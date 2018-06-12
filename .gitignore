@@ -1,0 +1,5 @@
+.idea/*
+*.ini
+*.iws
+out/*
+.idea_modules/*

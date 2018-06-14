@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EasyRTC Demo: Instant Messaging</title>
+    <link rel="stylesheet" type="text/css" href="/easyrtc/easyrtc.css" />
+
+    <!-- Assumes global locations for socket.io.js and easyrtc.js -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/easyrtc/easyrtc.js"></script>
+    <script type="text/javascript" src="demo_instant_messaging.js"></script>
+</head>
+<body onload="connect()">
+<div id="sendMessageArea">
+    <div id="iam">Obtaining ID...</div>
+    <textarea id="sendMessageText"></textarea>
+    <div id="otherClients"></div>
+</div>
+<div id="receiveMessageArea">
+    Received Messages:
+    <div id="conversation"></div>
+</div>
+
+</body>
+</html>

@@ -56,7 +56,7 @@
     <tr><td><a onClick="openSearch()"  style="cursor: pointer"><i class="fa fa-search"></i></a></td></tr>
     <tr><td><a  href="Components.html" target="mainframe"><i class="fa fa-terminal"></i></a></td></tr> 
     <tr><td><a href="FileM.html" target="mainframe"><i class="fa fa-archive"></i></a></td></tr>
-    <tr><td><a href="chat.html" target="mainframe"><i class="fa fa-comments-o"></i></a></td></tr>
+    <tr><td><a id="chat" target="mainframe"><i class="fa fa-comments-o"></i></a></td></tr>
     <tr><td><a onclick="return false"target="mainframe"><i class="fa fa-bars"></i></a></td></tr>
     <tr><td><a onClick="openNav()" style="cursor: pointer"><img src="images/sree.jpg" alt="Avatar" class= userpic></a></td></tr>
     </table>
@@ -156,5 +156,8 @@ document.getElementById("sbxx").onblur = function(){
 	document.getElementById("so").className = "searchoptions animated bounceOut";
 	document.getElementById("go").className = "searchoptions animated bounceOut";
 	document.getElementById("oc").style.top = "46%";}
+
+var chatBtn = document.getElementById('chat');
+chatBtn.href = "http://127.0.0.1:3000?username=" + window.location.search.substr(1).split('=')[1];
 </script>
 </html>

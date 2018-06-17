@@ -20,6 +20,7 @@ var chatClient = (function () {
     var user = users[username];
 
     var connect = function() {
+        easyrtc.setUsername(username);
         easyrtc.setPeerListener(chatLog.addMsg);
         easyrtc.setRoomOccupantListener(room.updateUsers);
         easyrtc.connect('sandbox-collab', onLoginSuccess, onLoginFailure);
@@ -42,12 +43,10 @@ var chatClient = (function () {
     };
 
     var onRoomJoinSuccess = function (roomName) {
-        console.log("SUCCESS");
         console.log("JOINED " + roomName);
     };
 
     var onRoomJoinFailure = function (errorCode, errorText, roomName) {
-        console.log("FAILURE");
         easyrtc.showError(errorCode, errorText);
     };
 
@@ -80,17 +79,18 @@ var chatLog = (function () {
     var msgs = [];
 
     var addMsg = function (sender, msgType, message) {
+        console.log(sender);
         msgs.push(message);
-        updateLog();
+        addMsgToList(sender,  message);
     };
 
-    var updateLog = function () {
-        log.empty();
-        $.each(msgs, addItemToList);
-    };
-
-    var addItemToList = function (i) {
-        return $('<li/>').attr('role', 'menuitem').text(msgs[i]).appendTo(log);
+    var addMsgToList = function (sender, message) {
+        var item = $('<li/>').attr('role', 'menuitem');
+        var senderTxt = $('<span/>').text(sender + ": ").css('font-weight', 'Bold');
+        var msgTxt = $('<span/>').text(message);
+        senderTxt.appendTo(item);
+        msgTxt.appendTo(item);
+        item.appendTo(log);
     };
 
     return {
@@ -114,4 +114,8 @@ var chatBox = (function () {
     return {
         send: send
     }
+})();
+
+var lobby = (function () {
+
 })();

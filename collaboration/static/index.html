@@ -3,6 +3,8 @@
 <head>
     <title>Chat</title>
 
+    <link rel="stylesheet" href="style.css">
+
     <!-- Assumes global locations for socket.io.js and easyrtc.js -->
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/easyrtc/easyrtc.js"></script>
@@ -12,7 +14,9 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div id="sendMessageArea">
+<div id="rooms">HELLO</div>
+<div id="info"></div>
+<div id="input">
     <textarea id="inputBox"></textarea>
     <input onclick="chatBox.send()" id="sendBtn" type="submit" value="SEND"/>
 </div>

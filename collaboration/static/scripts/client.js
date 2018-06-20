@@ -10,6 +10,10 @@ var rooms = {
     'apple': {
         id: "1",
         users: ["1"]
+    },
+    'microsoft': {
+        id: "2",
+        users: ["1"]
     }
 };
 
@@ -18,8 +22,16 @@ var chatClient = (function () {
     var searchParams = new URLSearchParams(window.location.search);
     var username = searchParams.get('username');
     var user = users[username];
+    if (typeof user === "undefined") {
+        alert("Username in query parameters invalid");
+    }
 
     var connect = function() {
+        var roomNames = Object.keys(rooms);
+        for (var i = 0; i < roomNames.length; i++) {
+            lobby.addRoom(roomNames[i]);
+        }
+
         easyrtc.setUsername(username);
         easyrtc.setPeerListener(chatLog.addMsg);
         easyrtc.setRoomOccupantListener(room.updateUsers);
@@ -28,10 +40,13 @@ var chatClient = (function () {
     $(document).ready(connect);
 
     var joinRoom = function (roomID) {
-        console.log("BEFORE");
         easyrtc.joinRoom(roomID, null, onRoomJoinSuccess, onRoomJoinFailure);
-        console.log("AFTER");
-        console.log(easyrtc.getRoomsJoined());
+    };
+
+    var changeRoom = function (roomID) {
+        var curID = Object.keys(easyrtc.getRoomsJoined())[0];
+        easyrtc.leaveRoom(curID, null, null);
+        joinRoom(roomID);
     };
 
     var onLoginSuccess = function(easyrtcid) {
@@ -52,10 +67,10 @@ var chatClient = (function () {
 
     return {
         connect: connect,
-        joinRoom: joinRoom
+        joinRoom: joinRoom,
+        changeRoom: changeRoom
     }
 })();
-chatClient.joinRoom(rooms['apple'].id); // TODO move to room picking button onclick listener (for multiple rooms)
 
 var room = (function () {
     var users = [];
@@ -117,5 +132,17 @@ var chatBox = (function () {
 })();
 
 var lobby = (function () {
+    var roomsList = $('#rooms').find('ul');
 
+    var addRoom = function (room) {
+        var li = $('<li/>');
+        li.click(function () {
+            chatClient.changeRoom(rooms[room].id);
+        });
+        li.text(room).appendTo(roomsList)
+    };
+
+    return {
+        addRoom: addRoom
+    }
 })();

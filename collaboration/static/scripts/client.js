@@ -21,12 +21,12 @@ var chatClient = (function () {
     // TODO Fetch username from something more secure than URL params e.g. DB
     var searchParams = new URLSearchParams(window.location.search);
     var username = searchParams.get('username');
-    var user = users[username];
+    var user = users['s']; // TODO Set properly
     if (typeof user === "undefined") {
-        alert("Username in query parameters invalid");
+        // alert("Username in query parameters invalid");
     }
 
-    var connect = function() {
+    var connect = function () {
         var roomNames = Object.keys(rooms);
         for (var i = 0; i < roomNames.length; i++) {
             lobby.addRoom(roomNames[i]);
@@ -36,6 +36,17 @@ var chatClient = (function () {
         easyrtc.setPeerListener(chatLog.addMsg);
         easyrtc.setRoomOccupantListener(room.updateUsers);
         easyrtc.connect('sandbox-collab', onLoginSuccess, onLoginFailure);
+
+        var uname = {username: username};
+        console.log(uname);
+        easyrtc.sendServerMessage('string', uname,
+            function (msgType, msgData) {
+                console.log("SUCCESS");
+            },
+            function (errorCode, errorText) {
+                console.log("FAILURE: error was " + errorText);
+            });
+        console.log("Sending message to server");
     };
     $(document).ready(connect);
 
@@ -49,11 +60,11 @@ var chatClient = (function () {
         joinRoom(roomID);
     };
 
-    var onLoginSuccess = function(easyrtcid) {
+    var onLoginSuccess = function (easyrtcid) {
         user.easyrtcid = easyrtcid;
     };
 
-    var onLoginFailure = function(errorCode, message) {
+    var onLoginFailure = function (errorCode, message) {
         easyrtc.showError(errorCode, message);
     };
 
@@ -96,7 +107,7 @@ var chatLog = (function () {
     var addMsg = function (sender, msgType, message) {
         console.log(sender);
         msgs.push(message);
-        addMsgToList(sender,  message);
+        addMsgToList(sender, message);
     };
 
     var addMsgToList = function (sender, message) {
@@ -118,12 +129,12 @@ var chatBox = (function () {
     var button = $('#sendBtn');
 
     var send = function () {
-        var message = inputBox.val();
-        chatLog.addMsg("Me", "string", message);
-        for (var user in room.getUsers()) {
-            easyrtc.sendDataWS(user, "string", message);
-        }
-        inputBox.val("");
+        // var message = inputBox.val();
+        // chatLog.addMsg("Me", "string", message);
+        // for (var user in room.getUsers()) {
+        //     easyrtc.sendDataWS(user, "string", message);
+        // }
+        // inputBox.val("");
     };
 
     return {

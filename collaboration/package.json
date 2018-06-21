@@ -11,7 +11,8 @@
     "easyrtc": "file:easyrtc",
     "express": "^4.16.3",
     "serve-static": "^1.8.0",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "mongodb": "^3.0.10"
   },
   "license": "BSD2",
   "engines": {

@@ -5,10 +5,13 @@
 <link rel="icon" href="images/logo-king.png">
 <link rel="stylesheet" href="css/animate.css">
 <link rel="stylesheet" href="css/CastleStyle.css">
+<title>Sandbox</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,height=device-height" />
 </head>
 <style>
    body{
-    background-image: url("images/Wallpaper.jpg");
+    background-image: url("images/blur.jpg");
     background-size: cover;
     font-family: "Lato";
     overflow: hidden;
@@ -48,13 +51,13 @@
 <img src="images/white-logo.png" class="milk">
 </div>
 <div class ="wrapper">
-<iframe src="home.html" id="mainframe" name="mainframe" frameBorder="0" class="hello"></iframe>
+<iframe src="home.html" id="mainframe" name="mainframe" frameBorder="0"></iframe>
 </div>
 <div class="icon-bar" id="taskbar">
     <table style="height: 100%">
     <tr><td><a href="home.html" target="mainframe"><img src="images/white-logo.png" class= otherpic></a></td></tr>
     <tr><td><a onClick="openSearch()"  style="cursor: pointer"><i class="fa fa-search"></i></a></td></tr>
-    <tr><td><a  href="Components.html" target="mainframe"><i class="fa fa-terminal"></i></a></td></tr> 
+    <tr><td><a  href="Sandbox_Back/playground.php" target="mainframe"><i class="fa fa-terminal"></i></a></td></tr> 
     <tr><td><a href="FileM.html" target="mainframe"><i class="fa fa-archive"></i></a></td></tr>
     <tr><td><a href="" target="mainframe"><i class="fa fa-comments-o"></i></a></td></tr>
     <tr><td><a onclick="return false"target="mainframe"><i class="fa fa-bars"></i></a></td></tr>
@@ -83,7 +86,7 @@
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-search-22"></use>
       </svg>
     </button>
-    <button type="reset" title="Clear the search query." class="sbx-custom__reset">
+    <button type="reset" title="Clear the search query." class="sbx-custom__reset" style="display: none;">
       <svg role="img" aria-label="Reset">
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-clear-5"></use>
       </svg>
@@ -152,9 +155,9 @@ document.getElementById("sbxx").oninput = function(){
 	}
 	document.getElementById("oc").style.top = "20%";
 }
-document.getElementById("sbxx").onblur = function(){
+/*document.getElementById("sbxx").onblur = function(){
 	document.getElementById("so").className = "searchoptions animated bounceOut";
 	document.getElementById("go").className = "searchoptions animated bounceOut";
-	document.getElementById("oc").style.top = "46%";}
+	document.getElementById("oc").style.top = "46%";}*/
 </script>
 </html>

@@ -101,14 +101,14 @@ input, button {
 #prevBtn {
   position: relative;
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   height: 2%;
   color: white;
 background: #FF3366;
   font-size: 1.5rem;
   border-radius: 3rem;
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
     margin-bottom: 10px;
   -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
   transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
@@ -116,6 +116,7 @@ background: #FF3366;
 #nextBtn {
   position: relative;
   width: 100%;
+padding: 5px;
   height: 2%;
   color: white;
   background: mediumseagreen;
@@ -130,8 +131,8 @@ background: #FF3366;
 		z-index: -100;
 		width: 25%;
 		position: absolute;
-		left: 40%;
-		top: 35%; 
+		left: 35%;
+		top: 30%; 
 		filter: blur(5px) brightness(70%);
 	}
 .valid {
@@ -171,7 +172,7 @@ background: #FF3366;
 <body>
 	<img src="images/white-logo.png" id="backlogo">
     <div class="animated zoomIn">
-      <form id="regForm" action="/action_page.php">
+      <form id="regForm" action="">
           <div class="signuphead"><label style="color: white;">Register:</label></div>
   <!-- One "tab" for each step in the form: -->
   <div class="tab"><label class="labeler"style="color: white;">Name:</label>
@@ -180,13 +181,9 @@ background: #FF3366;
   </div>
   <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Contact Info:</label>
     <p><input class="logintext" autocomplete="off" placeholder="E-mail..."  name="email"></p>
-        <p><input class="logintext" autocomplete="off" placeholder="Phone..."  name="phone"></p></div>
-  </div>
-  <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Birthday:</label>
-    <p><input class="logintext"autocomplete="off"placeholder="dd"  name="dd"></p>
-    <p><input class="logintext"autocomplete="off"placeholder="mm"  name="nn"></p>
-    <p><input class="logintext"autocomplete="off"placeholder="yyyy"  name="yyyy"></p>
-      </div></div>
+	  </div></div>
+  <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Fun Details</label>
+    <p><input class="logintext"autocomplete="off"placeholder="Java,PHP,Ruby"  name="languages"></p>      </div></div>
   <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Login Info:</label>
     <p><input class="logintext"autocomplete="off"placeholder="Username..."  name="uname"></p>
     <p><input class="logintext"autocomplete="off"placeholder="Password..."  name="pword" id="psw" type="password"></p>

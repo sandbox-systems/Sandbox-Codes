@@ -14,17 +14,28 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div id="rooms"><ul></ul></div>
-<div id="info"></div>
+<div id="rooms"><ul id="roomList"></ul></div>
+<div id="info"><span id="roomName"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="members"></span></div>
 <div id="input">
     <textarea id="inputBox"></textarea>
-    <input onclick="chatBox.send()" id="sendBtn" type="submit" value="SEND"/>
+    <input id="sendBtn" type="submit" value="SEND"/>
 </div>
 <div id="log">
     <ul id="list"></ul>
 </div>
 
-<script type="text/javascript" src="scripts/client.js"></script>
+<script>
+    function loadScriptSync (src) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.type = "text/javascript";
+        s.async = false;
+        document.getElementsByTagName('head')[0].appendChild(s);
+    }
+    loadScriptSync('scripts/models.js');
+    loadScriptSync('scripts/client.js');
+    loadScriptSync('scripts/script.js');
+</script>
 
 </body>
 </html>

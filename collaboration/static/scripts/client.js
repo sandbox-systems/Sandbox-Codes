@@ -1,159 +1,284 @@
-// TODO Move to DB
-var users = {
-    's': {  // Key is username here, but in the DB should be user id
-        id: "1",
-        easyrtcid: "",  // Session ID given by EasyRTC
-        roomIDs: ["1"]    // For now, only assuming 1 room
-    }
-};
-var rooms = {
-    'apple': {
-        id: "1",
-        users: ["1"]
+var DATA = {
+    userData: {
+        id: "u1",
+        name: "Jane Smith"
     },
-    'microsoft': {
-        id: "2",
-        users: ["1"]
-    }
+    friendData: [
+        {
+            id: "u0",
+            uname: "jdoe1",
+            name: "John Doe"
+        },
+        {
+            id: "u2",
+            uname: "ltorvs5",
+            name: "Linus Torvalds"
+        }
+    ],
+    roomData: [
+        {
+            id: "r1",
+            name: "Microsoft",
+            members: [
+                "u0",
+                "u2",
+                {
+                    id: "u3",
+                    uname: "srkhan97",
+                    name: "Shah Rukh Khan"
+                }
+            ],
+            chats: []
+        },
+        {
+            id: "r2",
+            name: "Google",
+            members: [
+                "u2",
+                "u3"
+            ],
+            chats: []
+        }
+    ]
 };
 
 var chatClient = (function () {
-    // TODO Fetch username from something more secure than URL params e.g. DB
     var searchParams = new URLSearchParams(window.location.search);
     var username = searchParams.get('username');
-    var user = users['s']; // TODO Set properly
-    if (typeof user === "undefined") {
-        // alert("Username in query parameters invalid");
-    }
+    var user = new User("", username, "");
+    var userPool = {};
+    var friends = [];
+    var rooms = [];
 
     var connect = function () {
-        var roomNames = Object.keys(rooms);
-        for (var i = 0; i < roomNames.length; i++) {
-            lobby.addRoom(roomNames[i]);
+        easyrtc.setUsername(username);
+        easyrtc.connect('sandbox-chat', callbacks.connectSuccess, callbacks.failure);
+
+        easyrtc.setPeerListener(chatRoom.handleChat);
+        easyrtc.addEventListener("roomOccupant", roomOccupantListener);
+
+        easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        easyrtc.setServerListener(function (msgType, msgData, targeting) {
+            fillData(msgType, DATA, targeting);
+        });
+    };
+
+    var fillData = function (msgType, msgData, targeting) {
+        fillUser(msgData.userData);
+        fillFriends(msgData.friendData);
+        fillRooms(msgData.roomData);
+        // console.log(userPool);
+        // console.log(friends);
+        console.log(rooms);
+    };
+
+    var fillUser = function (userData) {
+        user.id = userData.id;
+        user.name = userData.name;
+    };
+
+    var fillFriends = function (friendData) {
+        for (var i = 0; i < friendData.length; i++) {
+            var datum = friendData[i];
+            addFriend(new User(datum.id, datum.uname, datum.name));
+        }
+    };
+
+    var fillRooms = function (roomData) {
+        for (var i = 0; i < roomData.length; i++) {
+            var datum = roomData[i];
+            var room = new Room(datum.id, datum.name, datum.chats);
+
+            for (var j = 0; j < datum.members.length; j++) {
+                var member = datum.members[j];
+                if (typeof member === "string") {
+                    room.addMember(userPool[member]);
+                } else if (typeof member === "object") {
+                    var user = new User(member.id, member.uname, member.name);
+                    userPool[member.id] = user;
+                    room.addMember(user);
+                }
+            }
+
+            rooms.push(room);
+            easyrtc.joinRoom(datum.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
+        }
+    };
+
+    var roomOccupantListener = function (eName, eData) {
+        updatePeerOnlineStatuses(eData.default);
+    };
+
+    var updatePeerOnlineStatuses = function (occupants) {
+        var poolKeys = Object.keys(userPool);
+        for (var i = 0; i < poolKeys.length; i++) {
+            var id = poolKeys[i];
+            var user = userPool[id];
+            user.isOnline = false;
+            var occKeys = Object.keys(occupants);
+
+            for (var j = 0; j < occKeys.length; j++) {
+                var eid = occKeys[j];
+                var occupant = occupants[eid];
+
+                if (user.uname === occupant.username) {
+                    user.isOnline = true;
+                    break;
+                }
+            }
         }
 
-        easyrtc.setUsername(username);
-        easyrtc.setPeerListener(chatLog.addMsg);
-        easyrtc.setRoomOccupantListener(room.updateUsers);
-        easyrtc.connect('sandbox-collab', onLoginSuccess, onLoginFailure);
-
-        var uname = {username: username};
-        console.log(uname);
-        easyrtc.sendServerMessage('string', uname,
-            function (msgType, msgData) {
-                console.log("SUCCESS");
-            },
-            function (errorCode, errorText) {
-                console.log("FAILURE: error was " + errorText);
-            });
-        console.log("Sending message to server");
-    };
-    $(document).ready(connect);
-
-    var joinRoom = function (roomID) {
-        easyrtc.joinRoom(roomID, null, onRoomJoinSuccess, onRoomJoinFailure);
+        setRoomInfo();
     };
 
-    var changeRoom = function (roomID) {
-        var curID = Object.keys(easyrtc.getRoomsJoined())[0];
-        easyrtc.leaveRoom(curID, null, null);
-        joinRoom(roomID);
+    var addFriend = function (friendObj) {
+        userPool[friendObj.id] = friendObj;
+        friends.push(friendObj);
     };
 
-    var onLoginSuccess = function (easyrtcid) {
-        user.easyrtcid = easyrtcid;
+    var leaveRooms = function () {
+        for (var i = 0; i < rooms.length; i++) {
+            easyrtc.leaveRoom(rooms[i].id, callbacks.leaveRoomSuccess, callbacks.roomFailure);
+        }
     };
 
-    var onLoginFailure = function (errorCode, message) {
-        easyrtc.showError(errorCode, message);
+    var addRoom = function (roomObj) {
+        rooms.push(roomObj);
     };
 
-    var onRoomJoinSuccess = function (roomName) {
-        console.log("JOINED " + roomName);
+    var addChatToRoomByIndex = function (roomIndex, chat) {
+        rooms[roomIndex].addChat(chat);
     };
 
-    var onRoomJoinFailure = function (errorCode, errorText, roomName) {
-        easyrtc.showError(errorCode, errorText);
+    var addChatToRoomByID = function (roomID, chat) {
+        getRoomByID(roomID).addChat(chat);
+    };
+
+    var getClientUser = function () {
+        return user;
+    };
+
+    var getPeer = function (userID) {
+        return userPool[userID];
+    };
+
+    var getRoomByIndex = function (roomIndex) {
+        return rooms[roomIndex];
+    };
+
+    var getRoomByID = function (roomID) {
+        for (var i = 0; i < rooms.length; i++) {
+            if (rooms[i].id === roomID)
+                return rooms[i];
+        }
+        console.log("Could not find room with ID " + roomID);
+    };
+
+    var getRooms = function () {
+        return rooms;
     };
 
     return {
         connect: connect,
-        joinRoom: joinRoom,
+        addChatToRoomByIndex: addChatToRoomByIndex,
+        addChatToRoomByID: addChatToRoomByID,
+        addFriend: addFriend,
+        leaveRooms: leaveRooms,
+        addRoom: addRoom,
+        getClientUser: getClientUser,
+        getPeer: getPeer,
+        getRoomByIndex: getRoomByIndex,
+        getRoomByID: getRoomByID,
+        getRooms: getRooms
+    }
+})();
+
+var chatRoom = (function () {
+    var selRoomIndex = -1;
+
+    var addChatToCurRoom = function (uname, name, msg) {
+        chatClient.addChatToRoomByIndex(selRoomIndex, uname + " " + name + ": " + msg);
+        updateChat();
+    };
+
+    var addChatByID = function (roomID, uname, name, msg) {
+        chatClient.addChatToRoomByID(roomID, uname + " " + name + ": " + msg);
+        updateChat();
+    };
+
+    var handleChat = function (sender, msgType, msgData) {
+        addChatByID(msgData.roomID, msgData.senderName, msgData.senderName, msgData.msg);
+    };
+
+    var sendChat = function (msg) {
+        var uname = chatClient.getClientUser().uname;
+        var name = chatClient.getClientUser().name;
+        var curRoomID = getSelectedRoom().id;
+        var roomOcc = easyrtc.getRoomOccupantsAsArray(curRoomID);
+        var msgData = {
+            roomID: getSelectedRoom().id,
+            msg: msg,
+            senderUname: uname,
+            senderName: name
+        };
+
+        addChatToCurRoom(uname, name, msg);
+        for (var i = 0; i < roomOcc.length; i++) {
+            console.log(roomOcc[i]);
+            easyrtc.sendDataWS(roomOcc[i], "chatMessage", msgData);
+        }
+    };
+
+    var getSelectedRoom = function () {
+        if (selRoomIndex === -1)
+            return null;
+        else
+            return chatClient.getRoomByIndex(selRoomIndex);
+    };
+
+    var changeRoom = function (newInd) {
+        selRoomIndex = newInd;
+    };
+
+    return {
+        handleChat: handleChat,
+        sendChat: sendChat,
+        getSelectedRoom: getSelectedRoom,
         changeRoom: changeRoom
     }
 })();
 
-var room = (function () {
-    var users = [];
-
-    var getUsers = function () {
-        return users;
+var callbacks = (function () {
+    var connectSuccess = function (easyrtcid) {
+        console.log("User " + easyrtcid + " connected successfully")
     };
 
-    var updateUsers = function (roomName, occupants, isPrimary) {
-        users = occupants;
+    var sendServerMsgSuccess = function (msgType, msgData) {
+        console.log("Successfully sent msg to server")
     };
 
-    return {
-        getUsers: getUsers,
-        updateUsers: updateUsers
-    }
-})();
-
-var chatLog = (function () {
-    var log = $('#list');
-    var msgs = [];
-
-    var addMsg = function (sender, msgType, message) {
-        console.log(sender);
-        msgs.push(message);
-        addMsgToList(sender, message);
+    var joinRoomSuccess = function (roomName) {
+        console.log("Successfully joined " + roomName);
     };
 
-    var addMsgToList = function (sender, message) {
-        var item = $('<li/>').attr('role', 'menuitem');
-        var senderTxt = $('<span/>').text(sender + ": ").css('font-weight', 'Bold');
-        var msgTxt = $('<span/>').text(message);
-        senderTxt.appendTo(item);
-        msgTxt.appendTo(item);
-        item.appendTo(log);
+    var leaveRoomSuccess = function (roomName) {
+        console.log("Successfully left " + roomName);
+    };
+
+    var leaveRoomFailure = function (errorCode, errorText, roomName) {
+        easyrtc.showError(errorCode, errorText);
+    };
+
+    var failure = function (errorCode, errorText) {
+        easyrtc.showError(errorCode, errorText);
     };
 
     return {
-        addMsg: addMsg
-    }
-})();
-
-var chatBox = (function () {
-    var inputBox = $('#inputBox');
-    var button = $('#sendBtn');
-
-    var send = function () {
-        // var message = inputBox.val();
-        // chatLog.addMsg("Me", "string", message);
-        // for (var user in room.getUsers()) {
-        //     easyrtc.sendDataWS(user, "string", message);
-        // }
-        // inputBox.val("");
-    };
-
-    return {
-        send: send
-    }
-})();
-
-var lobby = (function () {
-    var roomsList = $('#rooms').find('ul');
-
-    var addRoom = function (room) {
-        var li = $('<li/>');
-        li.click(function () {
-            chatClient.changeRoom(rooms[room].id);
-        });
-        li.text(room).appendTo(roomsList)
-    };
-
-    return {
-        addRoom: addRoom
+        connectSuccess: connectSuccess,
+        sendServerMsgSuccess: sendServerMsgSuccess,
+        joinRoomSuccess: joinRoomSuccess,
+        leaveRoomSuccess: leaveRoomSuccess,
+        roomFailure: leaveRoomFailure,
+        failure: failure
     }
 })();

@@ -1,5 +1,6 @@
 var chatClient = (function () {
     var searchParams = new URLSearchParams(window.location.search);
+    var easyrtcid = "";
     var username = searchParams.get('username');
     var user = new User("", username, "");
     var userPool = {};
@@ -8,7 +9,10 @@ var chatClient = (function () {
 
     var connect = function () {
         easyrtc.setUsername(username);
-        easyrtc.connect('sandbox-chat', callbacks.connectSuccess, callbacks.failure);
+        easyrtc.connect('sandbox-chat', function (eid) {
+            easyrtcid = eid;
+            callbacks.connectSuccess(eid);
+        }, callbacks.failure);
 
         easyrtc.setPeerListener(chatRoom.handleChat);
         easyrtc.addEventListener("roomOccupant", roomOccupantListener);
@@ -21,9 +25,7 @@ var chatClient = (function () {
         fillUser(msgData.userData);
         fillFriends(msgData.friendData);
         fillRooms(msgData.roomData);
-        // console.log(userPool);
-        // console.log(friends);
-        console.log(rooms);
+        onConnect();
     };
 
     var fillUser = function (userData) {
@@ -61,6 +63,7 @@ var chatClient = (function () {
 
     var roomOccupantListener = function (eName, eData) {
         updatePeerOnlineStatuses(eData.default);
+        onRoomOccupantChange();
     };
 
     var updatePeerOnlineStatuses = function (occupants) {
@@ -81,8 +84,6 @@ var chatClient = (function () {
                 }
             }
         }
-
-        setRoomInfo();
     };
 
     var addFriend = function (friendObj) {
@@ -132,18 +133,28 @@ var chatClient = (function () {
         return rooms;
     };
 
+    var getEasyrtcid = function () {
+        return easyrtcid;
+    };
+
+    var disconnect = function () {
+        leaveRooms();
+        onDisconnect();
+    };
+
     return {
         connect: connect,
         addChatToRoomByIndex: addChatToRoomByIndex,
         addChatToRoomByID: addChatToRoomByID,
         addFriend: addFriend,
-        leaveRooms: leaveRooms,
+        disconnect: disconnect,
         addRoom: addRoom,
         getClientUser: getClientUser,
         getPeer: getPeer,
         getRoomByIndex: getRoomByIndex,
         getRoomByID: getRoomByID,
-        getRooms: getRooms
+        getRooms: getRooms,
+        getEasyrtcid: getEasyrtcid
     }
 })();
 
@@ -157,11 +168,11 @@ var chatRoom = (function () {
 
     var addChatByID = function (roomID, uname, name, msg) {
         chatClient.addChatToRoomByID(roomID, uname + " " + name + ": " + msg);
-        updateChat();
     };
 
     var handleChat = function (sender, msgType, msgData) {
-        addChatByID(msgData.roomID, msgData.senderName, msgData.senderName, msgData.msg);
+        addChatByID(msgData.roomID, msgData.senderUname, msgData.senderName, msgData.msg);
+        onChatInterception();
     };
 
     var sendChat = function (msg) {
@@ -178,9 +189,11 @@ var chatRoom = (function () {
 
         addChatToCurRoom(uname, name, msg);
         for (var i = 0; i < roomOcc.length; i++) {
-            console.log(roomOcc[i]);
-            easyrtc.sendDataWS(roomOcc[i], "chatMessage", msgData);
+            if (roomOcc[i] !== chatClient.getEasyrtcid())
+                easyrtc.sendDataWS(roomOcc[i], "chatMessage", msgData, null);
         }
+
+        onChatSend();
     };
 
     var getSelectedRoom = function () {

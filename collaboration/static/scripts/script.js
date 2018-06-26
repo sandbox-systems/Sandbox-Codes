@@ -1,7 +1,27 @@
 $(document).ready(chatClient.connect);
 
+// Event handlers called by client
+var onConnect = function() {
+    initRoomBtns();
+    setRoomInfo();
+};
+
+var onRoomOccupantChange = function () {
+    setRoomInfo();
+};
+
+var onChatInterception = function () {
+    updateChat();
+};
+
+var onChatSend = function () {
+};
+
+var onDisconnect = function () {
+};
+
+// UI side magic
 var initRoomBtns = function () {
-    console.log(chatClient.getRooms());
     $(chatClient.getRooms()).each(function (i) {
         var li = $('<li/>');
         li.click(function () {
@@ -38,15 +58,11 @@ var updateChat = function () {
     });
 };
 
-setTimeout(function () {
-    initRoomBtns();
-    setRoomInfo();
-}, 200);
-
 $('#sendBtn').click(function () {
     chatRoom.sendChat($('#inputBox').val());
 });
 
+// Called when user leaves page
 $(window).bind('beforeunload', function () {
-    chatClient.leaveRooms();
+    chatClient.disconnect();
 });

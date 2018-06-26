@@ -45,9 +45,9 @@ module.exports = {
         return module.exports.getDocumentsFromList(db, 'rooms', roomIDs,
             "Successfully fetched all room data and converted cursors to objects", successCB);
     },
-    // successCB = function (friends)
-    getFriends: function (db, friendIDs, successCB) {
-        return module.exports.getDocumentsFromList(db, 'users', friendIDs,
-            "Successfully fetched all friend data and converted cursors to objects", successCB);
+    // successCB = function (users)
+    getUsers: function (db, userIDs, successCB) {
+        return module.exports.getDocumentsFromList(db, 'users', userIDs,
+            "Successfully fetched all user data and converted cursors to objects", successCB);
     }
 };

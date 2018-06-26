@@ -1,6 +1,7 @@
 $(document).ready(chatClient.connect);
 
 var initRoomBtns = function () {
+    console.log(chatClient.getRooms());
     $(chatClient.getRooms()).each(function (i) {
         var li = $('<li/>');
         li.click(function () {
@@ -40,7 +41,7 @@ var updateChat = function () {
 setTimeout(function () {
     initRoomBtns();
     setRoomInfo();
-}, 100);
+}, 200);
 
 $('#sendBtn').click(function () {
     chatRoom.sendChat($('#inputBox').val());

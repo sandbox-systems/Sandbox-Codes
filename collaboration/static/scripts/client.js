@@ -58,9 +58,7 @@ var chatClient = (function () {
         easyrtc.addEventListener("roomOccupant", roomOccupantListener);
 
         easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
-        easyrtc.setServerListener(function (msgType, msgData, targeting) {
-            fillData(msgType, DATA, targeting);
-        });
+        easyrtc.setServerListener(fillData);
     };
 
     var fillData = function (msgType, msgData, targeting) {

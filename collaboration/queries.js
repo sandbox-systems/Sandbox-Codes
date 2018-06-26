@@ -1,11 +1,30 @@
+var mongodb = require('mongodb');
+
 module.exports = {
-    updateEasyrtcid: function (db, uname, easyrtcid) {
-        var query = {username: uname};
-        var newID = {$set: {easyrtcid: easyrtcid}};
-        // Update the easyrtcid of the user with username uname
+    // successCB = function()
+    updateFriends: function (db, id, friends, successCB) {
+        var query = {_id: mongodb.ObjectID(id)};
+        var newID = {$set: {friends: friends}};
+        // Update the friends key of the user with _id id
         db.collection("users").updateOne(query, newID, function (err, res) {
             if (err) throw err;
-            console.log("Successfully updated easyrtcid");
+            console.log("Successfully updated friends");
+            successCB();
+        });
+    },
+    // successCB = function()
+    updateRoom: function (db, id, roomData, successCB) {
+        var query = {_id: mongodb.ObjectID(id)};
+        var newData = {$set: {
+            name: roomData.name,
+            chatEntries: roomData.chat,
+            members: roomData.members
+        }};
+        // Update the friends key of the user with _id id
+        db.collection("rooms").updateOne(query, newData, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully updated room");
+            successCB();
         });
     },
     // successCB = function (user)

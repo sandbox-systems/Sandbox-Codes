@@ -138,8 +138,40 @@ var chatClient = (function () {
     };
 
     var disconnect = function () {
-        leaveRooms();
-        onDisconnect();
+        if (friends.length > 0 && rooms.length > 0) {
+            var newData = {
+                id: user.id,
+                friends: []
+            };
+
+            for (var f = 0; f < friends.length; f++) {
+                newData.friends.push(friends[f].id);
+            }
+
+            var roomData = [];
+            for (var i = 0; i < rooms.length; i++) {
+                var datum = {
+                    id: rooms[i].id,
+                    name: rooms[i].name,
+                    chat: rooms[i].chats,
+                    members: [user.id]
+                };
+                for (var j = 0; j < rooms[i].members.length; j++) {
+                    datum.members.push(rooms[i].members[j].id);
+                }
+                roomData.push(datum);
+            }
+
+            console.log(roomData);
+
+            newData.rooms = roomData;
+
+            easyrtc.sendServerMessage('updateDB', newData, function (msgType, msgData) {
+                console.log("Successfully sent data to update DB to server");
+                leaveRooms();
+                onDisconnect();
+            }, callbacks.failure);
+        }
     };
 
     return {

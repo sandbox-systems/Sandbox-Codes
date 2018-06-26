@@ -50,9 +50,6 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
         if (msg.msgType === "clientConnection") {
             var username = msg.msgData.username;
 
-            // Update easyrtcid entry for this user in the DB
-            queries.updateEasyrtcid(db, username, conObj.getEasyrtcid());
-
             // Contains all processed user IDs
             var userPool = [];
 
@@ -149,6 +146,16 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
                     });
                 });
 
+            });
+        } else if (msg.msgType === "updateDB") {
+            var id = msg.msgData.id;
+            var friends = msg.msgData.friends;
+            var rooms = msg.msgData.rooms;
+
+            queries.updateFriends(db, id, friends, function () {
+                for (var i = 0; i < rooms.length; i++) {
+                    queries.updateRoom(db, rooms[i].id, rooms[i], function () {});
+                }
             });
         } else {
             // If the message was not for a clientConnection, just let EastRTC do its thing

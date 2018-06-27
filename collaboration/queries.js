@@ -51,6 +51,22 @@ module.exports = {
             console.log("Successfully removed room from user");
         });
     },
+    addMemberToRoom: function (db, roomID, memberID) {
+        var query = {_id: mongodb.ObjectID(roomID)};
+        var push = {$push: {members: memberID}};
+        db.collection("rooms").update(query, push, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully added member to room");
+        });
+    },
+    addRoomToUser: function (db, roomID, userID) {
+        var query = {_id: mongodb.ObjectID(userID)};
+        var push = {$push: {roomIDs: roomID}};
+        db.collection("users").update(query, push, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully added room to user");
+        });
+    },
     // successCB = function (user)
     getUser: function (db, uname, successCB) {
         var query = {username: uname}, user;

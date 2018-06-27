@@ -18,7 +18,13 @@ var chatClient = (function () {
         easyrtc.addEventListener("roomOccupant", roomOccupantListener);
 
         easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
-        easyrtc.setServerListener(fillData);
+        easyrtc.setServerListener(serverListener);
+    };
+
+    var serverListener = function (msgType, msgData, targeting) {
+        if (msgType === "userData") {
+            fillData(msgType, msgData, targeting);
+        }
     };
 
     var fillData = function (msgType, msgData, targeting) {
@@ -66,6 +72,8 @@ var chatClient = (function () {
             chatRoom.handleChat(sender, msgType, msgData);
         } else if (msgType === "removeUser") {
             removeMemberFromRoom(msgData.roomID, msgData.msg.memberID);
+        } else if (msgType === "addFriendAsMember") {
+            addFriendAsMember(msgData.roomID, msgData.msg.friendID);
         }
         onDataInterception();
     };
@@ -128,9 +136,25 @@ var chatClient = (function () {
             }
         }
         if (user.id === memberID) {
-            chatRoom.changeRoom(-1);
+            if (chatRoom.getSelectedRoom().id === roomID) {
+                chatRoom.changeRoom(-1);
+            } else if (chatRoom.getSelectedRoom().id > roomID) {
+                chatRoom.changeRoom(chatRoom.getSelRoomIndex() - 1);
+            }
             easyrtc.leaveRoom(roomID, callbacks.leaveRoomSuccess, callbacks.roomFailure);
             rooms.splice(toRemoveRoomInd, 1);
+        }
+    };
+
+    var addFriendAsMember = function (roomID, friendID) {
+        for (var i = 0; i < friends.length; i++) {
+            if (friends[i].id === friendID) {
+                getRoomByID(roomID).addMember(friends[i]);
+                break;
+            }
+        }
+        if (user.id === friendID) {
+            // easyrtc.joinRoom(roomID, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
         }
     };
 
@@ -158,6 +182,10 @@ var chatClient = (function () {
         return rooms;
     };
 
+    var getFriends = function () {
+        return friends;
+    };
+
     var getEasyrtcid = function () {
         return easyrtcid;
     };
@@ -179,6 +207,7 @@ var chatClient = (function () {
         getRoomByIndex: getRoomByIndex,
         getRoomByID: getRoomByID,
         getRooms: getRooms,
+        getFriends: getFriends,
         getEasyrtcid: getEasyrtcid
     }
 })();
@@ -211,11 +240,19 @@ var chatRoom = (function () {
 
     var removeUser = function (memberID) {
         getSelectedRoom().removeMember(memberID);
-        var data = {
-            memberID: memberID
-        };
         easyrtc.sendServerMessage('removeUserDB', {roomID: getSelectedRoom().id, memberID: memberID}, callbacks.sendServerMsgSuccess, callbacks.failure);
         sendData("removeUser", {memberID: memberID});
+    };
+
+    var addFriendAsMember = function (friendID) {
+        for (var i = 0; i < chatClient.getFriends().length; i++) {
+            if (chatClient.getFriends()[i].id === friendID) {
+                getSelectedRoom().addMember(chatClient.getFriends()[i]);
+                break;
+            }
+        }
+        easyrtc.sendServerMessage('addMemberDB', {roomID: getSelectedRoom().id, memberID: friendID}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        sendData("addFriendAsMember", {friendID: friendID});
     };
 
     var sendData = function (msgType, data) {
@@ -246,16 +283,39 @@ var chatRoom = (function () {
             return chatClient.getRoomByIndex(selRoomIndex);
     };
 
+    var isRoomSelected = function () {
+        return selRoomIndex !== -1;
+    };
+
+    var getSelRoomIndex = function () {
+        return selRoomIndex;
+    };
+
     var changeRoom = function (newInd) {
         selRoomIndex = newInd;
+        onRoomChange();
+    };
+
+    // * DOES NOT INCLUDE CLIENT *
+    var getMembers = function () {
+        return getSelectedRoom().members;
+    };
+
+    var hasMember = function (memberObj) {
+        return getMembers().includes(memberObj);
     };
 
     return {
         handleChat: handleChat,
         sendChat: sendChat,
         getSelectedRoom: getSelectedRoom,
+        getSelRoomIndex: getSelRoomIndex,
+        isRoomSelected: isRoomSelected,
         changeRoom: changeRoom,
-        removeUser: removeUser
+        removeUser: removeUser,
+        addFriendAsMember: addFriendAsMember,
+        getMembers: getMembers,
+        hasMember: hasMember
     }
 })();
 

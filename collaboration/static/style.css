@@ -88,14 +88,14 @@
     float: left;
     left: 1%;
     bottom: 20%;
-    width: 82%;
+    width: 70%;
     height: 80%;
 }
 
 #sendBtn {
     position: relative;
     float: right;
-    right: 5%;
+    right: 15%;
     bottom: 20%;
     width: 10%;
     height: 80%;

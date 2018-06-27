@@ -27,6 +27,30 @@ module.exports = {
             successCB();
         });
     },
+    addChat: function (db, roomID, msg) {
+        var query = {_id: mongodb.ObjectID(roomID)};
+        var push = {$push: {chatEntries: msg}};
+        db.collection("rooms").updateOne(query, push, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully updated room");
+        });
+    },
+    removeMemberFromRoom: function (db, roomID, memberID) {
+        var query = {_id: mongodb.ObjectID(roomID)};
+        var pull = {$pull: {members: memberID}};
+        db.collection("rooms").update(query, pull, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully removed member from room");
+        });
+    },
+    removeRoomFromUser: function (db, roomID, userID) {
+        var query = {_id: mongodb.ObjectID(userID)};
+        var pull = {$pull: {roomIDs: roomID}};
+        db.collection("users").update(query, pull, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully removed room from user");
+        });
+    },
     // successCB = function (user)
     getUser: function (db, uname, successCB) {
         var query = {username: uname}, user;

@@ -15,6 +15,20 @@ var Room = function (id, name, chats) {
         this.members.push(memberObj);
     };
 
+    this.removeMember = function (memberID) {
+        var ind = -1;
+        for (var i = 0; i < this.members.length; i++) {
+            if (this.members[i].id === memberID) {
+                ind = i;
+            }
+        }
+        if (ind === -1) {
+            console.log("Could not find member with ID " + memberID + " in room " + this.id);
+        } else {
+            this.members.splice(ind, 1);
+        }
+    };
+
     this.addChat = function (chat) {
         chats.push(chat);
     };

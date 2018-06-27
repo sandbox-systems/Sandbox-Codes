@@ -147,16 +147,17 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
                 });
 
             });
-        } else if (msg.msgType === "updateDB") {
-            var id = msg.msgData.id;
-            var friends = msg.msgData.friends;
-            var rooms = msg.msgData.rooms;
+        } else if (msg.msgType === "chatMessageDB") {
+            var roomID = msg.msgData.roomID;
+            var chatMsg = msg.msgData.chatMsg;
 
-            queries.updateFriends(db, id, friends, function () {
-                for (var i = 0; i < rooms.length; i++) {
-                    queries.updateRoom(db, rooms[i].id, rooms[i], function () {});
-                }
-            });
+            queries.addChat(db, roomID, chatMsg);
+        } else if (msg.msgType === "removeUserDB") {
+            var room = msg.msgData.roomID;
+            var memberID = msg.msgData.memberID;
+
+            queries.removeMemberFromRoom(db, room, memberID);
+            queries.removeRoomFromUser(db, room, memberID);
         } else {
             // If the message was not for a clientConnection, just let EastRTC do its thing
             return easyrtcMsg(conObj, msg, socketCallback, next);

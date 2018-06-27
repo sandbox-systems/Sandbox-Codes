@@ -14,7 +14,7 @@ var chatClient = (function () {
             callbacks.connectSuccess(eid);
         }, callbacks.failure);
 
-        easyrtc.setPeerListener(chatRoom.handleChat);
+        easyrtc.setPeerListener(peerListener);
         easyrtc.addEventListener("roomOccupant", roomOccupantListener);
 
         easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
@@ -59,6 +59,15 @@ var chatClient = (function () {
             rooms.push(room);
             easyrtc.joinRoom(datum.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
         }
+    };
+
+    var peerListener = function (sender, msgType, msgData) {
+        if (msgType === "chatMessage") {
+            chatRoom.handleChat(sender, msgType, msgData);
+        } else if (msgType === "removeUser") {
+            removeMemberFromRoom(msgData.roomID, msgData.msg.memberID);
+        }
+        onDataInterception();
     };
 
     var roomOccupantListener = function (eName, eData) {
@@ -109,6 +118,22 @@ var chatClient = (function () {
         getRoomByID(roomID).addChat(chat);
     };
 
+    var removeMemberFromRoom = function (roomID, memberID) {
+        var toRemoveRoomInd = -1;
+        for (var i = 0; i < rooms.length; i++) {
+            if (rooms[i].id === roomID) {
+                rooms[i].removeMember(memberID);
+                toRemoveRoomInd = i;
+                break;
+            }
+        }
+        if (user.id === memberID) {
+            chatRoom.changeRoom(-1);
+            easyrtc.leaveRoom(roomID, callbacks.leaveRoomSuccess, callbacks.roomFailure);
+            rooms.splice(toRemoveRoomInd, 1);
+        }
+    };
+
     var getClientUser = function () {
         return user;
     };
@@ -138,40 +163,8 @@ var chatClient = (function () {
     };
 
     var disconnect = function () {
-        if (friends.length > 0 && rooms.length > 0) {
-            var newData = {
-                id: user.id,
-                friends: []
-            };
-
-            for (var f = 0; f < friends.length; f++) {
-                newData.friends.push(friends[f].id);
-            }
-
-            var roomData = [];
-            for (var i = 0; i < rooms.length; i++) {
-                var datum = {
-                    id: rooms[i].id,
-                    name: rooms[i].name,
-                    chat: rooms[i].chats,
-                    members: [user.id]
-                };
-                for (var j = 0; j < rooms[i].members.length; j++) {
-                    datum.members.push(rooms[i].members[j].id);
-                }
-                roomData.push(datum);
-            }
-
-            console.log(roomData);
-
-            newData.rooms = roomData;
-
-            easyrtc.sendServerMessage('updateDB', newData, function (msgType, msgData) {
-                console.log("Successfully sent data to update DB to server");
-                leaveRooms();
-                onDisconnect();
-            }, callbacks.failure);
-        }
+        leaveRooms();
+        onDisconnect();
     };
 
     return {
@@ -195,7 +188,6 @@ var chatRoom = (function () {
 
     var addChatToCurRoom = function (uname, name, msg) {
         chatClient.addChatToRoomByIndex(selRoomIndex, uname + " " + name + ": " + msg);
-        updateChat();
     };
 
     var addChatByID = function (roomID, uname, name, msg) {
@@ -204,28 +196,47 @@ var chatRoom = (function () {
 
     var handleChat = function (sender, msgType, msgData) {
         addChatByID(msgData.roomID, msgData.senderUname, msgData.senderName, msgData.msg);
-        onChatInterception();
     };
 
     var sendChat = function (msg) {
+        var uname = chatClient.getClientUser().uname;
+        var name = chatClient.getClientUser().name;
+        addChatToCurRoom(uname, name, msg);
+        easyrtc.sendServerMessage('chatMessageDB', {
+            roomID: getSelectedRoom().id,
+            chatMsg: uname + " " + name + ": " + msg
+        }, callbacks.sendServerMsgSuccess, callbacks.failure);
+        sendData("chatMessage", msg);
+    };
+
+    var removeUser = function (memberID) {
+        getSelectedRoom().removeMember(memberID);
+        var data = {
+            memberID: memberID
+        };
+        easyrtc.sendServerMessage('removeUserDB', {roomID: getSelectedRoom().id, memberID: memberID}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        sendData("removeUser", {memberID: memberID});
+    };
+
+    var sendData = function (msgType, data) {
         var uname = chatClient.getClientUser().uname;
         var name = chatClient.getClientUser().name;
         var curRoomID = getSelectedRoom().id;
         var roomOcc = easyrtc.getRoomOccupantsAsArray(curRoomID);
         var msgData = {
             roomID: getSelectedRoom().id,
-            msg: msg,
+            msg: data,
             senderUname: uname,
             senderName: name
         };
 
-        addChatToCurRoom(uname, name, msg);
         for (var i = 0; i < roomOcc.length; i++) {
-            if (roomOcc[i] !== chatClient.getEasyrtcid())
-                easyrtc.sendDataWS(roomOcc[i], "chatMessage", msgData, null);
+            if (roomOcc[i] !== chatClient.getEasyrtcid()) {
+                easyrtc.sendDataWS(roomOcc[i], msgType, msgData, null);
+            }
         }
 
-        onChatSend();
+        onDataSend();
     };
 
     var getSelectedRoom = function () {
@@ -243,7 +254,8 @@ var chatRoom = (function () {
         handleChat: handleChat,
         sendChat: sendChat,
         getSelectedRoom: getSelectedRoom,
-        changeRoom: changeRoom
+        changeRoom: changeRoom,
+        removeUser: removeUser
     }
 })();
 

@@ -10,11 +10,15 @@ var onRoomOccupantChange = function () {
     setRoomInfo();
 };
 
-var onChatInterception = function () {
+var onDataInterception = function () {
+    initRoomBtns();
+    setRoomInfo();
     updateChat();
 };
 
-var onChatSend = function () {
+var onDataSend = function () {
+    setRoomInfo();
+    updateChat();
 };
 
 var onDisconnect = function () {
@@ -22,6 +26,7 @@ var onDisconnect = function () {
 
 // UI side magic
 var initRoomBtns = function () {
+    $('#roomList').empty();
     $(chatClient.getRooms()).each(function (i) {
         var li = $('<li/>');
         li.click(function () {
@@ -42,6 +47,9 @@ var setRoomInfo = function () {
         $('#members').empty();
         $(chatRoom.getSelectedRoom().members).each(function (i) {
             $('<span/>')
+                .click(function () {
+                    chatRoom.removeUser(chatRoom.getSelectedRoom().members[i].id);
+                })
                 .text(chatRoom.getSelectedRoom().members[i].name + "  ")
                 .css('color', chatRoom.getSelectedRoom().members[i].isOnline ? 'green' : 'red')
                 .appendTo($('#members'));

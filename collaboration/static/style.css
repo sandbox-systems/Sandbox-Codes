@@ -31,6 +31,19 @@
     color: white;
 }
 
+#friends {
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    right: 0;
+    background-color: #0e1107;
+    overflow-x: hidden;
+    padding-top: 20px;
+    color: white;
+}
+
 #input {
     height: 10%;
     width: 90%;
@@ -98,10 +111,26 @@
     cursor: pointer;
 }
 
+#removeBtn {
+    background-color: #af0028;
+    border: none;
+    cursor: pointer;
+}
+
+#addBtn {
+    background-color: #4CAF50;
+    border: none;
+    cursor: pointer;
+}
+
 #list {
     list-style: none;
 }
 
 #rooms ul {
+    list-style: none;
+}
+
+#friends ul {
     list-style: none;
 }

@@ -46,6 +46,7 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
     });
 
     easyrtc.events.on("easyrtcMsg", function (conObj, msg, socketCallback, next) {
+        var roomID, memberID;
         // Upon receiving easyrtcid from client on connect, send back user and room data
         if (msg.msgType === "clientConnection") {
             var username = msg.msgData.username;
@@ -145,19 +146,24 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
                         });
                     });
                 });
-
             });
         } else if (msg.msgType === "chatMessageDB") {
-            var roomID = msg.msgData.roomID;
+            roomID = msg.msgData.roomID;
             var chatMsg = msg.msgData.chatMsg;
 
             queries.addChat(db, roomID, chatMsg);
         } else if (msg.msgType === "removeUserDB") {
-            var room = msg.msgData.roomID;
-            var memberID = msg.msgData.memberID;
+            roomID = msg.msgData.roomID;
+            memberID = msg.msgData.memberID;
 
-            queries.removeMemberFromRoom(db, room, memberID);
-            queries.removeRoomFromUser(db, room, memberID);
+            queries.removeMemberFromRoom(db, roomID, memberID);
+            queries.removeRoomFromUser(db, roomID, memberID);
+        } else if (msg.msgType === "addMemberDB") {
+            roomID = msg.msgData.roomID;
+            memberID = msg.msgData.memberID;
+
+            queries.addMemberToRoom(db, roomID, memberID);
+            queries.addRoomToUser(db, roomID, memberID);
         } else {
             // If the message was not for a clientConnection, just let EastRTC do its thing
             return easyrtcMsg(conObj, msg, socketCallback, next);

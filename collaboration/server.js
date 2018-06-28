@@ -86,6 +86,18 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
 
             queries.addMemberToRoom(db, roomID, memberID);
             queries.addRoomToUser(db, roomID, memberID);
+        } else if (msg.msgType === "createRoom") {
+            queries.createRoom(db, msg.msgData, function (roomID) {
+                for (var i = 0; i < msg.msgData.members.length; i++) {
+                    queries.addRoomToUser(db, roomID.toString(), msg.msgData.members[i]);
+                }
+                var newRoomData = {
+                    id: roomID,
+                    name: msg.msgData.name,
+                    members: msg.msgData.members
+                };
+                actions.emitMsgToClient(pub, conObj, "newRoomData", newRoomData);
+            });
         } else {
             // If the message was not for a clientConnection, just let EastRTC do its thing
             return easyrtcMsg(conObj, msg, socketCallback, next);

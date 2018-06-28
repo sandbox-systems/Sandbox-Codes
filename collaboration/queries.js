@@ -67,6 +67,19 @@ module.exports = {
             console.log("Successfully added room to user");
         });
     },
+    // successCB = function (roomID)
+    createRoom: function (db, roomData, successCB) {
+        var document = {
+            name: roomData.name,
+            chatEntries: [],
+            members: roomData.members
+        };
+        db.collection("rooms").insert(document, function(err, res){
+            if (err) throw err;
+            console.log("Successfully added room");
+            successCB(res.insertedIds[0]);
+        });
+    },
     // successCB = function (user)
     getUser: function (db, uname, successCB) {
         var query = {username: uname}, user;

@@ -4,11 +4,16 @@ $(document).ready(chatClient.connect);
 var onConnect = function () {
     setRoomBtns();
     setRoomInfo();
+    setupCreateRoomForm();
 };
 
 var onRoomOccupantChange = function () {
     setRoomInfo();
     setFriendBtns();
+};
+
+var onRoomCreated = function () {
+    setRoomBtns();
 };
 
 var onDataInterception = function () {
@@ -34,14 +39,50 @@ var onDisconnect = function () {
 };
 
 // UI side magic
+var createRoomFormMemberNames = [];
+var createRoomFormMembers = [];
+
+var setupCreateRoomForm = function () {
+    var friendList = $('#createRoomFriends');
+    friendList.empty();
+    $(chatClient.getFriends()).each(function (i) {
+        if (!createRoomFormMemberNames.includes(chatClient.getFriends()[i].name)) {
+            $('<li/>').text(chatClient.getFriends()[i].name)
+                .css('cursor', 'pointer')
+                .click(function () {
+                    createRoomFormMemberNames.push(chatClient.getFriends()[i].name);
+                    createRoomFormMembers.push(chatClient.getFriends()[i]);
+                    $('#createRoomMembers').text(createRoomFormMemberNames.toString());
+                    setupCreateRoomForm();
+                })
+                .appendTo(friendList);
+        }
+    });
+};
+
+var createRoom = function () {
+    chatClient.createRoom($('#createRoomName').val(), createRoomFormMembers);
+    closeCreateRoomForm();
+};
+
 var setRoomBtns = function () {
-    $('#roomList').empty();
+    var list = $('#roomList');
+    list.empty();
+    var item = $('<li/>');
+    $('<input/>').css('background', 'green').css('border', 'none').css('color', 'white').css('cursor', 'pointer')
+        .attr('type', 'submit')
+        .attr('value', '+')
+        .click(function () {
+            $('#createRoomForm').css('display', 'block');
+            setupCreateRoomForm();
+        }).appendTo(item);
+    item.appendTo(list);
     $(chatClient.getRooms()).each(function (i) {
         var li = $('<li/>');
         li.click(function () {
             chatRoom.changeRoom(i);
         });
-        li.text(chatClient.getRoomByIndex(i).name).appendTo($('#roomList'));
+        li.text(chatClient.getRoomByIndex(i).name).appendTo(list);
     });
 };
 
@@ -56,7 +97,7 @@ var setFriendBtns = function () {
                 .appendTo(list);
 
             var removeBtn = $('<input/>');
-            removeBtn.attr('id', 'removeBtn')
+            removeBtn.addClass('redBtn')
                 .attr('type', 'submit')
                 .attr('value', 'Remove')
                 .click(function () {
@@ -69,8 +110,8 @@ var setFriendBtns = function () {
                 var li = $('<li/>');
                 li.text(chatClient.getFriends()[i].name).appendTo(list);
 
-                var removeBtn = $('<input/>');
-                removeBtn.attr('id', 'addBtn')
+                var addBtn = $('<input/>');
+                addBtn.addClass('greenBtn')
                     .attr('type', 'submit')
                     .attr('value', 'Add')
                     .click(function () {
@@ -99,6 +140,14 @@ var updateChat = function () {
                 .appendTo($('#list'));
         });
     }
+};
+
+var closeCreateRoomForm = function() {
+    createRoomFormMemberNames.splice(0, createRoomFormMemberNames.length);
+    createRoomFormMembers.splice(0, createRoomFormMembers.length);
+    $('#createRoomMembers').empty();
+    $('#createRoomName').val('');
+    $('#createRoomForm').css('display', 'none');
 };
 
 $('#sendBtn').click(function () {

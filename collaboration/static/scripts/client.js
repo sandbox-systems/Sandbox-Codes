@@ -24,6 +24,27 @@ var chatClient = (function () {
     var serverListener = function (msgType, msgData, targeting) {
         if (msgType === "userData") {
             fillData(msgType, msgData, targeting);
+        } else if (msgType === "newRoomData") {
+            var newRoom = new Room(msgData.id, msgData.name, []);
+            for (var i = 0; i < msgData.members.length; i++) {
+                if (msgData.members[i] !== user.id)
+                    newRoom.members.push(userPool[msgData.members[i]]);
+            }
+            rooms.push(newRoom);
+            for (var f = 0; f < friends.length; f++) {
+                var eidObj = easyrtc.usernameToIds(friends[f].uname)[0];
+                if (eidObj !== undefined) {
+                    var room = new Room(newRoom.id, newRoom.name, newRoom.chats);
+                    for (var j = 0; j < newRoom.members.length; j++) {
+                        if (newRoom.members[j].id !== friends[f].id)
+                            room.addMember(newRoom.members[j]);
+                    }
+                    room.addMember(chatClient.getClientUser());
+                    easyrtc.sendDataWS(eidObj.easyrtcid, "addRoom", {room: room}, null);
+                }
+            }
+            easyrtc.joinRoom(newRoom.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
+            onRoomCreated();
         }
     };
 
@@ -75,7 +96,6 @@ var chatClient = (function () {
         } else if (msgType === "addFriendAsMember") {
             getRoomByID(msgData.roomID).addMember(msgData.msg.friend);
         } else if (msgType === "addRoom") {
-            console.log(msgData.room);
             easyrtc.joinRoom(msgData.room.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
             var room = new Room(msgData.room.id, msgData.room.name, msgData.room.chats);
             room.members = msgData.room.members;
@@ -118,6 +138,18 @@ var chatClient = (function () {
         for (var i = 0; i < rooms.length; i++) {
             easyrtc.leaveRoom(rooms[i].id, callbacks.leaveRoomSuccess, callbacks.roomFailure);
         }
+    };
+
+    var createRoom = function (name, members) {
+        var memberIDs = [user.id];
+        for (var i = 0; i < members.length; i++) {
+            memberIDs.push(members[i].id);
+        }
+        var roomData = {
+            name: name,
+            members: memberIDs
+        };
+        easyrtc.sendServerMessage('createRoom', roomData, callbacks.sendServerMsgSuccess, callbacks.failure);
     };
 
     var addRoom = function (roomObj) {
@@ -194,6 +226,7 @@ var chatClient = (function () {
 
     return {
         connect: connect,
+        createRoom: createRoom,
         addChatToRoomByIndex: addChatToRoomByIndex,
         addChatToRoomByID: addChatToRoomByID,
         addFriend: addFriend,
@@ -261,7 +294,6 @@ var chatRoom = (function () {
                     room.addMember(getSelectedRoom().members[j]);
             }
             room.addMember(chatClient.getClientUser());
-            console.log(room.members);
             easyrtc.sendDataWS(eidObj.easyrtcid, "addRoom", {room: room}, null);
         }
     };

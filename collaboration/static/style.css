@@ -111,13 +111,13 @@
     cursor: pointer;
 }
 
-#removeBtn {
+.redBtn {
     background-color: #af0028;
     border: none;
     cursor: pointer;
 }
 
-#addBtn {
+.greenBtn {
     background-color: #4CAF50;
     border: none;
     cursor: pointer;
@@ -133,4 +133,14 @@
 
 #friends ul {
     list-style: none;
+}
+
+#createRoomForm {
+    background: #0b97c4;
+    position: fixed;
+    width: 50%;
+    height: 50%;
+    z-index: 5;
+    margin: 150px;
+    display: none;
 }

@@ -73,7 +73,13 @@ var chatClient = (function () {
         } else if (msgType === "removeUser") {
             removeMemberFromRoom(msgData.roomID, msgData.msg.memberID);
         } else if (msgType === "addFriendAsMember") {
-            addFriendAsMember(msgData.roomID, msgData.msg.friendID);
+            getRoomByID(msgData.roomID).addMember(msgData.msg.friend);
+        } else if (msgType === "addRoom") {
+            console.log(msgData.room);
+            easyrtc.joinRoom(msgData.room.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
+            var room = new Room(msgData.room.id, msgData.room.name, msgData.room.chats);
+            room.members = msgData.room.members;
+            rooms.push(room);
         }
         onDataInterception();
     };
@@ -130,31 +136,22 @@ var chatClient = (function () {
         var toRemoveRoomInd = -1;
         for (var i = 0; i < rooms.length; i++) {
             if (rooms[i].id === roomID) {
+                console.log("ROOM[I]: " + Object.getOwnPropertyNames(rooms[i]));
                 rooms[i].removeMember(memberID);
                 toRemoveRoomInd = i;
                 break;
             }
         }
         if (user.id === memberID) {
-            if (chatRoom.getSelectedRoom().id === roomID) {
-                chatRoom.changeRoom(-1);
-            } else if (chatRoom.getSelectedRoom().id > roomID) {
-                chatRoom.changeRoom(chatRoom.getSelRoomIndex() - 1);
+            if (chatRoom.isRoomSelected()) {
+                if (chatRoom.getSelectedRoom().id === roomID) {
+                    chatRoom.changeRoom(-1);
+                } else if (chatRoom.getSelectedRoom().id > roomID) {
+                    chatRoom.changeRoom(chatRoom.getSelRoomIndex() - 1);
+                }
             }
             easyrtc.leaveRoom(roomID, callbacks.leaveRoomSuccess, callbacks.roomFailure);
             rooms.splice(toRemoveRoomInd, 1);
-        }
-    };
-
-    var addFriendAsMember = function (roomID, friendID) {
-        for (var i = 0; i < friends.length; i++) {
-            if (friends[i].id === friendID) {
-                getRoomByID(roomID).addMember(friends[i]);
-                break;
-            }
-        }
-        if (user.id === friendID) {
-            // easyrtc.joinRoom(roomID, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
         }
     };
 
@@ -245,14 +242,28 @@ var chatRoom = (function () {
     };
 
     var addFriendAsMember = function (friendID) {
+        var friend = null;
         for (var i = 0; i < chatClient.getFriends().length; i++) {
             if (chatClient.getFriends()[i].id === friendID) {
+                friend = chatClient.getFriends()[i];
                 getSelectedRoom().addMember(chatClient.getFriends()[i]);
                 break;
             }
         }
         easyrtc.sendServerMessage('addMemberDB', {roomID: getSelectedRoom().id, memberID: friendID}, callbacks.sendServerMsgSuccess, callbacks.failure);
-        sendData("addFriendAsMember", {friendID: friendID});
+        sendData("addFriendAsMember", {friend: friend});
+
+        var eidObj = easyrtc.usernameToIds(friend.uname)[0];
+        if (eidObj !== undefined) {
+            var room = new Room(getSelectedRoom().id, getSelectedRoom().name, getSelectedRoom().chats);
+            for (var j = 0; j < getSelectedRoom().members.length; j++) {
+                if (getSelectedRoom().members[j].id !== friend.id)
+                    room.addMember(getSelectedRoom().members[j]);
+            }
+            room.addMember(chatClient.getClientUser());
+            console.log(room.members);
+            easyrtc.sendDataWS(eidObj.easyrtcid, "addRoom", {room: room}, null);
+        }
     };
 
     var sendData = function (msgType, data) {
@@ -302,7 +313,11 @@ var chatRoom = (function () {
     };
 
     var hasMember = function (memberObj) {
-        return getMembers().includes(memberObj);
+        for (var i = 0; i < getMembers().length; i++) {
+            if (getMembers()[i].id === memberObj.id)
+                return true;
+        }
+        return false;
     };
 
     return {

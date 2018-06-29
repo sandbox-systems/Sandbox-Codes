@@ -52,6 +52,7 @@ var chatClient = (function () {
         fillUser(msgData.userData);
         fillFriends(msgData.friendData);
         fillRooms(msgData.roomData);
+        handleRequests(msgData.requestData);
         onConnect();
     };
 
@@ -88,6 +89,45 @@ var chatClient = (function () {
         }
     };
 
+    var handleRequests = function (requestData) {
+        for (var i = 0; i < requestData.pending.length; i++) {
+            var eidObj = easyrtc.usernameToIds(requestData.pending[i].from.uname)[0];
+            if (requestData.pending[i].type === "friend") {
+                if (confirm("Do you want to accept a friend request from " + requestData.pending[i].from.name + "?")) {
+                    createAndAddFriend(requestData.pending[i].from);
+                    if (eidObj !== undefined) {
+                        easyrtc.sendDataWS(eidObj.easyrtcid, "friendRequestAccepted", user, null);
+                        easyrtc.sendServerMessage('deleteRequest', {id: requestData.pending[i].id}, callbacks.sendServerMsgSuccess, callbacks.failure);
+                    } else {
+                        easyrtc.sendServerMessage('approveFriendRequest', {
+                            id: requestData.pending[i].id,
+                            user: {id: user.id, name: user.name, uname: user.uname}
+                        }, callbacks.sendServerMsgSuccess, callbacks.failure);
+                    }
+                } else {
+                    if (eidObj !== undefined) {
+                        easyrtc.sendDataWS(eidObj.easyrtcid, "friendRequestDenied", {name: user.name}, null);
+                        easyrtc.sendServerMessage('deleteRequest', {id: requestData.pending[i].id}, callbacks.sendServerMsgSuccess, callbacks.failure);
+                    } else {
+                        easyrtc.sendServerMessage('denyFriendRequest', {
+                            id: requestData.pending[i].id,
+                            user_name: user.name
+                        }, callbacks.sendServerMsgSuccess, callbacks.failure);
+                    }
+                }
+            }
+        }
+        for (var j = 0; j < requestData.processed.length; j++) {
+            if (requestData.processed[i].type === "friend") {
+                if (requestData.processed[i].accepted) {
+                    createAndAddFriend(requestData.processed[i].to);
+                } else {
+                    alert("Your friend request to " + requestData.processed[i].to + " was denied");
+                }
+            }
+        }
+    };
+
     var peerListener = function (sender, msgType, msgData) {
         if (msgType === "chatMessage") {
             chatRoom.handleChat(sender, msgType, msgData);
@@ -100,6 +140,17 @@ var chatClient = (function () {
             var room = new Room(msgData.room.id, msgData.room.name, msgData.room.chats);
             room.members = msgData.room.members;
             rooms.push(room);
+        } else if (msgType === "friendRequest") {
+            if (confirm("Do you want to accept a friend request from " + msgData.name + "?")) {
+                createAndAddFriend(msgData);
+                easyrtc.sendDataWS(sender, "friendRequestAccepted", user, null);
+            } else {
+                easyrtc.sendDataWS(sender, "friendRequestDenied", {name: user.name}, null);
+            }
+        } else if (msgType === "friendRequestAccepted") {
+            createAndAddFriend(msgData);
+        } else if (msgType === "friendRequestDenied") {
+            alert("Your friend request to " + msgData.name + " was denied");
         }
         onDataInterception();
     };
@@ -129,9 +180,33 @@ var chatClient = (function () {
         }
     };
 
+    var createAndAddFriend = function (friendData) {
+        var newFriend = new User(friendData.id, friendData.uname, friendData.name);
+        newFriend.isOnline = true;
+        addFriend(newFriend);
+        easyrtc.sendServerMessage('setupFriendship', {
+            fID1: user.id,
+            fID2: friendData.id
+        }, callbacks.sendServerMsgSuccess, callbacks.failure);
+    };
+
     var addFriend = function (friendObj) {
         userPool[friendObj.id] = friendObj;
         friends.push(friendObj);
+    };
+
+    var sendFriendRequest = function (userObj) {
+        var eidObj = easyrtc.usernameToIds(userObj.uname)[0];
+        if (eidObj !== undefined) {
+            easyrtc.sendDataWS(eidObj.easyrtcid, "friendRequest", user, null);
+        } else {
+            var from = Object.assign({}, user);
+            delete from.isOnline;
+            easyrtc.sendServerMessage('friendRequestDB', {
+                from: from,
+                toID: userObj.id
+            }, callbacks.sendServerMsgSuccess, callbacks.failure);
+        }
     };
 
     var leaveRooms = function () {
@@ -215,6 +290,14 @@ var chatClient = (function () {
         return friends;
     };
 
+    var hasFriend = function (friendObj) {
+        for (var i = 0; i < getFriends().length; i++) {
+            if (getFriends()[i].id === friendObj.id)
+                return true;
+        }
+        return false;
+    };
+
     var getEasyrtcid = function () {
         return easyrtcid;
     };
@@ -230,6 +313,7 @@ var chatClient = (function () {
         addChatToRoomByIndex: addChatToRoomByIndex,
         addChatToRoomByID: addChatToRoomByID,
         addFriend: addFriend,
+        sendFriendRequest: sendFriendRequest,
         disconnect: disconnect,
         addRoom: addRoom,
         getClientUser: getClientUser,
@@ -238,6 +322,7 @@ var chatClient = (function () {
         getRoomByID: getRoomByID,
         getRooms: getRooms,
         getFriends: getFriends,
+        hasFriend: hasFriend,
         getEasyrtcid: getEasyrtcid
     }
 })();
@@ -270,7 +355,10 @@ var chatRoom = (function () {
 
     var removeUser = function (memberID) {
         getSelectedRoom().removeMember(memberID);
-        easyrtc.sendServerMessage('removeUserDB', {roomID: getSelectedRoom().id, memberID: memberID}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        easyrtc.sendServerMessage('removeUserDB', {
+            roomID: getSelectedRoom().id,
+            memberID: memberID
+        }, callbacks.sendServerMsgSuccess, callbacks.failure);
         sendData("removeUser", {memberID: memberID});
     };
 
@@ -283,7 +371,10 @@ var chatRoom = (function () {
                 break;
             }
         }
-        easyrtc.sendServerMessage('addMemberDB', {roomID: getSelectedRoom().id, memberID: friendID}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        easyrtc.sendServerMessage('addMemberDB', {
+            roomID: getSelectedRoom().id,
+            memberID: friendID
+        }, callbacks.sendServerMsgSuccess, callbacks.failure);
         sendData("addFriendAsMember", {friend: friend});
 
         var eidObj = easyrtc.usernameToIds(friend.uname)[0];

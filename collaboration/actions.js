@@ -35,12 +35,27 @@ module.exports = {
         return idObjs;
     },
     // callback = function (userData, friendIDs, user)
-    getUserData: function (db, username, callback) {
+    getUserDataFromUname: function (db, username, callback) {
         // Get user object with appropriate username
-        queries.getUser(db, username, function (user) {
+        queries.getUserFromUname(db, username, function (user) {
             // Once user is fetched, only the id and name are sent to the client
             var userData = {};
             userData.id = user._id.toString();
+            userData.name = user.name;
+
+            // Friend IDs must be cast to ObjectID objects to use in querying
+            var friendIDs = module.exports.getObjectIDList(user.friends);
+
+            callback(userData, friendIDs, user);
+        });
+    },
+    // callback = function (userData)
+    getUserDataFromID: function (db, userID, callback) {
+        // Get user object with appropriate ID
+        queries.getUserFromID(db, userID, function (user) {
+            // Once user is fetched, only the id and name are sent to the client
+            var userData = {};
+            userData.username = user.username;
             userData.name = user.name;
 
             // Friend IDs must be cast to ObjectID objects to use in querying
@@ -120,6 +135,41 @@ module.exports = {
 
                 callback(roomData);
             });
+        });
+    },
+    // callback = function (requestData)
+    getPendingRequestDataFor: function (db, userID, callback) {
+        var requestData = [];
+
+        queries.getRequestsFor(db, userID, function(request) {
+            if (request.accepted === null) {
+                var datum = {
+                    id: request._id.toString(),
+                    type: request.type,
+                    from: request.from
+                };
+                requestData.push(datum);
+            }
+        }, function () {
+            callback(requestData);
+        });
+    },
+    // callback = function (pRequestData)
+    getProcessedRequestDataFrom: function (db, userID, callback) {
+        var requestData = [];
+
+        queries.getRequestsFrom(db, userID, function(request) {
+            if (request.accepted !== null) {
+                var datum = {
+                    type: request.type,
+                    accepted: request.accepted,
+                    to: request.toData
+                };
+                requestData.push(datum);
+                queries.deleteRequest(db, request._id.toString());
+            }
+        }, function () {
+            callback(requestData);
         });
     }
 };

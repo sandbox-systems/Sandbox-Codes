@@ -59,12 +59,90 @@ module.exports = {
             console.log("Successfully added member to room");
         });
     },
+    addFriend: function (db, userID, friendID) {
+        var query = {_id: mongodb.ObjectID(userID)};
+        var push = {$push: {friends: friendID}};
+        db.collection("users").update(query, push, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully added friend to user " + userID);
+        });
+    },
     addRoomToUser: function (db, roomID, userID) {
         var query = {_id: mongodb.ObjectID(userID)};
         var push = {$push: {roomIDs: roomID}};
         db.collection("users").update(query, push, function (err, res) {
             if (err) throw err;
             console.log("Successfully added room to user");
+        });
+    },
+    addRequest: function (db, type, from, toID) {
+        var document = {
+            type: type,
+            from: from,
+            fromID: from.id,
+            to: toID,
+            accepted: null
+        };
+        db.collection("requests").insert(document, function(err, res){
+            if (err) throw err;
+            console.log("Successfully added request");
+        });
+    },
+    updateRequestStatus: function (db, reqID, isAccepted) {
+        var query = {_id: mongodb.ObjectID(reqID)};
+        var set = {$set: {accepted: isAccepted}};
+        db.collection("requests").update(query, set, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully updated request status");
+        });
+    },
+    // forEachCB = function (request)
+    // successCB = function ()
+    getRequestsFor: function (db, toID, forEachCB, successCB) {
+        // Matches every document with to = toID
+        var query = {to: toID};
+
+        db.collection('requests').find(query).forEach(function (req) {
+            forEachCB(req);
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Successfully fetched all requests for " + toID);
+                successCB();
+            }
+        });
+    },
+    // forEachCB = function (request)
+    // successCB = function ()
+    getRequestsFrom: function (db, fromID, forEachCB, successCB) {
+        // Matches every document with appropriate fromID
+        var query = {fromID: fromID};
+
+        db.collection('requests').find(query).forEach(function (req) {
+            forEachCB(req);
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Successfully fetched all requests from " + fromID);
+                successCB();
+            }
+        });
+    },
+    addToUserDataToRequest: function (db, reqID, toUserData) {
+        var query = {_id: mongodb.ObjectID(reqID)};
+        var set = {$set: {toData: toUserData}};
+        db.collection("requests").update(query, set, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully added to user data to request");
+        });
+    },
+    deleteRequest: function (db, reqID) {
+        var query = {_id: mongodb.ObjectID(reqID)};
+        db.collection("requests").remove(query, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully removed request");
         });
     },
     // successCB = function (roomID)
@@ -81,8 +159,23 @@ module.exports = {
         });
     },
     // successCB = function (user)
-    getUser: function (db, uname, successCB) {
+    getUserFromUname: function (db, uname, successCB) {
         var query = {username: uname}, user;
+
+        db.collection("users").find(query).forEach(function (doc) {
+            user = doc;
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Successfully fetched user data and converted cursor to object")
+                successCB(user);
+            }
+        });
+    },
+    // successCB = function (user)
+    getUserFromID: function (db, userID, successCB) {
+        var query = {_id: mongodb.ObjectID(userID)}, user;
 
         db.collection("users").find(query).forEach(function (doc) {
             user = doc;

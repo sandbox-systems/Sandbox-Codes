@@ -123,6 +123,12 @@
     cursor: pointer;
 }
 
+.blueBtn {
+    background-color: #2c72af;
+    border: none;
+    cursor: pointer;
+}
+
 #list {
     list-style: none;
 }

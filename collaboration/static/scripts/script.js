@@ -104,6 +104,18 @@ var setFriendBtns = function () {
                     chatRoom.removeUser(chatRoom.getMembers()[i].id);
                 })
                 .appendTo(list);
+
+            if (!chatClient.hasFriend(chatRoom.getMembers()[i])) {
+                $('<br/>').appendTo(list);
+                var addFriendBtn = $('<input/>');
+                addFriendBtn.addClass('blueBtn')
+                    .attr('type', 'submit')
+                    .attr('value', 'Add Friend')
+                    .click(function () {
+                        chatClient.sendFriendRequest(chatRoom.getMembers()[i]);
+                    })
+                    .appendTo(list);
+            }
         });
         $(chatClient.getFriends()).each(function (i) {
             if (!chatRoom.hasMember(chatClient.getFriends()[i])) {

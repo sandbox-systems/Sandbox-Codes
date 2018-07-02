@@ -51,6 +51,13 @@ module.exports = {
             console.log("Successfully removed room from user");
         });
     },
+    deleteRoom: function (db, roomID) {
+        var query = {_id: mongodb.ObjectID(roomID)};
+        db.collection("rooms").remove(query, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully deleted room");
+        });
+    },
     addMemberToRoom: function (db, roomID, memberID) {
         var query = {_id: mongodb.ObjectID(roomID)};
         var push = {$push: {members: memberID}};

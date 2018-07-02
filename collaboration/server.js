@@ -88,6 +88,9 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
 
             queries.removeMemberFromRoom(db, roomID, memberID);
             queries.removeRoomFromUser(db, roomID, memberID);
+        } else if (msg.msgType === "removeRoomDB") {
+            roomID = msg.msgData.roomID;
+            queries.deleteRoom(db, roomID);
         } else if (msg.msgType === "addMemberDB") {
             roomID = msg.msgData.roomID;
             memberID = msg.msgData.memberID;

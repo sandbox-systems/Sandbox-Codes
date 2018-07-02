@@ -35,6 +35,10 @@ var onRoomChange = function () {
     updateChat();
 };
 
+var onRoomLeave = function () {
+    setRoomBtns();
+};
+
 var onDisconnect = function () {
 };
 
@@ -99,7 +103,7 @@ var setFriendBtns = function () {
             var removeBtn = $('<input/>');
             removeBtn.addClass('redBtn')
                 .attr('type', 'submit')
-                .attr('value', 'Remove')
+                .attr('value', 'Remove From Room')
                 .click(function () {
                     chatRoom.removeUser(chatRoom.getMembers()[i].id);
                 })
@@ -125,7 +129,7 @@ var setFriendBtns = function () {
                 var addBtn = $('<input/>');
                 addBtn.addClass('greenBtn')
                     .attr('type', 'submit')
-                    .attr('value', 'Add')
+                    .attr('value', 'Add To Room')
                     .click(function () {
                         chatRoom.addFriendAsMember(chatClient.getFriends()[i].id);
                     })
@@ -136,10 +140,21 @@ var setFriendBtns = function () {
 };
 
 var setRoomInfo = function () {
+    var info = $('#info');
+    info.find('input').remove();
     if (!chatRoom.isRoomSelected()) {
         $('#roomName').text("No room selected");
     } else {
         $('#roomName').text(chatRoom.getSelectedRoom().name);
+        $('<input/>').addClass('redBtn')
+            .attr('type', 'submit')
+            .attr('value', 'Leave Room')
+            .click(function () {
+                if (confirm("Are you sure you want to leave this group?")) {
+                    chatClient.leaveRoom(chatRoom.getSelectedRoom());
+                }
+            })
+            .appendTo(info);
     }
 };
 

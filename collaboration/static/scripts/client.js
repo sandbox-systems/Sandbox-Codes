@@ -137,9 +137,9 @@ var chatClient = (function () {
             getRoomByID(msgData.roomID).addMember(msgData.msg.friend);
         } else if (msgType === "addRoom") {
             easyrtc.joinRoom(msgData.room.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
-            var room = new Room(msgData.room.id, msgData.room.name, msgData.room.chats);
-            room.members = msgData.room.members;
-            rooms.push(room);
+            var newRoom = new Room(msgData.room.id, msgData.room.name, msgData.room.chats);
+            newRoom.members = msgData.room.members;
+            rooms.push(newRoom);
         } else if (msgType === "friendRequest") {
             if (confirm("Do you want to accept a friend request from " + msgData.name + "?")) {
                 createAndAddFriend(msgData);
@@ -151,6 +151,9 @@ var chatClient = (function () {
             createAndAddFriend(msgData);
         } else if (msgType === "friendRequestDenied") {
             alert("Your friend request to " + msgData.name + " was denied");
+        } else if (msgType === "leavingRoom") {
+            var room = getRoomByID(msgData.room);
+            room.removeMember(msgData.user);
         }
         onDataInterception();
     };
@@ -209,7 +212,39 @@ var chatClient = (function () {
         }
     };
 
-    var leaveRooms = function () {
+    var leaveRoomInSession = function (roomID) {
+        var toRemoveRoomInd = getIndexOfRoom(roomID);
+        if (chatRoom.isRoomSelected()) {
+            if (chatRoom.getSelectedRoom().id === roomID) {
+                chatRoom.changeRoom(-1);
+            } else if (chatRoom.getSelectedRoom().id > roomID) {
+                chatRoom.changeRoom(chatRoom.getSelRoomIndex() - 1);
+            }
+        }
+        easyrtc.leaveRoom(roomID, callbacks.leaveRoomSuccess, callbacks.roomFailure);
+        rooms.splice(toRemoveRoomInd, 1);
+    };
+
+    var leaveRoom = function (roomObj) {
+        roomObj.members.forEach(function (member) {
+            var eidObj = easyrtc.usernameToIds(member.uname)[0];
+            if (eidObj !== undefined) {
+                easyrtc.sendDataWS(eidObj.easyrtcid, "leavingRoom", {room: roomObj.id, user: user.id}, null);
+            }
+        });
+        leaveRoomInSession(roomObj.id);
+        if (roomObj.members.length === 0) {
+            easyrtc.sendServerMessage('removeRoomDB', {roomID: roomObj.id}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        } else {
+            easyrtc.sendServerMessage('removeUserDB', {
+                roomID: roomObj.id,
+                memberID: user.id
+            }, callbacks.sendServerMsgSuccess, callbacks.failure);
+        }
+        onRoomLeave();
+    };
+
+    var discFromAllRooms = function () {
         for (var i = 0; i < rooms.length; i++) {
             easyrtc.leaveRoom(rooms[i].id, callbacks.leaveRoomSuccess, callbacks.roomFailure);
         }
@@ -243,22 +278,13 @@ var chatClient = (function () {
         var toRemoveRoomInd = -1;
         for (var i = 0; i < rooms.length; i++) {
             if (rooms[i].id === roomID) {
-                console.log("ROOM[I]: " + Object.getOwnPropertyNames(rooms[i]));
                 rooms[i].removeMember(memberID);
                 toRemoveRoomInd = i;
                 break;
             }
         }
         if (user.id === memberID) {
-            if (chatRoom.isRoomSelected()) {
-                if (chatRoom.getSelectedRoom().id === roomID) {
-                    chatRoom.changeRoom(-1);
-                } else if (chatRoom.getSelectedRoom().id > roomID) {
-                    chatRoom.changeRoom(chatRoom.getSelRoomIndex() - 1);
-                }
-            }
-            easyrtc.leaveRoom(roomID, callbacks.leaveRoomSuccess, callbacks.roomFailure);
-            rooms.splice(toRemoveRoomInd, 1);
+            leaveRoomInSession(roomID);
         }
     };
 
@@ -272,6 +298,17 @@ var chatClient = (function () {
 
     var getRoomByIndex = function (roomIndex) {
         return rooms[roomIndex];
+    };
+
+    var getIndexOfRoom = function (roomID) {
+        var roomInd = -1;
+        for (var i = 0; i < rooms.length; i++) {
+            if (rooms[i].id === roomID) {
+                roomInd = i;
+                break;
+            }
+        }
+        return roomInd;
     };
 
     var getRoomByID = function (roomID) {
@@ -303,13 +340,14 @@ var chatClient = (function () {
     };
 
     var disconnect = function () {
-        leaveRooms();
+        discFromAllRooms();
         onDisconnect();
     };
 
     return {
         connect: connect,
         createRoom: createRoom,
+        leaveRoom: leaveRoom,
         addChatToRoomByIndex: addChatToRoomByIndex,
         addChatToRoomByID: addChatToRoomByID,
         addFriend: addFriend,

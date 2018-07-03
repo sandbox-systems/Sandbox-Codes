@@ -155,7 +155,7 @@ var setFriendBtns = function () {
                     .attr('type', 'submit')
                     .attr('value', 'Remove Friend')
                     .click(function () {
-                        chatClient.unfriend(chatRoom.getMembers()[i]);
+                        chatClient.unfriend(chatRoom.getFriends()[i]);
                     })
                     .appendTo(list);
             }

@@ -119,6 +119,9 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
             queries.addToUserDataToRequest(db, msg.msgData.id, msg.msgData.user_name);
         } else if (msg.msgType === "setupFriendship") {
             queries.addFriend(db, msg.msgData.fID1, msg.msgData.fID2);
+        } else if (msg.msgType === "unfriendDB") {
+            queries.removeFriend(db, msg.msgData.from, msg.msgData.friend);
+            queries.removeFriend(db, msg.msgData.friend, msg.msgData.from);
         } else if (msg.msgType === "deleteRequest") {
             queries.deleteRequest(db, msg.msgData.id);
         } else {

@@ -74,6 +74,14 @@ module.exports = {
             console.log("Successfully added friend to user " + userID);
         });
     },
+    removeFriend: function (db, userID, friendID) {
+        var query = {_id: mongodb.ObjectID(userID)};
+        var push = {$pull: {friends: friendID}};
+        db.collection("users").update(query, push, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully removed friend from user " + userID);
+        });
+    },
     addRoomToUser: function (db, roomID, userID) {
         var query = {_id: mongodb.ObjectID(userID)};
         var push = {$push: {roomIDs: roomID}};

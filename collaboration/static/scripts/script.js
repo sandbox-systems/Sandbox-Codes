@@ -35,6 +35,10 @@ var onRoomChange = function () {
     updateChat();
 };
 
+var onUnfriend = function () {
+    setFriendBtns();
+};
+
 var onRoomLeave = function () {
     setRoomBtns();
 };
@@ -119,6 +123,16 @@ var setFriendBtns = function () {
                         chatClient.sendFriendRequest(chatRoom.getMembers()[i]);
                     })
                     .appendTo(list);
+            } else {
+                $('<br/>').appendTo(list);
+                var remFriendBtn = $('<input/>');
+                remFriendBtn.addClass('yellowBtn')
+                    .attr('type', 'submit')
+                    .attr('value', 'Remove Friend')
+                    .click(function () {
+                        chatClient.unfriend(chatRoom.getMembers()[i]);
+                    })
+                    .appendTo(list);
             }
         });
         $(chatClient.getFriends()).each(function (i) {
@@ -132,6 +146,16 @@ var setFriendBtns = function () {
                     .attr('value', 'Add To Room')
                     .click(function () {
                         chatRoom.addFriendAsMember(chatClient.getFriends()[i].id);
+                    })
+                    .appendTo(list);
+
+                $('<br/>').appendTo(list);
+                var remFriendBtn = $('<input/>');
+                remFriendBtn.addClass('yellowBtn')
+                    .attr('type', 'submit')
+                    .attr('value', 'Remove Friend')
+                    .click(function () {
+                        chatClient.unfriend(chatRoom.getMembers()[i]);
                     })
                     .appendTo(list);
             }

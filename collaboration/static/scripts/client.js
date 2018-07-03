@@ -151,6 +151,9 @@ var chatClient = (function () {
             createAndAddFriend(msgData);
         } else if (msgType === "friendRequestDenied") {
             alert("Your friend request to " + msgData.name + " was denied");
+        } else if (msgType === "unfriend") {
+            alert("You were unfriended by " + msgData.name + ".");
+            removeFriend(msgData.id);
         } else if (msgType === "leavingRoom") {
             var room = getRoomByID(msgData.room);
             room.removeMember(msgData.user);
@@ -193,6 +196,17 @@ var chatClient = (function () {
         }, callbacks.sendServerMsgSuccess, callbacks.failure);
     };
 
+    var removeFriend = function (friendID) {
+        var toRemoveInd;
+        for (var i = 0; i < friends.length; i++) {
+            if (friends[i].id === friendID) {
+                toRemoveInd = i;
+                break;
+            }
+        }
+        friends.splice(toRemoveInd, 1);
+    };
+
     var addFriend = function (friendObj) {
         userPool[friendObj.id] = friendObj;
         friends.push(friendObj);
@@ -210,6 +224,16 @@ var chatClient = (function () {
                 toID: userObj.id
             }, callbacks.sendServerMsgSuccess, callbacks.failure);
         }
+    };
+
+    var unfriend = function (friendObj) {
+        var eidObj = easyrtc.usernameToIds(friendObj.uname)[0];
+        if (eidObj !== undefined) {
+            easyrtc.sendDataWS(eidObj.easyrtcid, "unfriend", user, null);
+        }
+        removeFriend(friendObj.id);
+        easyrtc.sendServerMessage('unfriendDB', {from: user.id, friend: friendObj.id}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        onUnfriend();
     };
 
     var leaveRoomInSession = function (roomID) {
@@ -352,6 +376,7 @@ var chatClient = (function () {
         addChatToRoomByID: addChatToRoomByID,
         addFriend: addFriend,
         sendFriendRequest: sendFriendRequest,
+        unfriend: unfriend,
         disconnect: disconnect,
         addRoom: addRoom,
         getClientUser: getClientUser,

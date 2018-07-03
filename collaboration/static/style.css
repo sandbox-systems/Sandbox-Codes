@@ -129,6 +129,12 @@
     cursor: pointer;
 }
 
+.yellowBtn {
+    background-color: #afa234;
+    border: none;
+    cursor: pointer;
+}
+
 #list {
     list-style: none;
 }

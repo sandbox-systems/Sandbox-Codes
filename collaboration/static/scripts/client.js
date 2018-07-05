@@ -6,6 +6,7 @@ var chatClient = (function () {
     var userPool = {};
     var fileSenders = {};
     var fileSenderPool = {toRemove: {}};
+    var filesToSend = [];
     var friends = [];
     var rooms = [];
 
@@ -34,17 +35,29 @@ var chatClient = (function () {
     };
 
     var fileCollectionHandler = function (files) {
+        for (var i = 0; i < files.length; i++) {
+            filesToSend.push(files[i]);
+        }
+        onFileCollection();
+    };
+
+    var sendCollectedFiles = function () {
         var roomID = chatRoom.getSelectedRoom().id;
         var keys = Object.keys(fileSenders[roomID]);
         for (var i = 0; i < keys.length; i++) {
-            fileSenders[roomID][keys[i]].sendFiles(files, user, roomID);
+            fileSenders[roomID][keys[i]].sendFiles(filesToSend, user, roomID);
         }
-        Object.keys(files).forEach(function (key) {
-            var file = files[key];
+        Object.keys(filesToSend).forEach(function (key) {
+            var file = filesToSend[key];
             var blob = file.slice();
             addChatToRoomByID(roomID, new SentFile(user.name, user.uname, file.name, blob, file.type));
         });
-        onFileCollection();
+        filesToSend = [];
+        onFilesSent();
+    };
+
+    var getFilesToSend = function () {
+        return filesToSend;
     };
 
     var serverListener = function (msgType, msgData, targeting) {
@@ -444,7 +457,9 @@ var chatClient = (function () {
         getRooms: getRooms,
         getFriends: getFriends,
         hasFriend: hasFriend,
-        getEasyrtcid: getEasyrtcid
+        getEasyrtcid: getEasyrtcid,
+        sendCollectedFiles: sendCollectedFiles,
+        getFilesToSend: getFilesToSend
     }
 })();
 

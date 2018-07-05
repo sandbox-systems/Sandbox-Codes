@@ -1,7 +1,7 @@
 $(document).ready(chatClient.connect);
 
 // Assumes return jQuerySelector
-var getDropper = function() {
+var getDropper = function () {
     return $('#attachForm');
 };
 
@@ -10,12 +10,7 @@ var onConnect = function () {
     setRoomBtns();
     setRoomInfo();
     setupCreateRoomForm();
-    $('#attachBtn').click(function () {
-        $('#attachForm').css('display', 'block');
-    });
-    $('#attachCancelBtn').click(function () {
-        closeAttachForm();
-    });
+    setupAttachmentsForm();
 };
 
 var onRoomOccupantChange = function () {
@@ -39,6 +34,10 @@ var onFileInterception = function () {
 };
 
 var onFileCollection = function () {
+    setAttachmentsList();
+};
+
+var onFilesSent = function () {
     updateChat();
     closeAttachForm();
 };
@@ -86,6 +85,18 @@ var setupCreateRoomForm = function () {
                 })
                 .appendTo(friendList);
         }
+    });
+};
+
+var setupAttachmentsForm = function () {
+    $('#attachBtn').click(function () {
+        $('#attachForm').css('display', 'block');
+    });
+    $('#attachCancelBtn').click(function () {
+        closeAttachForm();
+    });
+    $('#attachSendBtn').click(function () {
+        chatClient.sendCollectedFiles();
     });
 };
 
@@ -184,6 +195,15 @@ var setFriendBtns = function () {
     }
 };
 
+var setAttachmentsList = function () {
+    var list = $('#attachments');
+    list.empty();
+    console.log(chatClient.getFilesToSend());
+    chatClient.getFilesToSend().forEach(function (file) {
+        $('<li/>').text(file.name).appendTo(list);
+    });
+};
+
 var setRoomInfo = function () {
     var info = $('#info');
     info.find('input').remove();
@@ -236,7 +256,7 @@ var updateChat = function () {
     }
 };
 
-var closeCreateRoomForm = function() {
+var closeCreateRoomForm = function () {
     createRoomFormMemberNames.splice(0, createRoomFormMemberNames.length);
     createRoomFormMembers.splice(0, createRoomFormMembers.length);
     $('#createRoomMembers').empty();
@@ -244,8 +264,9 @@ var closeCreateRoomForm = function() {
     $('#createRoomForm').css('display', 'none');
 };
 
-var closeAttachForm = function() {
+var closeAttachForm = function () {
     $('#attachForm').css('display', 'none');
+    setAttachmentsList();
 };
 
 $('#sendBtn').click(function () {

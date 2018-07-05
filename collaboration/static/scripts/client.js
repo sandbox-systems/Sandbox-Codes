@@ -1,9 +1,15 @@
+Object.prototype.includesKey = function (key) {
+    return Object.keys(this).includes(key);
+};
+
 var chatClient = (function () {
     var searchParams = new URLSearchParams(window.location.search);
     var easyrtcid = "";
     var username = searchParams.get('username');
     var user = new User("", username, "");
     var userPool = {};
+    var fileSenders = {};
+    var fileSenderPool = {toRemove: {}};
     var friends = [];
     var rooms = [];
 
@@ -19,6 +25,26 @@ var chatClient = (function () {
 
         easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
         easyrtc.setServerListener(serverListener);
+
+        // .get(0) converts jQuerySelector to DOMString
+        easyrtc_ft.buildDragNDropRegion(getDropper()[0], fileCollectionHandler);
+        easyrtc_ft.buildFileReceiver(callbacks.fileReceiveAcceptReject, fileReceiveHandler, function (sender, status) {
+        });
+    };
+
+    var fileReceiveHandler = function (from, blob, filename, clientData) {
+        console.log("FROM HERE: " + JSON.stringify(clientData));
+        var imageUrl = window.URL.createObjectURL(blob);
+        var img = $('#photo');
+        img.attr('src', imageUrl);
+    };
+
+    var fileCollectionHandler = function (files) {
+        console.log(files);
+        var keys = Object.keys(fileSenders);
+        for (var i = 0; i < keys.length; i++) {
+            fileSenders[keys[i]].sendFiles(files);
+        }
     };
 
     var serverListener = function (msgType, msgData, targeting) {
@@ -162,27 +188,49 @@ var chatClient = (function () {
     };
 
     var roomOccupantListener = function (eName, eData) {
-        updatePeerOnlineStatuses(eData.default);
+        // Update peer online statuses and file senders
+        removeInactiveFileSenders();
+        resetOnlineStatuses();
+        var roomKeys = Object.keys(eData);
+        for (var i = 0; i < roomKeys.length; i++) {
+            var room = eData[roomKeys[i]];
+            var occKeys = Object.keys(room);
+            for (var j = 0; j < occKeys.length; j++) {
+                var occupant = room[occKeys[j]];
+                if (occupant.username !== user.uname) {
+                    setOnline(occupant.username);
+                    updateFileSender(occupant.easyrtcid);
+                }
+            }
+        }
+
         onRoomOccupantChange();
     };
 
-    var updatePeerOnlineStatuses = function (occupants) {
+    var updateFileSender = function (easyrtcid) {
+        if (!(easyrtcid in fileSenders)) {
+            fileSenders[easyrtcid] = new FileSender(easyrtcid);
+        }
+    };
+
+    var removeInactiveFileSenders = function () {
+
+    };
+
+    var setOnline = function (uname) {
+        var poolKeys = Object.keys(userPool);
+        for (var i = 0; i < poolKeys.length; i++) {
+            var user = userPool[poolKeys[i]];
+            if (user.uname === uname)
+                user.isOnline = true;
+        }
+    };
+
+    var resetOnlineStatuses = function () {
         var poolKeys = Object.keys(userPool);
         for (var i = 0; i < poolKeys.length; i++) {
             var id = poolKeys[i];
-            var user = userPool[id];
-            user.isOnline = false;
-            var occKeys = Object.keys(occupants);
-
-            for (var j = 0; j < occKeys.length; j++) {
-                var eid = occKeys[j];
-                var occupant = occupants[eid];
-
-                if (user.uname === occupant.username) {
-                    user.isOnline = true;
-                    break;
-                }
-            }
+            userPool[id].isOnline = false;
         }
     };
 
@@ -232,7 +280,10 @@ var chatClient = (function () {
             easyrtc.sendDataWS(eidObj.easyrtcid, "unfriend", user, null);
         }
         removeFriend(friendObj.id);
-        easyrtc.sendServerMessage('unfriendDB', {from: user.id, friend: friendObj.id}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        easyrtc.sendServerMessage('unfriendDB', {
+            from: user.id,
+            friend: friendObj.id
+        }, callbacks.sendServerMsgSuccess, callbacks.failure);
         onUnfriend();
     };
 
@@ -545,12 +596,17 @@ var callbacks = (function () {
         easyrtc.showError(errorCode, errorText);
     };
 
+    var fileReceiveAcceptReject = function (sender, filenamelist, wasAccepted) {
+        wasAccepted(true);
+    };
+
     return {
         connectSuccess: connectSuccess,
         sendServerMsgSuccess: sendServerMsgSuccess,
         joinRoomSuccess: joinRoomSuccess,
         leaveRoomSuccess: leaveRoomSuccess,
         roomFailure: leaveRoomFailure,
-        failure: failure
+        failure: failure,
+        fileReceiveAcceptReject: fileReceiveAcceptReject
     }
 })();

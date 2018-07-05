@@ -8,13 +8,14 @@
     <!-- Assumes global locations for socket.io.js and easyrtc.js -->
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/easyrtc/easyrtc.js"></script>
+    <script type="text/javascript" src="/easyrtc/easyrtc_ft.js"></script>
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div id="rooms"><ul id="roomList"></ul></div>
+<div id="rooms"><ul id="roomList"></ul><img id="photo" src="" /></div>
 <div id="friends"><ul id="friendsList"></ul></div>
 <div id="info"><span id="roomName"></span></div>
 <div id="input">
@@ -33,6 +34,9 @@
     <br>
     <ul style="list-style: none" id="createRoomFriends"></ul>
     <input class="greenBtn" type="submit" value="Create" onclick="createRoom()" />
+</div>
+<div id="attachForm">
+DROP FILE HERE
 </div>
 
 <script>

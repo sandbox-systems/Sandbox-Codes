@@ -33,3 +33,12 @@ var Room = function (id, name, chats) {
         chats.push(chat);
     };
 };
+
+var FileSender = function (easyrtcid) {
+    this.fileSender = easyrtc_ft.buildFileSender(easyrtcid, null, null);
+
+    this.sendFiles = function (files) {
+        console.log(easyrtcid);
+        this.fileSender(files, true, {"TEST": 5454545454});   // Assumes binary
+    };
+};

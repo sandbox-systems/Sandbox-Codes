@@ -9,7 +9,7 @@ var queries = require("./queries");
 
 // Setup express http application
 var httpApp = express();
-httpApp.use(serveStatic('static', {'index': ['test.html']}));
+httpApp.use(serveStatic('static', {'index': ['index.html']}));
 
 var db, dbClient;
 var dbUrl = 'mongodb://localhost:27017';
@@ -28,6 +28,9 @@ var webServer = http.createServer(httpApp).listen(3000);
 
 // Load and setup socket.io with express server
 var io = require("socket.io").listen(webServer);
+
+// Prevent clients from joining default room
+easyrtc.setOption("roomDefaultEnable", false);
 
 // Start EasyRTC server and handle events
 var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {    // pub is a public app object

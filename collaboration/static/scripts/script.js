@@ -1,5 +1,10 @@
 $(document).ready(chatClient.connect);
 
+// Assumes return jQuerySelector
+var getDropper = function() {
+    return $('#attachForm');
+};
+
 // Event handlers called by client
 var onConnect = function () {
     setRoomBtns();

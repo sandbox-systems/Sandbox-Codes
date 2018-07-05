@@ -164,5 +164,9 @@
     height: 50%;
     z-index: 5;
     margin: 150px;
-    /*display: none;*/
+    display: none;
+}
+
+#input {
+    display: none;
 }

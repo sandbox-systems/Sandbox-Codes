@@ -10,6 +10,12 @@ var onConnect = function () {
     setRoomBtns();
     setRoomInfo();
     setupCreateRoomForm();
+    $('#attachBtn').click(function () {
+        $('#attachForm').css('display', 'block');
+    });
+    $('#attachCancelBtn').click(function () {
+        closeAttachForm();
+    });
 };
 
 var onRoomOccupantChange = function () {
@@ -28,6 +34,15 @@ var onDataInterception = function () {
     updateChat();
 };
 
+var onFileInterception = function () {
+    updateChat();
+};
+
+var onFileCollection = function () {
+    updateChat();
+    closeAttachForm();
+};
+
 var onDataSend = function () {
     setRoomInfo();
     setFriendBtns();
@@ -38,6 +53,7 @@ var onRoomChange = function () {
     setRoomInfo();
     setFriendBtns();
     updateChat();
+    $('#input').css('display', 'block');
 };
 
 var onUnfriend = function () {
@@ -102,7 +118,7 @@ var setRoomBtns = function () {
 var setFriendBtns = function () {
     var list = $('#friendsList');
     list.empty();
-    if (chatRoom.isRoomSelected()) {
+    if (chatRoom.isARoomSelected()) {
         $(chatRoom.getMembers()).each(function (i) {
             var li = $('<li/>');
             li.text(chatRoom.getMembers()[i].name)
@@ -171,7 +187,7 @@ var setFriendBtns = function () {
 var setRoomInfo = function () {
     var info = $('#info');
     info.find('input').remove();
-    if (!chatRoom.isRoomSelected()) {
+    if (!chatRoom.isARoomSelected()) {
         $('#roomName').text("No room selected");
     } else {
         $('#roomName').text(chatRoom.getSelectedRoom().name);
@@ -188,12 +204,34 @@ var setRoomInfo = function () {
 };
 
 var updateChat = function () {
-    $('#list').empty();
-    if (chatRoom.isRoomSelected()) {
-        $(chatRoom.getSelectedRoom().chats).each(function (i) {
-            $('<li/>')
-                .text(chatRoom.getSelectedRoom().chats[i])
-                .appendTo($('#list'));
+    var list = $('#list');
+    list.empty();
+    if (chatRoom.isARoomSelected()) {
+        console.log(chatRoom.getSelectedRoom());
+        chatRoom.getSelectedRoom().chats.forEach(function (content) {
+            if (typeof content === "string") {
+                $('<li/>')
+                    .text(content)
+                    .appendTo(list);
+            } else if (typeof content === "object") {
+                $('<li/>').text(content.fromUname + " " + content.fromName)
+                    .appendTo(list);
+                if (content.type.includes("image")) {   // MIME Type
+                    var img = $('<img src=""/>');
+                    content.parseAsImage(img);
+                    img.appendTo(list);
+                } else {
+                    $('<li/>').text(content.name)
+                        .appendTo(list);
+                }
+                $('<input/>').addClass('greenBtn')
+                    .attr('type', 'submit')
+                    .attr('value', 'Download')
+                    .click(function () {
+                        content.download();
+                    })
+                    .appendTo(list);
+            }
         });
     }
 };
@@ -204,6 +242,10 @@ var closeCreateRoomForm = function() {
     $('#createRoomMembers').empty();
     $('#createRoomName').val('');
     $('#createRoomForm').css('display', 'none');
+};
+
+var closeAttachForm = function() {
+    $('#attachForm').css('display', 'none');
 };
 
 $('#sendBtn').click(function () {

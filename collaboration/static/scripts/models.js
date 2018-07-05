@@ -34,11 +34,29 @@ var Room = function (id, name, chats) {
     };
 };
 
-var FileSender = function (easyrtcid) {
-    this.fileSender = easyrtc_ft.buildFileSender(easyrtcid, null, null);
+var SentFile = function (fromName, fromUname, name, blob, type) {
+    this.fromName = fromName;
+    this.fromUname = fromUname;
+    this.name = name;
+    this.blob = blob;
+    this.type = type || blob.type;
 
-    this.sendFiles = function (files) {
+    this.download = function () {
+        easyrtc_ft.saveAs(this.blob, this.name);
+    };
+
+    this.parseAsImage = function (imgSel) {
+        var imageUrl = window.URL.createObjectURL(this.blob);
+        imgSel.attr('src', imageUrl);
+    };
+};
+
+var FileSender = function (easyrtcid, uname) {
+    this.fileSender = easyrtc_ft.buildFileSender(easyrtcid, null, null);
+    this.uname = uname;
+
+    this.sendFiles = function (files, from, roomID) {
         console.log(easyrtcid);
-        this.fileSender(files, true, {"TEST": 5454545454});   // Assumes binary
+        this.fileSender(files, true, {fromUname: from.uname, fromName: from.name, room: roomID});   // Assumes binary
     };
 };

@@ -47,7 +47,7 @@ div.chat-fixed {
   text-align: center;
   font-size: 28px;
   padding: 20px;
-  width: 200px;
+  width: 100%;
   transition: all 0.5s;
   cursor: pointer;
   margin: 5px;
@@ -2653,7 +2653,7 @@ div.chat-fixed {
         position: absolute;
         left: 50%;
         top: 15%;
-        height: 120%;
+		height: 70%;
     }
 
 		.image img {

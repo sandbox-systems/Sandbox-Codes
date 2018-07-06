@@ -3,3 +3,4 @@
 *.iws
 out/*
 .idea_modules/*
+collaboration/node_modules/

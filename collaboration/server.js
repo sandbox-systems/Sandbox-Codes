@@ -29,6 +29,9 @@ var webServer = http.createServer(httpApp).listen(3000);
 // Load and setup socket.io with express server
 var io = require("socket.io").listen(webServer);
 
+// Prevent clients from joining default room
+easyrtc.setOption("roomDefaultEnable", false);
+
 // Start EasyRTC server and handle events
 var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {    // pub is a public app object
     if (error)
@@ -82,6 +85,12 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
             var chatMsg = msg.msgData.chatMsg;
 
             queries.addChat(db, roomID, chatMsg);
+        } else if (msg.msgType === "fileMsgDB") {
+            roomID = msg.msgData.roomID;
+            var file = msg.msgData.file;
+            file.blob = Buffer.from(file.blob).toString('base64');
+
+            queries.addChat(db, roomID, file);
         } else if (msg.msgType === "removeUserDB") {
             roomID = msg.msgData.roomID;
             memberID = msg.msgData.memberID;

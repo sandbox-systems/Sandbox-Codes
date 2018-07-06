@@ -264,7 +264,7 @@ easyrtc_ft.buildFileSender = function(destUser, progressListener, options) {
         });
     }
 
-    function sendFilesOffer(files, areBinary) {
+    function sendFilesOffer(files, areBinary, clientData) {
         
         var fileNameList = [];
         for (var i = 0, l = files.length; i < l; i++) {
@@ -283,7 +283,8 @@ easyrtc_ft.buildFileSender = function(destUser, progressListener, options) {
         
         easyrtc.sendDataWS(destUser, "filesOffer", {
             seq: seq, 
-            fileNameList: fileNameList
+            fileNameList: fileNameList,
+            clientData: clientData
         });
 
         progressListener({
@@ -571,6 +572,8 @@ easyrtc_ft.buildFileReceiver = function(acceptRejectCB, blobAcceptor, statusCB, 
     var positionAcked = 0;
     var ackThreshold = options.ackThreshold || 10000; // receiver is allowed to be 10KB behind of sender
 
+    var clientData = null;
+
     var roomOccupantListener = function(eventType, eventData) {
         var destUser;
         var foundUser;
@@ -659,6 +662,7 @@ easyrtc_ft.buildFileReceiver = function(acceptRejectCB, blobAcceptor, statusCB, 
                 delete userOffers[destOffer];
             }
         });
+        clientData = msgData.clientData;
     }
 
     function fileChunkHandler(otherGuy, msgType, msgData) {
@@ -680,7 +684,7 @@ easyrtc_ft.buildFileReceiver = function(acceptRejectCB, blobAcceptor, statusCB, 
                     var blob = new Blob(userOffer.currentData, {
                         type: userOffer.currentFileType
                     });
-                    blobAcceptor(otherGuy, blob, userOffer.currentFileName);
+                    blobAcceptor(otherGuy, blob, userOffer.currentFileName, clientData);
                     statusCB(otherGuy, {
                         seq: destOffer,
                         status: "eof", 

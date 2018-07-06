@@ -4,6 +4,9 @@ var chatClient = (function () {
     var username = searchParams.get('username');
     var user = new User("", username, "");
     var userPool = {};
+    var fileSenders = {};
+    var fileSenderPool = {toRemove: {}};
+    var filesToSend = [];
     var friends = [];
     var rooms = [];
 
@@ -19,6 +22,48 @@ var chatClient = (function () {
 
         easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
         easyrtc.setServerListener(serverListener);
+
+        // .get(0) converts jQuerySelector to DOMString
+        easyrtc_ft.buildDragNDropRegion(getDropper()[0], fileCollectionHandler);
+        easyrtc_ft.buildFileReceiver(callbacks.fileReceiveAcceptReject, fileReceiveHandler, function (sender, status) {
+        });
+    };
+
+    var fileReceiveHandler = function (from, blob, filename, clientData) {
+        addChatToRoomByID(clientData.room, new SentFile(clientData.fromName, clientData.fromUname, filename, blob));
+        onFileInterception();
+    };
+
+    var fileCollectionHandler = function (files) {
+        for (var i = 0; i < files.length; i++) {
+            filesToSend.push(files[i]);
+        }
+        onFileCollection();
+    };
+
+    var sendCollectedFiles = function () {
+        var roomID = chatRoom.getSelectedRoom().id;
+        var keys = Object.keys(fileSenders[roomID]);
+        for (var i = 0; i < keys.length; i++) {
+            fileSenders[roomID][keys[i]].sendFiles(filesToSend, user, roomID);
+        }
+        Object.keys(filesToSend).forEach(function (key) {
+            var file = filesToSend[key];
+            var blob = file.slice();
+            // addChatToRoomByID(roomID, new SentFile(user.name, user.uname, file.name, blob, file.type));
+            var sentFile = new SentFile(user.name, user.uname, file.name, blob, file.type);
+            addChatToRoomByID(roomID, sentFile);
+            easyrtc.sendServerMessage('fileMsgDB', {
+                roomID: roomID,
+                file: sentFile
+            }, callbacks.sendServerMsgSuccess, callbacks.failure);
+        });
+        filesToSend = [];
+        onFilesSent();
+    };
+
+    var getFilesToSend = function () {
+        return filesToSend;
     };
 
     var serverListener = function (msgType, msgData, targeting) {
@@ -68,9 +113,26 @@ var chatClient = (function () {
         }
     };
 
+    function base64_to_blob(s) {
+        var byteChars = atob(s);
+        var l = byteChars.length;
+        var byteNumbers = new Array(l);
+        for (var i = 0; i < l; i++) {
+            byteNumbers[i] = byteChars.charCodeAt(i);
+        }
+        return new Blob([new Uint8Array(byteNumbers)]);
+    }
+
     var fillRooms = function (roomData) {
         for (var i = 0; i < roomData.length; i++) {
             var datum = roomData[i];
+            for (var c = 0; c < datum.chats.length; c++) {
+                if (typeof datum.chats[c] === "object") {
+                    datum.chats[c].blob = base64_to_blob(datum.chats[c].blob);
+                    datum.chats[c] = new SentFile(datum.chats[c].fromName, datum.chats[c].fromUname,
+                        datum.chats[c].name, datum.chats[c].blob, datum.chats[c].type);
+                }
+            }
             var room = new Room(datum.id, datum.name, datum.chats);
 
             for (var j = 0; j < datum.members.length; j++) {
@@ -162,26 +224,55 @@ var chatClient = (function () {
     };
 
     var roomOccupantListener = function (eName, eData) {
-        updatePeerOnlineStatuses(eData.default);
+        // Update peer online statuses and file senders
+        var newToRemove = {};
+        enableActiveUsers(eData, newToRemove);
+        disableInactiveUsers();
+        fileSenderPool.toRemove = Object.assign({}, newToRemove);
         onRoomOccupantChange();
     };
 
-    var updatePeerOnlineStatuses = function (occupants) {
+    var enableActiveUsers = function (eData, newToRemove) {
+        Object.keys(eData).forEach(function (roomID) {
+            fileSenders[roomID] = {};
+            Object.keys(eData[roomID]).forEach(function (eid) {
+                if (eData[roomID][eid].username !== user.uname) {
+                    if (Object.keys(fileSenderPool.toRemove).includes(eid)) {
+                        delete fileSenderPool.toRemove[eid];
+                    }
+                    if (!Object.keys(fileSenderPool).includes(eid)) {
+                        fileSenderPool[eid] = new FileSender(eid, eData[roomID][eid].username);
+                    }
+                    fileSenders[roomID][eid] = fileSenderPool[eid];
+                    if (!Object.keys(newToRemove).includes(eid)) {
+                        newToRemove[eid] = [];
+                    }
+                    newToRemove[eid].push(roomID);
+                    setOnlineStatus(eData[roomID][eid].username, true);
+                }
+            });
+        });
+    };
+
+    var disableInactiveUsers = function () {
+        if (Object.keys(fileSenderPool.toRemove).length !== 0) {
+            Object.keys(fileSenderPool.toRemove).forEach(function (eid) {
+                fileSenderPool.toRemove[eid].forEach(function (roomID) {
+                    delete fileSenders[roomID][eid];
+                });
+                setOnlineStatus(fileSenderPool[eid].uname, false);
+                delete fileSenderPool[eid];
+            });
+        }
+    };
+
+    var setOnlineStatus = function (uname, isOnline) {
         var poolKeys = Object.keys(userPool);
         for (var i = 0; i < poolKeys.length; i++) {
-            var id = poolKeys[i];
-            var user = userPool[id];
-            user.isOnline = false;
-            var occKeys = Object.keys(occupants);
-
-            for (var j = 0; j < occKeys.length; j++) {
-                var eid = occKeys[j];
-                var occupant = occupants[eid];
-
-                if (user.uname === occupant.username) {
-                    user.isOnline = true;
-                    break;
-                }
+            var user = userPool[poolKeys[i]];
+            if (user.uname === uname) {
+                user.isOnline = isOnline;
+                break;
             }
         }
     };
@@ -232,13 +323,16 @@ var chatClient = (function () {
             easyrtc.sendDataWS(eidObj.easyrtcid, "unfriend", user, null);
         }
         removeFriend(friendObj.id);
-        easyrtc.sendServerMessage('unfriendDB', {from: user.id, friend: friendObj.id}, callbacks.sendServerMsgSuccess, callbacks.failure);
+        easyrtc.sendServerMessage('unfriendDB', {
+            from: user.id,
+            friend: friendObj.id
+        }, callbacks.sendServerMsgSuccess, callbacks.failure);
         onUnfriend();
     };
 
     var leaveRoomInSession = function (roomID) {
         var toRemoveRoomInd = getIndexOfRoom(roomID);
-        if (chatRoom.isRoomSelected()) {
+        if (chatRoom.isARoomSelected()) {
             if (chatRoom.getSelectedRoom().id === roomID) {
                 chatRoom.changeRoom(-1);
             } else if (chatRoom.getSelectedRoom().id > roomID) {
@@ -386,7 +480,9 @@ var chatClient = (function () {
         getRooms: getRooms,
         getFriends: getFriends,
         hasFriend: hasFriend,
-        getEasyrtcid: getEasyrtcid
+        getEasyrtcid: getEasyrtcid,
+        sendCollectedFiles: sendCollectedFiles,
+        getFilesToSend: getFilesToSend
     }
 })();
 
@@ -511,7 +607,7 @@ var chatRoom = (function () {
         sendChat: sendChat,
         getSelectedRoom: getSelectedRoom,
         getSelRoomIndex: getSelRoomIndex,
-        isRoomSelected: isRoomSelected,
+        isARoomSelected: isRoomSelected,
         changeRoom: changeRoom,
         removeUser: removeUser,
         addFriendAsMember: addFriendAsMember,
@@ -545,12 +641,17 @@ var callbacks = (function () {
         easyrtc.showError(errorCode, errorText);
     };
 
+    var fileReceiveAcceptReject = function (sender, filenamelist, wasAccepted) {
+        wasAccepted(true);
+    };
+
     return {
         connectSuccess: connectSuccess,
         sendServerMsgSuccess: sendServerMsgSuccess,
         joinRoomSuccess: joinRoomSuccess,
         leaveRoomSuccess: leaveRoomSuccess,
         roomFailure: leaveRoomFailure,
-        failure: failure
+        failure: failure,
+        fileReceiveAcceptReject: fileReceiveAcceptReject
     }
 })();

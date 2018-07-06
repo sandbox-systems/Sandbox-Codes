@@ -198,7 +198,6 @@ var setFriendBtns = function () {
 var setAttachmentsList = function () {
     var list = $('#attachments');
     list.empty();
-    console.log(chatClient.getFilesToSend());
     chatClient.getFilesToSend().forEach(function (file) {
         $('<li/>').text(file.name).appendTo(list);
     });
@@ -227,7 +226,6 @@ var updateChat = function () {
     var list = $('#list');
     list.empty();
     if (chatRoom.isARoomSelected()) {
-        console.log(chatRoom.getSelectedRoom());
         chatRoom.getSelectedRoom().chats.forEach(function (content) {
             if (typeof content === "string") {
                 $('<li/>')

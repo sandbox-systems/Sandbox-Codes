@@ -46,6 +46,9 @@ var SentFile = function (fromName, fromUname, name, blob, type) {
     };
 
     this.parseAsImage = function (imgSel) {
+        if (Object.prototype.toString.call(this.blob) === "[object ArrayBuffer]") {
+            this.blob = new Blob([this.blob]);
+        }
         var imageUrl = window.URL.createObjectURL(this.blob);
         imgSel.attr('src', imageUrl);
     };

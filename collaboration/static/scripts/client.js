@@ -50,7 +50,13 @@ var chatClient = (function () {
         Object.keys(filesToSend).forEach(function (key) {
             var file = filesToSend[key];
             var blob = file.slice();
-            addChatToRoomByID(roomID, new SentFile(user.name, user.uname, file.name, blob, file.type));
+            // addChatToRoomByID(roomID, new SentFile(user.name, user.uname, file.name, blob, file.type));
+            var sentFile = new SentFile(user.name, user.uname, file.name, blob, file.type);
+            addChatToRoomByID(roomID, sentFile);
+            easyrtc.sendServerMessage('fileMsgDB', {
+                roomID: roomID,
+                file: sentFile
+            }, callbacks.sendServerMsgSuccess, callbacks.failure);
         });
         filesToSend = [];
         onFilesSent();
@@ -107,9 +113,26 @@ var chatClient = (function () {
         }
     };
 
+    function base64_to_blob(s) {
+        var byteChars = atob(s);
+        var l = byteChars.length;
+        var byteNumbers = new Array(l);
+        for (var i = 0; i < l; i++) {
+            byteNumbers[i] = byteChars.charCodeAt(i);
+        }
+        return new Blob([new Uint8Array(byteNumbers)]);
+    }
+
     var fillRooms = function (roomData) {
         for (var i = 0; i < roomData.length; i++) {
             var datum = roomData[i];
+            for (var c = 0; c < datum.chats.length; c++) {
+                if (typeof datum.chats[c] === "object") {
+                    datum.chats[c].blob = base64_to_blob(datum.chats[c].blob);
+                    datum.chats[c] = new SentFile(datum.chats[c].fromName, datum.chats[c].fromUname,
+                        datum.chats[c].name, datum.chats[c].blob, datum.chats[c].type);
+                }
+            }
             var room = new Room(datum.id, datum.name, datum.chats);
 
             for (var j = 0; j < datum.members.length; j++) {

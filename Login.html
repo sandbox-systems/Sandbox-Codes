@@ -47,11 +47,12 @@
 </body>
 <script>
 	function checker(){
-		if(document.getElementById("user").value == "" || document.getElementById("pass").value == ""){
+        var username = document.getElementById("user").value;
+        if(username == "" || document.getElementById("pass").value == ""){
 			swal("Incorrect Login", "Please Try Again", "error");
 			
 		}else{
-			location.replace("Castle.html");
+			location.replace("Castle.html?username=" + username);
 		}
 	}
 </script>

@@ -50,7 +50,6 @@ var chatClient = (function () {
         Object.keys(filesToSend).forEach(function (key) {
             var file = filesToSend[key];
             var blob = file.slice();
-            // addChatToRoomByID(roomID, new SentFile(user.name, user.uname, file.name, blob, file.type));
             var sentFile = new SentFile(user.name, user.uname, file.name, blob, file.type);
             addChatToRoomByID(roomID, sentFile);
             easyrtc.sendServerMessage('fileMsgDB', {

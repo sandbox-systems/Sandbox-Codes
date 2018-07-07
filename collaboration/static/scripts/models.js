@@ -42,6 +42,9 @@ var SentFile = function (fromName, fromUname, name, blob, type) {
     this.type = type || blob.type;
 
     this.download = function () {
+        if (Object.prototype.toString.call(this.blob) === "[object ArrayBuffer]") {
+            this.blob = new Blob([this.blob]);
+        }
         easyrtc_ft.saveAs(this.blob, this.name);
     };
 

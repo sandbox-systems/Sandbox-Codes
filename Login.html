@@ -19,7 +19,6 @@
   <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
 <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
   <div class="cont">
   <div class="demo">
@@ -40,7 +39,7 @@
           <input type="password" class="login__input pass" id="pass" placeholder="Password"/>
         </div>
         <button type="button" id="letsgo" onclick="javascript:checker()" class="login__submit">Sign in</button>
-        <p class="login__signup">      Don't have an account? &nbsp;<a id=hello href="SignUp.html">Sign up</a></p>
+		 <p class="login__signup">      Don't have an account? &nbsp;<a id=hello href="SignUp.html">Sign up here</a></p>
         </div>
     </div>
   </div>
@@ -48,11 +47,12 @@
 </body>
 <script>
 	function checker(){
-		if(document.getElementById("user").value == "" || document.getElementById("pass").value == ""){
+        var username = document.getElementById("user").value;
+        if(username == "" || document.getElementById("pass").value == ""){
 			swal("Incorrect Login", "Please Try Again", "error");
 			
 		}else{
-			location.replace("Castle.html");
+			location.replace("Castle.html?username=" + username);
 		}
 	}
 </script>

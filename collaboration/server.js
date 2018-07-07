@@ -15,7 +15,7 @@ var db, dbClient;
 var dbUrl = 'mongodb://localhost:27017';
 
 // Connect to MongoDB server
-mongodb.connect(dbUrl, function (err, client) {
+mongodb.connect(dbUrl, {useNewUrlParser: true}, function (err, client) {
     if (err) throw err;
     console.log("Successfully connected to MongoDB server");
 

@@ -30,14 +30,56 @@
 }
 
 #profile-container img {
+	object-fit:cover;
     width: 150px;
     height: 150px;
+	overflow: hidden;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    font-family:"Lato";
+	font-size: 15px;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 220px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 25%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 25%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }
 </style>
 <body>
-    <div id="preloader">
+    <!--<div id="preloader">
       <div id="loader"></div>
-    </div>
+    </div>-->
 <div class="container animated fadeIn">
 	<div id="profile-container">
    <image id="profileImage" src="images/profiletemp.png" />
@@ -71,6 +113,17 @@
 <td><form class="login__row">
         <input class="login__input" type="email" placeholder="johndoe@gmail.com">
     </form></td></tr>
+	<tr class="animated fadeIn">
+	<td>
+		<div class=" tooltip categ_row"><span class="tooltiptext">Relax Mode uses the Pomodoro technique to provide you breaks in pre-scheduled time to increase creativity and efficiency</span><div class="text">Relax Mode</div></div>
+	</td>
+	<td>
+		<label class="switch" style="float: left; width: 90%;right:0;">
+            <input value="None" type="checkbox">
+            <span class="slider"></span>
+            </label>	
+	</td>
+	</tr>
     </table>
 </body>
 <script>

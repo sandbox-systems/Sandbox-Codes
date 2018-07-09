@@ -4,6 +4,7 @@
 <head>
 <link rel="icon" href="images/logo-king.png">
 <link rel="stylesheet" href="css/animate.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/CastleStyle.css">
 <title>Sandbox</title>
 		<meta charset="utf-8" />
@@ -47,6 +48,7 @@
  </div></a>
   <a href="index.html">Main Site</a>
   <a href="Settings.html" target="mainframe">Settings</a>
+<a href="Pricing.html">Upgrade/Pricing</a>
   <a href="Login.html">Logout</a>
 <img src="images/white-logo.png" class="milk">
 </div>
@@ -59,9 +61,9 @@
     <tr><td><a onClick="openSearch()"  style="cursor: pointer"><i class="fa fa-search"></i></a></td></tr>
     <tr><td><a  href="Sandbox_Back/playground.php" target="mainframe"><i class="fa fa-terminal"></i></a></td></tr> 
     <tr><td><a href="FileM.html" target="mainframe"><i class="fa fa-archive"></i></a></td></tr>
-    <tr><td><a id="chat" target="mainframe"><i class="fa fa-comments-o"></i></a></td></tr>
+    <tr><td><a id="chat" href="" target="mainframe"><i class="fa fa-comments-o"></i></a></td></tr>
     <tr><td><a onclick="return false"target="mainframe"><i class="fa fa-bars"></i></a></td></tr>
-    <tr><td><a onClick="openNav()" style="cursor: pointer"><img src="images/sree.jpg" alt="Avatar" class= userpic></a></td></tr>
+    <tr><td><a onClick="openNav()" style="cursor: pointer"><img src="images/Stock.jpg" alt="Avatar" class= userpic></a></td></tr>
     </table>
 </div>
 <div id="myOverlay" class="overlay animated fadeIn">
@@ -159,7 +161,7 @@ document.getElementById("sbxx").oninput = function(){
 	document.getElementById("so").className = "searchoptions animated bounceOut";
 	document.getElementById("go").className = "searchoptions animated bounceOut";
 	document.getElementById("oc").style.top = "46%";}*/
-  
+
 var chatBtn = document.getElementById('chat');
 chatBtn.href = "http://127.0.0.1:3000?username=" + window.location.search.substr(1).split('=')[1];
 </script>

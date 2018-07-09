@@ -38,19 +38,13 @@ var SentFile = function (fromName, fromUname, name, blob, type) {
     this.fromName = fromName;
     this.fromUname = fromUname;
     this.name = name;
-    this.blob = blob;
+    this.blob = Object.prototype.toString.call(this.blob) === "[object ArrayBuffer]" ?
+        new Blob([this.blob]) : blob;
+    this.url = window.URL.createObjectURL(this.blob);
     this.type = type || blob.type;
 
     this.download = function () {
         easyrtc_ft.saveAs(this.blob, this.name);
-    };
-
-    this.parseAsImage = function (imgSel) {
-        if (Object.prototype.toString.call(this.blob) === "[object ArrayBuffer]") {
-            this.blob = new Blob([this.blob]);
-        }
-        var imageUrl = window.URL.createObjectURL(this.blob);
-        imgSel.attr('src', imageUrl);
     };
 };
 

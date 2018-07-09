@@ -1,7 +1,13 @@
+/* REQUIRED FOR ANGULAR */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 html{
 	font-family: "Lato";
 	background-color: #FFF8E7;
 }
+
 .container{
     border: 2px solid #dedede;
     background-color: #f1f1f1;
@@ -152,7 +158,7 @@ position:relative;
     cursor: pointer;
 }
 
-#list {
+#chatList {
     list-style: none;
 }
 
@@ -194,4 +200,12 @@ position:relative;
 
 #input {
     display: none;
+}
+
+.ownChat {
+    color: red;
+}
+
+.otherChat {
+    color: blue;
 }

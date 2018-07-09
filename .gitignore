@@ -4,3 +4,5 @@
 out/*
 .idea_modules/*
 collaboration/node_modules/
+
+chat/node_modules/

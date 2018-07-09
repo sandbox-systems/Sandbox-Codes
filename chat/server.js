@@ -9,13 +9,13 @@ var queries = require("./queries");
 
 // Setup express http application
 var httpApp = express();
-httpApp.use(serveStatic('static', {'index': ['index.html']}));
+httpApp.use(serveStatic('static', {'index': ['chat.html']}));
 
 var db, dbClient;
 var dbUrl = 'mongodb://localhost:27017';
 
 // Connect to MongoDB server
-mongodb.connect(dbUrl, function (err, client) {
+mongodb.connect(dbUrl, {useNewUrlParser: true}, function (err, client) {
     if (err) throw err;
     console.log("Successfully connected to MongoDB server");
 

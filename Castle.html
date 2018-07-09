@@ -161,5 +161,8 @@ document.getElementById("sbxx").oninput = function(){
 	document.getElementById("so").className = "searchoptions animated bounceOut";
 	document.getElementById("go").className = "searchoptions animated bounceOut";
 	document.getElementById("oc").style.top = "46%";}*/
+
+var chatBtn = document.getElementById('chat');
+chatBtn.href = "http://127.0.0.1:3000?username=" + window.location.search.substr(1).split('=')[1];
 </script>
 </html>

@@ -1,0 +1,211 @@
+/* REQUIRED FOR ANGULAR */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+html{
+	font-family: "Lato";
+	background-color: #FFF8E7;
+}
+
+.container{
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    width: 50%;
+}
+
+.darker {
+position:relative;
+    border-color: #ccc;
+    background-color: #ddd;
+    left:100%;
+}
+
+#rooms {
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(147, 112, 219);
+    overflow-x: hidden;
+    padding-top: 20px;
+    color: white;
+}
+
+#friends {
+    height: 100%;
+    width: 10%;
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    right: 0;
+    background-color: #0e1107;
+    overflow-x: hidden;
+    padding-top: 20px;
+    color: white;
+}
+
+#input {
+    height: 8%;
+    width: 85%;
+    position: fixed;
+    z-index: 2;
+    bottom: 0;
+    right: 0;
+    background-color: white;
+    overflow-x: hidden;
+    padding-top: 20px;
+	border-top: solid 2px mediumpurple;
+}
+
+#info {
+    height: 5%;
+    width: 85%;
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    right: 0;
+    background-color: rgba(147, 112, 219,0.4);
+    overflow-x: hidden;
+    padding-top: 20px;
+	border-bottom: solid 2px white;
+}
+
+#log {
+    height: 85%;
+    width: 85%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #FFF8E7;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-top: 50px;
+    font-size: 20px;
+}
+
+#inputBox {
+	background-color: rgba(0,0,0,0.2);
+    position: relative;
+    float: left;
+    bottom: 20%;
+    width: 75%;
+    height: 75%;
+	border-radius: 50px;
+	border: 0;
+	padding-left: 1%;
+	
+}
+#inputBox:focus{
+	outline: none;
+}
+
+#sendBtn {
+    position: relative;
+    float: right;
+	width: 7%;
+	height: 75%;
+    bottom: 20%;
+    background-color: #4CAF50;
+    border: none;
+    padding: 1%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+	border-radius: 50px;
+	margin-right: 5%;
+}
+
+.redBtn {
+    background-color: #af0028;
+    border: none;
+    cursor: pointer;
+	float: right;
+	border-radius: 50px;
+	margin-right: 10%;
+}
+
+.greenBtn {
+    background-color: #4CAF50;
+    border: none;
+    cursor: pointer;
+}
+
+.blueBtn {
+    background-color: #2c72af;
+    border: none;
+    cursor: pointer;
+	position: relative;
+	float: left;
+	margin-right: 2%;
+	margin-left: 2%;
+	padding: 1%;
+	bottom: 20%;
+	border-radius: 50px;
+}
+
+.yellowBtn {
+    background-color: #afa234;
+    border: none;
+    cursor: pointer;
+}
+
+#chatList {
+    list-style: none;
+}
+
+#rooms ul {
+    list-style: none;
+}
+#rooms li{
+	background-color: black;
+	border-bottom: solid 1px white;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 2%;
+	padding: 5%;
+}
+
+#friends ul {
+    list-style: none;
+}
+
+#createRoomForm {
+    background: #0b97c4;
+    position: fixed;
+    width: 50%;
+    height: 50%;
+    z-index: 5;
+    margin: 150px;
+    display: none;
+}
+
+#attachForm {
+    background: #0b97c4;
+    position: fixed;
+    width: 50%;
+    height: 50%;
+    z-index: 5;
+    margin: 150px;
+    display: none;
+}
+
+#input {
+    display: none;
+}
+
+.ownChat {
+    color: red;
+}
+
+.otherChat {
+    color: blue;
+}

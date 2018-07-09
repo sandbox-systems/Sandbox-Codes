@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="js/justcontext.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="stylesheet" href="css/demo-styles.css" />
+    <script src="js/modernizr-1.5.min.js"></script>
+<style>
+html{
+    font-family: "Lato";
+	overflow-x: scroll;
+}
+hr { width: 85%; 
+  background-color:#E4E4E4;
+  border-color:#E4E4E4;
+    color:#E4E4E4;
+}
+#cntnr{
+  display:none;
+  position:fixed;
+  border:1px solid #B2B2B2;
+  width:150px;      background:#F9F9F9;
+  box-shadow: 3px 3px 2px #E9E9E9;
+  border-radius:4px;
+}
+
+li{ 
+  padding: 3px;
+  padding-left:10px;
+}
+
+#items :hover{
+   color: white;
+  background:#284570;
+  border-radius:2px;
+}
+    #imagers{
+        position: relative;
+        top: 20%;
+    }
+</style>
+</head>
+<body>
+<div class="demo-wrapper">
+<!-- classnames for the pages should include: 1) type of page 2) page name-->
+<!--each tile should specify what page type it opens (to determine which animation) and the corresponding page name it should open-->
+  <div class="dashboard clearfix">
+    <ul class="tiles">
+      <div class="col1 clearfix">
+          <li class="tile tile-big tile-6 slideTextLeft">
+          <div><p><i class="fa fa-terminal fa-1x"></i> Playground</p></div>
+          <div><p>Lets Code!</p></div>
+        </li>
+      </div>
+      <div class="col2 clearfix">
+        <a href="FileM.html"><li class="tile tile-big tile-1 slideTextUp">
+          <div><p><i class="fa fa-archive fa-2x"></i><font size="+9"> Treasury</font></p></div>
+            <div><p><font size="+4">The file manager</font></p></div>
+        </li></a>
+
+      </div>
+            <a href="#"><div class="col3 clearfix">     
+          <li class="tile tile-big tile-5">
+          <div><p><i class="fa fa-bars"></i> Coming Soon!</p></div>
+        </li>
+      </div></a>
+    </ul>
+  </div>
+    </div><!--end dashboard-->
+    </body>
+<script src="js/jquery-1.8.2.min.js"></script>
+  <!--<script src="js/scripts.js"></script>-->
+</html>

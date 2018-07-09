@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head>
+<link rel="icon" href="images/logo-king.png">
+<link rel="stylesheet" href="css/animate.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="css/CastleStyle.css">
+<title>Sandbox</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,height=device-height" />
+</head>
+<style>
+   body{
+    background-image: url("images/blur.jpg");
+    background-size: cover;
+    font-family: "Lato";
+    overflow: hidden;
+    transition: background-color .5s;
+}
+	.searchoptions{
+		position: relative;
+		width: 90%;
+		left: 5%;
+		margin-top: 1%;
+		height: 90%;
+		background-color: rgba(256,256,256,0.5);
+		vertical-align: middle;
+		font-size: 20px;
+		display: none;
+		border-radius: 50px;
+		color: black;
+		padding: 10px;
+		transition: box-shadow .4s ease;
+}
+	.searchoptions:hover{
+		box-shadow: 0px 5px 8px 0px rgba(256,256,256,0.4);
+	}
+</style>
+<body>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a><div class="container">
+  <img src="images/sree.jpg" alt="PIC" class="image">
+  <div class="overlay1">
+    <div class="text">John Doe</div>
+  </div>
+ </div></a>
+  <a href="index.html">Main Site</a>
+  <a href="Settings.html" target="mainframe">Settings</a>
+<a href="Pricing.html">Upgrade/Pricing</a>
+  <a href="Login.html">Logout</a>
+<img src="images/white-logo.png" class="milk">
+</div>
+<div class ="wrapper">
+<iframe src="home.html" id="mainframe" name="mainframe" frameBorder="0"></iframe>
+</div>
+<div class="icon-bar" id="taskbar">
+    <table style="height: 100%">
+    <tr><td><a href="home.html" target="mainframe"><img src="images/white-logo.png" class= otherpic></a></td></tr>
+    <tr><td><a onClick="openSearch()"  style="cursor: pointer"><i class="fa fa-search"></i></a></td></tr>
+    <tr><td><a  href="Sandbox_Back/playground.php" target="mainframe"><i class="fa fa-terminal"></i></a></td></tr> 
+    <tr><td><a href="FileM.html" target="mainframe"><i class="fa fa-archive"></i></a></td></tr>
+    <tr><td><a id="chat" href="" target="mainframe"><i class="fa fa-comments-o"></i></a></td></tr>
+    <tr><td><a onclick="return false"target="mainframe"><i class="fa fa-bars"></i></a></td></tr>
+    <tr><td><a onClick="openNav()" style="cursor: pointer"><img src="images/Stock.jpg" alt="Avatar" class= userpic></a></td></tr>
+    </table>
+</div>
+<div id="myOverlay" class="overlay animated fadeIn">
+  <span class="closebtn" onclick="closeSearch()" title="Close Overlay">×</span>
+  <div class="overlay-content" id="oc">
+      <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol xmlns="http://www.w3.org/2000/svg" id="sbx-icon-search-22" viewBox="0 0 40 40">
+    <path d="M24.382 25.485c-1.704 1.413-3.898 2.263-6.292 2.263-5.42 0-9.814-4.36-9.814-9.736 0-5.377 4.394-9.736 9.814-9.736s9.815 4.36 9.815 9.736c0 2.126-.687 4.093-1.853 5.694l5.672 5.627-1.73 1.718-5.612-5.565zM20 40c11.046 0 20-8.954 20-20S31.046 0 20 0 0 8.954 0 20s8.954 20 20 20zm-1.91-14.686c4.065 0 7.36-3.27 7.36-7.302 0-4.033-3.295-7.302-7.36-7.302s-7.36 3.27-7.36 7.302c0 4.033 3.295 7.302 7.36 7.302z"
+    fill-rule="evenodd" />
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" id="sbx-icon-clear-5" viewBox="0 0 20 20">
+    <path d="M10 20c5.523 0 10-4.477 10-10S15.523 0 10 0 0 4.477 0 10s4.477 10 10 10zm1.35-10.123l3.567 3.568-1.225 1.226-3.57-3.568-3.567 3.57-1.226-1.227 3.568-3.568-3.57-3.57 1.227-1.224 3.568 3.568 3.57-3.567 1.224 1.225-3.568 3.57zM10 18.272c4.568 0 8.272-3.704 8.272-8.272S14.568 1.728 10 1.728 1.728 5.432 1.728 10 5.432 18.272 10 18.272z"
+    fill-rule="evenodd" />
+  </symbol>
+</svg>
+<div class="animated bounceInRight">
+<form novalidate="novalidate" id="covers" onsubmit="return false;" class="searchbox sbx-custom">
+  <div role="search" class="sbx-custom__wrapper">
+    <input type="search" name="search" placeholder="Search Sandbox" id="sbxx" autocomplete="off" required="required" class="sbx-custom__input">
+    <button type="submit" title="Submit your search query." class="sbx-custom__submit">
+      <svg role="img" aria-label="Search">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-search-22"></use>
+      </svg>
+    </button>
+    <button type="reset" title="Clear the search query." class="sbx-custom__reset" style="display: none;">
+      <svg role="img" aria-label="Reset">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-clear-5"></use>
+      </svg>
+    </button>
+	  <div class="searchoptions animated bounceIn" onclick="searchSO()" id="so" style="cursor: pointer;"><i class="fa fa-stack-overflow" style="margin-right: 3%;"></i> Search on Stack Overflow...</div>
+	  <div onclick="searchGoogle()" class="searchoptions animated bounceIn" id="go"style="cursor: pointer;"><i class="fa fa-google" style="margin-right: 3%;"></i> Search on Google...</div>
+    </div>
+</form>
+    </div>
+</div>
+    </div>
+</body>
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+    document.body.style.backgroundColor = "white";
+}
+function openNav1() {
+    document.getElementById("mySidenav1").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeNav1() {
+    document.getElementById("mySidenav1").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+    document.body.style.backgroundColor = "white";
+}
+function openSearch() {
+    document.getElementById("mainframe").style.filter="blur(13px)"; document.getElementById("taskbar").style.filter="blur(13px)";document.getElementById("myOverlay").className = "overlay animated fadeIn";
+	document.getElementById("myOverlay").style.display = "block"; 
+}
+
+function closeSearch() {
+    document.getElementById("myOverlay").className = "overlay animated fadeOut";
+	document.getElementById("myOverlay").style.display = "none";
+    document.getElementById("mainframe").style.filter="blur(0px)";
+	document.getElementById("taskbar").style.filter="blur(0px)";
+	document.getElementById("so").style.display = "none";
+	document.getElementById("go").style.display = "none";
+}
+document.querySelector('.searchbox [type="reset"]').addEventListener('click', function() {  this.parentNode.querySelector('input').focus();});
+function searchGoogle(){
+	var x = document.getElementById("sbxx").value;
+	window.location.replace("www.google.com/search?q=" + x);
+}
+function searchSO(){
+	var x = document.getElementById("sbxx").value;
+	window.location.replace("www.stackoverflow.com/search?q=" + x);
+}
+document.getElementById("sbxx").oninput = function(){
+	document.getElementById("so").className = "searchoptions animated bounceIn";
+	document.getElementById("go").className = "searchoptions animated bounceIn";
+	document.getElementById("so").style.display = "block";
+	document.getElementById("go").style.display = "block";
+	if(document.getElementById("sbxx").value == ""){
+		document.getElementById("so").className = "searchoptions animated bounceOut";
+		document.getElementById("go").className = "searchoptions animated bounceOut";
+	}
+	document.getElementById("oc").style.top = "20%";
+}
+/*document.getElementById("sbxx").onblur = function(){
+	document.getElementById("so").className = "searchoptions animated bounceOut";
+	document.getElementById("go").className = "searchoptions animated bounceOut";
+	document.getElementById("oc").style.top = "46%";}*/
+
+var chatBtn = document.getElementById('chat');
+chatBtn.href = "http://127.0.0.1:3000?username=" + window.location.search.substr(1).split('=')[1];
+</script>
+</html>

@@ -1,3 +1,8 @@
+/* REQUIRED FOR ANGULAR */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 #chatArea {
     background: inherit;
     left: 120px;
@@ -135,7 +140,7 @@
     cursor: pointer;
 }
 
-#list {
+#chatList {
     list-style: none;
 }
 
@@ -169,4 +174,8 @@
 
 #input {
     display: none;
+}
+
+.ownChat {
+    color: red;
 }

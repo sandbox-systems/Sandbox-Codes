@@ -414,9 +414,7 @@ angular.module("chat", [])
         };
 
         var addChatToRoomByIndex = function (roomIndex, chat) {
-            $scope.$apply(function() {
-                $scope.rooms[roomIndex].addChat(chat);
-            });
+            $scope.rooms[roomIndex].addChat(chat);
         };
 
         var addChatToRoomByID = function (roomID, chat) {
@@ -492,7 +490,6 @@ angular.module("chat", [])
 
         var disconnect = function () {
             discFromAllRooms();
-            // onDisconnect();
         };
 
         return {

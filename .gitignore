@@ -1,0 +1,6 @@
+.idea/*
+*.ini
+*.iws
+out/*
+.idea_modules/*
+collaboration/node_modules/

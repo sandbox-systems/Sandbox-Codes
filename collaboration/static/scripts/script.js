@@ -210,15 +210,15 @@ var setRoomInfo = function () {
         $('#roomName').text("No room selected");
     } else {
         $('#roomName').text(chatRoom.getSelectedRoom().name);
-        $('<input/>').addClass('redBtn')
-            .attr('type', 'submit')
-            .attr('value', 'Leave Room')
+        var temp = $('<button/>').addClass('redBtn')
             .click(function () {
                 if (confirm("Are you sure you want to leave this group?")) {
                     chatClient.leaveRoom(chatRoom.getSelectedRoom());
                 }
             })
             .appendTo(info);
+		$('<i/>').addClass('fas fa-sign-out-alt').attr('style','color:white;').appendTo(temp);
+		
     }
 };
 
@@ -227,6 +227,8 @@ var updateChat = function () {
     list.empty();
     if (chatRoom.isARoomSelected()) {
         chatRoom.getSelectedRoom().chats.forEach(function (content) {
+			var you = "";
+			var name = chatClient.getClientUser().uname;
             if (typeof content === "string") {
                 $('<li/>')
                     .text(content)
@@ -242,17 +244,18 @@ var updateChat = function () {
                     $('<li/>').text(content.name)
                         .appendTo(list);
                 }
-                $('<input/>').addClass('greenBtn')
+                /*$('<input/>').addClass('greenBtn')
                     .attr('type', 'submit')
                     .attr('value', 'Download')
                     .click(function () {
                         content.download();
                     })
-                    .appendTo(list);
+                    .appendTo(list);*/
             }
         });
     }
 };
+
 
 var closeCreateRoomForm = function () {
     createRoomFormMemberNames.splice(0, createRoomFormMemberNames.length);

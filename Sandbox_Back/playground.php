@@ -19,6 +19,7 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>  
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="https://togetherjs.com/togetherjs-min.js"></script>
 	</head>
 	<body>
 			<!-- *************************************************** -->
@@ -645,6 +646,15 @@
 				}
 				
 				/****************************************************
+				 ********************* COLLAB ***********************
+				 ****************************************************/
+				function collab(){
+					var TogetherJSConfig_dontShowClicks = true;
+					var TogetherJSConfig_cloneClicks = true;
+					TogetherJS(this);
+				}
+				
+				/****************************************************
 				 ****************** CURSOR MENUS ********************
 				 ****************************************************/
 				//Context Menu Helpers for FOLDERS
@@ -771,6 +781,14 @@
 					bindKey: {win: "Ctrl-n", mac: "Command-right"},
 					exec: function() {
 						createFile(editor);
+					}
+				});
+				
+				editor.commands.addCommand({
+					name: "collab",
+					bindKey: {win: "Ctrl-k", mac: "Command-k"},
+					exec: function() {
+						collab();
 					}
 				});
 				

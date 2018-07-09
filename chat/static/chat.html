@@ -74,16 +74,16 @@
             ng-click="chatRoom.sendChat(chatInput)"/>
     </div>
     <div id="log">
-        <div ng-if="selRoomIndex !== -1">
+        <div ng-if="chatRoom.isARoomSelected()">
             <ul id="chatList">
                 <li ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
                     <span ng-if="typeof(chat) === 'string'">
-                        <span ng-class="{'ownChat': chat.startsWith(user.uname)}">
+                        <span ng-class="chat.startsWith(user.uname) ? 'ownChat' : 'otherChat'">
                             {{chat}}
                         </span>
                     </span>
                     <span ng-if="typeof(chat) === 'object'">
-                        <span ng-class="{'ownChat': chat.fromUname === user.uname}">
+                        <span ng-class="chat.fromUname === user.uname ? 'ownChat' : 'otherChat'">
                             {{chat.fromUname + " " + chat.fromName}}
                             <img ng-if="chat.type.includes('image')" src="{{chat.url}}">
                             <span ng-if="!chat.type.includes('image')">{{chat.name}}</span>

@@ -29,8 +29,11 @@
         <div ng-if="chatRoom.isARoomSelected()">
             <ul id="friendsList">
                 <li ng-repeat="member in chatRoom.getMembers() track by $index">
-                    <span ng-class="member.isOnline ? 'green' : 'red'">
+                    <span ng-class="member.isOnline ? 'greenTxt' : 'redTxt'">
                         {{member.name}}
+                        <span ng-if="member.isTyping === chatRoom.getSelectedRoom().id">
+                            <br>(typing...)
+                        </span>
                     </span>
                     <input class="redBtn" type="submit" value="Remove From Room"
                            ng-click="chatRoom.removeUser(member.id)"/>
@@ -67,7 +70,7 @@
         </span>
     </div>
     <div id="input">
-        <input id="inputBox" ng-model="chatInput">
+        <input id="inputBox" ng-model="chatInput" ng-change="chatClient.updateTypingStatus()">
         <input id="attachBtn" onclick="showAttachmentForm()" style="color: white;" class="blueBtn" type="submit"
                value="📎"/>
         <input id="sendBtn" type="submit" value="SEND"

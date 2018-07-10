@@ -1,6 +1,6 @@
 angular.module("chat", [])
 
-.controller("chatCtrl", function($scope) {
+.controller("chatCtrl", function ($scope) {
     $scope.user = new User("", "", "");
     $scope.rooms = [];
     $scope.friends = [];
@@ -9,16 +9,16 @@ angular.module("chat", [])
     $scope.createRoomFormMemberNames = [];
     $scope.createRoomFormMembers = [];
 
-    $scope.typeof = function(variable) {
+    $scope.typeof = function (variable) {
         return typeof variable;
     };
 
-    $scope.addCreateRoomFormMember = function(member) {
+    $scope.addCreateRoomFormMember = function (member) {
         $scope.createRoomFormMembers.push(member);
         $scope.createRoomFormMemberNames.push(member.name);
     };
 
-    $scope.removeCreateRoomFormMember = function(member) {
+    $scope.removeCreateRoomFormMember = function (member) {
         $scope.createRoomFormMembers.splice($scope.createRoomFormMembers.indexOf(member), 1);
         $scope.createRoomFormMemberNames.splice($scope.createRoomFormMemberNames.indexOf(member.name), 1);
     };
@@ -30,6 +30,7 @@ angular.module("chat", [])
         var userPool = {};
         var fileSenders = {};
         var fileSenderPool = {toRemove: {}};
+        var typingTimer = null;
 
         var connect = function () {
             easyrtc.setUsername(username);
@@ -94,7 +95,7 @@ angular.module("chat", [])
                     if (msgData.members[i] !== $scope.user.id)
                         newRoom.members.push(userPool[msgData.members[i]]);
                 }
-                $scope.$apply(function() {
+                $scope.$apply(function () {
                     $scope.rooms.push(newRoom);
                 });
                 for (var f = 0; f < $scope.friends.length; f++) {
@@ -167,7 +168,7 @@ angular.module("chat", [])
                         room.addMember(user);
                     }
                 }
-                $scope.$apply(function() {
+                $scope.$apply(function () {
                     $scope.rooms.push(room);
                 });
                 easyrtc.joinRoom(datum.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
@@ -224,7 +225,7 @@ angular.module("chat", [])
                 easyrtc.joinRoom(msgData.room.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
                 var newRoom = new Room(msgData.room.id, msgData.room.name, msgData.room.chats);
                 newRoom.members = msgData.room.members;
-                $scope.$apply(function() {
+                $scope.$apply(function () {
                     $scope.rooms.push(newRoom);
                 });
             } else if (msgType === "friendRequest") {
@@ -244,6 +245,10 @@ angular.module("chat", [])
             } else if (msgType === "leavingRoom") {
                 var room = getRoomByID(msgData.room);
                 room.removeMember(msgData.user);
+            } else if (msgType === "typingStatus") {
+                $scope.$apply(function () {
+                    userPool[msgData.id].isTyping = msgData.isTyping ? msgData.room : false;
+                });
             }
         };
 
@@ -294,7 +299,9 @@ angular.module("chat", [])
             for (var i = 0; i < poolKeys.length; i++) {
                 var user = userPool[poolKeys[i]];
                 if (user.uname === uname) {
-                    user.isOnline = isOnline;
+                    $scope.$apply(function () {
+                        user.isOnline = isOnline;
+                    });
                     break;
                 }
             }
@@ -337,6 +344,7 @@ angular.module("chat", [])
             } else {
                 var from = Object.assign({}, $scope.user);
                 delete from.isOnline;
+                delete from.isTyping;
                 easyrtc.sendServerMessage('friendRequestDB', {
                     from: from,
                     toID: userObj.id
@@ -366,7 +374,7 @@ angular.module("chat", [])
                 }
             }
             easyrtc.leaveRoom(roomID, callbacks.leaveRoomSuccess, callbacks.roomFailure);
-            $scope.$apply(function() {
+            $scope.$apply(function () {
                 $scope.rooms.splice(toRemoveRoomInd, 1);
             });
         };
@@ -375,7 +383,10 @@ angular.module("chat", [])
             roomObj.members.forEach(function (member) {
                 var eidObj = easyrtc.usernameToIds(member.uname)[0];
                 if (eidObj !== undefined) {
-                    easyrtc.sendDataWS(eidObj.easyrtcid, "leavingRoom", {room: roomObj.id, user: $scope.user.id}, null);
+                    easyrtc.sendDataWS(eidObj.easyrtcid, "leavingRoom", {
+                        room: roomObj.id,
+                        user: $scope.user.id
+                    }, null);
                 }
             });
             leaveRoomInSession(roomObj.id);
@@ -408,7 +419,7 @@ angular.module("chat", [])
         };
 
         var addRoom = function (roomObj) {
-            $scope.$apply(function() {
+            $scope.$apply(function () {
                 $scope.rooms.push(roomObj);
             });
         };
@@ -425,7 +436,7 @@ angular.module("chat", [])
             var toRemoveRoomInd = -1;
             for (var i = 0; i < $scope.rooms.length; i++) {
                 if ($scope.rooms[i].id === roomID) {
-                    $scope.$apply(function() {
+                    $scope.$apply(function () {
                         $scope.rooms[i].removeMember(memberID);
                     });
                     toRemoveRoomInd = i;
@@ -484,6 +495,33 @@ angular.module("chat", [])
             return false;
         };
 
+        var updateTypingStatus = function () {
+            if (typingTimer === null) {
+                easyrtc.getRoomOccupantsAsArray($scope.chatRoom.getSelectedRoom().id).forEach(eid => {
+                    if (eid !== easyrtcid) {
+                        easyrtc.sendDataWS(eid, "typingStatus", {
+                            isTyping: true,
+                            id: $scope.user.id,
+                            room: $scope.chatRoom.getSelectedRoom().id
+                        }, null);
+                    }
+                });
+            } else {
+                clearTimeout(typingTimer);
+            }
+            typingTimer = setTimeout(function () {
+                easyrtc.getRoomOccupantsAsArray($scope.chatRoom.getSelectedRoom().id).forEach(eid => {
+                    if (eid !== easyrtcid) {
+                        easyrtc.sendDataWS(eid, "typingStatus", {
+                            isTyping: false,
+                            id: $scope.user.id
+                        }, null);
+                    }
+                });
+                typingTimer = null;
+            }, 2000);
+        };
+
         var getEasyrtcid = function () {
             return easyrtcid;
         };
@@ -512,7 +550,8 @@ angular.module("chat", [])
             hasFriend: hasFriend,
             getEasyrtcid: getEasyrtcid,
             sendCollectedFiles: sendCollectedFiles,
-            getFilesToSend: getFilesToSend
+            getFilesToSend: getFilesToSend,
+            updateTypingStatus: updateTypingStatus
         }
     })();
 

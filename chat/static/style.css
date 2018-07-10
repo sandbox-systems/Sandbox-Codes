@@ -158,6 +158,14 @@ position:relative;
     cursor: pointer;
 }
 
+.greenTxt {
+    color: green;
+}
+
+.redTxt {
+    color: red;
+}
+
 #chatList {
     list-style: none;
 }

@@ -3,6 +3,7 @@ var User = function (id, uname, name) {
     this.uname = uname;
     this.name = name;
     this.isOnline = false;
+    this.isTyping = false;
 };
 
 var Room = function (id, name, chats) {

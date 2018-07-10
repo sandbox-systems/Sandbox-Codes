@@ -222,6 +222,13 @@ position:relative;
 border: none;
 		cursor: pointer;
 }
+.greenTxt {
+    color: green;
+}
+
+.redTxt {
+    color: red;
+}
 #chatList {
     list-style: none;
 	height: 85%;

@@ -23,7 +23,10 @@
 		<button id="addRoom" onclick="showCreateRoomForm()"><i class="fas fa-plus"></i></button>
         <ul id="roomList">
             <li ng-repeat="room in rooms track by $index">
-                <span onclick="showChatInput()" ng-click="chatRoom.changeRoom($index)">{{room.name}}</span>
+                <span onclick="showChatInput()" ng-click="chatRoom.changeRoom($index)">
+                    {{room.name}}&nbsp;
+                    <span ng-if="room.unread > 0" class="redTxt">{{room.unread}}</span>
+                </span>
             </li>
         </ul>
     </div>
@@ -31,8 +34,11 @@
         <div ng-if="chatRoom.isARoomSelected()">
             <ul id="friendsList">
                 <li ng-repeat="member in chatRoom.getMembers() track by $index">
-                    <span ng-class="member.isOnline ? 'green' : 'red'">
+                    <span ng-class="member.isOnline ? 'greenTxt' : 'redTxt'">
                         {{member.name}}
+                        <span ng-if="member.isTyping === chatRoom.getSelectedRoom().id">
+                            <br>(typing...)
+                        </span>
                     </span>
                     <input class="redBtn" type="submit" value="Remove From Room"
                            ng-click="chatRoom.removeUser(member.id)"/>
@@ -72,8 +78,7 @@
 		<button id="attachBtn" onclick="showAttachmentForm()" style="color: white;" class="blueBtn"><i class="fas fa-paperclip fa-2x"></i></button>
         <input id="inputBox" ng-model="chatInput">
         <button id="sendBtn"
-				ng-click="chatRoom.sendChat(chatInput)"><i style="color: white" class="fas fa-paper-plane fa-2x"></i></button>
-    </div>
+				ng-click="chatRoom.sendChat(chatInput)"><i style="color: white" class="fas fa-paper-plane fa-2x"></i></button>    </div>
     <div id="log">
         <div ng-if="chatRoom.isARoomSelected()">
             <ul id="chatList">

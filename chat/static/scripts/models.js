@@ -3,6 +3,7 @@ var User = function (id, uname, name) {
     this.uname = uname;
     this.name = name;
     this.isOnline = false;
+    this.isTyping = false;
 };
 
 var Room = function (id, name, chats) {
@@ -10,6 +11,7 @@ var Room = function (id, name, chats) {
     this.name = name;
     this.chats = chats;
     this.members = [];
+    this.unread = 0;
 
     this.addMember = function (memberObj) {
         this.members.push(memberObj);

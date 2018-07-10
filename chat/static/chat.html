@@ -21,7 +21,10 @@
         <input onclick="showCreateRoomForm()" class="greenBtn" type="submit" value="+"/>
         <ul id="roomList">
             <li ng-repeat="room in rooms track by $index">
-                <span onclick="showChatInput()" ng-click="chatRoom.changeRoom($index)">{{room.name}}</span>
+                <span onclick="showChatInput()" ng-click="chatRoom.changeRoom($index)">
+                    {{room.name}}&nbsp;
+                    <span ng-if="room.unread > 0" class="redTxt">{{room.unread}}</span>
+                </span>
             </li>
         </ul>
     </div>
@@ -81,12 +84,14 @@
             <ul id="chatList">
                 <li ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
                     <span ng-if="typeof(chat) === 'string'">
+                        <img ng-src="https://ui-avatars.com/api/?name={{chat.split(' ')[1] + '+' + chat.substr(0, chat.indexOf(':')).split(' ')[chat.substr(0, chat.indexOf(':')).split(' ').length - 1]}}"/>
                         <span ng-class="chat.startsWith(user.uname) ? 'ownChat' : 'otherChat'">
                             {{chat}}
                         </span>
                     </span>
                     <span ng-if="typeof(chat) === 'object'">
                         <span ng-class="chat.fromUname === user.uname ? 'ownChat' : 'otherChat'">
+                            <img ng-src="https://ui-avatars.com/api/?name={{chat.fromName.split(' ')[0] + '+' + chat.fromName.split(' ')[chat.fromName.split(' ').length - 1]}}"/>
                             {{chat.fromUname + " " + chat.fromName}}
                             <img ng-if="chat.type.includes('image')" src="{{chat.url}}">
                             <span ng-if="!chat.type.includes('image')">{{chat.name}}</span>

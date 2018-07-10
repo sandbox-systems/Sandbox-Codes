@@ -566,6 +566,11 @@ angular.module("chat", [])
 
         var handleChat = function (sender, msgType, msgData) {
             addChatByID(msgData.roomID, msgData.senderUname, msgData.senderName, msgData.msg);
+            if (!isARoomSelected() || msgData.roomID !== getSelectedRoom().id) {
+                $scope.$apply(function () {
+                    $scope.chatClient.getRoomByID(msgData.roomID).unread++;
+                });
+            }
         };
 
         var sendChat = function (msg) {
@@ -634,7 +639,7 @@ angular.module("chat", [])
                 return $scope.chatClient.getRoomByIndex($scope.selRoomIndex);
         };
 
-        var isRoomSelected = function () {
+        var isARoomSelected = function () {
             return $scope.selRoomIndex !== -1;
         };
 
@@ -644,6 +649,7 @@ angular.module("chat", [])
 
         var changeRoom = function (newInd) {
             $scope.selRoomIndex = newInd;
+            getSelectedRoom().unread = 0;
         };
 
         // * DOES NOT INCLUDE CLIENT *
@@ -664,7 +670,7 @@ angular.module("chat", [])
             sendChat: sendChat,
             getSelectedRoom: getSelectedRoom,
             getSelRoomIndex: getSelRoomIndex,
-            isARoomSelected: isRoomSelected,
+            isARoomSelected: isARoomSelected,
             changeRoom: changeRoom,
             removeUser: removeUser,
             addFriendAsMember: addFriendAsMember,

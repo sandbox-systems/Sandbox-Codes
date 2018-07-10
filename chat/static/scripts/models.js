@@ -11,6 +11,7 @@ var Room = function (id, name, chats) {
     this.name = name;
     this.chats = chats;
     this.members = [];
+    this.unread = 0;
 
     this.addMember = function (memberObj) {
         this.members.push(memberObj);

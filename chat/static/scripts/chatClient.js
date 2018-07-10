@@ -119,6 +119,7 @@ angular.module("chat", [])
             fillFriends(msgData.friendData);
             fillRooms(msgData.roomData);
             handleRequests(msgData.requestData);
+            handleNotifications(msgData.notifData);
         };
 
         var fillUser = function (userData) {
@@ -157,6 +158,7 @@ angular.module("chat", [])
                     }
                 }
                 var room = new Room(datum.id, datum.name, datum.chats);
+                room.unread = datum.unread;
 
                 for (var j = 0; j < datum.members.length; j++) {
                     var member = datum.members[j];
@@ -212,6 +214,12 @@ angular.module("chat", [])
                     }
                 }
             }
+        };
+
+        var handleNotifications = function (notifData) {
+            notifData.forEach(notification => {
+                alert(notification.message)
+            });
         };
 
         var peerListener = function (sender, msgType, msgData) {
@@ -567,6 +575,10 @@ angular.module("chat", [])
         var handleChat = function (sender, msgType, msgData) {
             addChatByID(msgData.roomID, msgData.senderUname, msgData.senderName, msgData.msg);
             if (!isARoomSelected() || msgData.roomID !== getSelectedRoom().id) {
+                easyrtc.sendServerMessage('incUnread', {
+                    roomID: msgData.roomID,
+                    memberID: $scope.user.id
+                }, callbacks.sendServerMsgSuccess, callbacks.failure);
                 $scope.$apply(function () {
                     $scope.chatClient.getRoomByID(msgData.roomID).unread++;
                 });
@@ -650,6 +662,10 @@ angular.module("chat", [])
         var changeRoom = function (newInd) {
             $scope.selRoomIndex = newInd;
             getSelectedRoom().unread = 0;
+            easyrtc.sendServerMessage('resetUnread', {
+                roomID: getSelectedRoom().id,
+                memberID: $scope.user.id
+            }, callbacks.sendServerMsgSuccess, callbacks.failure);
         };
 
         // * DOES NOT INCLUDE CLIENT *

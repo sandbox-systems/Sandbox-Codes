@@ -594,6 +594,15 @@ angular.module("chat", [])
                 chatMsg: uname + " " + name + ": " + msg
             }, callbacks.sendServerMsgSuccess, callbacks.failure);
             sendData("chatMessage", msg);
+            getSelectedRoom().members.forEach(member => {
+                var eidObj = easyrtc.usernameToIds(member.uname)[0];
+                if (eidObj === undefined) {
+                    easyrtc.sendServerMessage('incUnread', {
+                        roomID: getSelectedRoom().id,
+                        memberID: member.id
+                    }, callbacks.sendServerMsgSuccess, callbacks.failure);
+                }
+            });
         };
 
         var removeUser = function (memberID) {

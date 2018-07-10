@@ -63,6 +63,10 @@ angular.module("chat", [])
             }
         };
 
+        var clearFilesToSend = function () {
+            $scope.filesToSend = [];
+        };
+
         var sendCollectedFiles = function () {
             var roomID = $scope.chatRoom.getSelectedRoom().id;
             var keys = Object.keys(fileSenders[roomID]);
@@ -79,7 +83,7 @@ angular.module("chat", [])
                     file: sentFile
                 }, callbacks.sendServerMsgSuccess, callbacks.failure);
             });
-            $scope.filesToSend = [];
+            clearFilesToSend();
         };
 
         var getFilesToSend = function () {
@@ -561,7 +565,8 @@ angular.module("chat", [])
             getEasyrtcid: getEasyrtcid,
             sendCollectedFiles: sendCollectedFiles,
             getFilesToSend: getFilesToSend,
-            updateTypingStatus: updateTypingStatus
+            updateTypingStatus: updateTypingStatus,
+            clearFilesToSend: clearFilesToSend
         }
     })();
 

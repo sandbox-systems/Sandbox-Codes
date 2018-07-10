@@ -4,6 +4,8 @@
     <title>Chat</title>
 
     <link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
     <!-- Assumes global locations for socket.io.js and easyrtc.js -->
     <script src="/socket.io/socket.io.js"></script>
@@ -18,14 +20,14 @@
 <body ng-app="chat">
 <div ng-cloak ng-controller="chatCtrl">
     <div id="rooms">
-        <input onclick="showCreateRoomForm()" class="greenBtn" type="submit" value="+"/>
+		<button id="addRoom" onclick="showCreateRoomForm()"><i class="fas fa-plus"></i></button>
         <ul id="roomList">
             <li ng-repeat="room in rooms track by $index">
                 <span onclick="showChatInput()" ng-click="chatRoom.changeRoom($index)">{{room.name}}</span>
             </li>
         </ul>
     </div>
-    <div id="friends">
+   <!-- <div id="friends">
         <div ng-if="chatRoom.isARoomSelected()">
             <ul id="friendsList">
                 <li ng-repeat="member in chatRoom.getMembers() track by $index">
@@ -55,40 +57,41 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div>-->
     <div id="info">
         <span ng-if="chatRoom.isARoomSelected()">
             <span>{{chatRoom.getSelectedRoom().name}}</span>
-            <input class="redBtn" type="submit" value="Leave Room"
-                   ng-click="chatClient.leaveRoom(chatRoom.getSelectedRoom())"/>
+            <button class="redBtn"
+					ng-click="chatClient.leaveRoom(chatRoom.getSelectedRoom())"><i class="fas fa-sign-out-alt fa-2x" style="color: white;"></i></button>
         </span>
         <span ng-if="!chatRoom.isARoomSelected()">
             <span>No room selected</span>
         </span>
     </div>
     <div id="input">
+		<button id="attachBtn" onclick="showAttachmentForm()" style="color: white;" class="blueBtn"><i class="fas fa-paperclip fa-2x"></i></button>
         <input id="inputBox" ng-model="chatInput">
-        <input id="attachBtn" onclick="showAttachmentForm()" style="color: white;" class="blueBtn" type="submit"
-               value="📎"/>
-        <input id="sendBtn" type="submit" value="SEND"
-            ng-click="chatRoom.sendChat(chatInput)"/>
+        <button id="sendBtn"
+				ng-click="chatRoom.sendChat(chatInput)"><i style="color: white" class="fas fa-paper-plane fa-2x"></i></button>
     </div>
     <div id="log">
         <div ng-if="chatRoom.isARoomSelected()">
             <ul id="chatList">
                 <li ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
                     <span ng-if="typeof(chat) === 'string'">
-                        <span ng-class="chat.startsWith(user.uname) ? 'ownChat' : 'otherChat'">
+						<img ng-src="https://ui-avatars.com/api/?name={{chat.split(' ')[1] + '+' + chat.substr(0, chat.indexOf(':')).split(' ')[chat.substr(0, chat.indexOf(':')).split(' ').length - 1]}}/?size=20/?rounded=true"/>
+                        <span ng-class="chat.startsWith(user.uname) ? 'container darker' : 'container'">
                             {{chat}}
                         </span>
                     </span>
                     <span ng-if="typeof(chat) === 'object'">
-                        <span ng-class="chat.fromUname === user.uname ? 'ownChat' : 'otherChat'">
+						<img ng-src="https://ui-avatars.com/api/?name={{chat.fromName.split(' ')[0] + '+' + chat.fromName.split(' ')[chat.fromName.split(' ').length - 1]}}/?size=20/?rounded=true"/>
+                        <span ng-class="chat.fromUname === user.uname ? 'container darker' : 'container'">
                             {{chat.fromUname + " " + chat.fromName}}
                             <img ng-if="chat.type.includes('image')" src="{{chat.url}}">
                             <span ng-if="!chat.type.includes('image')">{{chat.name}}</span>
                             <br/>
-                            <input class="greenBtn" type="submit" value="Download" ng-click="chat.download()"/>
+                            <!--<input class="greenBtn" type="submit" value="Download" ng-click="chat.download()"/>-->
                         </span>
                     </span>
                 </li>
@@ -119,17 +122,24 @@
         <input class="greenBtn" type="submit" value="Create" onclick="closeCreateRoomForm()"
                ng-click="chatClient.createRoom(createRoomName, createRoomFormMembers)"/>
     </div>
-    <div id="attachForm">
-        DROP FILE HERE
-        <input id="attachCancelBtn" onclick="closeAttachmentForm()" class="redBtn" type="submit" value="Cancel"/>
-        <input id="attachSendBtn" onclick="closeAttachmentForm()" ng-click="chatClient.sendCollectedFiles()"
-               class="greenBtn" type="submit" value="Send"/>
-        <ul id="attachments">
+	<div id="attachForm"  class="modal">
+    <div class="modal-content animated fadeIn">
+		<div class="modal-header">
+		DROP FILE HERE
+		<span id="attachCancelBtn" class="close" onclick="closeAttachmentForm()" >&times;</span>
+		</div>
+		<div class="modal-body">
+		<ul id="attachments">
             <li ng-repeat="file in filesToSend track by $index">
                 {{file.name}}
             </li>
         </ul>
+		</div>
+		<div class="modal-footer">
+			<button id="attachSendBtn" onclick="closeAttachmentForm()" ng-click="chatClient.sendCollectedFiles()" class="greenBtn" type="submit"><i class="far fa-paper-plane fa-2x"></i></button>
+		</div>
     </div>
+		</div>
 </div>
 
 <script src="scripts/models.js"></script>

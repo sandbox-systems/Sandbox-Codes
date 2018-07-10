@@ -34,9 +34,9 @@ easyrtc.setOption("roomDefaultEnable", false);
 
 // Start EasyRTC server and handle events
 var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {    // pub is a public app object
-    if (error)
+    if (error){
         return console.log(error);
-
+	}
     var connect = pub.events.defaultListeners.connection;
     var disconnect = pub.events.defaultListeners.disconnect;
     var roomJoin = pub.events.defaultListeners.roomJoin;

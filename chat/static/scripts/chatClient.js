@@ -437,7 +437,9 @@ angular.module("chat", [])
         };
 
         var addChatToRoomByID = function (roomID, chat) {
-            getRoomByID(roomID).addChat(chat);
+            $scope.$apply(function () {
+                getRoomByID(roomID).addChat(chat);
+            });
         };
 
         var removeMemberFromRoom = function (roomID, memberID) {

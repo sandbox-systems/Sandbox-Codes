@@ -29,7 +29,7 @@ class GitHubReposContents extends GitHubService
 	 * Get the content
 	 * 
 	 * @param $ref string (Optional) - The String name of the Commit/Branch/Tag.  Defaults to `master`.
-	 * @return GitHubContent
+	 * @return GitHubContents
 	 */
 	public function getContents($owner, $repo, $path, $ref = null)
 	{

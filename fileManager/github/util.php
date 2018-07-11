@@ -46,9 +46,9 @@ function getFiles($client, $owner, $repo, $path = "", $branch="master")
  *
  * @return GitHubContents object will all file information
  */
-function getFile($client, $owner, $repo, $path, $branch = "master")
+function getFile($client, $owner, $repo, $path, $filename, $branch = "master")
 {
-    return $client->repos->contents->getContents($owner, $repo, $path, $ref = $branch);
+    return $client->repos->contents->getContents($owner, $repo, $path . '/' . $filename, $ref = $branch);
 }
 
 /**
@@ -57,9 +57,9 @@ function getFile($client, $owner, $repo, $path, $branch = "master")
  * @return string Contents of desired file
  * TODO parse raw contents to account for special characters (i.e. <>)
  */
-function getFileContents($client, $owner, $repo, $path, $branch = "master")
+function getFileContents($client, $owner, $repo, $path, $filename, $branch = "master")
 {
-    $file = getFile($client, $owner, $repo, $path, $branch);
+    $file = getFile($client, $owner, $repo, $path, $filename, $branch);
     // Get and decode contents of file (fetched in Base 64)
     return base64_decode($file->getContent());
 }

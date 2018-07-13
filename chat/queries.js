@@ -183,8 +183,11 @@ module.exports = {
         var document = {
             name: roomData.name,
             chatEntries: [],
-            members: roomData.members
+            members: {}
         };
+        for (var i = 0; i < roomData.members.length; i++) {
+            document.members[roomData.members[i]] = 0;
+        }
         db.collection("rooms").insert(document, function(err, res){
             if (err) throw err;
             console.log("Successfully added room");

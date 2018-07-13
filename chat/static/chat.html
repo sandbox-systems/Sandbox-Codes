@@ -170,7 +170,7 @@ ng-repeat="member in chatRoom.getMembers() track by $index">
     <div class="modal-content">
 		<div class="modal-header">
 		Attach File Here
-		<span id="attachCancelBtn" class="close" onclick="closeAttachmentForm()" >&times;</span>
+		<span id="attachCancelBtn" class="close" onclick="closeAttachmentForm()"ng-click="chatClient.clearFilesToSend()" >&times;</span>
 		</div>
 		<div class="modal-body">
 		<ul id="attachments">

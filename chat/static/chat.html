@@ -20,7 +20,13 @@
 <body ng-app="chat">
 <div ng-cloak ng-controller="chatCtrl">
     <div id="rooms">
-		<button id="addRoom" onclick="showCreateRoomForm()"><i class="fas fa-plus"></i></button>
+		<div style="margin:auto; text-align: center; padding-top: 10%">
+		<img class="friendspic" ng-src="https://ui-avatars.com/api/?name={{user.name}}&font-size=0.5&rounded=true&size=60&color=ffffff&background=009900"/>
+		<div>
+		<p style="margin: 0">{{user.name}}</p>
+		<p style="font-size: 0.8em; color:lightgray;margin-top:0">@{{user.uname}}</p>
+			</div>
+			</div>
         <ul id="roomList">
             <li ng-repeat="room in rooms track by $index">
                 <span onclick="showChatInput()" ng-click="chatRoom.changeRoom($index)">
@@ -29,6 +35,7 @@
                 </span>
             </li>
         </ul>
+	<button id="addRoom" onclick="showCreateRoomForm()"><i class="fas fa-plus"></i></button>
     </div>
    <div id="friends" class="sidenav">
         <div ng-if="chatRoom.isARoomSelected()">
@@ -36,7 +43,7 @@
 			<button class="redBtn"
 					ng-click="chatClient.leaveRoom(chatRoom.getSelectedRoom())" style="width: 100%;font-family: 'Lato'"><i class="fas fa-sign-out-alt fa-2x" style="color: white"></i></button>
             <ul id="friendsList" style="padding: 0%;">
-                <li style="padding: 5%;overflow:  auto;border-radius: 50px;width:  75%;margin: 2.5% auto;background-color:  white;"
+                <li style="padding: 5%;overflow:  auto;border-radius: 50px;width:  75%;margin: 2.5% auto;background-color:  white;border:solid 1.5px rebeccapurple;height: 50px"
 ng-repeat="member in chatRoom.getMembers() track by $index">
                     <span ng-if="member.isOnline">
                         <img class="friendspic" ng-src="https://ui-avatars.com/api/?name={{member.name}}&font-size=0.3&rounded=true&size=50&color=ffffff&background=009900" style="float: left"/>
@@ -78,52 +85,56 @@ ng-repeat="member in chatRoom.getMembers() track by $index">
     </div>
     <div id="info">
         <span ng-if="chatRoom.isARoomSelected()">
-            <h2 style="float:left;margin: 0">{{chatRoom.getSelectedRoom().name}}</h2>
+            <h2 style="float:left;margin: 0 2%">{{chatRoom.getSelectedRoom().name}}</h2>
 			<a href="javascript:openNav()"><i class="fas fa-ellipsis-h fa-2x" style="color: gray;float: right;position: relative;margin-right: 2%"></i></a>
         </span>
         <span ng-if="!chatRoom.isARoomSelected()">
-            <h2 style="float: left;margin: 0">No room selected</h2>
+            <h2 style="float: left;margin: 0 2%">No room selected</h2>
         </span>
     </div>
     <div id="input">
-		<button id="attachBtn" onclick="showAttachmentForm()" style="color: white;" class="blueBtn" style="float: left;"><i class="fas fa-paperclip fa-2x"></i></button>
+		<button id="attachBtn" onclick="showAttachmentForm()" style="color: white;" class="blueBtn" style="float: left;"><i class="fas fa-paperclip"></i></button>
         <input id="inputBox" ng-model="chatInput">
         <button id="sendBtn"
-				ng-click="chatRoom.sendChat(chatInput)" onclick="document.getElementById('inputBox').value=''"><i style="color: white" class="fas fa-paper-plane fa-2x"></i></button>    </div>
+				ng-click="chatRoom.sendChat(chatInput)" onclick="document.getElementById('inputBox').value=''"><i style="color: white" class="fas fa-paper-plane"></i></button>    </div>
     <div id="log">
         <div ng-if="chatRoom.isARoomSelected()">
             <ul id="chatList">
-                <li ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
+                <li ng-class="typeof(chat) === 'string' ? 'texter' : 'temp'" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
                     <span ng-if="typeof(chat) === 'string'">
 						<span ng-if="!chat.startsWith(user.uname)">
+							<div class="tooltip">
 							<img ng-src="https://ui-avatars.com/api/?name={{chat.split(' ')[1] + '+' + chat.substr(0, chat.indexOf(':')).split(' ')[chat.substr(0, chat.indexOf(':')).split(' ').length - 1]}}&font-size=0.3&rounded=true&size=50&color=ffffff&background=663399" style="float: left"/>
+							<span class="tooltiptext">{{chat.split(' ')[1] + chat.substr(0, chat.indexOf(':')).split(' ')[chat.substr(0, chat.indexOf(':')).split(' ').length - 1]}}</span>
+							</div>
 							<p ng-class="chat.startsWith(user.uname) ? 'container darker' : 'container'">
-								{{chat.substr(chat.indexOf(' ') + 1)}}
+								{{chat.substr(chat.indexOf(':') + 1)}}
 							</p>
 						</span>
 						<span ng-if="chat.startsWith(user.uname)">
 							<img ng-src="https://ui-avatars.com/api/?name={{chat.split(' ')[1] + '+' + chat.substr(0, chat.indexOf(':')).split(' ')[chat.substr(0, chat.indexOf(':')).split(' ').length - 1]}}&font-size=0.3&rounded=true&size=50&color=ffffff&background=663399" style="float: right"/>
 							<p ng-class="chat.startsWith(user.uname) ? 'container darker' : 'container'">
-								{{chat.substr(chat.indexOf(' ') + 1)}}
+								{{chat.substr(chat.indexOf(':') + 1)}}
 							</p>
 						</span>
                     </span>
                     <span ng-if="typeof(chat) === 'object'">
 						<span ng-if="!chat.startsWith(user.uname)">
-						<img ng-src="https://ui-avatars.com/api/?name={{chat.fromName.split(' ')[0] + '+' + chat.fromName.split(' ')[chat.fromName.split(' ').length - 1]}}&size=0.3&rounded=true&size=50&color=ffffff&background=663399" style="float: left"/>
+							<div class="tooltip">
+						<img ng-src="https://ui-avatars.com/api/?name={{chat.fromName.split(' ')[0] + '+' + chat.fromName.split(' ')[chat.fromName.split(' ').length - 1]}}&font-size=0.3&rounded=true&size=50&color=ffffff&background=663399" style="float: left"/>
+								<span class="tooltiptext">{{chat.fromName.split(' ')[0] + chat.fromName.split(' ')[chat.fromName.split(' ').length - 1]}}</span>
+							</div>
                             <!--{{chat.fromUname + " " + chat.fromName}}-->
-                            <img ng-if="chat.type.includes('image')" src="{{chat.url}}">
-                            <span ng-if="!chat.type.includes('image')">{{chat.name}}</span>
-                            <br/>
-                            <!--<input class="greenBtn" type="submit" value="Download" ng-click="chat.download()"/>-->
+                            <img style="width: 40%;margin: 0% 2%;" ng-if="chat.type.includes('image')" src="{{chat.url}}">
+                            <span ng-if="!chat.type.includes('image')"><input class="greenBtn" type="submit" style="height: 50px;margin-left: 1%;bottom: 20px" value="{{chat.name}}" ng-click="chat.download()"/></span>
 						</span>
 						<span ng-if="chat.startsWith(user.uname)">
-							<img ng-src="https://ui-avatars.com/api/?name={{chat.fromName.split(' ')[0] + '+' + chat.fromName.split(' ')[chat.fromName.split(' ').length - 1]}}&size=0.3&rounded=true&size=50&color=ffffff&background=663399" style="float: right"/>
+							<img style="width: 40%;margin: 0% 2%;" ng-src="https://ui-avatars.com/api/?name={{chat.fromName.split(' ')[0] + '+' + chat.fromName.split(' ')[chat.fromName.split(' ').length - 1]}}&font-size=0.3&rounded=true&size=50&color=ffffff&background=663399" style="float: right"/>
                             <!--{{chat.fromUname + " " + chat.fromName}}-->
                             <img ng-if="chat.type.includes('image')" src="{{chat.url}}">
                             <span ng-if="!chat.type.includes('image')">{{chat.name}}</span>
                             <br/>
-                            <!--<input class="greenBtn" type="submit" value="Download" ng-click="chat.download()"/>-->
+                            <input class="greenBtn" type="submit" value="Download" ng-click="chat.download()"/>
                         </span>
                     </span>
                 </li>

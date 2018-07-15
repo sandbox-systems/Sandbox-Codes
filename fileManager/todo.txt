@@ -1,0 +1,8 @@
+Delete File
+Add File
+Share File
+Trash File
+Edit File Property
+Edit File data
+Fetch branches
+

@@ -17,13 +17,18 @@ $token = $_SESSION['token'];
 $owner = "";
 if (isset($_SESSION['owner'])) {
     $owner = $_SESSION['owner'];
+} else {
+    if (isset($_GET['owner'])) {
+        $_SESSION['owner'] = $_GET['owner'];
+        header("Refresh:0");
+    }
 }
 
 if (!isset($_GET['repo'])) {
+    unset($_SESSION['owner']);
     foreach ($client->repos->listYourRepositories() as &$repo) {
         $name = $repo->getName();
         $owner = $repo->getOwner()->getLogin();
-        $_SESSION['owner'] = $owner;
         $params = 'token=' . $token . '&owner=' . $owner . '&repo=' . $name . '&branch=master&path=';
         echo "<a class='repo' href='?$params'>$owner/$name</a>";
         echo "<br>";

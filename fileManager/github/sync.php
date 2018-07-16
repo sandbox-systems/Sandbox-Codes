@@ -7,6 +7,9 @@
 
 include 'params.php';
 
+if (isset($_GET['unsuccessful']))
+    echo "Login was unsuccessful";
+
 ?>
 
 <!-- Send user to Github authentication page -->

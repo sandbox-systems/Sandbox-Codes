@@ -7,18 +7,23 @@
 
 include "init.php";
 
-$token = $_GET['token'];
-$owner = $_GET['owner'];
+if (!setupToken($client)) {
+    echo "Github account is not synced<br/>";
+    echo "<a href='sync.php'>Go to sync</a>";
+    die();
+}
+$token = $_SESSION['token'];
 
-//$the_file = getFile($client, $owner, $repo, $file);
-
-//$content = base64_decode($the_file->getContent()) . " else 3.0";
-//print_r($content);
+$owner = "";
+if (isset($_SESSION['owner'])) {
+    $owner = $_SESSION['owner'];
+}
 
 if (!isset($_GET['repo'])) {
     foreach ($client->repos->listYourRepositories() as &$repo) {
         $name = $repo->getName();
         $owner = $repo->getOwner()->getLogin();
+        $_SESSION['owner'] = $owner;
         $params = 'token=' . $token . '&owner=' . $owner . '&repo=' . $name . '&branch=master&path=';
         echo "<a class='repo' href='?$params'>$owner/$name</a>";
         echo "<br>";

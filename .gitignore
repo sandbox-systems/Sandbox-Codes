@@ -3,6 +3,6 @@
 *.iws
 out/*
 .idea_modules/*
-collaboration/node_modules/
-
 chat/node_modules/
+composer.phar
+/vendor/

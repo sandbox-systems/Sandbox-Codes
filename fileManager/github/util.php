@@ -10,44 +10,17 @@
  */
 
 include 'params.php';
+session_start();
 
-/**
- * Fetch access token from authentication server using callback code.
- *
- * @param string $client_id Application client ID
- * @param string $client_secret Application client secret
- * @param string $code Callback code; don't pass argument if already authenticated
- *
- * @return string Access Token
- */
-function getToken($client_id, $client_secret, $code = "")
-{
-    // TODO Store and get access token from DB
-    if (isset($_GET['token'])) {
-        return $_GET['token'];
-    } else {
-        $token = "b13ace3057d4737d9eefa8af364547dce3618cab";
-//        $token = fetchToken($code, $client_id, $client_secret);
-        header('Location: ?token=' . $token);
-        exit();
-    }
-}
-
-function fetchToken($code, $client_id, $client_secret)
-{
+function send_post($uri, $data) {
     // Location of Github authentication server where access token is given
-    $auth_server_url = "https://github.com/login/oauth/access_token";
+    $auth_server_url = $uri;
 
     // Define request parameters
-    $data = array(
-        'client_id' => $client_id,
-        'client_secret' => $client_secret,
-        'code' => $code,
-        'accept' => 'application/json'
-    );
     $payload = array(
         'http' => array(
             'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'accept' => 'application/json',
             'method' => 'POST',
             'content' => http_build_query($data)
         )
@@ -57,11 +30,6 @@ function fetchToken($code, $client_id, $client_secret)
     $context = stream_context_create($payload);
     $response_temp = file_get_contents($auth_server_url, false, $context);
 
-    // Kill application if response was unsuccessfully fetched
-    if ($response_temp === FALSE) {
-        die("UNSUCCESSFUL");
-    }
-
     // Parse response to array
     $response_to_array = explode('&', $response_temp);
     $response = array();
@@ -70,20 +38,34 @@ function fetchToken($code, $client_id, $client_secret)
         $response[$key_value [0]] = $key_value [1];
     }
 
-    // Get token from response
-    // TODO Store token in DB and reuse; fetch new one only once old one expires
-    return $response['access_token'];
+    return $response;
+}
+
+function fetchToken($code, $client_id, $client_secret)
+{
+    $token_response = send_post("https://github.com/login/oauth/access_token", array(
+        'client_id' => $client_id,
+        'client_secret' => $client_secret,
+        'code' => $code
+    ));
+
+    if (isset($token_response['error']))
+        return false;
+    else
+        return $token_response['access_token'];
 }
 
 /**
  * Setup client with access code.
  */
-function setupToken($client, $client_id, $client_secret)
+function setupToken($client)
 {
-    $code = "";
-    if (isset($_GET['code']))
-        $code = $_GET['code'];
-    $client->setOauthToken(getToken($code, $client_id, $client_secret));
+    if (isset($_SESSION['token'])) {
+        $client->setOauthToken($_SESSION['token']);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**

@@ -14,7 +14,7 @@ html {
     position: relative;
     background-color: rgba(0, 0, 0, 0.2);
     padding: 20%;
-
+    cursor: pointer;
 }
 
 .outline:hover {

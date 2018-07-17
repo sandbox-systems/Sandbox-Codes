@@ -6,16 +6,12 @@ scotchApp.config(function ($routeProvider, $locationProvider) {
             redirectTo: '/'
         })
         .when('/', {
-            templateUrl: 'content.php',
+            templateUrl: 'projects.php',
             controller: 'mainController'
         })
-        .when('/about/:id*', {
-            templateUrl: 'content.php',
+        .when('/sync', {
+            templateUrl: 'github/sync.php',
             controller: 'aboutController'
-        })
-        .when('/contact', {
-            templateUrl: 'content.php',
-            controller: 'contactController'
         });
 
     $locationProvider.html5Mode(true);

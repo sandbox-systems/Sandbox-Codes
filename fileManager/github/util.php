@@ -10,6 +10,7 @@
  */
 
 include 'params.php';
+
 session_start();
 
 function send_post($uri, $data) {

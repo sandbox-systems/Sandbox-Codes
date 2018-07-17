@@ -70,14 +70,8 @@
             id="sortarrow" class="fas fa-arrow-left"></span> Back Home!</a>
 </div>
 
-<ul>
-    <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-    <li><a href="#about/1"><i class="fa fa-shield"></i> About</a></li>
-    <li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
-</ul>
-
-<div ng-view></div>
 <ul id="fileList">
+    <div ng-view></div>
     <!--<li draggable="true" ondragstart="drag(event)" id="entry"><span id="adder" class="far fa-folder-open outline animated tada" style="color: white; font-size: 4.5em;"></span><label>New Entry!</label></li>-->
 </ul>
 <ul id="shareList" style="display: none;">
@@ -185,7 +179,8 @@
                           onclick="test=document.getElementById('purple').style.backgroundColor"></span>
                 </fieldset>
                 <fieldset>
-                    <div style="float:right; background-color:green; " class="goBtn" onclick="addFolder()">Create</div>
+                    <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFolder()">Create
+                    </div>
                     <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closeModal()">Cancel
                     </div>
                 </fieldset>
@@ -338,7 +333,7 @@
         }
     }
 
-    function addFolder() {
+    function addFolder(name, onclick) {
         var node = document.createElement("LI");
         var icon = document.createElement("SPAN");
         var namer = document.createElement("LABEL");
@@ -350,14 +345,14 @@
         var temp = "folder";
         temp += counter;
         node.id = temp;
-        namer.innerHTML = document.getElementById("foldername").value;
-        document.getElementById("foldername").value = "";
+        namer.innerHTML = name;
         icon.className = "far fa-folder-open outline";
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
         node.className = "animated tada";
         node.appendChild(icon);
         node.appendChild(namer);
+        node.onclick = onclick;
         if (namer.innerHTML === "") {
             swal("Uh oh!", "You forgot to name your folder", "warning");
         } else {
@@ -366,6 +361,12 @@
             counter++;
             test = "white";
         }
+    }
+
+    function addNewFolder() {
+        // TODO change null
+        addFolder(document.getElementById("foldername").value, null);
+        document.getElementById("foldername").value = "";
     }
 </script>
 <script>

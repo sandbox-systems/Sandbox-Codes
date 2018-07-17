@@ -4,8 +4,12 @@
  *
  * @author Shivashriganesh Mahato
  */
-
 include 'util.php';
 
 // Get access token from callback code and setup client with it
-setupToken($client, $client_id, $client_secret);
+if (!setupToken($client)) {
+    echo "Github account is not synced<br/>";
+    echo "<a href='#sync'>Go to sync</a>";
+    die();
+}
+$token = $_SESSION['token'];

@@ -7,13 +7,6 @@
 
 include "init.php";
 
-if (!setupToken($client)) {
-    echo "Github account is not synced<br/>";
-    echo "<a href='sync.php'>Go to sync</a>";
-    die();
-}
-$token = $_SESSION['token'];
-
 $owner = "";
 if (isset($_SESSION['owner'])) {
     $owner = $_SESSION['owner'];

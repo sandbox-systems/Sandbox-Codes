@@ -1,0 +1,430 @@
+html {
+    background-color: rgba(255, 255, 255, 0.25);
+    overflow-y: scroll;
+    overflow-x: visible;
+}
+
+.labelhelper {
+    display: flow-root;
+    margin-top: 10%;
+}
+
+.outline {
+    border-radius: 500%;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20%;
+
+}
+
+.outline:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.9);
+}
+
+li {
+    float: left;
+    margin: 5%;
+    text-align: center;
+    width: 7rem;
+    color: white;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: whitesmoke;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 40%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+    border: 5px solid mediumpurple;
+    border-radius: 50px;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: mediumpurple;
+    color: white;
+    border-top-left-radius: 200px;
+    border-top-right-radius: 200px;
+}
+
+.modal-body {
+    padding: 2px 16px;
+}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.switch {
+    position: relative;
+    top: 0%;
+    width: 100%;
+    height: 2rem;
+    float: right;
+    padding: 2px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 10px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 80%;
+    width: 40%;
+    left: 4px;
+    bottom: 10%;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 10px;
+}
+
+input:checked + .slider {
+    background-color: mediumpurple;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px mediumpurple;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(145%);
+    -ms-transform: translateX(145%);
+    transform: translateX(145%);
+}
+
+fieldset {
+    border: solid 0px;
+    padding: 2%;
+}
+
+button {
+    outline: none;
+    border: none;
+    color: black;
+}
+
+.prevBtn {
+    position: relative;
+    width: 4.5vw;
+    padding: 10px;
+    height: 2%;
+    color: white;
+    font-size: 90%;
+    border-radius: 3rem;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+}
+
+.goBtn {
+    position: relative;
+    width: 30%;
+    padding: 2px;
+    height: 2%;
+    color: white;
+    font-size: 90%;
+    border-radius: 3rem;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+}
+
+.profile {
+    position: relative;
+    width: 4.5vw;
+    padding: 2px;
+    height: 2%;
+    color: white;
+    font-size: 90%;
+    border-radius: 3rem;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+}
+
+.prevBtn:active {
+    border: solid mediumpurple 2px;
+}
+
+.inputname {
+    background-color: rgba(0, 0, 0, 0);
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 2px solid gray;
+    outline: none;
+    width: 95%;
+}
+
+select {
+    outline: none;
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0.05);
+/ / border-radius: 10 px;
+    color: black;
+}
+
+option {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 0px;
+    outline: none;
+}
+
+.topnav {
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.topnav a.okeh {
+    background-color: mediumslateblue;
+    color: white;
+}
+
+.topnav a.active {
+    background-color: dimgray;
+    color: white;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    color: white;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.sticky + ul {
+    padding-top: 60px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+.infoname {
+    width: 90%;
+    border: 0px;
+    background-color: white;
+}
+
+#preloader {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999999;
+}
+
+#loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #9370DB;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+#loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #BA55D3;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+}
+
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #FF00FF;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

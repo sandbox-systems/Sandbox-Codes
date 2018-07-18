@@ -1,4 +1,9 @@
 <?php
+/**
+ * Fetch all folders and files contained within this path of the repository opened
+ *
+ * @author Shivashriganesh Mahato
+ */
 
 include 'init.php';
 
@@ -6,7 +11,7 @@ $contents = array(
     'dirs' => array(),
     'files' => array()
 );
-$data = $client->repos->contents->getContents($owner, $repo, $path);
+$data = $client->repos->contents->getContents($owner, $repo, $path, $ref = $branch);
 
 foreach ($data as &$content) {
     $name = $content->getName();

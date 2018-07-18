@@ -9,6 +9,7 @@ include "global.php";
 
 $owner = $_GET['owner'];
 $repo = $_GET['repo'];
+$branch = $_GET['branch'];
 $path = $_GET['path'];
 $file = $_GET['file'];
 

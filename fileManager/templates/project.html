@@ -1,3 +1,7 @@
+<span ng-repeat="branch in branches">
+    {{ addBranch(branch) }}
+</span>
+
 <span ng-repeat="(id, dir) in contents.dirs track by $index">
     {{ addFolder(id, dir) }}
 </span>

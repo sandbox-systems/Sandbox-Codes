@@ -66,6 +66,13 @@
     <a href="javascript:showTrash()" ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
             class="fas fa-trash"></span> Trash</a>
     <a href="javascript:sortListDir()" id="sortclick"><span id="sortarrow" class="fas fa-arrow-up"></span> Sort</a>
+    <div class="dropdown">
+        <button class="dropbtn">
+            <span class="fas fa-code-branch"></span> Select Branch
+        </button>
+        <div id="branchesDropdown" class="dropdown-content">
+        </div>
+    </div>
     <a id="home" href="javascript:showFile()" style="position: relative;float: right; right: 2%;display: none;"><span
             id="sortarrow" class="fas fa-arrow-left"></span> Back Home!</a>
 </div>
@@ -381,6 +388,20 @@
 
     function clearFileList() {
         $('#fileList').find('li').remove();
+    }
+
+    function addBranch(name, href, onclick) {
+        let dropdown = $('#branchesDropdown');
+        let link = $('<a>');
+        link.text(name);
+        link.attr('href', href);
+        link.click(onclick);
+        link.appendTo(dropdown);
+        $('</br>').appendTo(dropdown);
+    }
+
+    function clearBranches() {
+        $('#branchesDropdown').empty();
     }
 </script>
 <script>

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Fetch all repositories belonging to or shared with the user
+ *
+ * @author Shivashriganesh Mahato
+ */
 
 include 'init.php';
 

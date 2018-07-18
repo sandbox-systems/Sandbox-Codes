@@ -83,8 +83,17 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
         branch: $routeParams.branch || "master"
     };
 
+    setOnCreateFile(function (name) {
+        $http({
+            url: "requests/createFile.php",
+            params: {...$scope.params, ...{name: name}},
+            method: "get"
+        }).then(function (response) {
+        });
+    });
+
     $http({
-        url: "requests/projectContents.php",
+        url: "requests/getProjectContents.php",
         params: $scope.params,
         method: "get"
     }).then(function (response) {
@@ -149,7 +158,7 @@ fmApp.controller('fileController', function ($scope, $http, $routeParams) {
     };
 
     $http({
-        url: "requests/fileContents.php",
+        url: "requests/getFileContents.php",
         params: $scope.params,
         method: "get"
     }).then(function (response) {

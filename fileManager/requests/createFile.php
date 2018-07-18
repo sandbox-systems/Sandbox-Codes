@@ -1,6 +1,6 @@
 <?php
 /**
- * Fetch and respond with the contents of a file
+ * Create new file and add to appropriate storage API
  *
  * @author Shivashriganesh Mahato
  */
@@ -11,8 +11,8 @@ $owner = $_GET['owner'];
 $repo = $_GET['repo'];
 $branch = $_GET['branch'];
 $path = $_GET['path'];
-$file = $_GET['file'];
+$name = $_GET['name'];
 
 if ($storageMethod == "GITHUB") {
-    include '../github/repoFileContents.php';
+    include '../github/pushNewFile.php';
 }

@@ -343,8 +343,17 @@
         }
     }
 
+    let onCreateFile;
+
+    function setOnCreateFile(func) {
+        onCreateFile = func;
+    }
+
     function addNewFile() {
-        addFile(document.getElementById("filename").value, "", null);
+        let filename = document.getElementById("filename").value;
+        addFile(filename, "", null);
+        if (onCreateFile)
+            onCreateFile(filename);
         document.getElementById("filename").value = "";
     }
 

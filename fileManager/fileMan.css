@@ -4,10 +4,6 @@ html {
     overflow-x: visible;
 }
 
-body {
-    background: lightblue;
-}
-
 .dropdown {
     float: left;
     overflow: hidden;

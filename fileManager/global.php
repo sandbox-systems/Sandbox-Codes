@@ -1,2 +1,0 @@
-<?php
-$storageMethod = "GITHUB";

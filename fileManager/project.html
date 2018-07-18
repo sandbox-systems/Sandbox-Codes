@@ -1,7 +1,0 @@
-<span ng-repeat="(id, dir) in contents.dirs track by $index">
-    {{ addFolder(id, dir, "owners/" + params.owner + "/repos/" + params.repo + "/" + params.path + (params.path.length === 0 ? '' : '/') + dir) }}
-</span>
-
-<span ng-repeat="(id, file) in contents.files track by $index">
-    {{ addFile(id, file, "owners/" + params.owner + "/repos/" + params.repo + "/" + params.path + (params.path.length === 0 ? '' : '/') + dir) }}
-</span>

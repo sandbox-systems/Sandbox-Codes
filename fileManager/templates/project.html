@@ -1,0 +1,7 @@
+<span ng-repeat="(id, dir) in contents.dirs track by $index">
+    {{ addFolder(id, dir) }}
+</span>
+
+<span ng-repeat="(id, file) in contents.files track by $index">
+    {{ addFile(id, file) }}
+</span>

@@ -15,7 +15,7 @@
 
     <base href="/fileManager/FileM.html">
 </head>
-<body ng-controller="mainController">
+<body>
 <!--<div id="preloader">
       <div id="loader"></div>
     </div>-->
@@ -71,7 +71,7 @@
 </div>
 
 <ul id="fileList">
-    <div ng-view></div>
+    <div id="routedTemplate" ng-view></div>
     <!--<li draggable="true" ondragstart="drag(event)" id="entry"><span id="adder" class="far fa-folder-open outline animated tada" style="color: white; font-size: 4.5em;"></span><label>New Entry!</label></li>-->
 </ul>
 <ul id="shareList" style="display: none;">
@@ -153,7 +153,7 @@
                           onclick="test=document.getElementById('purple').style.backgroundColor"></span>
                 </fieldset>
                 <fieldset>
-                    <div style="float:right; background-color:green; " class="goBtn" onclick="addFile()">Create</div>
+                    <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFile()">Create</div>
                     <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closeModal()">Cancel
                     </div>
                 </fieldset>
@@ -301,12 +301,12 @@
         modal.style.display = "block";
     }
 
-    function addFile() {
+    function addFile(name, href, onclick) {
         var node = document.createElement("LI");
+        var link = document.createElement("A");
         var icon = document.createElement("I");
         var namer = document.createElement("LABEL");
-        namer.innerHTML = document.getElementById("filename").value;
-        document.getElementById("filename").value = "";
+        namer.innerHTML = name;
         namer.style.textAlign = "center";
         var temp = "file";
         temp += counter;
@@ -321,8 +321,11 @@
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
         node.className = "animated tada";
-        node.appendChild(icon);
-        node.appendChild(namer);
+        node.onclick = onclick;
+        link.setAttribute('href', '#' + href);
+        link.appendChild(icon);
+        link.appendChild(namer);
+        node.appendChild(link);
         if (namer.innerHTML === "") {
             swal("Uh oh!", "You forgot to name your file", "warning");
         } else {
@@ -333,8 +336,14 @@
         }
     }
 
-    function addFolder(name, onclick) {
+    function addNewFile() {
+        addFile(document.getElementById("filename").value, "", null);
+        document.getElementById("filename").value = "";
+    }
+
+    function addFolder(name, href, onclick) {
         var node = document.createElement("LI");
+        var link = document.createElement("A");
         var icon = document.createElement("SPAN");
         var namer = document.createElement("LABEL");
         namer.style.textAlign = "center";
@@ -350,9 +359,11 @@
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
         node.className = "animated tada";
-        node.appendChild(icon);
-        node.appendChild(namer);
         node.onclick = onclick;
+        link.setAttribute('href', '#' + href);
+        link.appendChild(icon);
+        link.appendChild(namer);
+        node.appendChild(link);
         if (namer.innerHTML === "") {
             swal("Uh oh!", "You forgot to name your folder", "warning");
         } else {
@@ -364,9 +375,12 @@
     }
 
     function addNewFolder() {
-        // TODO change null
-        addFolder(document.getElementById("foldername").value, null);
+        addFolder(document.getElementById("foldername").value, "", null);
         document.getElementById("foldername").value = "";
+    }
+
+    function clearFileList() {
+        $('#fileList').find('li').remove();
     }
 </script>
 <script>

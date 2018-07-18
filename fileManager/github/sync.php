@@ -8,7 +8,7 @@
 include 'params.php';
 
 if (isset($_GET['unsuccessful']))
-    echo "Login was unsuccessful";
+    echo "Sync was unsuccessful";
 
 ?>
 

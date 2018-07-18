@@ -42,7 +42,7 @@ fmApp.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 });
 
-fmApp.controller('mainController', function ($scope, $routeParams, $http) {
+fmApp.controller('mainController', function ($scope, $route, $routeParams, $http, $location) {
     clearFileList();
 
     $http({
@@ -50,6 +50,9 @@ fmApp.controller('mainController', function ($scope, $routeParams, $http) {
         params: {},
         method: "get"
     }).then(function (response) {
+        if (response.data === "UNSYNCED") {
+            $location.path('/sync');
+        }
         $scope.repos = response.data;
     });
 

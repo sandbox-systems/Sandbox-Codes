@@ -23,14 +23,6 @@ fmApp.config(function ($routeProvider, $locationProvider) {
             templateUrl: 'templates/project.html',
             controller: 'repoController'
         })
-        .when('/owners/:owner/repos/:repo/branches/:branch/file/:file', {
-            templateUrl: 'templates/file.html',
-            controller: 'fileController'
-        })
-        .when('/owners/:owner/repos/:repo/branches/:branch/:path*/file/:file', {
-            templateUrl: 'templates/file.html',
-            controller: 'fileController'
-        })
         .when('/owners/:owner/repos/:repo/branches/:branch/:path*', {
             templateUrl: 'templates/project.html',
             controller: 'repoController'
@@ -92,6 +84,16 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
         });
     });
 
+    setFetchFleContents(function (name) {
+        $http({
+            url: "requests/getFileContents.php",
+            params: {...$scope.params, ...{file: name}},
+            method: "get"
+        }).then(function (response) {
+            showFileContents(response.data);
+        });
+    });
+
     $http({
         url: "requests/getProjectContents.php",
         params: $scope.params,
@@ -126,11 +128,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
     $scope.addFile = function (id, name) {
         if (!$scope.addedIDs.files.includes(id)) {
             $scope.addedIDs.files.push(id);
-            let href = "owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
-                $scope.params.branch + "/" + $scope.params.path + ($scope.params.path.length === 0 ? '' : '/') +
-                'file/' + name;
-            addFile(name, href, function () {
-                window.scrollTo(0, 0);
+            addFile(name, function () {
             })
         }
     };
@@ -144,24 +142,4 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
             })
         }
     };
-});
-
-fmApp.controller('fileController', function ($scope, $http, $routeParams) {
-    clearFileList();
-
-    $scope.params = {
-        owner: $routeParams.owner || "",
-        repo: $routeParams.repo || "",
-        path: $routeParams.path || "",
-        branch: $routeParams.branch || "master",
-        file: $routeParams.file || ""
-    };
-
-    $http({
-        url: "requests/getFileContents.php",
-        params: $scope.params,
-        method: "get"
-    }).then(function (response) {
-        $scope.contents = response.data;
-    });
 });

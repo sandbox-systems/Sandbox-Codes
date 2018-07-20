@@ -13,12 +13,14 @@ $contents = array(
 );
 $data = $client->repos->contents->getContents($owner, $repo, $path, $ref = $branch);
 
-foreach ($data as &$content) {
-    $name = $content->getName();
-    if ($content->getType() == "file") {
-        $contents['files']['i' . count($contents['files'])] = $name;
-    } else {
-        $contents['dirs']['i' . count($contents['dirs'])] = $name;
+if (is_array($data)) {
+    foreach ($data as &$content) {
+        $name = $content->getName();
+        if ($content->getType() == "file") {
+            $contents['files']['i' . count($contents['files'])] = $name;
+        } else {
+            $contents['dirs']['i' . count($contents['dirs'])] = $name;
+        }
     }
 }
 

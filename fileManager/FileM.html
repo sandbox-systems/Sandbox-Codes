@@ -308,7 +308,13 @@
         modal.style.display = "block";
     }
 
-    function addFile(name, href, onclick) {
+    let fetchFileContents;
+
+    function setFetchFleContents(func) {
+        fetchFileContents = func;
+    }
+
+    function addFile(name, onclick) {
         var node = document.createElement("LI");
         var link = document.createElement("A");
         var icon = document.createElement("I");
@@ -328,8 +334,10 @@
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
         node.className = "animated tada";
-        node.onclick = onclick;
-        link.setAttribute('href', '#' + href);
+        node.onclick = function () {
+            onclick();
+            fetchFileContents(name);
+        };
         link.appendChild(icon);
         link.appendChild(namer);
         node.appendChild(link);
@@ -351,7 +359,7 @@
 
     function addNewFile() {
         let filename = document.getElementById("filename").value;
-        addFile(filename, "", null);
+        addFile(filename, null);
         if (onCreateFile)
             onCreateFile(filename);
         document.getElementById("filename").value = "";
@@ -412,6 +420,16 @@
     function clearBranches() {
         $('#branchesDropdown').empty();
     }
+
+    function showFileContents(contents) {
+        console.log(contents);
+    }
+
+    showFileContents("public abstract interface AI {\n" +
+        "    public abstract String getName();\n" +
+        "\n" +
+        "    public abstract Point getNextMove(TicTacToe paramTicTacToe, TicTacToePiece paramTicTacToePiece);\n" +
+        "}");
 </script>
 <script>
     function showTrash() {

@@ -10,11 +10,13 @@ include 'init.php';
 $repos = array();
 $data = $client->repos->listYourRepositories();
 
-foreach ($data as &$repo) {
-    $repos['i' . count($repos)] = array(
-        'name' => $repo->getName(),
-        'owner' => $repo->getOwner()->getLogin()
-    );
+if (is_array($data)) {
+    foreach ($data as &$repo) {
+        $repos['i' . count($repos)] = array(
+            'name' => $repo->getName(),
+            'owner' => $repo->getOwner()->getLogin()
+        );
+    }
 }
 
 header('Content-Type: application/json');

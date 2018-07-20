@@ -13,8 +13,10 @@ $repo = $_GET['repo'];
 $branches = array();
 $data = $client->repos->listBranches($owner, $repo);
 
-foreach ($data as &$branch) {
-    $branches[] = $branch->getName();
+if (is_array($data)) {
+    foreach ($data as &$branch) {
+        $branches[] = $branch->getName();
+    }
 }
 
 header('Content-Type: application/json');

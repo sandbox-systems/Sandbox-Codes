@@ -16,8 +16,12 @@ $data = $client->repos->contents->getContents($owner, $repo, $path, $ref = $bran
 if (is_array($data)) {
     foreach ($data as &$content) {
         $name = $content->getName();
+        $sha = $content->getSha();
         if ($content->getType() == "file") {
-            $contents['files']['i' . count($contents['files'])] = $name;
+            $contents['files']['i' . count($contents['files'])] = array(
+                'name' => $name,
+                'sha' => $sha
+            );
         } else {
             $contents['dirs']['i' . count($contents['dirs'])] = $name;
         }

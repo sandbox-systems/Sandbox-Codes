@@ -314,7 +314,7 @@
         fetchFileContents = func;
     }
 
-    function addFile(name, onclick) {
+    function addFile(name, onclick, sha) {
         var node = document.createElement("LI");
         var link = document.createElement("A");
         var icon = document.createElement("I");
@@ -424,12 +424,6 @@
     function showFileContents(contents) {
         console.log(contents);
     }
-
-    showFileContents("public abstract interface AI {\n" +
-        "    public abstract String getName();\n" +
-        "\n" +
-        "    public abstract Point getNextMove(TicTacToe paramTicTacToe, TicTacToePiece paramTicTacToePiece);\n" +
-        "}");
 </script>
 <script>
     function showTrash() {

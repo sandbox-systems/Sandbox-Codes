@@ -7,5 +7,5 @@
 </span>
 
 <span ng-repeat="(id, file) in contents.files track by $index">
-    {{ addFile(id, file) }}
+    {{ addFile(id, file['name'], file['sha']) }}
 </span>

@@ -125,11 +125,11 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
             });
         }
     };
-    $scope.addFile = function (id, name) {
+    $scope.addFile = function (id, name, sha) {
         if (!$scope.addedIDs.files.includes(id)) {
             $scope.addedIDs.files.push(id);
             addFile(name, function () {
-            })
+            }, sha)
         }
     };
     $scope.addBranch = function (name) {

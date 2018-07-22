@@ -7,8 +7,8 @@
 
 include 'init.php';
 
-$owner = $_GET['owner'];
-$repo = $_GET['repo'];
-$branch = $_GET['branch'];
+$owner = $_POST['owner'];
+$repo = $_POST['repo'];
+$branch = $_POST['branch'];
 
 $client->git->refs->deleteReference($owner, $repo, "heads/$branch");

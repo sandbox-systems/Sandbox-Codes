@@ -39,8 +39,9 @@ fmApp.controller('mainController', function ($scope, $route, $routeParams, $http
 
     $http({
         url: "requests/getProjects.php",
-        params: {},
-        method: "get"
+        data: $.param({}),
+        method: "post",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
         if (response.data === "UNSYNCED") {
             $location.path('/sync');
@@ -78,8 +79,9 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
     setOnCreateFile(function (name) {
         $http({
             url: "requests/createFile.php",
-            params: {...$scope.params, ...{name: name}},
-            method: "get"
+            data: $.param({...$scope.params, ...{name: name}}),
+            method: "post",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
         }).then(function (response) {
         });
     });
@@ -87,8 +89,9 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
     setFetchFleContents(function (name) {
         $http({
             url: "requests/getFileContents.php",
-            params: {...$scope.params, ...{file: name}},
-            method: "get"
+            data: $.param({...$scope.params, ...{file: name}}),
+            method: "post",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
         }).then(function (response) {
             showFileContents(response.data);
         });
@@ -96,19 +99,21 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
 
     $http({
         url: "requests/getProjectContents.php",
-        params: $scope.params,
-        method: "get"
+        data: $.param($scope.params),
+        method: "post",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
         $scope.contents = response.data;
     });
 
     $http({
         url: "github/branches.php",
-        params: {
+        data: $.param({
             owner: $scope.params.owner,
             repo: $scope.params.repo
-        },
-        method: "get"
+        }),
+        method: "post",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
         $scope.branches = response.data;
     });

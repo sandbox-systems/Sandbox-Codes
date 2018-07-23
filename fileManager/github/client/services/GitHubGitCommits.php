@@ -19,6 +19,21 @@ class GitHubGitCommits extends GitHubService
 		
 		return $this->client->request("/repos/$owner/$repo/git/commits/$sha", 'GET', $data, 200, 'GitHubGitCommit');
 	}
+
+	/**
+	 * Get a Commit
+	 *
+	 * @return GitHubGitCommit
+	 */
+	public function createCommit($owner, $repo, $message, $treeSha, $parentSha)
+	{
+		$data = array();
+		$data['message'] = $message;
+		$data['tree'] = $treeSha;
+		$data['parents'] = [$parentSha];
+
+		return $this->client->request("/repos/$owner/$repo/git/commits", 'POST', $data, 201, 'GitHubGitCommit');
+	}
 	
 }
 

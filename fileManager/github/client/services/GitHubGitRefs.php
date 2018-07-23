@@ -13,11 +13,11 @@ class GitHubGitRefs extends GitHubService
 	 * 
 	 * @return GitHubRef
 	 */
-	public function getReference($owner, $repo)
+	public function getReference($owner, $repo, $ref)
 	{
 		$data = array();
 		
-		return $this->client->request("/repos/$owner/$repo/git/refs/heads/skunkworkz/featureA", 'GET', $data, 200, 'GitHubRef');
+		return $this->client->request("/repos/$owner/$repo/git/refs/$ref", 'GET', $data, 200, 'GitHubRef');
 	}
 	
 	/**
@@ -35,6 +35,13 @@ class GitHubGitRefs extends GitHubService
 	    $data = array();
 
 	    return $this->client->request("/repos/$owner/$repo/git/refs/$ref", 'DELETE', $data, 204, '');
+    }
+
+	public function updateReference($owner, $repo, $ref, $sha) {
+	    $data = array();
+	    $data['sha'] = $sha;
+
+	    return $this->client->request("/repos/$owner/$repo/git/refs/$ref", 'PATCH', $data, 204, '');
     }
 }
 

@@ -38,7 +38,7 @@ if (isset($_SESSION['changes'])) {
             case 'ADD':
                 $tree[] = array(
                     "path" => $filePath,
-                    "mode" => '100644',
+                    "mode" => $change['isExecutable'] ? '100755' : '100644',
                     "type" => 'blob',
                     "content" => ''
                 );

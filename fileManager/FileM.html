@@ -12,6 +12,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
     <script src="router.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
     <base href="/fileManager/FileM.html">
 </head>
@@ -21,6 +25,7 @@
     </div>-->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div style="width: 15%;">
     <form>
         <fieldset>
             Name<br>
@@ -54,14 +59,16 @@
         <fieldset>
             Shared With<br>
         </fieldset>
-
-
     </form>
+    </div>
+    <div style="width: 80%">
+       <pre><code id="preview"></code></pre>
+    </div>
 </div>
 <div class="topnav animated fadeIn" id="navbar">
     <a class="okeh" href="javascript:openModal()">New Entry!</a>
     <a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
-    <a href="javascript:showShare()" id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
+    <a id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
     <a href="javascript:showTrash()" ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
             class="fas fa-trash"></span> Trash</a>
@@ -74,18 +81,12 @@
         </div>
     </div>
     <a id="home" href="javascript:showFile()" style="position: relative;float: right; right: 2%;display: none;"><span
-            id="sortarrow" class="fas fa-arrow-left"></span> Back Home!</a>
+            class="fas fa-arrow-left"></span> Back Home!</a>
 </div>
 
 <ul id="fileList">
     <div id="routedTemplate" ng-view></div>
     <!--<li draggable="true" ondragstart="drag(event)" id="entry"><span id="adder" class="far fa-folder-open outline animated tada" style="color: white; font-size: 4.5em;"></span><label>New Entry!</label></li>-->
-</ul>
-<ul id="shareList" style="display: none;">
-
-</ul>
-<ul id="trashList" style="display: none;">
-
 </ul>
 <!-- The Modal -->
 <div id="shareModal" class="modal">
@@ -104,7 +105,6 @@
                 </fieldset>
                 <fieldset id="sharedwith">
                     Shared with:<br>
-                    <span id="gray" class="profile" style="background-color: #CAD3C8;"></span>
                 </fieldset>
             </form>
         </div>
@@ -127,7 +127,7 @@
             <form id="fileform" class="animated fadeIn">
                 <fieldset>
                     Filename:<br>
-                    <input id="filename" class="inputname" type="text" oninput="typeUpdater()" autocomplete="off"
+                    <input id="filename" class="inputname" type="text" oninput="typeUpdater(document.getElementById('filename').value)" autocomplete="off"
                            required>
                 </fieldset>
                 <fieldset>
@@ -195,6 +195,15 @@
         </div>
     </div>
 </div>
+<div id="cssmenu">
+    <ul>
+        <li class="active"><a href="#">Breadcrumbs</a></li>
+        <li><a href="#">Daily UI</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+    </ul>
+</div>
 </body>
 <script>
     jQuery(document).ready(function ($) {
@@ -258,7 +267,6 @@
     }
 
     function opensharemodal() {
-        showFile();
         var dodal = document.getElementById('shareModal');
         dodal.style.display = "block";
     }
@@ -284,8 +292,8 @@
         }
     }
 
-    function typeUpdater() {
-        var name = document.getElementById("filename").value;
+    function typeUpdater(filer) {
+        var name = filer;
         var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
         var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
         var temp = "";
@@ -295,6 +303,7 @@
                 document.getElementById("filechoose").value = actual[i];
             }
         }
+        return temp;
     }
 
     function closeModal() {
@@ -303,7 +312,6 @@
     }
 
     function openModal() {
-        showFile();
         var modal = document.getElementById('myModal');
         modal.style.display = "block";
     }
@@ -365,7 +373,7 @@
         document.getElementById("filename").value = "";
     }
 
-    function addFolder(name, href, onclick) {
+    function addFolder(name, href, onclick,isprivate) {
         var node = document.createElement("LI");
         var link = document.createElement("A");
         var icon = document.createElement("SPAN");
@@ -379,7 +387,13 @@
         temp += counter;
         node.id = temp;
         namer.innerHTML = name;
-        icon.className = "far fa-folder-open outline";
+        if(isprivate == null){
+            icon.className = "far fa-folder-open outline";
+        }else if(isprivate == true){
+            icon.className = "fas fa-book";
+        }else{
+            icon.className = "fas fa-lock";
+        }
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
         node.className = "animated tada";
@@ -420,39 +434,11 @@
     function clearBranches() {
         $('#branchesDropdown').empty();
     }
-
     function showFileContents(contents) {
-        console.log(contents);
+        document.getElementById("preview").innerText=contents;
     }
 </script>
 <script>
-    function showTrash() {
-        document.getElementById("fileList").style.display = "none";
-        document.getElementById("shareList").style.display = "none";
-        document.getElementById("trashList").style.display = "block";
-        document.getElementById("trasher").className = "active";
-        document.getElementById("sharebutton").className = "";
-        document.getElementById("home").style.display = "block";
-    }
-
-    function showFile() {
-        document.getElementById("fileList").style.display = "block";
-        document.getElementById("shareList").style.display = "none";
-        document.getElementById("trashList").style.display = "none";
-        document.getElementById("home").style.display = "none";
-        document.getElementById("trasher").className = "";
-        document.getElementById("sharebutton").className = "";
-    }
-
-    function showShare() {
-        document.getElementById("fileList").style.display = "none";
-        document.getElementById("shareList").style.display = "block";
-        document.getElementById("trashList").style.display = "none";
-        document.getElementById("home").style.display = "block";
-        document.getElementById("sharebutton").className = "active";
-        document.getElementById("trasher").className = "";
-    }
-
     function allowDrop(ev) {
         ev.preventDefault();
     }
@@ -488,32 +474,13 @@
     function infodrop(ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
-        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("mySidenav").style.width = "100%";
         var bemp = document.getElementById(data);
         var temp = bemp.getElementsByTagName("LABEL");
         var name = temp[0].innerHTML;
-        document.getElementById("displayname").setAttribute("placeholder", name);
-        if (bemp.innerHTML.indexOf("folder") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "Folder");
-        } else if (bemp.innerHTML.indexOf("java") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "Java");
-        } else if (bemp.innerHTML.indexOf("cplusplus") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "C++");
-        } else if (bemp.innerHTML.indexOf("csharp") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "C#");
-        } else if (bemp.innerHTML.indexOf("python") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "Python");
-        } else if (bemp.innerHTML.indexOf("javascript") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "Javascript");
-        } else if (bemp.innerHTML.indexOf("html") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "HTML");
-        } else if (bemp.innerHTML.indexOf("css") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "CSS");
-        } else if (bemp.innerHTML.indexOf("ruby") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "Ruby");
-        } else if (bemp.innerHTML.indexOf("objc") != -1) {
-            document.getElementById("displaytype").setAttribute("placeholder", "Objective-C");
-        }
+        fetchFileContents(name);
+        document.getElementById("displayname").value=name;
+        document.getElementById("displaytype").value = typeUpdater(name);
     }
 
     function dropper(ev) {
@@ -531,7 +498,7 @@
 
     }
 </script>
-<!--<script>	
+<script>
 function sortListDir() {
 changesorticon();
   var list, i, switching, b,c, shouldSwitch, dir, j,switchcount = 0;
@@ -583,5 +550,5 @@ changesorticon();
     }
   }
 }
-	</script>-->
+	</script>
 </html>

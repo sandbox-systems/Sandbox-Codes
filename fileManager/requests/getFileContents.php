@@ -7,11 +7,11 @@
 
 include "global.php";
 
-$owner = $_GET['owner'];
-$repo = $_GET['repo'];
-$branch = $_GET['branch'];
-$path = $_GET['path'];
-$file = $_GET['file'];
+$owner = $_POST['owner'];
+$repo = $_POST['repo'];
+$branch = $_POST['branch'];
+$path = $_POST['path'];
+$file = $_POST['file'];
 
 if ($storageMethod == "GITHUB") {
     include '../github/fileContents.php';

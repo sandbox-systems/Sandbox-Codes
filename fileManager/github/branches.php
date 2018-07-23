@@ -7,8 +7,8 @@
 
 include 'init.php';
 
-$owner = $_GET['owner'];
-$repo = $_GET['repo'];
+$owner = $_POST['owner'];
+$repo = $_POST['repo'];
 
 $branches = array();
 $data = $client->repos->listBranches($owner, $repo);

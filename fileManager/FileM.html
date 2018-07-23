@@ -412,8 +412,14 @@
         }
     }
 
+    var curPath = "";
+    function setCurPath(path) {
+        curPath = path;
+    }
+
     function addNewFolder() {
-        addFolder(document.getElementById("foldername").value, "", null);
+        var name = document.getElementById("foldername").value;
+        addFolder(name, curPath + name, null);
         document.getElementById("foldername").value = "";
     }
 

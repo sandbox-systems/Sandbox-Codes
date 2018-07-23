@@ -6,3 +6,4 @@ out/*
 chat/node_modules/
 composer.phar
 /vendor/
+collaboration/node_modules/

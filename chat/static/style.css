@@ -3,6 +3,10 @@
     display: none !important;
 }
 
+.hidden {
+    display: none;
+}
+
 html, body {
     min-height: 100% !important;
     height: 100%;
@@ -109,6 +113,10 @@ html, body {
     height: 120px;
 }
 
+.selectedRoomBtn {
+    background: #f8f9fa60;
+}
+
 .groupsIcon {
     font-size: 28px;
 }
@@ -148,6 +156,33 @@ html, body {
 
     overflow: hidden;
     z-index: 0;
+}
+
+#chatOverlay {
+    background: #8044a8;
+    -webkit-transition: background-color 2s ease-out;
+    -moz-transition: background-color 2s ease-out;
+    -o-transition: background-color 2s ease-out;
+    transition: background-color 2s ease-out;
+    text-align: center;
+    padding: 0;
+}
+
+#chatOverlay img {
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+
+#noRoomSelectedTxt {
+    color: white;
+    font-size: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #chat {

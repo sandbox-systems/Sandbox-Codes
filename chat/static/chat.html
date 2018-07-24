@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"/>
 </head>
 <body ng-app="chat">
-<div ng-cloak ng-controller="chatCtrl">
+<div id="chatContainer" class="hidden" ng-cloak ng-controller="chatCtrl">
     <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="leaveGroupModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -197,7 +197,8 @@
                     </div>
                 </div>
                 <div ng-repeat="room in rooms track by $index">
-                    <button class="btn roomBtn" ng-click="chatRoom.changeRoom($index)">
+                    <button class="btn roomBtn" ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === $index ? -1 : $index)"
+                            ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
                         <span class="row">
                             <span class="col-3">
                                 <img ng-if="room.members.length === 1"
@@ -218,7 +219,7 @@
                     </button>
                 </div>
             </div>
-            <div id="chat" class="col-9 fullH container-fluid">
+            <div ng-if="chatRoom.isARoomSelected()" id="chat" class="col-9 fullH container-fluid">
                 <div id="chatLog">
                     <div class="chatMsg" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
                         <span ng-if="typeof(chat) === 'string'">
@@ -358,6 +359,12 @@
                 </span>
                 </div>
             </div>
+            <div ng-if="!chatRoom.isARoomSelected()" id="chatOverlay" class="col-9 fullH">
+                <img src="img/Wallpaper.jpg">
+                <div id="noRoomSelectedTxt">
+                    Select a room to start chatting
+                </div>
+            </div>
         </div>
         <div id="overlay" class="fixed-top w-100 h-100 bg-dark"></div>
         <frosted-glass ng-if="chatRoom.isARoomSelected()" id="moreGroupInfo" class="fixed-top off-screen w-25 h-100"
@@ -422,6 +429,8 @@
 <script src="scripts/chatClient.js"></script>
 <script>
     $(function () {
+        $('#chatContainer').fadeIn(1000).removeClass('hidden');
+
         $('[data-toggle="popover"]').popover();
         $('body').click(function (e) {
             $('[data-toggle="popover"]').each(function () {
@@ -501,6 +510,13 @@
         attachModalDialog.on('drop', function () {
             dropFileOverlay.fadeOut();
         });
+
+        let colors = ['#193e87', '#8044a8', '#7b0e75', '#6b142c'];
+        let colorCounter = 2;
+        window.setInterval(function () {
+            $('#chatOverlay').css('background', colors[colorCounter]);
+            colorCounter = (colorCounter + 1) % colors.length;
+        }, 2000);
     });
 </script>
 </body>

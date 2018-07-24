@@ -37,8 +37,11 @@ module.exports = {
     },
     removeMemberFromRoom: function (db, roomID, memberID) {
         var query = {_id: mongodb.ObjectID(roomID)};
-        var pull = {$pull: {members: memberID}};
-        db.collection("rooms").update(query, pull, function (err, res) {
+        var assignment = {};
+        assignment["members." + memberID] = "";
+        var unset = {$unset: assignment};
+
+        db.collection("rooms").update(query, unset, function (err, res) {
             if (err) throw err;
             console.log("Successfully removed member from room");
         });
@@ -60,8 +63,11 @@ module.exports = {
     },
     addMemberToRoom: function (db, roomID, memberID) {
         var query = {_id: mongodb.ObjectID(roomID)};
-        var push = {$push: {members: memberID}};
-        db.collection("rooms").update(query, push, function (err, res) {
+        var assignment = {};
+        assignment["members." + memberID] = 0;
+        var set = {$set: assignment};
+
+        db.collection("rooms").update(query, set, function (err, res) {
             if (err) throw err;
             console.log("Successfully added member to room");
         });

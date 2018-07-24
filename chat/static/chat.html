@@ -197,7 +197,8 @@
                     </div>
                 </div>
                 <div ng-repeat="room in rooms track by $index">
-                    <button class="btn roomBtn" ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === $index ? -1 : $index)"
+                    <button class="btn roomBtn"
+                            ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === $index ? -1 : $index)"
                             ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
                         <span class="row">
                             <span class="col-3">
@@ -209,7 +210,9 @@
                                 <span class="groupText">
                                     <strong>{{ room.name }}</strong>
                                     <br>
-                                    {{ room.chats.length > 0 ? trunc(typeof(room.chats[room.chats.length - 1]) === 'object' ? room.chats[room.chats.length - 1].fromName + ": " + room.chats[room.chats.length - 1].name : room.chats[room.chats.length - 1].substr(room.chats[room.chats.length - 1].indexOf(' ') + 1), 20) : "" }}
+                                    <span class="groupTextSub">
+                                        {{ room.chats.length > 0 ? trunc(typeof(room.chats[room.chats.length - 1]) === 'object' ? room.chats[room.chats.length - 1].fromName + ": " + room.chats[room.chats.length - 1].name : room.chats[room.chats.length - 1].substr(room.chats[room.chats.length - 1].indexOf(' ') + 1), 20) : "" }}
+                                    </span>
                                 </span>
                             </span>
                             <span class="col-3" ng-if="room.unread > 0">
@@ -219,7 +222,7 @@
                     </button>
                 </div>
             </div>
-            <div ng-if="chatRoom.isARoomSelected()" id="chat" class="col-9 fullH container-fluid">
+            <div ng-class="chatRoom.isARoomSelected() ? '' : 'hidden'" id="chat" class="col-9 fullH container-fluid">
                 <div id="chatLog">
                     <div class="chatMsg" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
                         <span ng-if="typeof(chat) === 'string'">
@@ -343,12 +346,14 @@
                     <span id="moreGroupInfoBtnContainer" class="float-right">
                     <span id="onlineMembersContainer">
                         <span ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">
-                            <img class="onlineMember bordered-circle-green" data-toggle="popover" data-html="true"
-                                 ng-if="member.isOnline"
-                                 data-content="<strong>{{member.name}}</strong><br/>@{{member.uname}}"
-                                 data-placement="top"
-                                 ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{member.name}}"/>
-                            &nbsp;
+                            <span ng-if="member.isOnline">
+                                <img class="onlineMember bordered-circle-green" data-toggle="popover" data-html="true"
+                                     data-content="<strong>{{member.name}}</strong><br/>@{{member.uname}}"
+                                     data-placement="top"
+                                     ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{member.name}}"/>
+                                <img ng-if="member.isTyping" class="onlineMemberTyping" src="img/typing.png"/>
+                                &nbsp;
+                            </span>
                         </span>
                     </span>
                     <span id="moreGroupInfoBtn" class="groupInfoItem hamburger hamburger--elastic">
@@ -359,7 +364,7 @@
                 </span>
                 </div>
             </div>
-            <div ng-if="!chatRoom.isARoomSelected()" id="chatOverlay" class="col-9 fullH">
+            <div ng-class="!chatRoom.isARoomSelected() ? '' : 'hidden'" id="chatOverlay" class="col-9 fullH">
                 <img src="img/Wallpaper.jpg">
                 <div id="noRoomSelectedTxt">
                     Select a room to start chatting
@@ -367,7 +372,7 @@
             </div>
         </div>
         <div id="overlay" class="fixed-top w-100 h-100 bg-dark"></div>
-        <frosted-glass ng-if="chatRoom.isARoomSelected()" id="moreGroupInfo" class="fixed-top off-screen w-25 h-100"
+        <frosted-glass id="moreGroupInfo" class="fixed-top off-screen w-25 h-100"
                        style="z-index: 1030; position: fixed"
                        overlay-color="#d1ecff50"
                        blur-amount="50px">
@@ -472,10 +477,6 @@
 
         function toggleMoreGroupInfo() {
             moreGroupInfoPanel.toggleClass('off-screen offset-9');
-
-            moreGroupInfoPanel.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function () {
-                window.dispatchEvent(new Event('resize'));
-            });
 
             function toggleOverlay() {
                 overlay.toggle();

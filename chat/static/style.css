@@ -4,7 +4,7 @@
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 html, body {
@@ -126,6 +126,10 @@ html, body {
     text-align: left;
     left: 0;
     top: 15px;
+}
+
+.groupTextSub {
+    color: #d5d5d5;
 }
 
 .unreadCount {
@@ -301,7 +305,7 @@ html, body {
 }
 
 .otherChatBubble {
-    background: #d0cdc7;
+    background: #dad7d1;
     color: black;
     float: left;
 }
@@ -309,7 +313,7 @@ html, body {
 .otherChatBubble::after {
     left: 0;
     border: 10px solid transparent;
-    border-right-color: #d0cdc7;
+    border-right-color: #dad7d1;
     border-left: 0;
     margin-top: -10px;
     margin-left: -10px;

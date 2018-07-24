@@ -172,6 +172,44 @@ html, body {
     width: 100%;
 }
 
+.ownChatFile {
+    background: #5E3377;
+    color: white;
+    vertical-align: center;
+    border-radius: 0;
+}
+
+.ownChatFile:hover {
+    background: #3c2651;
+}
+
+.ownChatFileIcon {
+    font-size: 20px;
+}
+
+.ownChatFileDownload {
+    color: #696969;
+}
+
+.otherChatFile {
+    background: #c2bfb9;
+    color: black;
+    vertical-align: center;
+    border-radius: 0;
+}
+
+.otherChatFile:hover {
+    background: #aba8a2;
+}
+
+.otherChatFileIcon {
+    font-size: 20px;
+}
+
+.otherChatFileDownload {
+    color: #373737;
+}
+
 #groupInfo {
     display: inline-block;
     white-space: nowrap;

@@ -252,11 +252,16 @@
                                     <div>
                                         <div class="chatBubble ownChatBubble">
                                             <img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">
-                                            <span ng-if="!chat.type.includes('image')">
-                                                <input class="greenBtn" type="submit"
-                                                       style="height: 50px;margin-left: 1%;bottom: 20px"
-                                                       value="{{chat.name}}" ng-click="chat.download()"/>
-                                            </span>
+                                            <div ng-if="!chat.type.includes('image')">
+                                                <button class="ownChatFile btn" type="submit"
+                                                        ng-click="chat.download()">
+                                                    <span class="ownChatFileIcon"><span class="fas"
+                                                            ng-class="isCodeFile(chat.name) ? 'fa-code' : 'fa-file'"></span></span>&nbsp;
+                                                    {{chat.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span class="ownChatFileDownload"><span
+                                                            class="fas fa-download"></span></span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -269,11 +274,16 @@
                                     <div>
                                         <div class="chatBubble otherChatBubble">
                                             <img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">
-                                            <span ng-if="!chat.type.includes('image')">
-                                                <input class="greenBtn" type="submit"
-                                                       style="height: 50px;margin-left: 1%;bottom: 20px"
-                                                       value="{{chat.name}}" ng-click="chat.download()"/>
-                                            </span>
+                                            <div ng-if="!chat.type.includes('image')">
+                                                <button class="otherChatFile btn" type="submit"
+                                                        ng-click="chat.download()">
+                                                    <span class="otherChatFileIcon"><span class="fas"
+                                                                                          ng-class="isCodeFile(chat.name) ? 'fa-code' : 'fa-file'"></span></span>&nbsp;
+                                                    {{chat.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span class="otherChatFileDownload"><span
+                                                            class="fas fa-download"></span></span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

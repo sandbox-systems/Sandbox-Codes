@@ -38,6 +38,15 @@ angular.module("chat", [])
             $scope.createRoomFormMemberNames.splice($scope.createRoomFormMemberNames.indexOf(member.name), 1);
         };
 
+        $scope.isCodeFile = function (filename) {
+             if (filename.indexOf('.') === -1)
+                 return false;
+             let split = filename.split('.');
+             let ext = split[split.length - 1];
+             let possExts = ['java', 'cpp', 'py', 'js', 'html', 'css', 'rb', 'cs', 'c', 'swift', 'h', 'm'];
+             return possExts.includes(ext);
+        };
+
         $scope.chatClient = (function () {
             var searchParams = new URLSearchParams(window.location.search);
             var easyrtcid = "";

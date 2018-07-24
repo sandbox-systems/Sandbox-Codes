@@ -76,6 +76,9 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
         branch: $routeParams.branch || "master"
     };
 
+    updateBreadCrumbs("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
+        $scope.params.branch, $scope.params.path, $scope.params.repo);
+
     setCurPath("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
         $scope.params.branch + "/" + $scope.params.path + ($scope.params.path.length === 0 ? '' : '/'));
 

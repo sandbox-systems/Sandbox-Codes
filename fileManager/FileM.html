@@ -196,12 +196,8 @@
     </div>
 </div>
 <div id="cssmenu">
-    <ul>
-        <li class="active"><a href="#">Breadcrumbs</a></li>
-        <li><a href="#">Daily UI</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Portfolio</a></li>
-        <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+    <ul id="cssmenuList">
+        <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
     </ul>
 </div>
 </body>
@@ -442,6 +438,20 @@
     }
     function showFileContents(contents) {
         document.getElementById("preview").innerText=contents;
+    }
+
+    function updateBreadCrumbs(prePath, path, repo) {
+        let list = $('#cssmenuList');
+        list.find('li').not($('#cssmenuListHome')).remove();
+        list.prepend('<li><a href="' + prePath  + '">' + repo + '</a></li>');
+        path.split('/').forEach(comp => {
+            if (comp !== "") {
+                let newPath = path.substring(0, path.indexOf(comp) + comp.length);
+                let href = prePath + (newPath === "" ? "" : "/") + newPath;
+                console.log(href);
+                list.prepend('<li><a href="' + href  + '">' + comp + '</a></li>');
+            }
+        });
     }
 </script>
 <script>

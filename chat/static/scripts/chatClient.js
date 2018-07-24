@@ -1,11 +1,11 @@
 angular.module("chat", [])
-
     .directive("selectNgFiles", function () {
         return {
             require: "ngModel",
             link: function postLink(scope, elem, attrs, ngModel) {
                 elem.on("change", function (e) {
                     var files = elem[0].files;
+                    scope.filesToSend.push(files[0]);
                     ngModel.$setViewValue(files);
                 })
             }
@@ -465,9 +465,7 @@ angular.module("chat", [])
             };
 
             var addChatToRoomByID = function (roomID, chat) {
-                $scope.$apply(function () {
-                    getRoomByID(roomID).addChat(chat);
-                });
+                getRoomByID(roomID).addChat(chat);
             };
 
             var removeMemberFromRoom = function (roomID, memberID) {

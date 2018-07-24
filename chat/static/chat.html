@@ -36,7 +36,7 @@
 
     <div class="modal fade" id="attachModal" tabindex="-1" role="dialog" aria-labelledby="attachModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog" id="attachModalDialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="attachModalLabel">Send attachment</h5>
@@ -45,6 +45,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div id="dropFileOverlay">
+                        <div id="dropFileOverlayContent">
+                            <span id="dropFileOverlayContentIcon"><span class="fas fa-file"></span></span>
+                            <br>
+                            DROP FILES HERE
+                        </div>
+                    </div>
                     <div class="custom-file">
                         <input type="file" select-ng-files class="custom-file-input" id="selectedFile"
                                ng-model="selectedFilesArr">
@@ -52,10 +59,22 @@
                             {{selectedFilesArr[0].name || "Choose file" }}
                         </label>
                     </div>
+                    <ul ng-if="filesToSend.length > 0" id="filesUploadedList">
+                        <br>
+                        <li ng-repeat="file in filesToSend track by $index">
+                            <span><span class="fas"
+                                        ng-class="isCodeFile(file.name) ? 'fa-file-code' : 'fa-file'"></span></span>
+                            {{file.name}}
+                        </li>
+                    </ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success">Send</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            ng-click="chatClient.clearFilesToSend()">Cancel
+                    </button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            ng-click="chatClient.sendCollectedFiles()">Send
+                    </button>
                 </div>
             </div>
         </div>
@@ -256,7 +275,7 @@
                                                 <button class="ownChatFile btn" type="submit"
                                                         ng-click="chat.download()">
                                                     <span class="ownChatFileIcon"><span class="fas"
-                                                            ng-class="isCodeFile(chat.name) ? 'fa-code' : 'fa-file'"></span></span>&nbsp;
+                                                                                        ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;
                                                     {{chat.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                     <span class="ownChatFileDownload"><span
                                                             class="fas fa-download"></span></span>
@@ -278,7 +297,7 @@
                                                 <button class="otherChatFile btn" type="submit"
                                                         ng-click="chat.download()">
                                                     <span class="otherChatFileIcon"><span class="fas"
-                                                                                          ng-class="isCodeFile(chat.name) ? 'fa-code' : 'fa-file'"></span></span>&nbsp;
+                                                                                          ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;
                                                     {{chat.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                     <span class="otherChatFileDownload"><span
                                                             class="fas fa-download"></span></span>
@@ -469,6 +488,18 @@
         overlay.click(function () {
             if (toggled)
                 toggleMoreGroupInfo();
+        });
+
+        let attachModalDialog = $('#attachModalDialog');
+        let dropFileOverlay = $('#dropFileOverlay');
+        attachModalDialog.on('dragenter', function () {
+            dropFileOverlay.fadeIn();
+        });
+        attachModalDialog.on('dragleave', function () {
+            dropFileOverlay.fadeOut();
+        });
+        attachModalDialog.on('drop', function () {
+            dropFileOverlay.fadeOut();
         });
     });
 </script>

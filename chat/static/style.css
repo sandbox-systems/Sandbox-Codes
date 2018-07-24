@@ -398,7 +398,7 @@ html, body {
 
 #filesUploadedList {
     list-style: none;
-    word-break: break-word;
+    word-wrap: break-word;
 }
 
 .btn-circle {

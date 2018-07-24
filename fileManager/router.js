@@ -50,13 +50,13 @@ fmApp.controller('mainController', function ($scope, $route, $routeParams, $http
     });
 
     $scope.addedIDs = [];
-    $scope.addRepo = function (id, owner, name) {
+    $scope.addRepo = function (id, owner, name, isPrivate) {
         if (!$scope.addedIDs.includes(id)) {
             $scope.addedIDs.push(id);
             let href = "owners/" + owner + "/repos/" + name + "/branches/master";
             addFolder(name, href, function () {
                 window.scrollTo(0, 0);
-            });
+            }, isPrivate);
         }
     };
 });

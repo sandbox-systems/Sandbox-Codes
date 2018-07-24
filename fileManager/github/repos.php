@@ -14,7 +14,8 @@ if (is_array($data)) {
     foreach ($data as &$repo) {
         $repos['i' . count($repos)] = array(
             'name' => $repo->getName(),
-            'owner' => $repo->getOwner()->getLogin()
+            'owner' => $repo->getOwner()->getLogin(),
+            'isPrivate' => $repo->getPrivate()
         );
     }
 }

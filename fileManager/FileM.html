@@ -26,43 +26,43 @@
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <div style="width: 15%;">
-    <form>
-        <fieldset>
-            Name<br>
-            <input id="displayname" type="text" class="infoname">
-            FileType<br>
-            <input id="displaytype" type="text" class="infoname" readonly>
-            Description<br>
-            <input type="text" class="infoname">
-            Size<br>
-            <input type="text" class="infoname" readonly>
-            Created<br>
-            <input type="date" class="infoname" readonly>
-            Last Modified<br>
-            <input type="date" class="infoname" readonly>
-        </fieldset>
-        <fieldset>
-            Color<br>
-            <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
-                  onclick="test=document.getElementById('gray').style.backgroundColor"></span>
-            <span id="pink" class="prevBtn" style="background-color: #FC427B;"
-                  onclick="test=document.getElementById('pink').style.backgroundColor"></span>
-            <span id="orange" class="prevBtn" style="background-color: #F97F51;"
-                  onclick="test=document.getElementById('orange').style.backgroundColor"></span>
-            <span id="green" class="prevBtn" style="background-color: #55E6C1;"
-                  onclick="test=document.getElementById('green').style.backgroundColor"></span>
-            <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
-                  onclick="test=document.getElementById('blue').style.backgroundColor"></span>
-            <span id="purple" class="prevBtn" style="background-color: #82589F;"
-                  onclick="test=document.getElementById('purple').style.backgroundColor"></span>
-        </fieldset>
-        <fieldset>
-            Shared With<br>
-        </fieldset>
-    </form>
+        <form>
+            <fieldset>
+                Name<br>
+                <input id="displayname" type="text" class="infoname">
+                FileType<br>
+                <input id="displaytype" type="text" class="infoname" readonly>
+                Description<br>
+                <input type="text" class="infoname">
+                Size<br>
+                <input type="text" class="infoname" readonly>
+                Created<br>
+                <input type="date" class="infoname" readonly>
+                Last Modified<br>
+                <input type="date" class="infoname" readonly>
+            </fieldset>
+            <fieldset>
+                Color<br>
+                <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
+                      onclick="test=document.getElementById('gray').style.backgroundColor"></span>
+                <span id="pink" class="prevBtn" style="background-color: #FC427B;"
+                      onclick="test=document.getElementById('pink').style.backgroundColor"></span>
+                <span id="orange" class="prevBtn" style="background-color: #F97F51;"
+                      onclick="test=document.getElementById('orange').style.backgroundColor"></span>
+                <span id="green" class="prevBtn" style="background-color: #55E6C1;"
+                      onclick="test=document.getElementById('green').style.backgroundColor"></span>
+                <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
+                      onclick="test=document.getElementById('blue').style.backgroundColor"></span>
+                <span id="purple" class="prevBtn" style="background-color: #82589F;"
+                      onclick="test=document.getElementById('purple').style.backgroundColor"></span>
+            </fieldset>
+            <fieldset>
+                Shared With<br>
+            </fieldset>
+        </form>
     </div>
     <div style="width: 80%">
-       <pre><code id="preview"></code></pre>
+        <pre><code id="preview"></code></pre>
     </div>
 </div>
 <div class="topnav animated fadeIn" id="navbar">
@@ -127,7 +127,8 @@
             <form id="fileform" class="animated fadeIn">
                 <fieldset>
                     Filename:<br>
-                    <input id="filename" class="inputname" type="text" oninput="typeUpdater(document.getElementById('filename').value)" autocomplete="off"
+                    <input id="filename" class="inputname" type="text"
+                           oninput="typeUpdater(document.getElementById('filename').value)" autocomplete="off"
                            required>
                 </fieldset>
                 <fieldset>
@@ -369,7 +370,7 @@
         document.getElementById("filename").value = "";
     }
 
-    function addFolder(name, href, onclick,isprivate) {
+    function addFolder(name, href, onclick, isPrivate) {
         var node = document.createElement("LI");
         var link = document.createElement("A");
         var icon = document.createElement("SPAN");
@@ -383,12 +384,12 @@
         temp += counter;
         node.id = temp;
         namer.innerHTML = name;
-        if(isprivate == null){
+        if (isPrivate == null) {
             icon.className = "far fa-folder-open outline";
-        }else if(isprivate == true){
-            icon.className = "fas fa-book";
-        }else{
-            icon.className = "fas fa-lock";
+        } else if (isPrivate) {
+            icon.className = "fas fa-book outline";
+        } else {
+            icon.className = "fas fa-lock outline";
         }
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
@@ -409,6 +410,7 @@
     }
 
     var curPath = "";
+
     function setCurPath(path) {
         curPath = path;
     }
@@ -436,20 +438,21 @@
     function clearBranches() {
         $('#branchesDropdown').empty();
     }
+
     function showFileContents(contents) {
-        document.getElementById("preview").innerText=contents;
+        document.getElementById("preview").innerText = contents;
     }
 
     function updateBreadCrumbs(prePath, path, repo) {
         let list = $('#cssmenuList');
         list.find('li').not($('#cssmenuListHome')).remove();
-        list.prepend('<li><a href="' + prePath  + '">' + repo + '</a></li>');
+        list.prepend('<li><a href="' + prePath + '">' + repo + '</a></li>');
         path.split('/').forEach(comp => {
             if (comp !== "") {
                 let newPath = path.substring(0, path.indexOf(comp) + comp.length);
                 let href = prePath + (newPath === "" ? "" : "/") + newPath;
                 console.log(href);
-                list.prepend('<li><a href="' + href  + '">' + comp + '</a></li>');
+                list.prepend('<li><a href="' + href + '">' + comp + '</a></li>');
             }
         });
     }
@@ -495,7 +498,7 @@
         var temp = bemp.getElementsByTagName("LABEL");
         var name = temp[0].innerHTML;
         fetchFileContents(name);
-        document.getElementById("displayname").value=name;
+        document.getElementById("displayname").value = name;
         document.getElementById("displaytype").value = typeUpdater(name);
     }
 
@@ -515,56 +518,56 @@
     }
 </script>
 <script>
-function sortListDir() {
-changesorticon();
-  var list, i, switching, b,c, shouldSwitch, dir, j,switchcount = 0;
-  list = document.getElementById("fileList");
-  switching = true;
-  //Set the sorting direction to ascending:
-  dir = "asc"; 
-  //Make a loop that will continue until no switching has been done:
-  while (switching) {
-    //start by saying: no switching is done:
-    switching = false;
-    b = list.getElementsByTagName("LI");
-    //Loop through all list-items:
-    for (i = 0; i < (b.length - 1); i++) {
-      //start by saying there should be no switching:
-      shouldSwitch = false;
-      /*check if the next item should switch place with the current item,
-      based on the sorting direction (asc or desc):*/
-      if (dir == "asc") {
-        if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
-          /*if next item is alphabetically lower than current item,
-          mark as a switch and break the loop:*/
-          shouldSwitch = true;
-          break;
-        }
-      } else if (dir == "desc") {
-        if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
-          /*if next item is alphabetically higher than current item,
-          mark as a switch and break the loop:*/
-          shouldSwitch= true;
-          break;
-        }
-      }
-    }
-    if (shouldSwitch) {
-      /*If a switch has been marked, make the switch
-      and mark that a switch has been done:*/
-      b[i].parentNode.insertBefore(b[i + 1], b[i]);
-      switching = true;
-      //Each time a switch is done, increase switchcount by 1:
-      switchcount ++;
-    } else {
-      /*If no switching has been done AND the direction is "asc",
-      set the direction to "desc" and run the while loop again.*/
-      if (switchcount == 0 && dir == "asc") {
-        dir = "desc";
+    function sortListDir() {
+        changesorticon();
+        var list, i, switching, b, c, shouldSwitch, dir, j, switchcount = 0;
+        list = document.getElementById("fileList");
         switching = true;
-      }
+        //Set the sorting direction to ascending:
+        dir = "asc";
+        //Make a loop that will continue until no switching has been done:
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            b = list.getElementsByTagName("LI");
+            //Loop through all list-items:
+            for (i = 0; i < (b.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*check if the next item should switch place with the current item,
+                based on the sorting direction (asc or desc):*/
+                if (dir == "asc") {
+                    if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+                        /*if next item is alphabetically lower than current item,
+                        mark as a switch and break the loop:*/
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+                        /*if next item is alphabetically higher than current item,
+                        mark as a switch and break the loop:*/
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                b[i].parentNode.insertBefore(b[i + 1], b[i]);
+                switching = true;
+                //Each time a switch is done, increase switchcount by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
     }
-  }
-}
-	</script>
+</script>
 </html>

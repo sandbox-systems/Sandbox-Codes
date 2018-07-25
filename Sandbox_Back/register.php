@@ -11,8 +11,9 @@
             throw new Exception("Username cannot be null.");
         }
 
+        $ecode = sha1(openssl_random_pseudo_bytes(30));
         $salt = sha1(openssl_random_pseudo_bytes(256));
-        $hash = sha1($password.$salt);
+        $hash = sha1((string)$_POST['password'].$salt);
         $iv = openssl_random_pseudo_bytes(16);
         $email_enc = openssl_encrypt($_POST['email'], "AES-256-CBC", $salt, $options=OPENSSL_RAW_DATA, $iv);
 
@@ -37,15 +38,15 @@
         echo "User successfully created";
 
         $subject = 'Sandbox Email Verification';
-        $message = "<p>Dear $username,<p>".
+        $message = "<p>Dear ".(string)$_POST['username'].",<p>".
             "<p>Thank you for choosing Sandbox. Your account is waiting for you! Please click the following link to activate your email.<br />".
-            "<a href=\"https://sandboxcodes.com/Sandbox_Back/verifyemail.php?username=$username&code=$code\">Verify Email!<a><br />".
+            "<a href=\"https://sandboxcodes.com/Sandbox_Back/verifyemail.php?username=".(string)$_POST['username']."&code=$ecode\">Verify Email!<a><br />".
             "Sincerely,<br />".
             "The Sandbox Team";
         $headers = 'From: webmaster@sandboxcodes.com' . "\r\n" .
             'Reply-To: no-reply@sandboxcodes.com' . "\r\n" .
             'Content-type: text/html';
-        mail($email, $subject, $message, $headers);
+        mail((string)$_POST['email'], $subject, $message, $headers);
     }catch(Exception $e){
         die($e);
     }

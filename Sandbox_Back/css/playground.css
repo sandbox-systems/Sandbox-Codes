@@ -1,6 +1,9 @@
 body{
 	margin: 0;
+	font-family: Lato;
 	outline: none;
+    background-image: url("images/blur.jpg");
+	overflow: hidden;
 }
 
 /****************************************************
@@ -16,9 +19,26 @@ body{
  ****************** LEFT COLUMN *********************
  ****************************************************/
 #leftcol {
-	position: absolute;
+	position: relative;
 	width: 20%;
 	height: 100%;
+	display: inline-block;
+}
+.rightcol{
+	position: relative;
+	display: inline-block;
+	width: 76%;
+	height: 100%;
+	float: right;
+	margin-right: 3.5%;
+}
+#addpeople{
+	background-color: rebeccapurple;
+	border-radius: 500px;
+	border: solid 2px mediumpurple;
+	padding: 25%;
+	color: white;
+	cursor: pointer;
 }
 
 /****************************************************
@@ -26,39 +46,48 @@ body{
  ****************************************************/
 #toolbar {
 	width: 100%;
-	height: 5%;
+	height: 2%;
 	background-color: rgba(255, 255, 255, .3);
-	padding-left: 2.7%;
+	color: white;
+}
+#newFolderButton {
+	border: 0;
+	border-left: solid 1px white;
+	border-right: solid 1px white;
 }
 
 #toolbar .toolbarButton {
-	width: 23%;
+	width: 5%;
 	height: 100%;
-	margin-left: auto;
-	margin-right: auto;
-	border-radius: 20%;
-	background-color: #282822;
 	cursor: pointer;
+	background-color: rgba(0,0,0,0);
+	//border: 0;
+	color: white;
 }
-
+#addbutton{
+	width:75%;
+	border:0;
+	border-top: solid 2px rgba(255,255,255,0.4);
+	cursor: pointer;
+	background: rgba(0,0,0,0);
+	color:rgba(255,255,255,0.4);
+	padding: 0.5%;
+	margin-left: 12.5%;
+}
 #toolbar .toolbarButton:focus {
 	outline: 0;
 }
 
 #newFileButton {
-	background: url(../images/addFile.png) no-repeat center;
-}
-
-#newFolderButton {
-	background: url(../images/addFolder.png) no-repeat center;
+	border:0;
 }
 
 #debugButton {
-	background: url(../images/debug.png) no-repeat center;
+	border: 0;
 }
 
 #runButton {
-	background: url(../images/run.png) no-repeat center;
+	border: 0;
 }
 
 /****************************************************
@@ -67,9 +96,7 @@ body{
 #filemanager {
 	width: 100%;
 	height: 95%;
-	background-color: darkgrey;
-	background: linear-gradient(to bottom, rgba(255,0,0,0), rgba(90,26,84,.7));
-	overflow: scroll;
+	overflow:auto;
 	line-height: 30px;
 	color: whitesmoke;
 }
@@ -84,14 +111,12 @@ body{
 }
 
 #filemanager .expand.dropdownli.folder {
-	background: url(../images/folder.png) no-repeat left top;
   	padding: 0px 0px 3px 25px;
   	list-style: none;
 	margin: 0;
 }
 
 .file {
-	background: url(../images/file.png) no-repeat left center;
 	padding: 0px 0px 3px 25px;
   	list-style: none;
   	margin: 0;
@@ -99,7 +124,6 @@ body{
 }
 
 .folder{
-  	background: url(../images/folder.png) no-repeat left center;
   	padding: 0px 0px 3px 25px;
   	list-style: none;
 	margin: 0;
@@ -123,7 +147,7 @@ body{
 }
 
 #foldermenu .contextMenuItem {
-	width: 100%-5px;
+	width: 100%;
 	list-style-type: none;
 	padding-left: 5px;
 	padding-top: 5px;
@@ -156,7 +180,7 @@ body{
 }
 
 #filemenu .contextMenuItem {
-	width: 100%-5px;
+	width: 100%;
 	list-style-type: none;
 	padding-left: 5px;
 	padding-top: 5px;
@@ -172,11 +196,10 @@ body{
  ********************* EDITOR ***********************
  ****************************************************/
 #editor { 
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 30%;
-	left: 20%;
+	position: relative;
+	height:70vh;
+	width: 100%;
+	display: inline-block;
 }
 
 /****************************************************
@@ -195,13 +218,9 @@ body{
  ******************** TERMINAL **********************
  ****************************************************/
 #terminal {
-	position: absolute;
-	top: 70%;
-	right: 0;
-	bottom: 0;
-	left: 20%;
-	width: 80%;
-	height: 30%;
+	position: relative;
+	width: 100%;
+	height: 20vh;
 	background: black;
 }
 
@@ -226,4 +245,48 @@ body{
 .swal-uploadBox {
 	width: 60%;
 	height: 70%;
+}
+.tab {
+	overflow: hidden;
+	background-color: rgba(255,255,255,0.2);
+	height: 5%;
+	position: relative;
+	display: inline-flex;
+	border-bottom-right-radius: 50px;
+	border-top-right-radius: 50px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+	background-color: inherit;
+	float: left;
+	border: 0;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+	font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+	background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+	background-color: #ccc;
+}
+
+/* Style the tab content */
+
+/* Fade in tabs */
+@-webkit-keyframes fadeEffect {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+	from {opacity: 0;}
+	to {opacity: 1;}
 }

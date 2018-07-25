@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 <head>
     <style type="text/css">
         .swal-icon--error {
@@ -2190,6 +2191,11 @@
             resourceBase64Data[9] = "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACl1BMVEUAAADqniDzwl7zwl7qkxnpnTXyvlfzxGL0xmX0xmX0xmX0xmXzxGLzwl7qkhbsnC3sozzsoz3soz3soz3sojzuqkL1ymz20HX2z3P0x2bhiADklCTnmzTmmzTmmzTmmzTmmzTmmzTvt1X1zGvzyGTwu020FADbihvwv1Hwv1HFawPPfA/vvUnvvUldAADbminuu0Luu0Lkoxfvv0ntuTvtuTvrtjLsuDbstzTstzTqtS3qtC3qtC3qtC3psibpsibpsibpsibosB/osB/osB/osB/nrhjnrhjnrhjnrhjmrRLmrBHmrBHnrRGZo77SqTrcqiPcqiLcqiPcqiTcqiTcqiTbqiTbqiTcqiTcqiTcqiTcqiPcqiLcqiPTqTeZo72kpKWkpKSspZGupY2tpY+tpZCtpZCspZGspZGspZGspZGspZGspZGtpZCtpZCtpY+upY2spZGkpKOkpKWkpKOjpKebo7ibo7meo7Oeo7Kfo7CgpK6gpK6gpK6gpK6gpK6eo7Kdo7Obo7mbo7qjpKekpKP20Hb20Hb20HbyxF7ywlrywlrywlrywlrzxV/biRnahhTahhTahhTahhTahhTahRLimiryxV7xwFLwvlDwv1Dwv1Dwv1DSgRLThBXThBXThBXThBXUhRbdmCrvv1fwwVDvvEnvvUnvvUnvvUnquE3uwFjuwFjuwFjuwFfuwlryyGDwwU7uukLuu0Luu0LwwU3uvUPuvUPuvUPuvUPuvELtuj3tuDvtuTvtuTvstzTstjTstjTstjTstjTstzTstzTstzTqtC3qtC3qtC3psibosB/nrhjmrBHmrBHmrBHmrBHmrBHmrBDmrBDmrBDmrBHmrBHmrBHmrBHmrBHbqiTbqiT/////bibIAAAAhnRSTlMAAAAAAAAMQmFiYmJUEwYuPDs7OztApPX+igFh6/T09PT09f63CACeuAgBoLgIAaG4CAWvuAgGtLgIBrS4CAa0uAgGtLgIBrS4CASssQYLc/D7/P7+/v///v7+/PvxdgoqZZGlsbe7xMfHx8bEu7ewpJBiIwIFCQwQERMYGRgZGBEPCwgFAflwzIYAAAABYktHRNwHYIO3AAAAB3RJTUUH4QsWAi4juYr35QAAARxJREFUGNNjYKASYGRiY+fg5OLm4WVmYOHjFxAUEhISFhEVE29rb++QkJRiYJWWkZWTl5dXUFRS7uzq7untU1FlUFPvnzBx0uQpU6dNnzFz1uzZs+ZoaDJoac+dN3/BwkWLlyxdtnwFEKzU0WXQ01+1es3ades3bNy0eQsYGBgyGBlv3bZ9x85du/fs3QcBJqYMZub7Dxw8eOjwkaPHoMDCksHK+viJkyjAxpbBzv4UGnBwZHByPo0GXFwZ3NzPoAEPTwYv77Pnzl+4eOnylSuXr168dv3GTR9fBj//gMCg4JDQsFu3wyMio6JjYuPiGRISk5JTUtPSMzKzsnNy8/ILCouKGUpKy8orKquqa2pr6+qrGhqbmltasQYtAHlSoafR7A9BAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTExLTIyVDAyOjQ2OjM1LTA1OjAwHhLi0AAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0xMS0yMlQwMjo0NjozNS0wNTowMG9PWmwAAAAASUVORK5CYII=";
         }
     </script>
+	<script>
+function openCity(evt, cityName) {
+    evt.currentTarget.className += " active";
+}
+</script>
     <meta name="savepage-url" content="http://localhost:9000/Sandbox_Back/playground.php">
     <meta name="savepage-title" content="Sandbox 2.0">
     <meta name="savepage-date" content="Sat Jul 14 2018 23:33:48 GMT-0500 (CDT)">
@@ -2198,22 +2204,36 @@
     <meta name="savepage-version" content="11.2">
     <meta name="savepage-comments" content="">
 </head>
-<body oncontextmenu="return false;">
+<body>
 <!-- *************************************************** -->
 <!-- ********************* DOWNLOAD ******************** -->
 <!-- *************************************************** -->
 <iframe src="data:text/html;charset=utf-8,%3Chtml%3E%3Chead%3E%0A%3Cbase%20href%3D%22http%3A%2F%2Flocalhost%3A9000%2FSandbox_Back%2Fplayground.php%22%3E%0A%3C%2Fhead%3E%3Cbody%3E%3C%2Fbody%3E%3C%2Fhtml%3E"
         data-savepage-sameorigin="" id="download"></iframe>
+
+<div id="toolbar">
+        <button value="" id="newFileButton" class="toolbarButton"><i class="fas fa-ellipsis-h fa-2x"></i></button>
+        <button value="" id="newFolderButton" class="toolbarButton"><i class="fas fa-cloud-download-alt fa-2x"></i></button>
+        <button value="" id="runButton" class="toolbarButton"><i class="fas fa-play fa-2x"></i></button>
+		<div class="tab">
+		  <button class="tablinks" onclick="openCity(event, 'London')">London</button>
+		  <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+		  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+					  <button class="tablinks" onclick="openCity(event, 'Tokyo')">boop</button>
+		</div>
+	<ul style="list-style: none;display: inline-block">
+	<li>
+		<img src="https://ui-avatars.com/api/?background=a0a0a0">
+	</li>
+	<li>
+		<button id="addpeople"><i class="fas fa-plus fa-2x"></i></button>
+	</li>
+	</ul>
+</div>
 <div id="leftcol">
     <!-- *************************************************** -->
     <!-- ********************* TOOLBAR ********************* -->
     <!-- *************************************************** -->
-    <div id="toolbar">
-        <input value="" id="newFileButton" class="toolbarButton" type="button">
-        <input value="" id="newFolderButton" class="toolbarButton" type="button">
-        <input value="" id="debugButton" class="toolbarButton" type="button">
-        <input value="" id="runButton" class="toolbarButton" type="button">
-    </div>
 
     <!-- *************************************************** -->
     <!-- ******************* FILE MANAGER ****************** -->
@@ -2226,7 +2246,7 @@
             </li>
             <li class="dropdownli folder ui-draggable ui-draggable-handle ui-droppable" data-name="Lab 10"
                 data-wd="/home/shriggy/Documents/Projects/Sandbox/Sandbox_Back/Users/aadhi0319/Lab 10"
-                style="position: relative;">Lab 10
+                style="position: relative;"><i class="far fa-folder"></i> Lab 10
                 <ul>
                     <li class="file ui-draggable ui-draggable-handle ui-droppable" data-name=".DS_Store"
                         data-wd="/home/shriggy/Documents/Projects/Sandbox/Sandbox_Back/Users/aadhi0319/Lab 10/.DS_Store"
@@ -2294,9 +2314,12 @@
             </li>
             <li class="file ui-draggable ui-draggable-handle ui-droppable" data-name="sandbox.java"
                 data-wd="/home/shriggy/Documents/Projects/Sandbox/Sandbox_Back/Users/aadhi0319/sandbox.java"
-                style="position: relative;">sandbox.java
+                style="position: relative;"><i class="far fa-file"></i> sandbox.java
             </li>
         </ul>
+        <div>
+            <button id="addbutton"><i class="fas fa-plus fa-2x"></i></button>
+        </div>
     </div>
 
     <!-- *************************************************** -->
@@ -2334,6 +2357,7 @@
 <!-- *************************************************** -->
 <!-- ***************** ACE CODE EDITOR ***************** -->
 <!-- *************************************************** -->
+<div class="rightcol">
 <div id="editor" class=" ace_editor ace-monokai ace_dark"><textarea class="ace_text-input" wrap="off" autocorrect="off"
                                                                     autocapitalize="off" spellcheck="false"
                                                                     style="opacity: 0; height: 12px; width: 6.00031px; left: 44px; top: 0px;">  </textarea>
@@ -2380,12 +2404,26 @@
 <!-- *************************************************** -->
 <div id="terminal">
     <iframe id="consoleFrame" data-savepage-src="http://localhost:7681/" src="" width="100%" height="100%"
-            name="savepage-frame-940665565"></iframe>
+            name="savepage-frame-940665565" style="border:0"></iframe>
 </div>
-
+</div>
 <script data-savepage-src="ace_editor/src-noconflict/ace.js" src="" type="text/javascript" charset="utf-8"></script>
 <script data-savepage-src="ace_editor/src-noconflict/ext-language_tools.js" src=""></script>
-<script></script>
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
 
 </body>
 </html>

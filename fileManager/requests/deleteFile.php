@@ -12,8 +12,7 @@ $repo = $_POST['repo'];
 $branch = $_POST['branch'];
 $path = $_POST['path'];
 $name = $_POST['name'];
-$sha = $_POST['sha'];
 
 if ($storageMethod == "GITHUB") {
-    include '../github/pushFileDeletion.php';
+    include '../github/logFileDeletion.php';
 }

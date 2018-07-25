@@ -14,5 +14,5 @@ $path = $_POST['path'];
 $name = $_POST['name'];
 
 if ($storageMethod == "GITHUB") {
-    include '../github/pushNewFile.php';
+    include '../github/logNewFile.php';
 }

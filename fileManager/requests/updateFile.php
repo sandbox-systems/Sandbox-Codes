@@ -16,5 +16,5 @@ $content = $_POST['content'];
 $sha = $_POST['sha'];
 
 if ($storageMethod == "GITHUB") {
-    include '../github/pushFileUpdate.php';
+    include '../github/logFileUpdate.php';
 }

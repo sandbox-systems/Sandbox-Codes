@@ -21,6 +21,6 @@ $tree = $_SESSION['tree'];
 $parent = $client->git->refs->getReference($owner, $repo, "heads/$branch")->getObject()->getSha();
 // Create commit object from working tree
 $commit = $client->git->commits->createCommit($owner, $repo, $message, $tree, $parent)->getSha();
-$_SESSION['tree'] = $commit;
+$_SESSION['tree'] = "";
 // Point branch HEAD to new commit
 $client->git->refs->updateReference($owner, $repo, "heads/$branch", $commit);

@@ -82,9 +82,29 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
     setCurPath("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
         $scope.params.branch + "/" + $scope.params.path + ($scope.params.path.length === 0 ? '' : '/'));
 
+    setOnCommitPress(function (msg) {
+        $http({
+            url: "requests/saveChanges.php",
+            data: $.param({...$scope.params, ...{message: msg}}),
+            method: "post",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+        }).then(function (response) {
+        });
+    });
+
     setOnCreateFile(function (name) {
         $http({
             url: "requests/createFile.php",
+            data: $.param({...$scope.params, ...{name: name}}),
+            method: "post",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+        }).then(function (response) {
+        });
+    });
+
+    setOnFileDelete(function (name) {
+        $http({
+            url: "requests/deleteFile.php",
             data: $.param({...$scope.params, ...{name: name}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}

@@ -201,6 +201,12 @@
         <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
     </ul>
 </div>
+<div style="background: red; position: fixed; width: 200px; height: 80px; right: 0; bottom: 0;">
+    <input type="text" id="commitMessageInput" placeholder="commit msg" title="Commit Message">
+    <button id="commitBtn">
+        COMMIT
+    </button>
+</div>
 </body>
 <script>
     jQuery(document).ready(function ($) {
@@ -451,11 +457,21 @@
             if (comp !== "") {
                 let newPath = path.substring(0, path.indexOf(comp) + comp.length);
                 let href = prePath + (newPath === "" ? "" : "/") + newPath;
-                console.log(href);
                 list.prepend('<li><a href="' + href + '">' + comp + '</a></li>');
             }
         });
     }
+
+    let onCommitPress;
+
+    function setOnCommitPress(func) {
+        onCommitPress = func;
+    }
+
+    $('#commitBtn').click(function () {
+        if (onCommitPress)
+            onCommitPress($('#commitMessageInput').val());
+    });
 </script>
 <script>
     function allowDrop(ev) {
@@ -466,23 +482,32 @@
         ev.dataTransfer.setData("text", ev.target.id);
     }
 
+    let onFileDelete;
+
+    function setOnFileDelete(func) {
+        onFileDelete = func;
+    }
+
     function drop(ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
+        let filename = $('#' + data).text();
         if (document.getElementById(data).nodeName == "LI") {
             swal({
                 title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover ",
+                text: "Once deleted, you will not be able to recover " + filename,
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             })
                 .then((willDelete) => {
                     if (willDelete) {
+                        if (onFileDelete)
+                            onFileDelete(filename);
                         swal("Poof! Your file has been deleted!", {
                             icon: "success",
                         });
-                        document.getElementById("trashList").appendChild(document.getElementById(data));
+                        $('#' + data).remove();
                     } else {
                         swal("Your file is safe!");
                     }

@@ -11,19 +11,29 @@ $contents = array(
     'dirs' => array(),
     'files' => array()
 );
-$data = $client->repos->contents->getContents($owner, $repo, $path, $ref = $branch);
 
-if (is_array($data)) {
-    foreach ($data as &$content) {
-        $name = $content->getName();
-        $sha = $content->getSha();
-        if ($content->getType() == "file") {
-            $contents['files']['i' . count($contents['files'])] = array(
-                'name' => $name,
-                'sha' => $sha
-            );
-        } else {
-            $contents['dirs']['i' . count($contents['dirs'])] = $name;
+// Fetch repo HEAD if local HEAD is new
+if (!isset($_SESSION['tree']) || $_SESSION['tree'] == "") {
+    $_SESSION['tree'] = $client->git->refs->getReference($owner, $repo, "heads/$branch")->getObject()->getSha();
+}
+// Fetch working tree at HEAD
+$tree = $client->git->trees->getTreeRecursively($owner, $repo, $_SESSION['tree'])->getTree();
+
+if (is_array($tree)) {
+    foreach ($tree as &$content) {
+        $cPath = $content->getPath();
+        $pattern = "/^" . str_replace('/', '\/', $path) . ($path == '' ? '' : '\/') . "([^\/]+)$/";
+        if (preg_match($pattern, $cPath, $groups)) {
+            $name = $groups[1];
+            $sha = $content->getSha();
+            if ($content->getType() == "blob") {
+                $contents['files']['i' . count($contents['files'])] = array(
+                    'name' => $name,
+                    'sha' => $sha
+                );
+            } else {
+                $contents['dirs']['i' . count($contents['dirs'])] = $name;
+            }
         }
     }
 }

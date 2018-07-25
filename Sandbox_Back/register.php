@@ -1,44 +1,52 @@
 <?php
-	$username = mysql_real_escape_string($_POST["username"]);
-	$password = mysql_real_escape_string($_POST["password"]);
-	$type = mysql_real_escape_string($_POST["type"]);
-	$card = mysql_real_escape_string($_POST["card"]);
-	$firstname = mysql_real_escape_string($_POST["firstname"]);
-	$lastname = mysql_real_escape_string($_POST["lastname"]);
-	$dob = mysql_real_escape_string($_POST["dob"]);
-	$email = mysql_real_escape_string($_POST["email"]);
-	$profilepic = mysql_real_escape_string($_POST["profilepic"]);
-	$tagline = mysql_real_escape_string($_POST["tagline"]);
-	$credentials = mysql_real_escape_string($_POST["credentials"]);
-		
-	$salt = sha1(openssl_random_pseudo_bytes(256));
-	$hash = sha1($password.$salt);
-    $iv = openssl_random_pseudo_bytes(16);
-    $card = openssl_encrypt($card, "AES-256-CBC", $salt, $options=OPENSSL_RAW_DATA, $iv);
-	$email_enc = openssl_encrypt($email, "AES-256-CBC", $salt, $options=OPENSSL_RAW_DATA, $iv);
+    try {
+        $mng = new MongoDB\Driver\Manager("mongodb://sandbox:NhJLmHZb$@localhost:27017/admin");
+        $query = new MongoDB\Driver\Query(["username" => (string)$_POST['username']]);
+        $rows = $mng->executeQuery("sandbox.users", $query);
 
-	$mysqli = new mysqli("localhost", "root", "root", "sandbox");
-	$result = $mysqli->query("SELECT * FROM login_info WHERE username='$username' OR email='$email'");
-	if($result->num_rows > 0){
-		die("Username already exists.");	
-	}
+        if(sizeof($rows->toArray())!=0){
+            throw new Exception("Username already exists.");
+        }
+        if($_POST['username']==NULL){
+            throw new Exception("Username cannot be null.");
+        }
 
-	$code = sha1(openssl_random_pseudo_bytes(30));
+        $salt = sha1(openssl_random_pseudo_bytes(256));
+        $hash = sha1($password.$salt);
+        $iv = openssl_random_pseudo_bytes(16);
+        $email_enc = openssl_encrypt($_POST['email'], "AES-256-CBC", $salt, $options=OPENSSL_RAW_DATA, $iv);
 
-	$insert = $mysqli->query("INSERT INTO `login_info` (`username`, `hash`, `salt`, `iv`, `type`, `card`, `firstname`, `lastname`, `email`, `dob`, `profilepic`, `tagline`, `credentials`, `code`) VALUES ('$username', '$hash', '$salt', '$iv', '$type', '$card', '$firstname', '$lastname', '$email_enc', '$dob', '$profilepic', '$tagline', '$credentials', '$code')");
-	if($insert === TRUE){
-		echo "Success";
-		$subject = 'Sandbox Email Verification';
-		$message = "<p>Dear $username,<p>".
-			"<p>Thank you for choosing Sandbox. Your account is waiting for you! Please click the following link to activate your email.<br />".
-			"<a href=\"http://localhost:8888/Sandbox%202.0/Sandbox_Back/verifyemail.php?username=$username&code=$code\">Verify Email!<a><br />".
-			"Sincerely,<br />".
-			"The Sandbox Team";
-		$headers = 'From: webmaster@sandbox.com' . "\r\n" .
-			'Reply-To: no-reply@sandbox.com' . "\r\n" .
-			'Content-type: text/html';
-		mail($email, $subject, $message, $headers);
-	}else{
-		echo "Failure";	
-	}
+        $write = new MongoDB\Driver\BulkWrite;
+        $newUser = array(
+            'username' => (string)$_POST['username'],
+            'fname' => (string)$_POST['firstname'],
+            'lname' => (string)$_POST['lastname'],
+            'email' => new MongoDB\BSON\Binary($email_enc, MongoDB\BSON\Binary::TYPE_GENERIC),
+            'hash' => new MongoDB\BSON\Binary($hash, MongoDB\BSON\Binary::TYPE_GENERIC),
+            'salt' => new MongoDB\BSON\Binary($salt, MongoDB\BSON\Binary::TYPE_GENERIC),
+            'iv' => new MongoDB\BSON\Binary($iv, MongoDB\BSON\Binary::TYPE_GENERIC),
+            'ecode' => new MongoDB\BSON\Binary($ecode, MongoDB\BSON\Binary::TYPE_GENERIC),
+            'everify' => false,
+            'github' => (string)"github.com",
+            'features' => (string)$_POST['features'],
+            'relax' => true,
+            'timestamp' => (new MongoDB\BSON\UTCDateTime())->toDateTime()->format('U.u')
+        );
+        $write->insert($newUser);
+        $mng->executeBulkWrite('sandbox.users', $write);
+        echo "User successfully created";
+
+        $subject = 'Sandbox Email Verification';
+        $message = "<p>Dear $username,<p>".
+            "<p>Thank you for choosing Sandbox. Your account is waiting for you! Please click the following link to activate your email.<br />".
+            "<a href=\"https://sandboxcodes.com/Sandbox_Back/verifyemail.php?username=$username&code=$code\">Verify Email!<a><br />".
+            "Sincerely,<br />".
+            "The Sandbox Team";
+        $headers = 'From: webmaster@sandboxcodes.com' . "\r\n" .
+            'Reply-To: no-reply@sandboxcodes.com' . "\r\n" .
+            'Content-type: text/html';
+        mail($email, $subject, $message, $headers);
+    }catch(Exception $e){
+        die($e);
+    }
 ?>

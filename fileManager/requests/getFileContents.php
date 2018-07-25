@@ -9,9 +9,7 @@ include "global.php";
 
 $owner = $_POST['owner'];
 $repo = $_POST['repo'];
-$branch = $_POST['branch'];
-$path = $_POST['path'];
-$file = $_POST['file'];
+$sha = $_POST['sha'];
 
 if ($storageMethod == "GITHUB") {
     include '../github/fileContents.php';

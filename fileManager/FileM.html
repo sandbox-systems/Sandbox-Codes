@@ -347,7 +347,9 @@
         node.className = "animated tada";
         node.onclick = function () {
             onclick();
-            fetchFileContents(name);
+        };
+        node.ondragend = function () {
+            fetchFileContents(sha);
         };
         link.appendChild(icon);
         link.appendChild(namer);
@@ -370,7 +372,8 @@
 
     function addNewFile() {
         let filename = document.getElementById("filename").value;
-        addFile(filename, null);
+        addFile(filename, function () {
+        }, null);
         if (onCreateFile)
             onCreateFile(filename);
         document.getElementById("filename").value = "";

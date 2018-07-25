@@ -112,10 +112,10 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
         });
     });
 
-    setFetchFleContents(function (name) {
+    setFetchFleContents(function (sha) {
         $http({
             url: "requests/getFileContents.php",
-            data: $.param({...$scope.params, ...{file: name}}),
+            data: $.param({...$scope.params, ...{sha: sha}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
         }).then(function (response) {

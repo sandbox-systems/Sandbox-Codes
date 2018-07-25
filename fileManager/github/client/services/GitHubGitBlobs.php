@@ -11,7 +11,7 @@ class GitHubGitBlobs extends GitHubService
 	/**
 	 * Get a Blob
 	 * 
-	 * @return array<GitHubBlob>
+	 * @return GitHubBlob
 	 */
 	public function getBlob($owner, $repo, $sha)
 	{

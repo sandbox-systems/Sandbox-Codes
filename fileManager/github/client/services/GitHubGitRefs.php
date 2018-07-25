@@ -31,6 +31,14 @@ class GitHubGitRefs extends GitHubService
 		return $this->client->request("/repos/octocat/Hello-World/git/refs/tags/v1.0", 'DELETE', $data, 204, '');
 	}
 
+	public function addReference($owner, $repo, $ref, $sha) {
+	    $data = array();
+	    $data['ref'] = $ref;
+	    $data['sha'] = $sha;
+
+	    return $this->client->request("/repos/$owner/$repo/git/refs", 'POST', $data, 202, '');
+    }
+
 	public function deleteReference($owner, $repo, $ref) {
 	    $data = array();
 

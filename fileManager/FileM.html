@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="../css/FileMM.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="fileMan.css">
@@ -20,12 +20,12 @@
     <base href="/fileManager/FileM.html">
 </head>
 <body>
-<!--<div id="preloader">
+<div id="preloader">
       <div id="loader"></div>
-    </div>-->
+    </div>
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <div style="width: 15%;">
+    <div style="width: 15%; float: left;">
         <form>
             <fieldset>
                 Name<br>
@@ -61,27 +61,26 @@
             </fieldset>
         </form>
     </div>
-    <div style="width: 80%">
+    <div style="width: 95%">
         <pre><code id="preview"></code></pre>
     </div>
 </div>
 <div class="topnav animated fadeIn" id="navbar">
-    <a class="okeh" href="javascript:openModal()">New Entry!</a>
+    <a class="okeh" href="javascript:openModal('myModal')">New Entry!</a>
     <a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
     <a id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
-    <a href="javascript:showTrash()" ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
+    <a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
             class="fas fa-trash"></span> Trash</a>
     <a href="javascript:sortListDir()" id="sortclick"><span id="sortarrow" class="fas fa-arrow-up"></span> Sort</a>
+    <a href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
     <div class="dropdown">
-        <button class="dropbtn">
+        <button class="dropbtn" onclick="openModal('branchModal')">
             <span class="fas fa-code-branch"></span> Select Branch
         </button>
         <div id="branchesDropdown" class="dropdown-content">
         </div>
     </div>
-    <a id="home" href="javascript:showFile()" style="position: relative;float: right; right: 2%;display: none;"><span
-            class="fas fa-arrow-left"></span> Back Home!</a>
 </div>
 
 <ul id="fileList">
@@ -110,10 +109,49 @@
         </div>
     </div>
 </div>
+<div id="branchModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <fieldset>
+            <input type="text" id="newBranchName" style="margin-top: 2%" placeholder="New Branch Name">
+            </fieldset>
+            <fieldset>
+                Branch Off Of<br>
+            <select id="branchSelector">
+            </select>
+            </fieldset>
+            <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn" onclick="document.getElementById('branchModal').style.display='none'">
+                Cancel
+            </div>
+            <div style="background-color:green; margin-top:7%" class="goBtn">
+                Go Ahead!
+            </div>
+        </div>
+    </div>
+</div>
+<div id="commitModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <form class="animated fadeIn">
+                <fieldset>
+                    <label>Files Changed</label>
+                    <ul style="overflow: scroll;max-height: 100px;">
+                    </ul>
+                </fieldset>
+            <input type="text" id="commitMessageInput" placeholder="Commit Message" title="Commit Message" style="margin-top: 2%">
+            <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn" onclick="document.getElementById('commitModal').style.display='none'">
+                Cancel
+            </div>
+                <div style="background-color:green; margin-top:7%" class="goBtn" id="commitBtn">
+                    Go Ahead!
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div id="myModal" class="modal">
 
-    <!-- Modal content -->
-    <span class="close">&times;</span>
+    <!-- Modal content --></span>
     <div class="modal-content">
         <div class="modal-header" id="fileheader">Create New File!</div>
         <div class="modal-header" id="folderheader" style="display: none;">Create New Folder!</div>
@@ -201,12 +239,6 @@
         <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
     </ul>
 </div>
-<div style="background: red; position: fixed; width: 200px; height: 80px; right: 0; bottom: 0;">
-    <input type="text" id="commitMessageInput" placeholder="commit msg" title="Commit Message">
-    <button id="commitBtn">
-        COMMIT
-    </button>
-</div>
 </body>
 <script>
     jQuery(document).ready(function ($) {
@@ -256,6 +288,19 @@
             document.getElementById("sortarrow").className = "fas fa-arrow-up";
         }
     }
+    let onCommitPress;
+
+    function setOnCommitPress(func) {
+        onCommitPress = func;
+    }
+
+    $('#commitBtn').click(function () {
+        if (onCommitPress)
+            onCommitPress($('#commitMessageInput').val());
+        document.getElementById('commitModal').style.display="none";
+       document.getElementById('commitMessageInput').value="";
+        swal("Success", 'Commited', "success");
+    });
 
     function share() {
         var tester = document.getElementById("sharer").value;
@@ -267,11 +312,6 @@
         temp += tester;
         swal("Success", temp, "success");
         closesharemodal();
-    }
-
-    function opensharemodal() {
-        var dodal = document.getElementById('shareModal');
-        dodal.style.display = "block";
     }
 
     function closesharemodal() {
@@ -314,8 +354,8 @@
         modal.style.display = "none";
     }
 
-    function openModal() {
-        var modal = document.getElementById('myModal');
+    function openModal(name) {
+        var modal = document.getElementById(name);
         modal.style.display = "block";
     }
 
@@ -396,9 +436,9 @@
         if (isPrivate == null) {
             icon.className = "far fa-folder-open outline";
         } else if (isPrivate) {
-            icon.className = "fas fa-book outline";
-        } else {
             icon.className = "fas fa-lock outline";
+        } else {
+            icon.className = "fas fa-book outline";
         }
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
@@ -464,17 +504,6 @@
             }
         });
     }
-
-    let onCommitPress;
-
-    function setOnCommitPress(func) {
-        onCommitPress = func;
-    }
-
-    $('#commitBtn').click(function () {
-        if (onCommitPress)
-            onCommitPress($('#commitMessageInput').val());
-    });
 </script>
 <script>
     function allowDrop(ev) {
@@ -534,7 +563,7 @@
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
         if (document.getElementById(data).nodeName == "LI") {
-            opensharemodal();
+            document.getElementById('shareModal').style.display="block";
         }
     }
 

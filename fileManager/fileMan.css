@@ -298,6 +298,24 @@ button {
     width: 95%;
 }
 
+#commitMessageInput{
+    background-color: rgba(0, 0, 0, 0);
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 2px solid gray;
+    outline: none;
+    width: 95%;
+}
+#newBranchName{
+    background-color: rgba(0, 0, 0, 0);
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 2px solid gray;
+    outline: none;
+    width: 95%;
+}
 select {
     outline: none;
     border: 0px;

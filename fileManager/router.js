@@ -36,6 +36,7 @@ fmApp.config(function ($routeProvider, $locationProvider) {
 
 fmApp.controller('mainController', function ($scope, $route, $routeParams, $http, $location) {
     clearFileList();
+    setCurBranchName("Select Branch");
 
     $http({
         url: "requests/getProjects.php",
@@ -76,6 +77,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
         branch: $routeParams.branch || "master"
     };
 
+    setCurBranchName($scope.params.branch);
     updateBreadCrumbs("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
         $scope.params.branch, $scope.params.path, $scope.params.repo);
 

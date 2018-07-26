@@ -6,5 +6,6 @@
  * @author Shivashriganesh Mahato
  */
 
-updateDocument($man, "repos", ['owner' => $owner, 'name' => $repo], Operators::Set,
-    [$branch => $_SESSION['tree']]);
+// Update or create appropriate field in appropriate repos document with given branch name
+updateDocument($man, "repos", ['owner' => base64_encode($owner), 'name' => base64_encode($repo)],
+    Operators::Set, [base64_encode($branch) => $_SESSION['tree']]);

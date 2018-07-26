@@ -8,25 +8,26 @@
 include 'init.php';
 include 'fetchTree.php';
 
+// Stores contents to be sent back
 $contents = array(
     'dirs' => array(),
     'files' => array()
 );
-//
-//// Fetch repo HEAD if local HEAD is new
-//if (!isset($_SESSION['tree']) || $_SESSION['tree'] == "") {
-//    $_SESSION['tree'] = $client->git->refs->getReference($owner, $repo, "heads/$branch")->getObject()->getSha();
-//}
 // Fetch working tree at HEAD
 $tree = $client->git->trees->getTreeRecursively($owner, $repo, $_SESSION['tree'])->getTree();
 
+// Collect all contents that match the given path
 if (is_array($tree)) {
     foreach ($tree as &$content) {
         $cPath = $content->getPath();
+        // Matches any content with a path of the form $path/:name
+        // Unmatched if :name contains a / (indicating a deeper pa
         $pattern = "/^" . str_replace('/', '\/', $path) . ($path == '' ? '' : '\/') . "([^\/]+)$/";
         if (preg_match($pattern, $cPath, $groups)) {
+            // The first group contains the name of the folder/file
             $name = $groups[1];
             $sha = $content->getSha();
+            // Add content to array as blob or dir as appropriate
             if ($content->getType() == "blob") {
                 $contents['files']['i' . count($contents['files'])] = array(
                     'name' => $name,
@@ -39,5 +40,6 @@ if (is_array($tree)) {
     }
 }
 
+// Respond with encoded contents
 header('Content-Type: application/json');
 echo json_encode($contents);

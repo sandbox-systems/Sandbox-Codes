@@ -76,7 +76,7 @@
     <a href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
     <div class="dropdown">
         <button class="dropbtn" onclick="openModal('branchModal')">
-            <span class="fas fa-code-branch"></span> Select Branch
+            <span class="fas fa-code-branch"></span> <span id="curBranchName">Select Branch</span>
         </button>
         <div id="branchesDropdown" class="dropdown-content">
         </div>
@@ -572,6 +572,10 @@
         var data = ev.dataTransfer.getData("text");
         document.getElementById(data).style.display = "none";
 
+    }
+
+    function setCurBranchName(name) {
+        $('#curBranchName').text(name);
     }
 </script>
 <script>

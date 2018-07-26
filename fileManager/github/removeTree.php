@@ -7,5 +7,6 @@
  */
 
 unset($_SESSION['tree']);
-updateDocument($man, "repos", ['owner' => $owner, 'name' => $repo], Operators::Unset,
-    [$branch => ""]);
+// Remove the field within the appropriate repos document that matches the appropriate branch
+updateDocument($man, "repos", ['owner' => base64_encode($owner), 'name' => base64_encode($repo)],
+    Operators::Unset, [base64_encode($branch) => ""]);

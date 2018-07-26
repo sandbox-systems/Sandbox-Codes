@@ -23,6 +23,8 @@ abstract class Operators
 }
 
 /**
+ * Fetch an array of documents that match a filter
+ *
  * @param $man Manager
  * @param $collection string
  * @param $filter array
@@ -45,6 +47,8 @@ function getDocuments($man, $collection, $filter, $options) {
 }
 
 /**
+ * Insert a new document
+ *
  * @param $man Manager
  * @param $collection string
  * @param $document array
@@ -57,6 +61,9 @@ function insertDocument($man, $collection, $document) {
 }
 
 /**
+ * Update a document that matches the filter with a certain operation
+ * A document is upserted if there are no matches for the filter
+ *
  * @param $man Manager
  * @param $collection string
  * @param $filter array
@@ -71,6 +78,8 @@ function updateDocument($man, $collection, $filter, $operator, $update) {
 }
 
 /**
+ * Delete the document that matches the filter
+ *
  * @param $man Manager
  * @param $collection string
  * @param $filter array

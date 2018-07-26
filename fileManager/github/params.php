@@ -6,6 +6,7 @@
  */
 
 include 'client/GitHubClient.php';
+include '../initDB.php';
 
 // Parameters given by Github when you register your application for OAuth
 // TODO Setup Environment Variables to store values; DO NOT HARD CODE IN PRODUCTION

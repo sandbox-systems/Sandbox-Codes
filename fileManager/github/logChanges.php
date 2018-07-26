@@ -12,10 +12,8 @@ $owner = $_POST['owner'];
 $repo = $_POST['repo'];
 $branch = $_POST['branch'];
 
-// Fetch repo HEAD if local HEAD is new
-if (!isset($_SESSION['tree']) || $_SESSION['tree'] == "") {
-    $_SESSION['tree'] = $client->git->refs->getReference($owner, $repo, "heads/$branch")->getObject()->getSha();
-}
+include 'fetchTree.php';
+
 // Fetch working tree at HEAD
 $baseTree = $client->git->trees->getTreeRecursively($owner, $repo, $_SESSION['tree']);
 
@@ -68,5 +66,7 @@ if (isset($_SESSION['changes'])) {
 $tree = array_values($tree);
 
 // Create new tree object from local version and store sha
-$_SESSION['tree'] = $client->git->trees->createTree($owner, $repo, $tree)->getSha();
+$newTreeSha = $client->git->trees->createTree($owner, $repo, $tree)->getSha();
+$_SESSION['tree'] = $newTreeSha;
+include 'saveTree.php';
 $_SESSION['changes'] = array();

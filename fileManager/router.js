@@ -112,7 +112,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
         });
     });
 
-    setFetchFleContents(function (sha) {
+    setFetchFileContents(function (sha) {
         $http({
             url: "requests/getFileContents.php",
             data: $.param({...$scope.params, ...{sha: sha}}),

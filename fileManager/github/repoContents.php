@@ -6,16 +6,17 @@
  */
 
 include 'init.php';
+include 'fetchTree.php';
 
 $contents = array(
     'dirs' => array(),
     'files' => array()
 );
-
-// Fetch repo HEAD if local HEAD is new
-if (!isset($_SESSION['tree']) || $_SESSION['tree'] == "") {
-    $_SESSION['tree'] = $client->git->refs->getReference($owner, $repo, "heads/$branch")->getObject()->getSha();
-}
+//
+//// Fetch repo HEAD if local HEAD is new
+//if (!isset($_SESSION['tree']) || $_SESSION['tree'] == "") {
+//    $_SESSION['tree'] = $client->git->refs->getReference($owner, $repo, "heads/$branch")->getObject()->getSha();
+//}
 // Fetch working tree at HEAD
 $tree = $client->git->trees->getTreeRecursively($owner, $repo, $_SESSION['tree'])->getTree();
 

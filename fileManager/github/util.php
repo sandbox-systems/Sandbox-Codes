@@ -11,6 +11,64 @@
 
 include 'params.php';
 
+session_start();
+
+function send_post($uri, $data) {
+    // Location of Github authentication server where access token is given
+    $auth_server_url = $uri;
+
+    // Define request parameters
+    $payload = array(
+        'http' => array(
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'accept' => 'application/json',
+            'method' => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+
+    // Send request and fetch response
+    $context = stream_context_create($payload);
+    $response_temp = file_get_contents($auth_server_url, false, $context);
+
+    // Parse response to array
+    $response_to_array = explode('&', $response_temp);
+    $response = array();
+    for ($i = 0; $i < count($response_to_array); $i++) {
+        $key_value = explode('=', $response_to_array [$i]);
+        $response[$key_value [0]] = $key_value [1];
+    }
+
+    return $response;
+}
+
+function fetchToken($code, $client_id, $client_secret)
+{
+    $token_response = send_post("https://github.com/login/oauth/access_token", array(
+        'client_id' => $client_id,
+        'client_secret' => $client_secret,
+        'code' => $code
+    ));
+
+    if (isset($token_response['error']))
+        return false;
+    else
+        return $token_response['access_token'];
+}
+
+/**
+ * Setup client with access code.
+ */
+function setupToken($client)
+{
+    if (isset($_SESSION['token'])) {
+        $client->setOauthToken($_SESSION['token']);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /**
  * Get organized array of repository files.
  *
@@ -46,9 +104,9 @@ function getFiles($client, $owner, $repo, $path = "", $branch="master")
  *
  * @return GitHubContents object will all file information
  */
-function getFile($client, $owner, $repo, $path, $branch = "master")
+function getFile($client, $owner, $repo, $path, $filename, $branch = "master")
 {
-    return $client->repos->contents->getContents($owner, $repo, $path, $ref = $branch);
+    return $client->repos->contents->getContents($owner, $repo, $path . '/' . $filename, $ref = $branch);
 }
 
 /**
@@ -57,85 +115,11 @@ function getFile($client, $owner, $repo, $path, $branch = "master")
  * @return string Contents of desired file
  * TODO parse raw contents to account for special characters (i.e. <>)
  */
-function getFileContents($client, $owner, $repo, $path, $branch = "master")
+function getFileContents($client, $owner, $repo, $path, $filename, $branch = "master")
 {
-    $file = getFile($client, $owner, $repo, $path, $branch);
+    $file = getFile($client, $owner, $repo, $path, $filename, $branch);
     // Get and decode contents of file (fetched in Base 64)
     return base64_decode($file->getContent());
-}
-
-/**
- * Fetch access token from authentication server using callback code.
- *
- * @param string $client_id Application client ID
- * @param string $client_secret Application client secret
- * @param string $code Callback code; don't pass argument if already authenticated
- *
- * @return string Access Token
- */
-function getToken($client_id, $client_secret, $code = "")
-{
-    // TODO Store and get access token from DB
-    if (isset($_GET['token'])) {
-        return $_GET['token'];
-    } else {
-        $token = fetchToken($code, $client_id, $client_secret);
-        header('Location: ?token=' . $token);
-        exit();
-    }
-}
-
-function fetchToken($code, $client_id, $client_secret)
-{
-    // Location of Github authentication server where access token is given
-    $auth_server_url = "https://github.com/login/oauth/access_token";
-
-    // Define request parameters
-    $data = array(
-        'client_id' => $client_id,
-        'client_secret' => $client_secret,
-        'code' => $code,
-        'accept' => 'application/json'
-    );
-    $payload = array(
-        'http' => array(
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($data)
-        )
-    );
-
-    // Send request and fetch response
-    $context = stream_context_create($payload);
-    $response_temp = file_get_contents($auth_server_url, false, $context);
-
-    // Kill application if response was unsuccessfully fetched
-    if ($response_temp === FALSE) {
-        die("UNSUCCESSFUL");
-    }
-
-    // Parse response to array
-    $response_to_array = explode('&', $response_temp);
-    $response = array();
-    for ($i = 0; $i < count($response_to_array); $i++) {
-        $key_value = explode('=', $response_to_array [$i]);
-        $response[$key_value [0]] = $key_value [1];
-    }
-
-    // Get token from response
-    // TODO Store token in DB and reuse; fetch new one only once old one expires
-    return $response['access_token'];
-}
-
-/**
- * Setup client with access code.
- */
-function setupToken($client, $client_id, $client_secret)
-{
-    $code = "";
-    if (isset($_GET['code']))
-        $code = $_GET['code'];
-    $client->setOauthToken(getToken($code, $client_id, $client_secret));
 }
 
 /**

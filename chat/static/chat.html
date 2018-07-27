@@ -144,13 +144,34 @@
                         <div class="form-group">
                             <label for="newGroupName">Group Name</label>
                             <input type="text" class="form-control" id="newGroupName" aria-describedby="groupName"
-                                   placeholder="Enter group name">
+                                   placeholder="Enter group name" ng-model="createRoomName">
+                            <br>
+                            <p>Members</p>
+                            <ul id="createRoomFormMembersList">
+                                <li ng-repeat="name in createRoomFormMemberNames track by $index">
+                                    <span ng-click="removeCreateRoomFormMember(name)">
+                                        {{name}}
+                                    </span>
+                                </li>
+                            </ul>
+                            <ul id="createRoomFormFriendsList">
+                                <li id="createRoomFormFriendsListItem" ng-repeat="friend in friends track by $index">
+                                    <span ng-if="!createRoomFormMemberNames.includes(friend.name)">
+                                        <span ng-click="addCreateRoomFormMember(friend)" id="createRoomFormFriendsListItemContent" >
+                                            <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{friend.name}}">
+                                            &nbsp;{{friend.name}}
+                                        </span>
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" ng-disabled="!createRoomName"
+                            ng-click="chatClient.createRoom(createRoomName, createRoomFormMembers)">Create
+                    </button>
                 </div>
             </div>
         </div>
@@ -194,9 +215,14 @@
                     <br>
                     @{{user.uname}}
                 </div>
-                <div id="searchBox">
+                <div id="searchBox" class="input-group">
                     <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."
                            aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">
+                    <div class="input-group-append">
+                        <button id="searchBoxBtn" class="btn btn-outline-light" type="button" data-toggle="modal"
+                                data-target="#createGroupModal">
+                            <span class="fas fa-plus"></span></button>
+                    </div>
                 </div>
                 <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
                     <button class="btn roomBtn"

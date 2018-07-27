@@ -24,11 +24,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to leave ((ROOM NAME))?
+                    Are you sure you want to leave {{chatRoom.getSelectedRoom().name}}?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger">Yes</button>
+                    <button id="leaveGroupSubmitBtn" type="button" class="btn btn-danger" data-dismiss="modal"
+                            ng-click="chatClient.leaveRoom(chatRoom.getSelectedRoom())">Yes
+                    </button>
                 </div>
             </div>
         </div>
@@ -92,11 +94,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to kick ((MEMBER NAME)) from ((ROOM NAME))?
+                    Are you sure you want to kick {{modalMember.name}} from {{chatRoom.getSelectedRoom().name}}?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            ng-click="chatRoom.removeUser(modalMember.id)">Yes
+                    </button>
                 </div>
             </div>
         </div>
@@ -113,11 +117,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to unfriend ((FRIEND NAME))?
+                    Are you sure you want to unfriend {{modalMember.name}}?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            ng-click="chatClient.unfriend(modalMember)">Yes
+                    </button>
                 </div>
             </div>
         </div>
@@ -138,13 +144,34 @@
                         <div class="form-group">
                             <label for="newGroupName">Group Name</label>
                             <input type="text" class="form-control" id="newGroupName" aria-describedby="groupName"
-                                   placeholder="Enter group name">
+                                   placeholder="Enter group name" ng-model="createRoomName">
+                            <br>
+                            <p>Members</p>
+                            <ul id="createRoomFormMembersList">
+                                <li ng-repeat="name in createRoomFormMemberNames track by $index">
+                                    <span ng-click="removeCreateRoomFormMember(name)">
+                                        {{name}}
+                                    </span>
+                                </li>
+                            </ul>
+                            <ul id="createRoomFormFriendsList">
+                                <li id="createRoomFormFriendsListItem" ng-repeat="friend in friends track by $index">
+                                    <span ng-if="!createRoomFormMemberNames.includes(friend.name)">
+                                        <span ng-click="addCreateRoomFormMember(friend)" id="createRoomFormFriendsListItemContent" >
+                                            <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{friend.name}}">
+                                            &nbsp;{{friend.name}}
+                                        </span>
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" ng-disabled="!createRoomName"
+                            ng-click="chatClient.createRoom(createRoomName, createRoomFormMembers)">Create
+                    </button>
                 </div>
             </div>
         </div>
@@ -190,13 +217,14 @@
                 </div>
                 <div id="searchBox" class="input-group">
                     <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."
-                           aria-label="searchbox" aria-describedby="searchbox">
+                           aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">
                     <div class="input-group-append">
-                        <button id="searchBoxBtn" class="btn btn-outline-light" type="button"><span
-                                class="fas fa-search"></span></button>
+                        <button id="searchBoxBtn" class="btn btn-outline-light" type="button" data-toggle="modal"
+                                data-target="#createGroupModal">
+                            <span class="fas fa-plus"></span></button>
                     </div>
                 </div>
-                <div ng-repeat="room in rooms track by $index">
+                <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
                     <button class="btn roomBtn"
                             ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === $index ? -1 : $index)"
                             ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
@@ -367,7 +395,7 @@
             <div ng-class="!chatRoom.isARoomSelected() ? '' : 'hidden'" id="chatOverlay" class="col-9 fullH">
                 <img src="img/Wallpaper.jpg">
                 <div id="noRoomSelectedTxt">
-                    Select a room to start chatting
+                    Select a group to start chatting
                 </div>
             </div>
         </div>
@@ -386,7 +414,7 @@
                     <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{member.name}}"/>
                     &nbsp;{{member.name}}<br>
                     <span class="removeGroupMember" data-toggle="modal" data-target="#removeFromGroupModal"
-                          title="Kick from group" ng-click="chatRoom.removeUser(member.id)">
+                          title="Kick from group" ng-click="setModalMember(member)">
                         <span class="fas fa-door-open"></span>
                     </span>&nbsp;
                     <span ng-if="!chatClient.hasFriend(member)" class="addFriendBtn" title="Add friend"
@@ -395,7 +423,7 @@
                     </span>&nbsp;
                     <span ng-if="chatClient.hasFriend(member)" class="removeFriendBtn" data-toggle="modal"
                           data-target="#removeFriendModal"
-                          title="Remove friend" ng-click="chatClient.unfriend(member)">
+                          title="Remove friend" ng-click="setModalMember(member)">
                         <span class="fas fa-user-minus"></span>
                     </span>
                     <br><br>
@@ -461,14 +489,6 @@
             $(window).trigger('resize');
         });
 
-        function scrollToBottom() {
-            let log = $("#chat");
-            console.log(log.prop("scrollHeight"));
-            log.scrollTop(log.prop("scrollHeight"));
-        }
-
-        scrollToBottom();
-
         let moreGroupInfoPanel = $('#moreGroupInfo');
         let toggled = false;
         let moreGroupInfoBtn = $('#moreGroupInfoBtn');
@@ -495,6 +515,7 @@
         }
 
         moreGroupInfoBtn.click(toggleMoreGroupInfo);
+        $('#leaveGroupSubmitBtn').click(toggleMoreGroupInfo);
         overlay.click(function () {
             if (toggled)
                 toggleMoreGroupInfo();

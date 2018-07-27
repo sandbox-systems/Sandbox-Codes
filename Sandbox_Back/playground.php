@@ -5,20 +5,24 @@
 		COPYRIGHT SANDBOX LLC
 	*/
 
-	require "checklogin.php";
+	//require "checklogin.php";
 	$text = json_decode(file_get_contents("languages/en-US.json"), true);
 ?>
 
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" ng-app="playground">
 	<head>
 		<title><?php echo $text["title"]; ?></title>
 		<link rel="stylesheet" type="text/css" href="css/playground.css" />
 		<link href="node_modules/fine-uploader/all.fine-uploader/fine-uploader-new.css" rel="stylesheet">
 		<link rel="stylesheet" href="../FontAwesome/web-fonts-with-css/css/fontawesome-all.css" />
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>  
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="https://togetherjs.com/togetherjs-min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+        <script src="controller.js"></script>
 	</head>
 	<body>
 			<!-- *************************************************** -->
@@ -39,7 +43,9 @@
 			<!-- *************************************************** -->
 			<!-- ******************* FILE MANAGER ****************** -->
 			<!-- *************************************************** -->
-			<div id="filemanager"></div>
+			<div id="filemanager" ng-controller="controller">
+                <ul style="color: black;" ng-bind-html="scan"></ul>
+            </div>
 
 			<!-- *************************************************** -->
 			<!-- ******************* CURSOR MENUS ****************** -->
@@ -540,7 +546,7 @@
 						},
 						dataType: "text",
 						success: function(data){
-							document.getElementById("filemanager").innerHTML = data;
+							//document.getElementById("filemanager").innerHTML = data;
 							$("#filemanager .file").draggable({
 								revert: "invalid"
 							});
@@ -642,6 +648,15 @@
 							});
 						}
 					});
+				}
+				
+				/****************************************************
+				 ********************* COLLAB ***********************
+				 ****************************************************/
+				function collab(){
+					var TogetherJSConfig_dontShowClicks = true;
+					var TogetherJSConfig_cloneClicks = true;
+					TogetherJS(this);
 				}
 				
 				/****************************************************
@@ -771,6 +786,14 @@
 					bindKey: {win: "Ctrl-n", mac: "Command-right"},
 					exec: function() {
 						createFile(editor);
+					}
+				});
+				
+				editor.commands.addCommand({
+					name: "collab",
+					bindKey: {win: "Ctrl-k", mac: "Command-k"},
+					exec: function() {
+						collab();
 					}
 				});
 				

@@ -139,47 +139,47 @@ border-radius: 25px;
 				<!-- Main -->
 					<section id="main" class="wrapper">
 						<div class="content row">
-						<div class="inner column animated bounceIn" onmouseover="change()" onmouseout="changeBack()" id="sreec">
+						<div class="inner column animated bounceIn" onmouseover="change('sreec')" onmouseout="changeBack('sreec')" id="sreec">
 							<!--<span class="image fit"><img src="images/pic04.jpg" alt="" /></span>-->
-									<img src="images/sree.jpg" id="myBtn" alt="" width="30%" style="position: relative;left:35%;border-radius: 50000px;border: 5px solid rebeccapurple;"/>
+									<img src="images/sree.jpg" onclick="modalOpen('sreeModal')" alt="" width="30%" style="position: relative;left:35%;border-radius: 50000px;border: 5px solid rebeccapurple;"/>
 									<h2>Sree Grandhe</h2>
 									<h3>Co-Founder and Co-CEO</h3>
 								</div>
-								<div id="aadhic" class="inner column animated bounceIn" onmouseover="changeAadhi()" onmouseout="changeBackAadhi()">
-									<img src="images/image2.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 50000px;border: 5px solid rebeccapurple;" id="aadhiBtn"/>
+								<div id="aadhic" class="inner column animated bounceIn" onmouseover="change('aadhic')" onmouseout="changeBack('aadhic')">
+									<img src="images/image2.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 50000px;border: 5px solid rebeccapurple;" onclick="modalOpen('aadhiModal')"/>
 									<h2>Aadhithya Kannan</h2>
 									<h3>Co-Founder and Co-CEO</h3>
 								</div>
-								<div id="christianc" class="inner column animated bounceIn" onmouseover="changeChristian()" onmouseout="changeBackChristian()">
-									<img src="images/christian.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" id="chrisBtn"/>
-									<h2>Christian Wells</h2>
-									<h3>Developer</h3>
-								</div>
-							</div>
+						<div id="shivac" class="inner column animated bounceIn" onmouseover="change('shivac')" onmouseout="changeBack('shivac')">
+							<img src="images/Shiva.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" onclick="modalOpen('shivaModal')"/>
+							<h2>Shivasriganesh Mahato</h2>
+							<h3>CTO</h3>
+						</div>
+						</div>
 						<div class="content row">
-							<div id="shivac" class="inner column animated bounceIn" onmouseover="changeShiva()" onmouseout="changeBackShiva()">
-								<img src="images/Shiva.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" id="shivaButton"/>
-									<h2>Shivasriganesh Mahato</h2>
-									<h3>Developer</h3>
+							<div id="govindc" class="inner column animated bounceIn" onmouseover="change('govindc')" onmouseout="changeBack('govindc')">
+								<img src="images/govindpic.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" id="govindButton"/>
+								<h2>Govind Joshi</h2>
+								<h3>Developer</h3>
 							</div>
-							<div id="aryac" class="inner column animated bounceIn" onmouseover="changeArya()" onmouseout="changeBackArya()">
-									<img src="images/Arya.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" id="aryaButton"/>
+							<div id="aryac" class="inner column animated bounceIn" onmouseover="change('aryac')" onmouseout="changeBack('aryac')">
+									<img src="images/Arya.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" onclick="modalOpen('aryaModal')"/>
 									<h2>Arya Saksena</h2>
 									<h3>Business Consultant</h3>
 							</div>
-							<div id="krishnac" class="inner column animated bounceIn" onmouseover="changeKrishna()" onmouseout="changeBackKrishna()">
-									<img src="images/Krishna.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" id="krishnaButton"/>
+							<div id="krishnac" class="inner column animated bounceIn" onmouseover="change('krishnac')" onmouseout="changeBack('krishnac')">
+									<img src="images/Krishna.jpg" alt="" width="30%" style="position: relative;left:35%;border-radius: 1000px;border: 5px solid rebeccapurple;" onclick="modalOpen('krishnaModal')"/>
 									<h2>Krishna Ganesh</h2>
 									<h3>Business Consultant</h3>
 							</div>
 						</div>
 					</section>
 			
-					<div id="aadhi" class="modal">
+					<div id="aadhiModal" class="modal">
 					  <!-- Modal content -->
 					  <div class="modal-content">
 						<div class="modal-header">
-						  <span class="close">&times;</span>
+						  <span class="close" onclick="modalClose('aadhiModal')">&times;</span>
 						  <h2>Aadhithya Kannan</h2>
 						</div>
 						<div class="modal-body">
@@ -191,11 +191,11 @@ border-radius: 25px;
 						</div>
 					  </div>
 					</div>
-					<div id="arya" class="modal">
+					<div id="aryaModal" class="modal">
 					  <!-- Modal content -->
 					  <div class="modal-content">
 						<div class="modal-header">
-						  <span class="close">&times;</span>
+						  <span class="close" onclick="modalClose('aryaModal')">&times;</span>
 						  <h2>Arya Saksena</h2>
 						</div>
 						<div class="modal-body">
@@ -211,7 +211,7 @@ border-radius: 25px;
 					  <!-- Modal content -->
 					  <div class="modal-content">
 						<div class="modal-header">
-						  <span class="close">&times;</span>
+						  <span class="close" onclick="modalClose('sreeModal')">&times;</span>
 						  <h2>Sree Grandhe</h2>
 						</div>
 						<div class="modal-body">
@@ -223,28 +223,11 @@ border-radius: 25px;
 						</div>
 					  </div>
 					</div>
-					<div id="chrisModal" class="modal">
-					  <!-- Modal content -->
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <span class="close">&times;</span>
-						  <h2>Christian Wells</h2>
-						</div>
-						<div class="modal-body">
-							<img src="images/christian.jpg" alt="" width="10%" height="50%" style="position: relative;border-radius: 1000px;border: 5px solid white;" />
-						  <p>Christian Wells is a Junior in the Computer Science academy at McNeil High School. He grew up in Austin, Texas and plans on studying Computer Science in college.
-					When presented with a problem, Christian will work on it until it's finished. He's been interested in Computer Science since he was introduced to programming in 6th grade, and intends to turn his love of computers into a lifetime career.</p>
-						</div>
-						<div class="modal-footer">
-						  <h3>Developer and Flapjack Chef</h3>
-						</div>
-					  </div>
-					</div>
 					<div id="krishnaModal" class="modal">
 					  <!-- Modal content -->
 					  <div class="modal-content">
 						<div class="modal-header">
-						  <span class="close">&times;</span>
+						  <span class="close" onclick="modalClose('krishnaModal')">&times;</span>
 						  <h2>Krishna Ganesh</h2>
 						</div>
 						<div class="modal-body">
@@ -264,7 +247,7 @@ Sandbox to spread the joy and rewards of coding to all markets around the globe.
 					  <!-- Modal content -->
 					  <div class="modal-content">
 						<div class="modal-header">
-						  <span class="close">&times;</span>
+						  <span class="close" onclick="modalClose('shivaModal')">&times;</span>
 						  <h2>Shiva Mahato</h2>
 						</div>
 						<div class="modal-body">
@@ -272,209 +255,42 @@ Sandbox to spread the joy and rewards of coding to all markets around the globe.
 						  <p>Shiva Mahato is an experienced scientist and engineer who has worked in the fields in physical ranging from advanced physics based analysis of the human body to entertaining mobile games. He's knwon for his positive approach to many problems and keen problem solving skills.</p>
 						</div>
 						<div class="modal-footer">
-						  <h3>Developer and Master Wizard</h3>
+						  <h3>CTO and Master Wizard</h3>
 						</div>
 					  </div>
 					</div>
+		<div id="govindModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close" onclick="modalClose('govindModal')">&times;</span>
+				<h2>Govind Joshi</h2>
+			</div>
+			<div class="modal-body">
+				<img src="images/govindpic.jpg.jpg" alt="" width="10%" height="50%" style="position: relative;border-radius: 1000px;border: 5px solid white;" />
+				<p>Govind Joshi is a computer engineer specializing in Java programming and network-based storage applications. He has worked in several different past projects involving android game design, web design, and has accumulated a pristine set of leadership skills through his endeavors as the Drum Major of his high school band program and a Senior Patrol Leader in his Boy Scout Troop.</p></div>
+			<div class="modal-footer">
+				<h3>Developer and Wallclimber</h3>
+			</div>
+		</div>
+		</div>
+</body>
 	
 <script>
-function changeShiva(){
-	document.getElementById("shivac").className = "inner column animated tada";
+function change(element){
+    var temp = document.getElementById(element);
+    temp.className="inner column animated tada";
 }
-function changeBackShiva(){
-	document.getElementById("shivac").className = "inner column";
+function changeBack(element){
+    var temp = document.getElementById(element);
+    temp.className="inner column";
 }
-function change(){
-	document.getElementById("sreec").className = "inner column animated tada";
+function modalOpen(alpha) {
+	var temp = document.getElementById(alpha);
+	temp.style.display="block";
 }
-function changeBack(){
-	document.getElementById("sreec").className = "inner column";
-}
-function changeAadhi(){
-		document.getElementById("aadhic").className = "inner column animated tada";
-}
-function changeBackAadhi(){
-		document.getElementById("aadhic").className = "inner column";
-}
-function changeChristian(){
-		document.getElementById("christianc").className = "inner column animated tada";
-}
-function changeBackChristian(){
-		document.getElementById("christianc").className = "inner column";
-}
-function changeArya(){
-		document.getElementById("aryac").className = "inner column animated tada";
-}
-function changeBackArya(){
-		document.getElementById("aryac").className = "inner column";
-}
-function changeKrishna(){
-		document.getElementById("krishnac").className = "inner column animated tada";
-}
-function changeBackKrishna(){
-		document.getElementById("krishnac").className = "inner column";
-}
-</script>
-<script>
-// Get the modal
-var alpha = document.getElementById("shivaModal");
-
-// Get the button that opens the modal
-var beta = document.getElementById("shivaButton");
-
-// Get the <span> element that closes the modal
-var theta = document.getElementsByClassName("close")[5];
-
-// When the user clicks the button, open the modal 
-beta.onclick = function() {
-    alpha.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-theta.onclick = function() {
-    alpha.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == alpha) {
-        alpha.style.display = "none";
-    }
-}
-</script>
-<script>
-// Get the modal
-var podal = document.getElementById("krishnaModal");
-
-// Get the button that opens the modal
-var buutnn = document.getElementById("krishnaButton");
-
-// Get the <span> element that closes the modal
-var supann1 = document.getElementsByClassName("close")[4];
-
-// When the user clicks the button, open the modal 
-buutnn.onclick = function() {
-    podal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-supann1.onclick = function() {
-    podal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == podal) {
-        podal.style.display = "none";
-    }
-}
-</script>
-<script>
-// Get the modal
-var kodal = document.getElementById("arya");
-
-// Get the button that opens the modal
-var butnn = document.getElementById("aryaButton");
-
-// Get the <span> element that closes the modal
-var supann = document.getElementsByClassName("close")[1];
-
-// When the user clicks the button, open the modal 
-butnn.onclick = function() {
-    kodal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-supann.onclick = function() {
-    kodal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == kodal) {
-        kodal.style.display = "none";
-    }
-}
-</script>
-<script>
-// Get the modal
-var dodal = document.getElementById("aadhi");
-
-// Get the button that opens the modal
-var btnn = document.getElementById("aadhiBtn");
-
-// Get the <span> element that closes the modal
-var spann = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal 
-btnn.onclick = function() {
-    dodal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-spann.onclick = function() {
-    dodal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == dodal) {
-        dodal.style.display = "none";
-    }
-}
-</script>
-<script>
-// Get the modal
-var bodal = document.getElementById("chrisModal");
-
-// Get the button that opens the modal
-var btnnn = document.getElementById("chrisBtn");
-
-// Get the <span> element that closes the modal
-var spannn = document.getElementsByClassName("close")[3];
-
-// When the user clicks the button, open the modal 
-btnnn.onclick = function() {
-    bodal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-spannn.onclick = function() {
-    bodal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == bodal) {
-        bodal.style.display = "none";
-    }
-}
-</script>
-<script>
-// Get the modal
-var modal = document.getElementById('sreeModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[2];
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
+function modalClose(alpha) {
+    var temp = document.getElementById(alpha);
+    temp.style.display="none";
 }
 </script>
 		<!-- Footer -->

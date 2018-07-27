@@ -19,7 +19,7 @@ if (is_array($tree)) {
     foreach ($tree as &$content) {
         $sha = $content->getSha();
         $name = $content->getPath();
-        
+
         $contents[] = array(
             'name' => $name,
             'sha' => $sha,

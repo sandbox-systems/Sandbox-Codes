@@ -1,15 +1,25 @@
 <?php
-	$username = $_GET["username"];
-	$code = $_GET["code"];
+    try {
+        $username = (string)$_GET["username"];
+        $code = (string)$_GET["code"];
 
-	$mysqli = new mysqli("localhost", "root", "root", "sandbox");
-	$update = $mysqli->query("UPDATE login_info SET email_verification=1 WHERE username='$username' AND code='$code'");
-	if($update === TRUE){
-		header("Location: http://localhost:8888/Sandbox%202.0/Sandbox_Front/Login.html");
-		if (!file_exists("Users/$username")) {
-			mkdir("Users/$username", 0777, true);
-		}
-	}else{
-		echo "Username/Code combination invalid. Please check your email for the correct link and feel free to contact Sandbox for any assistance.";	
-	}
+        $mng = new MongoDB\Driver\Manager("mongodb://sandbox:NhJLmHZb$@localhost:27017/admin");
+
+                $write = new MongoDB\Driver\BulkWrite;
+                $write->update(
+                    ["username" => $username, "ecode" => new MongoDB\BSON\Binary($code, MongoDB\BSON\Binary::TYPE_GENERIC)],
+                    ['$set' => ["everify" => true]],
+                    ['multi' => false, 'upsert' => false]
+                );
+                $result = $mng->executeBulkWrite('sandbox.users', $write);
+
+                if(!$result->getModifiedCount()){
+                    throw new Exception("No account exists with that info.");
+                }
+
+        header("Location: https://sandboxcodes.com/Login.html");
+
+    }catch(Exception $e){
+        die($e->getMessage());
+    }
 ?>

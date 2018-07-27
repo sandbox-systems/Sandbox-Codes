@@ -1,4 +1,12 @@
 <?php
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
+    /*require "../composer/vendor/phpmailer/phpmailer/src/Exception.php";
+    require "../composer/vendor/phpmailer/phpmailer/src/PHPMailer.php";
+    require "../composer/vendor/phpmailer/phpmailer/src/SMTP.php";*/
+    require '../composer/vendor/autoload.php';
+
     try {
         $mng = new MongoDB\Driver\Manager("mongodb://sandbox:NhJLmHZb$@localhost:27017/admin");
         $query = new MongoDB\Driver\Query(["username" => (string)$_POST['username']]);
@@ -37,17 +45,38 @@
         $mng->executeBulkWrite('sandbox.users', $write);
         echo "User successfully created";
 
-        $subject = 'Sandbox Email Verification';
-        $message = "<p>Dear ".(string)$_POST['username'].",<p>".
+        $mail = new PHPMailer(true);
+        try {
+            //Server settings
+            //$mail->SMTPDebug = 2;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'info.codesandbox@gmail.com';
+            $mail->Password = 'beatCloud!9';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            //Recipients
+            $mail->setFrom('info@sandboxcodes.com', 'Sandbox Systems');
+            $mail->addAddress((string)$_POST["email"], (string)$_POST["firstname"]." ".(string)$_POST["lastname"]);
+
+            //Content
+            $mail->isHTML(true);                                
+            $mail->Subject = 'Sandbox Email Verification';
+            $mail->Body    = "<p>Dear ".(string)$_POST["username"].",</p>".
             "<p>Thank you for choosing Sandbox. Your account is waiting for you! Please click the following link to activate your email.<br />".
-            "<a href=\"https://sandboxcodes.com/Sandbox_Back/verifyemail.php?username=".(string)$_POST['username']."&code=$ecode\">Verify Email!<a><br />".
+            "<a href=\"https://sandboxcodes.com/Sandbox_Back/verifyemail.php?username=".(string)$_POST["username"]."&code=$ecode\">Verify Email!<a><br />".
             "Sincerely,<br />".
             "The Sandbox Team";
-        $headers = 'From: webmaster@sandboxcodes.com' . "\r\n" .
-            'Reply-To: no-reply@sandboxcodes.com' . "\r\n" .
-            'Content-type: text/html';
-        mail((string)$_POST['email'], $subject, $message, $headers);
+            $mail->AltBody = "Click this: https://sandboxcodes.com/Sandbox_Back/verifyemail.php?username=".(string)$_POST["username"]."&code=$ecode";
+
+            $mail->send();
+            header("Location: https://sandboxcodes.com/Login.html");
+        } catch (Exception $e) {
+            echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+        }
     }catch(Exception $e){
-        die($e);
+        die($e->getMessage());
     }
 ?>

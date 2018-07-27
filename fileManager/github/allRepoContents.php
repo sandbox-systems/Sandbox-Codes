@@ -9,10 +9,8 @@ include 'init.php';
 include 'fetchTree.php';
 
 // Stores contents to be sent back
-$contents = array(
-    'dirs' => array(),
-    'files' => array()
-);
+$contents = array();
+
 // Fetch working tree at HEAD
 $tree = $client->git->trees->getTreeRecursively($owner, $repo, $_SESSION['tree'])->getTree();
 
@@ -20,15 +18,13 @@ $tree = $client->git->trees->getTreeRecursively($owner, $repo, $_SESSION['tree']
 if (is_array($tree)) {
     foreach ($tree as &$content) {
         $sha = $content->getSha();
-        // Add content to array as blob or dir as appropriate
-        if ($content->getType() == "blob") {
-            $contents['files']['i' . count($contents['files'])] = array(
-                'name' => $name,
-                'sha' => $sha
-            );
-        } else {
-            $contents['dirs']['i' . count($contents['dirs'])] = $name;
-        }
+        $name = $content->getPath();
+        
+        $contents[] = array(
+            'name' => $name,
+            'sha' => $sha,
+            'type' => $content->getType()
+        );
     }
 }
 

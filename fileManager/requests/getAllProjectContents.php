@@ -7,12 +7,9 @@
 
 include "global.php";
 
-//$owner = $_POST['owner'];
-//$repo = $_POST['repo'];
-//$branch = $_POST['branch'];
-$owner = 'aadhi0319';
-$repo = 'Sandbox';
-$branch = 'master';
+$owner = $_POST['owner'];
+$repo = $_POST['repo'];
+$branch = $_POST['branch'];
 
 if ($storageMethod == "GITHUB") {
     include '../github/allRepoContents.php';

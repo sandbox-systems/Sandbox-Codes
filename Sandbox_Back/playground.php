@@ -5,7 +5,7 @@
 		COPYRIGHT SANDBOX LLC
 	*/
 
-	//require "checklogin.php";
+	require "checklogin.php";
 	$text = json_decode(file_get_contents("languages/en-US.json"), true);
 ?>
 
@@ -15,31 +15,125 @@
 		<title><?php echo $text["title"]; ?></title>
 		<link rel="stylesheet" type="text/css" href="css/playground.css" />
 		<link href="node_modules/fine-uploader/all.fine-uploader/fine-uploader-new.css" rel="stylesheet">
-		<link rel="stylesheet" href="../FontAwesome/web-fonts-with-css/css/fontawesome-all.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		<script src="https://togetherjs.com/togetherjs-min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
         <script src="controller.js"></script>
 	</head>
-	<body>
-			<!-- *************************************************** -->
+	<body style="background-color:rgba(255,255,255,0.2);">
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <span class="close">&times;</span>
+        <div class="modal-content" style="border-radius: 64px">
+            <div class="modal-header" id="fileheader">Create New File!</div>
+            <div class="modal-header" id="folderheader" style="display: none;">Create New Folder!</div>
+            <div class="modal-body">
+                <fieldset style="    margin-top: 1%;">
+                    <label class="switch">
+                        <input value="None" type="checkbox" id="letscheck" onchange="switcher()">
+                        <span class="slider"></span>
+                    </label>
+                </fieldset>
+                <form id="fileform" class="animated fadeIn">
+                    <fieldset style="    margin-top: 2%;">
+                        Filename:<br>
+                        <input id="filename" class="inputname" type="text" oninput="typeUpdater()" autocomplete="off" required>
+                    </fieldset>
+                    <fieldset style="    margin-top: 2%;">
+                        File type:
+                        <select id="filechoose">
+                            <option value="java">Java</option>
+                            <option value="python">Python</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="html">HTML</option>
+                            <option value="css">CSS</option>
+                            <option value="cplusplus">C++</option>
+                            <option value="objc">Objective-C</option>
+                            <option value="csharp">C#</option>
+                            <option value="ruby">Ruby</option>
+                        </select>
+                    </fieldset>
+                    <fieldset style="    margin-top: 2%;">
+                        <div style="float:right; background-color:green; margin-right: 5%" class="goBtn" onclick="addFile()">Create</div>
+                        <div style="float:left; background-color:#FF3366; margin-left: 5%;" class="goBtn" onclick="closeModal()">Cancel</div>
+                    </fieldset>
+                </form>
+                <form id="folderform" style="display: none;" class="animated fadeIn">
+                    <fieldset style="    margin-top: 2%;">
+                        Foldername:<br>
+                        <input id="foldername" class="inputname" type="text" autocomplete="off">
+                    </fieldset>
+                    <fieldset style="    margin-top: 2%;">
+                        <div style="float:right; background-color:green;margin-right: 5% " class="goBtn" onclick="">Create</div>
+                        <div style="float:left; background-color:#FF3366; margin-left:5%" class="goBtn" onclick="closeModal()">Cancel</div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- *************************************************** -->
 			<!-- ********************* DOWNLOAD ******************** -->
 			<!-- *************************************************** -->
 		<iframe id="download"></iframe>
-		<div id="leftcol">
+
 			<!-- *************************************************** -->
 			<!-- ********************* TOOLBAR ********************* -->
 			<!-- *************************************************** -->
-			<div id="toolbar">
-				<input id="newFileButton" class="toolbarButton" type="button"/>
-				<input id="newFolderButton" class="toolbarButton" type="button"/>
-				<input id="debugButton" class="toolbarButton" type="button"/>
-				<input id="runButton" class="toolbarButton" type="button"/>
-			</div>
-
+            <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
+                <div class="container-fluid">
+                    <div class="navbar-header" style="width: 20%">
+                        <button value="" onclick="openModal()" class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
+                        <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i></button>
+                        <button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>
+                        <button class="dropdown btn navbar-btn toolbarButton">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="."><span style="color:white" class="fas fa-ellipsis-h fa-2x"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:temper('chrome')">chrome</a></li>
+                                <li><a href="javascript:temper('clouds')">clouds</a></li>
+                                <li><a href="javascript:temper('clouds_midnight')">clouds_midnight</a></li>
+                                <li><a href="javascript:temper('cobalt')">cobalt</a></li>
+                                <li><a href="javascript:temper('crimson_editor')">crimson_editor</a></li>
+                                <li><a href="javascript:temper('dawn')">dawn</a></li>
+                                <li><a href="javascript:temper('eclipse')">eclipse</a></li>
+                                <li><a href="javascript:temper('idle_fingers')">idle_fingers</a></li>
+                                <li><a href="javascript:temper('kr_theme')">kr_theme</a></li>
+                                <li><a href="javascript:temper('merbivore')">merbivore</a></li>
+                                <li><a href="javascript:temper('merbivore_soft')">merbivore_soft</a></li>
+                                <li><a href="javascript:temper('mono_industrial')">mono_industrial</a></li>
+                                <li><a href="javascript:temper('monokai')">monokai</a></li>
+                                <li><a href="javascript:temper('pastel_on_dark')">pastel_on_dark</a></li>
+                                <li><a href="javascript:temper('solarized_dark')">solarized_dark</a></li>
+                                <li><a href="javascript:temper('solarized_light')">solarized_light</a></li>
+                                <li><a href="javascript:temper('text_mate')">text_mate</a></li>
+                                <li><a href="javascript:temper('tomorrow')">tomorrow</a></li>
+                                <li><a href="javascript:temper('tomorrow_night')">tomorrow_night</a></li>
+                                <li><a href="javascript:temper('tomorrow_night_blue')">tomorrow_night_blue</a></li>
+                                <li><a href="javascript:temper('tomorrow_night_bright')">tomorrow_night_bright</a></li>
+                                <li><a href="javascript:temper('tomorrow_night_eighties')">tomorrow_night_eighties</a></li>
+                                <li><a href="javascript:temper('twilight')">twilight</a></li>
+                                <li><a href="javascript:temper('vibrant_ink')">vibrant_ink</a></li>
+                            </ul>
+                        </button>
+                    </div>
+                    <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
+	margin-right: 3%;">
+                        <img class="bordered-circle-green" src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
+                        <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
+                        <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
+                        <button onclick="shareFile()" id="addpeople"><span class="fas fa-plus"></span></button>
+                    </div>
+                </div>
+            </nav>
+            <div id="leftcol">
 			<!-- *************************************************** -->
 			<!-- ******************* FILE MANAGER ****************** -->
 			<!-- *************************************************** -->
@@ -51,37 +145,44 @@
 			<!-- ******************* CURSOR MENUS ****************** -->
 			<!-- *************************************************** -->
 			<div id="foldermenu">
-				<li id="folderNewFile" class="contextMenuItem"><?php echo $text["newFile"]; ?></li>
-				<li id="folderNewFolder" class="contextMenuItem"><?php echo $text["newFolder"]; ?></li>
-				<li id="folderRenameFolder" class="contextMenuItem"><?php echo $text["renameFolder"]; ?></li>
-				<li id="folderDuplicateFolder" class="contextMenuItem"><?php echo $text["duplicateFolder"]; ?></li>
+                <li id="folderNewFile" class="contextMenuItem"><span class="fas fa-file"></span> <?php echo $text["newFile"]; ?></li>
+				<li id="folderNewFolder" class="contextMenuItem"><span class="fas fa-folder"></span> <?php echo $text["newFolder"]; ?></li>
+				<li id="folderRenameFolder" class="contextMenuItem"><span class="fas fa-pencil-alt"></span> <?php echo $text["renameFolder"]; ?></li>
+				<li id="folderDuplicateFolder" class="contextMenuItem"><span class="fas fa-copy"></span> <?php echo $text["duplicateFolder"]; ?></li>
 				<div class="lineBreak"></div>
-				<li id="folderDownloadFolder" class="contextMenuItem"><?php echo $text["downloadFolder"]; ?></li>
-				<li id="folderUpload" class="contextMenuItem"><?php echo $text["upload"]; ?></li>
+				<li id="folderDownloadFolder" class="contextMenuItem"><span class="fas fa-cloud-download-alt"></span> <?php echo $text["downloadFolder"]; ?></li>
+				<li id="folderUpload" class="contextMenuItem"><span class="fas fa-cloud-upload-alt"></span> <?php echo $text["upload"]; ?></li>
 				<div class="lineBreak"></div>
-				<li id="folderEmpty" class="contextMenuItem"><?php echo $text["emptyFolder"]; ?></li>
-				<li id="folderDelete" class="contextMenuItem"><?php echo $text["deleteFolder"]; ?></li>
+				<li id="folderEmpty" class="contextMenuItem"><span class="fas fa-folder-open"></span> <?php echo $text["emptyFolder"]; ?></li>
+				<li id="folderDelete" class="contextMenuItem"><span class="fas fa-trash"></span> <?php echo $text["deleteFolder"]; ?></li>
 				<div class="lineBreak"></div>
-				<li id="folderRefresh" class="contextMenuItem"><?php echo $text["refreshFiles"]; ?></li>
+				<li id="folderRefresh" class="contextMenuItem"><span class="fas fa-sync-alt"></span> <?php echo $text["refreshFiles"]; ?></li>
 			</div>
 
 			<div id="filemenu">
-				<li id="fileNewFile" class="contextMenuItem"><?php echo $text["newFile"]; ?></li>
-				<li id="fileNewFolder" class="contextMenuItem"><?php echo $text["newFolder"]; ?></li>
-				<li id="fileRenameFile" class="contextMenuItem"><?php echo $text["renameFile"]; ?></li>
-				<li id="fileDuplicateFile" class="contextMenuItem"><?php echo $text["duplicateFile"]; ?></li>
-				<div class="lineBreak"></div>
-				<li id="fileDownloadFile" class="contextMenuItem"><?php echo $text["downloadFolder"]; ?></li>
-				<li id="fileUpload" class="contextMenuItem"><?php echo $text["upload"]; ?></li>
-				<div class="lineBreak"></div>
-				<li id="fileDelete" class="contextMenuItem"><?php echo $text["deleteFile"]; ?></li>
-				<div class="lineBreak"></div>
-				<li id="fileRefresh" class="contextMenuItem"><?php echo $text["refreshFiles"]; ?></li>
+                <li id="folderNewFile" class="contextMenuItem"><span class="fas fa-file"></span> <?php echo $text["newFile"]; ?></li>
+                <li id="folderNewFolder" class="contextMenuItem"><span class="fas fa-folder"></span> <?php echo $text["newFolder"]; ?></li>
+                <li id="folderRenameFolder" class="contextMenuItem"><span class="fas fa-pencil-alt"></span> <?php echo $text["renameFile"]; ?></li>
+                <li id="folderDuplicateFolder" class="contextMenuItem"><span class="fas fa-copy"></span> <?php echo $text["duplicateFile"]; ?></li>
+                <div class="lineBreak"></div>
+                <li id="folderDownloadFolder" class="contextMenuItem"><span class="fas fa-cloud-download-alt"></span> <?php echo $text["downloadFolder"]; ?></li>
+                <li id="folderUpload" class="contextMenuItem"><span class="fas fa-cloud-upload-alt"></span> <?php echo $text["upload"]; ?></li>
+                <div class="lineBreak"></div>
+                <li id="folderDelete" class="contextMenuItem"><span class="fas fa-trash"></span> <?php echo $text["deleteFile"]; ?></li>
+                <div class="lineBreak"></div>
+                <li id="folderRefresh" class="contextMenuItem"><span class="fas fa-sync-alt"></span> <?php echo $text["refreshFiles"]; ?></li>
 			</div>
 		</div>
 		<!-- *************************************************** -->
 		<!-- ***************** ACE CODE EDITOR ***************** -->
 		<!-- *************************************************** -->
+            <div class="rightcol">
+                <ul id="tab-list" class="nav navbar-nav nav-tabs" >
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href=".">Menu 1</a></li>
+                    <li><a href=".">Menu 2</a></li>
+                    <li><a href=".">Menu 3</a></li>
+                </ul>
 		<div id="editor"></div>
 		
 		<!-- *************************************************** -->
@@ -94,6 +195,43 @@
 		<script src="ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script src="ace_editor/src-noconflict/ext-language_tools.js"></script>
 		<script>
+            function switcher(){
+                if(document.getElementById("letscheck").checked === true){
+                    document.getElementById("fileform").style.display="none";
+                    document.getElementById("folderform").style.display="block";
+                    document.getElementById("fileheader").style.display="none";
+                    document.getElementById("folderheader").style.display="block";
+                }else{
+                    document.getElementById("fileform").style.display="block";
+                    document.getElementById("folderform").style.display="none";
+                    document.getElementById("fileheader").style.display="block";
+                    document.getElementById("folderheader").style.display="none";
+                }
+            }
+            function closeModal(){
+                var modal = document.getElementById('myModal');
+                modal.style.display="none";
+            }
+            function openModal(){
+                var modal = document.getElementById('myModal');
+                modal.style.display="block";
+            }
+            function typeUpdater(){
+                var name = document.getElementById("filename").value;
+                var array =[".java",".py",".js",".html",".css",".cpp",".cs",".m",".rb"];
+                var actual =["java","python","javascript","html","css","cplusplus","csharp","objc","ruby"];
+                var temp = "";
+                for(i =0; i<array.length;i++){
+                    if(name.substring(name.indexOf(".")) === array[i]){
+                        temp=actual[i];
+                        document.getElementById("filechoose").value = actual[i];
+                    }
+                }
+            }
+            function temper(theme){
+                var editor = ace.edit('editor');
+                editor.setTheme("ace/theme/"+theme);
+            }
 			$(document).ready(function(){
 				/****************************************************
 				 *********** ACTIVE DIRECTORY VARIABLES *************
@@ -119,7 +257,7 @@
 					enableSnippets: true,
 					enableLiveAutocompletion: false
 				});
-				editor.setTheme("ace/theme/monokai");
+				editor.setTheme("ace/theme/chrome");
 				editor.getSession().setMode("ace/mode/javascript");
 				editor.getSession().on('change', function() {
 					save(editor, false);					
@@ -658,7 +796,7 @@
 					var TogetherJSConfig_cloneClicks = true;
 					TogetherJS(this);
 				}
-				
+
 				/****************************************************
 				 ****************** CURSOR MENUS ********************
 				 ****************************************************/
@@ -796,8 +934,37 @@
 						collab();
 					}
 				});
-				
+
 			});
+            function shareFile(){
+                swal({
+                    title:'Share With',
+                    content: {
+                        element: "input",
+                        attributes: {
+                            placeholder: "@johndoe",
+                            type: "text",
+                        },
+                    },
+                });
+            }
+            $(document).ready(function () {
+                var tabID = 1;
+                $('#btn-add-tab').click(function () {
+                    tabID++;
+                    $('#tab-list').append($('<li><a href="#tab' + tabID + '" role="tab" data-toggle="tab">Tab ' + tabID + '<button class="close" type="button" title="Remove this page">×</button></a></li>'));
+                    //$('#tab-content').append($('<div class="tab-pane fade" id="tab' + tabID + '">Tab '+ tabID +' content</div>'));
+                });
+                $('#tab-list').on('click','.close',function(){
+                    var tabID = $(this).parents('a').attr('href');
+                    $(this).parents('li').remove();
+                    $(tabID).remove();
+
+                    //display first tab
+                    var tabFirst = $('#tab-list a:first');
+                    tabFirst.tab('show');
+                });
+            });
 		</script>
 	</body>
 </html>

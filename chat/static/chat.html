@@ -1,166 +1,553 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Chat</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Assumes global locations for socket.io.js and easyrtc.js -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/easyrtc/easyrtc.js"></script>
-    <script type="text/javascript" src="/easyrtc/easyrtc_ft.js"></script>
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-grid.css"/>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-reboot.css"/>
+    <link rel="stylesheet" href="lib/hamburgers.css"/>
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"/>
 </head>
 <body ng-app="chat">
-<div ng-cloak ng-controller="chatCtrl">
-    <div id="rooms">
-        <input onclick="showCreateRoomForm()" class="greenBtn" type="submit" value="+"/>
-        <ul id="roomList">
-            <li ng-repeat="room in rooms track by $index">
-                <span onclick="showChatInput()" ng-click="chatRoom.changeRoom($index)">{{room.name}}</span>
-            </li>
-        </ul>
+<div id="chatContainer" class="hidden" ng-cloak ng-controller="chatCtrl">
+    <div class="modal fade" id="leaveGroupModal" tabindex="-1" role="dialog" aria-labelledby="leaveGroupModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="leaveGroupModalLabel">Leaving Group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to leave {{chatRoom.getSelectedRoom().name}}?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="leaveGroupSubmitBtn" type="button" class="btn btn-danger" data-dismiss="modal"
+                            ng-click="chatClient.leaveRoom(chatRoom.getSelectedRoom())">Yes
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="friends">
-        <div ng-if="chatRoom.isARoomSelected()">
-            <ul id="friendsList">
-                <li ng-repeat="member in chatRoom.getMembers() track by $index">
-                    <span ng-class="member.isOnline ? 'green' : 'red'">
-                        {{member.name}}
+
+    <div class="modal fade" id="attachModal" tabindex="-1" role="dialog" aria-labelledby="attachModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" id="attachModalDialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attachModalLabel">Send attachment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="dropFileOverlay">
+                        <div id="dropFileOverlayContent">
+                            <span id="dropFileOverlayContentIcon"><span class="fas fa-file"></span></span>
+                            <br>
+                            DROP FILES HERE
+                        </div>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" select-ng-files class="custom-file-input" id="selectedFile"
+                               ng-model="selectedFilesArr">
+                        <label class="custom-file-label" for="selectedFile">
+                            {{selectedFilesArr[0].name || "Choose file" }}
+                        </label>
+                    </div>
+                    <ul ng-if="filesToSend.length > 0" id="filesUploadedList">
+                        <br>
+                        <li ng-repeat="file in filesToSend track by $index">
+                            <span><span class="fas"
+                                        ng-class="isCodeFile(file.name) ? 'fa-file-code' : 'fa-file'"></span></span>
+                            {{file.name}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            ng-click="chatClient.clearFilesToSend()">Cancel
+                    </button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            ng-click="chatClient.sendCollectedFiles()">Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="removeFromGroupModal" tabindex="-1" role="dialog"
+         aria-labelledby="removeFromGroupModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="removeFromGroupModalLabel">Kicking from group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to kick {{modalMember.name}} from {{chatRoom.getSelectedRoom().name}}?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            ng-click="chatRoom.removeUser(modalMember.id)">Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="removeFriendModal" tabindex="-1" role="dialog" aria-labelledby="removeFriendModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="removeFriendModalLabel">Removing friend</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to unfriend {{modalMember.name}}?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            ng-click="chatClient.unfriend(modalMember)">Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createGroupModalLabel">Creating Group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="newGroupName">Group Name</label>
+                            <input type="text" class="form-control" id="newGroupName" aria-describedby="groupName"
+                                   placeholder="Enter group name" ng-model="createRoomName">
+                            <br>
+                            <p>Members</p>
+                            <ul id="createRoomFormMembersList">
+                                <li ng-repeat="name in createRoomFormMemberNames track by $index">
+                                    <span ng-click="removeCreateRoomFormMember(name)">
+                                        {{name}}
+                                    </span>
+                                </li>
+                            </ul>
+                            <ul id="createRoomFormFriendsList">
+                                <li id="createRoomFormFriendsListItem" ng-repeat="friend in friends track by $index">
+                                    <span ng-if="!createRoomFormMemberNames.includes(friend.name)">
+                                        <span ng-click="addCreateRoomFormMember(friend)" id="createRoomFormFriendsListItemContent" >
+                                            <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{friend.name}}">
+                                            &nbsp;{{friend.name}}
+                                        </span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" ng-disabled="!createRoomName"
+                            ng-click="chatClient.createRoom(createRoomName, createRoomFormMembers)">Create
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="renameGroupModal" tabindex="-1" role="dialog" aria-labelledby="renameGroupModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameGroupModalLabel">Group Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="newGroupName">New Group Name</label>
+                            <input type="text" class="form-control" id="groupNewName" aria-describedby="groupNewName"
+                                   placeholder="Enter new name" ng-model="groupNewName">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" ng-disabled="!groupNewName">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <frosted-glass-container class="container-fluid">
+        <div class="row">
+            <div id="groupsBG" class="fixed-top w-25 fullH"></div>
+            <div id="groups" class="col-3 fullH container-fluid noPadding">
+                <div id="selfInfo">
+                    <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=dc3545&color=fff&name={{user.name}}">
+                    <br><br>
+                    <strong>{{user.name}}</strong>
+                    <br>
+                    @{{user.uname}}
+                </div>
+                <div id="searchBox" class="input-group">
+                    <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."
+                           aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">
+                    <div class="input-group-append">
+                        <button id="searchBoxBtn" class="btn btn-outline-light" type="button" data-toggle="modal"
+                                data-target="#createGroupModal">
+                            <span class="fas fa-plus"></span></button>
+                    </div>
+                </div>
+                <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
+                    <button class="btn roomBtn"
+                            ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === $index ? -1 : $index)"
+                            ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
+                        <span class="row">
+                            <span class="col-3">
+                                <img ng-if="room.members.length === 1"
+                                     ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{room.members[0].name}}">
+                                <img ng-if="room.members.length !== 1" width="64" height="64" src="img/group.png">
+                            </span>&nbsp;
+                            <span class="col-5">
+                                <span class="groupText">
+                                    <strong>{{ room.name }}</strong>
+                                    <br>
+                                    <span class="groupTextSub">
+                                        {{ room.chats.length > 0 ? trunc(typeof(room.chats[room.chats.length - 1]) === 'object' ? room.chats[room.chats.length - 1].fromName + ": " + room.chats[room.chats.length - 1].name : room.chats[room.chats.length - 1].substr(room.chats[room.chats.length - 1].indexOf(' ') + 1), 20) : "" }}
+                                    </span>
+                                </span>
+                            </span>
+                            <span class="col-3" ng-if="room.unread > 0">
+                                <span class="unreadCount badge badge-pill badge-danger float-right">{{room.unread}}</span>
+                            </span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div ng-class="chatRoom.isARoomSelected() ? '' : 'hidden'" id="chat" class="col-9 fullH container-fluid">
+                <div id="chatLog">
+                    <div class="chatMsg" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
+                        <span ng-if="typeof(chat) === 'string'">
+                            <span class="row" ng-if="chat.startsWith(user.uname)">
+                                <div class="col-xl-5"></div>
+                                <div class="col-xl-7">
+                                    <div>
+                                        <div class="chatBubble ownChatBubble">
+                                            {{chat.substr(chat.indexOf(':') + 1)}}
+                                            <span ng-if="typeof(chat) === 'object'">
+                                                <img class="chatImg" ng-if="chat.type.includes('image')"
+                                                     src="{{chat.url}}">
+                                                <span ng-if="!chat.type.includes('image')">
+                                                    <input class="greenBtn" type="submit"
+                                                           style="height: 50px;margin-left: 1%;bottom: 20px"
+                                                           value="{{chat.name}}" ng-click="chat.download()"/>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </span>
+                            <span class="row" ng-if="!chat.startsWith(user.uname)">
+                                <div class="col-xl-1">
+                                    <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{chat.split(' ')[1] + '+' + chat.substr(0, chat.indexOf(':')).split(' ')[chat.substr(0, chat.indexOf(':')).split(' ').length - 1]}}"/>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div>
+                                        <div class="chatBubble otherChatBubble">
+                                            {{chat.substr(chat.indexOf(':') + 1)}}
+                                            <span ng-if="typeof(chat) === 'object'">
+                                                <img class="chatImg" ng-if="chat.type.includes('image')"
+                                                     src="{{chat.url}}">
+                                                <span ng-if="!chat.type.includes('image')">
+                                                    <input class="greenBtn" type="submit"
+                                                           style="height: 50px;margin-left: 1%;bottom: 20px"
+                                                           value="{{chat.name}}" ng-click="chat.download()"/>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5"></div>
+                            </span>
+                        </span>
+                        <span ng-if="typeof(chat) === 'object'">
+                            <span class="row" ng-if="chat.fromUname === user.uname">
+                                <div class="col-xl-5"></div>
+                                <div class="col-xl-7">
+                                    <div>
+                                        <div class="chatBubble ownChatBubble">
+                                            <img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">
+                                            <div ng-if="!chat.type.includes('image')">
+                                                <button class="ownChatFile btn" type="submit"
+                                                        ng-click="chat.download()">
+                                                    <span class="ownChatFileIcon"><span class="fas"
+                                                                                        ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;
+                                                    {{chat.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span class="ownChatFileDownload"><span
+                                                            class="fas fa-download"></span></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </span>
+                            <span class="row" ng-if="chat.fromUname !== user.uname">
+                                <div class="col-xl-1">
+                                    <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{chat.fromName}}"/>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div>
+                                        <div class="chatBubble otherChatBubble">
+                                            <img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">
+                                            <div ng-if="!chat.type.includes('image')">
+                                                <button class="otherChatFile btn" type="submit"
+                                                        ng-click="chat.download()">
+                                                    <span class="otherChatFileIcon"><span class="fas"
+                                                                                          ng-class="isCodeFile(chat.name) ? 'fa-file-code' : 'fa-file'"></span></span>&nbsp;
+                                                    {{chat.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span class="otherChatFileDownload"><span
+                                                            class="fas fa-download"></span></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5"></div>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div id="chatInput" class="row container-fluid offset-3 fixed-bottom noPadding">
+                    <div id="attachBtnOverlay" class="col-1 text-center">
+                    <span id="attachBtn" data-toggle="modal" data-target="#attachModal">
+                        <span class="fas fa-paperclip"></span>
                     </span>
-                    <input class="redBtn" type="submit" value="Remove From Room"
-                           ng-click="chatRoom.removeUser(member.id)"/>
-                    <br/>
-                    <span ng-if="chatClient.hasFriend(member)">
-                        <input class="yellowBtn" type="submit" value="Remove Friend"
-                               ng-click="chatClient.unfriend(member)"/>
+                    </div>
+                    <div class="col-8">
+                        <div id="chatInputBoxContainer">
+                        <textarea ng-model="chatInputText" type="text" class="form-control" id="chatInputBox"
+                                  placeholder="Write something..." rows="1"
+                                  ng-change="chatClient.updateTypingStatus()"></textarea>
+                            <div id="chatInputBorder"></div>
+                        </div>
+                        <input type="button" id="chatInputSubmitBtn" style="display: none"
+                               ng-click="chatRoom.sendChat(chatInputText)" onclick="$('#chatInputBox').val('')">
+                    </div>
+                </div>
+                <div id="groupInfo" class="navbar text-dark offset-3 w-75 fixed-top">
+                    <span id="groupSignature" class="float-left">
+                        <span class="navbar-brand">
+                            <span class="rounded-circle nicePurpleBG text-light p-2">
+                                <span class="fas fa-users"></span></span>
+                            &nbsp;<span id="groupName" data-toggle="modal" data-target="#renameGroupModal">{{chatRoom.getSelectedRoom().name}}</span>
+                            <sup id="editGroupData">
+                                <span class="fas fa-pencil-alt"></span>
+                            </sup>
+                        </span>
                     </span>
-                    <span ng-if="!chatClient.hasFriend(member)">
-                        <input class="blueBtn" type="submit" value="Add Friend"
-                               ng-click="chatClient.sendFriendRequest(member)"/>
+                    <span id="moreGroupInfoBtnContainer" class="float-right">
+                    <span id="onlineMembersContainer">
+                        <span ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">
+                            <span ng-if="member.isOnline">
+                                <img class="onlineMember bordered-circle-green" data-toggle="popover" data-html="true"
+                                     data-content="<strong>{{member.name}}</strong><br/>@{{member.uname}}"
+                                     data-placement="top"
+                                     ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{member.name}}"/>
+                                <img ng-if="member.isTyping" class="onlineMemberTyping" src="img/typing.png"/>
+                                &nbsp;
+                            </span>
+                        </span>
                     </span>
-                </li>
-                <li ng-repeat="friend in chatClient.getFriends() track by $index">
+                    <span id="moreGroupInfoBtn" class="groupInfoItem hamburger hamburger--elastic">
+                        <span class="hamburger-box">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                    </span>
+                </span>
+                </div>
+            </div>
+            <div ng-class="!chatRoom.isARoomSelected() ? '' : 'hidden'" id="chatOverlay" class="col-9 fullH">
+                <img src="img/Wallpaper.jpg">
+                <div id="noRoomSelectedTxt">
+                    Select a group to start chatting
+                </div>
+            </div>
+        </div>
+        <div id="overlay" class="fixed-top w-100 h-100 bg-dark"></div>
+        <frosted-glass id="moreGroupInfo" class="fixed-top off-screen w-25 h-100"
+                       style="z-index: 1030; position: fixed"
+                       overlay-color="#d1ecff50"
+                       blur-amount="50px">
+            <div id="closePanelContainer"></div>
+            <div id="moreGroupInfoContainer">
+                <span id="leaveGroupBtn" data-toggle="modal" data-target="#leaveGroupModal" title="Leave Group">
+                    <span class="fas fa-door-open"></span>&nbsp;Leave group
+                </span>
+                <hr class="divider"/>
+                <div class="moreGroupInfoUser" ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">
+                    <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{member.name}}"/>
+                    &nbsp;{{member.name}}<br>
+                    <span class="removeGroupMember" data-toggle="modal" data-target="#removeFromGroupModal"
+                          title="Kick from group" ng-click="setModalMember(member)">
+                        <span class="fas fa-door-open"></span>
+                    </span>&nbsp;
+                    <span ng-if="!chatClient.hasFriend(member)" class="addFriendBtn" title="Add friend"
+                          ng-click="chatClient.sendFriendRequest(member)">
+                        <span class="fas fa-user-plus"></span>
+                    </span>&nbsp;
+                    <span ng-if="chatClient.hasFriend(member)" class="removeFriendBtn" data-toggle="modal"
+                          data-target="#removeFriendModal"
+                          title="Remove friend" ng-click="setModalMember(member)">
+                        <span class="fas fa-user-minus"></span>
+                    </span>
+                    <br><br>
+                </div>
+                <hr class="divider"/>
+                <div class="moreGroupInfoFriend" ng-repeat="friend in chatClient.getFriends() track by $index">
                     <span ng-if="!chatRoom.hasMember(friend)">
-                        {{friend.name}}
-                        <input class="greenBtn" type="submit" value="Add To Room"
-                               ng-click="chatRoom.addFriendAsMember(friend)"/>
-                        <input class="yellowBtn" type="submit" value="Remove Room"
-                               ng-click="chatClient.unfriend(friend)"/>
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div id="info">
-        <span ng-if="chatRoom.isARoomSelected()">
-            <span>{{chatRoom.getSelectedRoom().name}}</span>
-            <input class="redBtn" type="submit" value="Leave Room"
-                   ng-click="chatClient.leaveRoom(chatRoom.getSelectedRoom())"/>
-        </span>
-        <span ng-if="!chatRoom.isARoomSelected()">
-            <span>No room selected</span>
-        </span>
-    </div>
-    <div id="input">
-        <input id="inputBox" ng-model="chatInput">
-        <input id="attachBtn" onclick="showAttachmentForm()" style="color: white;" class="blueBtn" type="submit"
-               value="📎"/>
-        <input id="sendBtn" type="submit" value="SEND"
-            ng-click="chatRoom.sendChat(chatInput)"/>
-    </div>
-    <div id="log">
-        <div ng-if="chatRoom.isARoomSelected()">
-            <ul id="chatList">
-                <li ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
-                    <span ng-if="typeof(chat) === 'string'">
-                        <span ng-class="chat.startsWith(user.uname) ? 'ownChat' : 'otherChat'">
-                            {{chat}}
+                        <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{friend.name}}"/>
+                        &nbsp;{{friend.name}}<br>
+                        <span class="addGroupMember" title="Add to group" ng-click="chatRoom.addFriendAsMember(friend)">
+                            <span class="fas fa-plus"></span>
+                        </span>&nbsp;
+                        <span class="removeFriendBtn" data-toggle="modal" data-target="#removeFriendModal"
+                              title="Remove friend" ng-click="chatClient.unfriend(friend)">
+                            <span class="fas fa-user-minus"></span>
                         </span>
+                        <br><br>
                     </span>
-                    <span ng-if="typeof(chat) === 'object'">
-                        <span ng-class="chat.fromUname === user.uname ? 'ownChat' : 'otherChat'">
-                            {{chat.fromUname + " " + chat.fromName}}
-                            <img ng-if="chat.type.includes('image')" src="{{chat.url}}">
-                            <span ng-if="!chat.type.includes('image')">{{chat.name}}</span>
-                            <br/>
-                            <input class="greenBtn" type="submit" value="Download" ng-click="chat.download()"/>
-                        </span>
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div id="createRoomForm">
-        <input class="redBtn" type="submit" value="Cancel" onclick="closeCreateRoomForm()"/>
-        <br>
-        Name: <label for="createRoomName"></label><input id="createRoomName" type="text" ng-model="createRoomName">
-        <br>
-        Members:
-        <span ng-repeat="member in createRoomFormMembers track by $index" id="createRoomMembers">
-                <span ng-click="removeCreateRoomFormMember(member)">
-                    {{member.name}}
-                </span>
-            </span>
-        <br>
-        <ul style="list-style: none" id="createRoomFriends">
-            <li ng-repeat="friend in friends track by $index">
-                <span ng-if="!createRoomFormMemberNames.includes(friend.name)">
-                    <span ng-click="addCreateRoomFormMember(friend)">
-                        {{friend.name}}
-                    </span>
-                </span>
-            </li>
-        </ul>
-        <input class="greenBtn" type="submit" value="Create" onclick="closeCreateRoomForm()"
-               ng-click="chatClient.createRoom(createRoomName, createRoomFormMembers)"/>
-    </div>
-    <div id="attachForm">
-        DROP FILE HERE
-        <input id="attachCancelBtn" onclick="closeAttachmentForm()" class="redBtn" type="submit" value="Cancel"/>
-        <input id="attachSendBtn" onclick="closeAttachmentForm()" ng-click="chatClient.sendCollectedFiles()"
-               class="greenBtn" type="submit" value="Send"/>
-        <ul id="attachments">
-            <li ng-repeat="file in filesToSend track by $index">
-                {{file.name}}
-            </li>
-        </ul>
-    </div>
+                </div>
+            </div>
+        </frosted-glass>
+    </frosted-glass-container>
 </div>
 
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/easyrtc/easyrtc.js"></script>
+<script type="text/javascript" src="/easyrtc/easyrtc_ft.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.js"></script>
+<script src="lib/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script src="lib/autosize.min.js"></script>
+<script src='https://unpkg.com/frosted-glass/dist/frostedglass.js'></script>
 <script src="scripts/models.js"></script>
 <script src="scripts/chatClient.js"></script>
 <script>
-    function showCreateRoomForm() {
-        $('#createRoomForm').css('display', 'block');
-    }
+    $(function () {
+        $('#chatContainer').fadeIn(1000).removeClass('hidden');
 
-    function closeCreateRoomForm() {
-        $('#createRoomMembers').empty();
-        $('#createRoomName').val('');
-        $('#createRoomForm').css('display', 'none');
-    }
+        $('[data-toggle="popover"]').popover();
+        $('body').click(function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
 
-    function showAttachmentForm() {
-        $('#attachForm').css('display', 'block');
-    }
+        var inputBox = $('#chatInputBox');
+        autosize(inputBox);
+        inputBox.keypress(function (e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (!e.shiftKey && code === 13) {
+                e.preventDefault();
+                $("#chatInputSubmitBtn").trigger('click');
+                return true;
+            }
+        });
 
-    function closeAttachmentForm() {
-        $('#attachForm').css('display', 'none');
-    }
+        $("#chatInputSubmitBtn").click(function () {
+            $(this).attr('rows', '1');
+            $(window).trigger('resize');
+        });
 
-    function showChatInput() {
-        $('#input').css('display', 'block');
-    }
+        function scrollToBottom() {
+            let log = $("#chat");
+            console.log(log.prop("scrollHeight"));
+            log.scrollTop(log.prop("scrollHeight"));
+        }
 
-    function closeChatInput() {
-        $('#input').css('display', 'none');
-    }
+        scrollToBottom();
+
+        let moreGroupInfoPanel = $('#moreGroupInfo');
+        let toggled = false;
+        let moreGroupInfoBtn = $('#moreGroupInfoBtn');
+        let moreGroupInfoBtnContainer = $('#moreGroupInfoBtnContainer');
+        let overlay = $('#overlay');
+
+        function toggleMoreGroupInfo() {
+            moreGroupInfoPanel.toggleClass('off-screen offset-9');
+
+            function toggleOverlay() {
+                overlay.toggle();
+            }
+
+            toggled = !toggled;
+            if (toggled) {
+                moreGroupInfoBtn.detach().appendTo(moreGroupInfoPanel);
+                toggleOverlay();
+                overlay.fadeTo("slow", 0.65);
+            } else {
+                moreGroupInfoBtn.detach().appendTo(moreGroupInfoBtnContainer);
+                overlay.fadeTo("slow", 0, toggleOverlay);
+            }
+            moreGroupInfoBtn.toggleClass('is-active');
+        }
+
+        moreGroupInfoBtn.click(toggleMoreGroupInfo);
+        $('#leaveGroupSubmitBtn').click(toggleMoreGroupInfo);
+        overlay.click(function () {
+            if (toggled)
+                toggleMoreGroupInfo();
+        });
+
+        let attachModalDialog = $('#attachModalDialog');
+        let dropFileOverlay = $('#dropFileOverlay');
+        attachModalDialog.on('dragenter', function () {
+            dropFileOverlay.fadeIn();
+        });
+        attachModalDialog.on('dragleave', function () {
+            dropFileOverlay.fadeOut();
+        });
+        attachModalDialog.on('drop', function () {
+            dropFileOverlay.fadeOut();
+        });
+
+        let colors = ['#193e87', '#8044a8', '#7b0e75', '#6b142c'];
+        let colorCounter = 2;
+        window.setInterval(function () {
+            $('#chatOverlay').css('background', colors[colorCounter]);
+            colorCounter = (colorCounter + 1) % colors.length;
+        }, 2000);
+    });
 </script>
-
 </body>
 </html>

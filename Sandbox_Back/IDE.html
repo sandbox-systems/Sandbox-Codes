@@ -1,5 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 <head>
     <style type="text/css">
@@ -1194,7 +1200,6 @@
     .qq-uploader DIALOG::backdrop {
         background-color: rgba(0, 0, 0, 0.7);
     }</style>
-    <link rel="stylesheet" href="../FontAwesome/web-fonts-with-css/css/fontawesome-all.css">
     <script type="text/javascript" data-savepage-src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
             src=""></script>
     <script type="text/javascript"
@@ -2192,9 +2197,6 @@
         }
     </script>
 	<script>
-function openCity(evt, cityName) {
-    evt.currentTarget.className += " active";
-}
 </script>
     <meta name="savepage-url" content="http://localhost:9000/Sandbox_Back/playground.php">
     <meta name="savepage-title" content="Sandbox 2.0">
@@ -2211,25 +2213,28 @@ function openCity(evt, cityName) {
 <iframe src="data:text/html;charset=utf-8,%3Chtml%3E%3Chead%3E%0A%3Cbase%20href%3D%22http%3A%2F%2Flocalhost%3A9000%2FSandbox_Back%2Fplayground.php%22%3E%0A%3C%2Fhead%3E%3Cbody%3E%3C%2Fbody%3E%3C%2Fhtml%3E"
         data-savepage-sameorigin="" id="download"></iframe>
 
-<div id="toolbar">
-        <button value="" id="newFileButton" class="toolbarButton"><i class="fas fa-ellipsis-h fa-2x"></i></button>
-        <button value="" id="newFolderButton" class="toolbarButton"><i class="fas fa-cloud-download-alt fa-2x"></i></button>
-        <button value="" id="runButton" class="toolbarButton"><i class="fas fa-play fa-2x"></i></button>
-		<div class="tab">
-		  <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-		  <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-		  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-					  <button class="tablinks" onclick="openCity(event, 'Tokyo')">boop</button>
-		</div>
-	<ul style="list-style: none;display: inline-block">
-	<li>
-		<img src="https://ui-avatars.com/api/?background=a0a0a0">
-	</li>
-	<li>
-		<button id="addpeople"><i class="fas fa-plus fa-2x"></i></button>
-	</li>
-	</ul>
-</div>
+<nav class="navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header" style="width: 20%">
+            <button value="" id="newFileButton" class="btn navbar-btn toolbarButton"><i class="fas fa-ellipsis-h fa-2x"></i></button>
+            <button value="" id="newFolderButton" class="btn navbar-btn toolbarButton"><i class="fas fa-cloud-download-alt fa-2x"></i></button>
+            <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i></button>
+        </div>
+        <ul class="nav navbar-nav nav-tabs">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Menu 1</a></li>
+            <li><a href="#">Menu 2</a></li>
+            <li><a href="#">Menu 3</a></li>
+        </ul>
+        <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
+	margin-right: 3%;">
+            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
+            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
+            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
+            <button id="addpeople"><span class="fas fa-plus"></span></button>
+        </div>
+    </div>
+</nav>
 <div id="leftcol">
     <!-- *************************************************** -->
     <!-- ********************* TOOLBAR ********************* -->
@@ -2409,21 +2414,6 @@ function openCity(evt, cityName) {
 </div>
 <script data-savepage-src="ace_editor/src-noconflict/ace.js" src="" type="text/javascript" charset="utf-8"></script>
 <script data-savepage-src="ace_editor/src-noconflict/ext-language_tools.js" src=""></script>
-<script>
-    function openCity(evt, cityName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(cityName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-</script>
 
 </body>
 </html>

@@ -133,10 +133,7 @@
 }
 .wrapper iframe {
     position: relative;
-    left: 35px;
-		overflow-y: scroll;
-    width: 100%;
-    height: 102%;
+    overflow-y: scroll;
 }
 .userpic{
     position: relative;

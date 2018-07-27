@@ -15,9 +15,22 @@
         $hash = sha1($password.$row->salt);
         $query = new MongoDB\Driver\Query(["username" => $username, "hash" => new MongoDB\BSON\Binary($hash, MongoDB\BSON\Binary::TYPE_GENERIC)], ["limit" => 1]);
         $rows = $mng->executeQuery("sandbox.users", $query);
-        if(sizeof($rows->toArray())){
-            echo "User authenticated.";
+
+        $row = new IteratorIterator($rows);
+        $row->rewind();
+
+        if(!$row->valid()){
+            throw new Exception("Invalid Login.");
         }
+
+        session_start();
+        $_SESSION["username"] = $row->current()->username;
+        $_SESSION["type"] = $row->current()->features;
+        $_SESSION["fname"] = $row->current()->fname;
+        $_SESSION["lname"] = $row->current()->lname;
+        $_SESSION["profilepic"] = property_exists($row->current(), "profilepic")?$row->current()->profilepic:"default_profile_pic";
+
+        echo "User authenticated.";
 
     }catch(Exception $e){
 	    die($e->getMessage());

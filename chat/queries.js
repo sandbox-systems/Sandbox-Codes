@@ -37,8 +37,11 @@ module.exports = {
     },
     removeMemberFromRoom: function (db, roomID, memberID) {
         var query = {_id: mongodb.ObjectID(roomID)};
-        var pull = {$pull: {members: memberID}};
-        db.collection("rooms").update(query, pull, function (err, res) {
+        var assignment = {};
+        assignment["members." + memberID] = "";
+        var unset = {$unset: assignment};
+
+        db.collection("rooms").update(query, unset, function (err, res) {
             if (err) throw err;
             console.log("Successfully removed member from room");
         });
@@ -60,8 +63,11 @@ module.exports = {
     },
     addMemberToRoom: function (db, roomID, memberID) {
         var query = {_id: mongodb.ObjectID(roomID)};
-        var push = {$push: {members: memberID}};
-        db.collection("rooms").update(query, push, function (err, res) {
+        var assignment = {};
+        assignment["members." + memberID] = 0;
+        var set = {$set: assignment};
+
+        db.collection("rooms").update(query, set, function (err, res) {
             if (err) throw err;
             console.log("Successfully added member to room");
         });
@@ -145,6 +151,24 @@ module.exports = {
             }
         });
     },
+    getNotificationsFor: function (db, userID, successCB) {
+        var query = {recipientID: userID};
+        var notifications = [];
+
+        db.collection('notifications').find(query).forEach(function (doc) {
+            notifications.push({
+                type: doc.type,
+                message: doc.message
+            });
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Successfully fetched all notifications for " + userID);
+                successCB(notifications);
+            }
+        });
+    },
     addToUserDataToRequest: function (db, reqID, toUserData) {
         var query = {_id: mongodb.ObjectID(reqID)};
         var set = {$set: {toData: toUserData}};
@@ -165,8 +189,11 @@ module.exports = {
         var document = {
             name: roomData.name,
             chatEntries: [],
-            members: roomData.members
+            members: {}
         };
+        for (var i = 0; i < roomData.members.length; i++) {
+            document.members[roomData.members[i]] = 0;
+        }
         db.collection("rooms").insert(document, function(err, res){
             if (err) throw err;
             console.log("Successfully added room");
@@ -224,6 +251,28 @@ module.exports = {
     getRooms: function (db, roomIDs, successCB) {
         return module.exports.getDocumentsFromList(db, 'rooms', roomIDs,
             "Successfully fetched all room data and converted cursors to objects", successCB);
+    },
+    resetUnread: function (db, roomID, memberID) {
+        var query = {_id: mongodb.ObjectID(roomID)};
+        var assignment = {};
+        assignment["members." + memberID] = 0;
+        var set = {$set: assignment};
+
+        db.collection("rooms").update(query, set, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully reset room unread status for room " + roomID + ", member " + memberID);
+        });
+    },
+    incUnread: function (db, roomID, memberID) {
+        var query = {_id: mongodb.ObjectID(roomID)};
+        var incrementation = {};
+        incrementation["members." + memberID] = 1;
+        var set = {$inc: incrementation};
+
+        db.collection("rooms").update(query, set, function (err, res) {
+            if (err) throw err;
+            console.log("Successfully incremented unread for room " + roomID + ", member " + memberID);
+        });
     },
     // successCB = function (users)
     getUsers: function (db, userIDs, successCB) {

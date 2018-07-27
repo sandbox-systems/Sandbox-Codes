@@ -103,8 +103,9 @@ module.exports = {
                 };
                 // If the member is also a friend, add the already created friend to members
                 // Otherwise, the other members must be fetched from the DB
-                for (var j = 0; j < rooms[i].members.length; j++) {
-                    var member = rooms[i].members[j];
+                var memberIDs = Object.keys(rooms[i].members);
+                for (var j = 0; j < memberIDs.length; j++) {
+                    var member = memberIDs[j];
                     if (member !== userData.id) {
                         if (userPool.includes(member)) {
                             room.members.push(member);
@@ -112,16 +113,18 @@ module.exports = {
                             newMembers[member] = i;
                             userPool.push(member);
                         }
+                    } else {
+                        room.unread = rooms[i].members[member];
                     }
                 }
                 roomData.push(room);
             }
 
             // New member IDs must be cast to ObjectID objects to use in querying
-            var memberIDs = module.exports.getObjectIDList(Object.keys(newMembers));
+            var newMemberIDs = module.exports.getObjectIDList(Object.keys(newMembers));
 
             // Fetch an array of user objects with appropriate IDs corresponding to room new member IDs
-            queries.getUsers(db, memberIDs, function (members) {
+            queries.getUsers(db, newMemberIDs, function (members) {
                 // Once new members are fetched, only the id, username, and name are sent to the client
                 for (var i = 0; i < members.length; i++) {
                     var member = {
@@ -170,6 +173,12 @@ module.exports = {
             }
         }, function () {
             callback(requestData);
+        });
+    },
+    // callback = function (notifData)
+    getNotificationsFor: function (db, userID, callback) {
+        queries.getNotificationsFor(db, userID, function (notifications) {
+            callback(notifications);
         });
     }
 };

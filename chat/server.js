@@ -34,9 +34,9 @@ easyrtc.setOption("roomDefaultEnable", false);
 
 // Start EasyRTC server and handle events
 var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {    // pub is a public app object
-    if (error)
+    if (error){
         return console.log(error);
-
+	}
     var connect = pub.events.defaultListeners.connection;
     var disconnect = pub.events.defaultListeners.disconnect;
     var roomJoin = pub.events.defaultListeners.roomJoin;
@@ -46,6 +46,11 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
     easyrtc.events.on('connection', function (socket, easyrtcid, next) {
         console.log('Connection from easyrtcid', easyrtcid);
         return connect(socket, easyrtcid, next);
+    });
+
+    easyrtc.events.on('disconnect', function (conObj, next) {
+        console.log(conObj.getUsername() + ' disconnected');
+        return disconnect(conObj, next);
     });
 
     easyrtc.events.on("easyrtcMsg", function (conObj, msg, socketCallback, next) {
@@ -62,19 +67,22 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
                     actions.getRoomData(db, userData, userPool, roomIDs, function (roomData) {
                         actions.getPendingRequestDataFor(db, userData.id, function (requestData) {
                             actions.getProcessedRequestDataFrom(db, userData.id, function (pRequestData) {
-                                // Create single object to encapsulate all data
-                                var data = {
-                                    userData: userData,
-                                    friendData: friendData,
-                                    roomData: roomData,
-                                    requestData: {
-                                        pending: requestData,
-                                        processed: pRequestData
-                                    }
-                                };
+                                actions.getNotificationsFor(db, userData.id, function (notifData) {
+                                    // Create single object to encapsulate all data
+                                    var data = {
+                                        userData: userData,
+                                        friendData: friendData,
+                                        roomData: roomData,
+                                        requestData: {
+                                            pending: requestData,
+                                            processed: pRequestData
+                                        },
+                                        notifData: notifData
+                                    };
 
-                                // Finally, the data is sent to the client
-                                actions.emitMsgToClient(pub, conObj, "userData", data);
+                                    // Finally, the data is sent to the client
+                                    actions.emitMsgToClient(pub, conObj, "userData", data);
+                                });
                             });
                         });
                     });
@@ -133,6 +141,10 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
             queries.removeFriend(db, msg.msgData.friend, msg.msgData.from);
         } else if (msg.msgType === "deleteRequest") {
             queries.deleteRequest(db, msg.msgData.id);
+        } else if (msg.msgType === "resetUnread") {
+            queries.resetUnread(db, msg.msgData.roomID, msg.msgData.memberID);
+        } else if (msg.msgType === "incUnread") {
+            queries.incUnread(db, msg.msgData.roomID, msg.msgData.memberID);
         } else {
             // If the message was not for a clientConnection, just let EastRTC do its thing
             return easyrtcMsg(conObj, msg, socketCallback, next);

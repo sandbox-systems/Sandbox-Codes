@@ -11,7 +11,7 @@ angular.module("chat", [])
             }
         }
     })
-    .controller("chatCtrl", function ($scope) {
+    .controller("chatCtrl", function ($scope, $timeout) {
         $scope.user = new User("", "", "");
         $scope.rooms = [];
         $scope.friends = [];
@@ -44,12 +44,12 @@ angular.module("chat", [])
         };
 
         $scope.isCodeFile = function (filename) {
-             if (filename.indexOf('.') === -1)
-                 return false;
-             let split = filename.split('.');
-             let ext = split[split.length - 1];
-             let possExts = ['java', 'cpp', 'py', 'js', 'html', 'css', 'rb', 'cs', 'c', 'swift', 'h', 'm', 'r'];
-             return possExts.includes(ext);
+            if (filename.indexOf('.') === -1)
+                return false;
+            let split = filename.split('.');
+            let ext = split[split.length - 1];
+            let possExts = ['java', 'cpp', 'py', 'js', 'html', 'css', 'rb', 'cs', 'c', 'swift', 'h', 'm', 'r'];
+            return possExts.includes(ext);
         };
 
         $scope.chatClient = (function () {
@@ -463,6 +463,7 @@ angular.module("chat", [])
 
             var addChatToRoomByIndex = function (roomIndex, chat) {
                 $scope.rooms[roomIndex].addChat(chat);
+                $scope.chatRoom.scrollToBottom();
             };
 
             var addChatToRoomByID = function (roomID, chat) {
@@ -476,6 +477,7 @@ angular.module("chat", [])
                         $scope.chatClient.getRoomByID(roomID).unread++;
                     });
                 }
+                $scope.chatRoom.scrollToBottom();
             };
 
             var removeMemberFromRoom = function (roomID, memberID) {
@@ -603,12 +605,21 @@ angular.module("chat", [])
         })();
 
         $scope.chatRoom = (function () {
+            var scrollToBottom = function () {
+                $timeout(function () {
+                    let log = $("#chat");
+                    log.scrollTop(log.prop("scrollHeight"));
+                });
+            };
+
             var addChatToCurRoom = function (uname, name, msg) {
                 $scope.chatClient.addChatToRoomByIndex($scope.selRoomIndex, uname + " " + name + ": " + msg);
+                scrollToBottom();
             };
 
             var addChatByID = function (roomID, uname, name, msg) {
                 $scope.chatClient.addChatToRoomByID(roomID, uname + " " + name + ": " + msg);
+                scrollToBottom();
             };
 
             var handleChat = function (sender, msgType, msgData) {
@@ -699,8 +710,10 @@ angular.module("chat", [])
             };
 
             var changeRoom = function (newInd) {
-                if (newInd !== -1)
+                if (newInd !== -1) {
                     $scope.selRoomIndex = newInd;
+                    scrollToBottom();
+                }
                 getSelectedRoom().unread = 0;
                 easyrtc.sendServerMessage('resetUnread', {
                     roomID: getSelectedRoom().id,
@@ -726,6 +739,7 @@ angular.module("chat", [])
             };
 
             return {
+                scrollToBottom: scrollToBottom,
                 handleChat: handleChat,
                 sendChat: sendChat,
                 getSelectedRoom: getSelectedRoom,

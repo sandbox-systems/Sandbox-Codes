@@ -489,14 +489,6 @@
             $(window).trigger('resize');
         });
 
-        function scrollToBottom() {
-            let log = $("#chat");
-            console.log(log.prop("scrollHeight"));
-            log.scrollTop(log.prop("scrollHeight"));
-        }
-
-        scrollToBottom();
-
         let moreGroupInfoPanel = $('#moreGroupInfo');
         let toggled = false;
         let moreGroupInfoBtn = $('#moreGroupInfoBtn');

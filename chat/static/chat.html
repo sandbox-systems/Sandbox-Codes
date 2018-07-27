@@ -194,15 +194,11 @@
                     <br>
                     @{{user.uname}}
                 </div>
-                <div id="searchBox" class="input-group">
+                <div id="searchBox">
                     <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."
-                           aria-label="searchbox" aria-describedby="searchbox">
-                    <div class="input-group-append">
-                        <button id="searchBoxBtn" class="btn btn-outline-light" type="button"><span
-                                class="fas fa-search"></span></button>
-                    </div>
+                           aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">
                 </div>
-                <div ng-repeat="room in rooms track by $index">
+                <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
                     <button class="btn roomBtn"
                             ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === $index ? -1 : $index)"
                             ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">

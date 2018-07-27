@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html ng-app="fileManager">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="../css/FileMM.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="fileMan.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+    <script src="router.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <base href="/fileManager/FileM.html">
+</head>
+<body>
+<div id="preloader">
+      <div id="loader"></div>
+    </div>
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div style="width: 15%; float: left;">
+        <form>
+            <fieldset>
+                Name<br>
+                <input id="displayname" type="text" class="infoname">
+                FileType<br>
+                <input id="displaytype" type="text" class="infoname" readonly>
+                Description<br>
+                <input type="text" class="infoname">
+                Size<br>
+                <input type="text" class="infoname" readonly>
+                Created<br>
+                <input type="date" class="infoname" readonly>
+                Last Modified<br>
+                <input type="date" class="infoname" readonly>
+            </fieldset>
+            <fieldset>
+                Color<br>
+                <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
+                      onclick="test=document.getElementById('gray').style.backgroundColor"></span>
+                <span id="pink" class="prevBtn" style="background-color: #FC427B;"
+                      onclick="test=document.getElementById('pink').style.backgroundColor"></span>
+                <span id="orange" class="prevBtn" style="background-color: #F97F51;"
+                      onclick="test=document.getElementById('orange').style.backgroundColor"></span>
+                <span id="green" class="prevBtn" style="background-color: #55E6C1;"
+                      onclick="test=document.getElementById('green').style.backgroundColor"></span>
+                <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
+                      onclick="test=document.getElementById('blue').style.backgroundColor"></span>
+                <span id="purple" class="prevBtn" style="background-color: #82589F;"
+                      onclick="test=document.getElementById('purple').style.backgroundColor"></span>
+            </fieldset>
+            <fieldset>
+                Shared With<br>
+            </fieldset>
+        </form>
+    </div>
+    <div style="width: 95%">
+        <pre><code id="preview"></code></pre>
+    </div>
+</div>
+<div class="topnav animated fadeIn" id="navbar">
+    <a class="okeh" href="javascript:openModal('myModal')">New Entry!</a>
+    <a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
+    <a id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
+            class="fas fa-user-plus"></span> Share</a>
+    <a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
+            class="fas fa-trash"></span> Trash</a>
+    <a href="javascript:sortListDir()" id="sortclick"><span id="sortarrow" class="fas fa-arrow-up"></span> Sort</a>
+    <a href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
+    <div class="dropdown">
+        <button class="dropbtn" onclick="openModal('branchModal')">
+            <span class="fas fa-code-branch"></span> <span id="curBranchName">Select Branch</span>
+        </button>
+        <div id="branchesDropdown" class="dropdown-content">
+        </div>
+    </div>
+</div>
+
+<ul id="fileList">
+    <div id="routedTemplate" ng-view></div>
+    <!--<li draggable="true" ondragstart="drag(event)" id="entry"><span id="adder" class="far fa-folder-open outline animated tada" style="color: white; font-size: 4.5em;"></span><label>New Entry!</label></li>-->
+</ul>
+<!-- The Modal -->
+<div id="shareModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <form class="animated fadeIn">
+                <fieldset>
+                    Share with:<br>
+                    <input class="inputname" id="sharer" type="text" autocomplete="off">
+                </fieldset>
+                <fieldset>
+                    <div style="float:right; background-color:green; " class="goBtn" onclick="share()">Share</div>
+                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closesharemodal()">
+                        Cancel
+                    </div>
+                </fieldset>
+                <fieldset id="sharedwith">
+                    Shared with:<br>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="branchModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <fieldset>
+            <input type="text" id="newBranchName" style="margin-top: 2%" placeholder="New Branch Name">
+            </fieldset>
+            <fieldset>
+                Branch Off Of<br>
+            <select id="branchSelector">
+            </select>
+            </fieldset>
+            <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn" onclick="document.getElementById('branchModal').style.display='none'">
+                Cancel
+            </div>
+            <div style="background-color:green; margin-top:7%" class="goBtn">
+                Go Ahead!
+            </div>
+        </div>
+    </div>
+</div>
+<div id="commitModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <form class="animated fadeIn">
+                <fieldset>
+                    <label>Files Changed</label>
+                    <ul style="overflow: scroll;max-height: 100px;">
+                    </ul>
+                </fieldset>
+            <input type="text" id="commitMessageInput" placeholder="Commit Message" title="Commit Message" style="margin-top: 2%">
+            <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn" onclick="document.getElementById('commitModal').style.display='none'">
+                Cancel
+            </div>
+                <div style="background-color:green; margin-top:7%" class="goBtn" id="commitBtn">
+                    Go Ahead!
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal">
+
+    <!-- Modal content --></span>
+    <div class="modal-content">
+        <div class="modal-header" id="fileheader">Create New File!</div>
+        <div class="modal-header" id="folderheader" style="display: none;">Create New Folder!</div>
+        <div class="modal-body">
+            <fieldset>
+                <label class="switch">
+                    <input value="None" type="checkbox" id="letscheck" onchange="switcher()">
+                    <span class="slider"></span>
+                </label>
+            </fieldset>
+            <form id="fileform" class="animated fadeIn">
+                <fieldset>
+                    Filename:<br>
+                    <input id="filename" class="inputname" type="text"
+                           oninput="typeUpdater(document.getElementById('filename').value)" autocomplete="off"
+                           required>
+                </fieldset>
+                <fieldset>
+                    File type:
+                    <select id="filechoose">
+                        <option value="java">Java</option>
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="cplusplus">C++</option>
+                        <option value="objc">Objective-C</option>
+                        <option value="csharp">C#</option>
+                        <option value="ruby">Ruby</option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    Color Select:<br>
+                    <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
+                          onclick="test=document.getElementById('gray').style.backgroundColor"></span>
+                    <span id="pink" class="prevBtn" style="background-color: #FC427B;"
+                          onclick="test=document.getElementById('pink').style.backgroundColor"></span>
+                    <span id="orange" class="prevBtn" style="background-color: #F97F51;"
+                          onclick="test=document.getElementById('orange').style.backgroundColor"></span>
+                    <span id="green" class="prevBtn" style="background-color: #55E6C1;"
+                          onclick="test=document.getElementById('green').style.backgroundColor"></span>
+                    <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
+                          onclick="test=document.getElementById('blue').style.backgroundColor"></span>
+                    <span id="purple" class="prevBtn" style="background-color: #82589F;"
+                          onclick="test=document.getElementById('purple').style.backgroundColor"></span>
+                </fieldset>
+                <fieldset>
+                    <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFile()">Create</div>
+                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closeModal()">Cancel
+                    </div>
+                </fieldset>
+            </form>
+            <form id="folderform" style="display: none;" class="animated fadeIn">
+                <fieldset>
+                    Foldername:<br>
+                    <input id="foldername" class="inputname" type="text" autocomplete="off">
+                </fieldset>
+                <fieldset>
+                    Color Select:<br>
+                    <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
+                          onclick="test=document.getElementById('gray').style.backgroundColor"></span>
+                    <span id="pink" class="prevBtn" style="background-color: #FC427B;"
+                          onclick="test=document.getElementById('pink').style.backgroundColor"></span>
+                    <span id="orange" class="prevBtn" style="background-color: #F97F51;"
+                          onclick="test=document.getElementById('orange').style.backgroundColor"></span>
+                    <span id="green" class="prevBtn" style="background-color: #55E6C1;"
+                          onclick="test=document.getElementById('green').style.backgroundColor"></span>
+                    <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
+                          onclick="test=document.getElementById('blue').style.backgroundColor"></span>
+                    <span id="purple" class="prevBtn" style="background-color: #82589F;"
+                          onclick="test=document.getElementById('purple').style.backgroundColor"></span>
+                </fieldset>
+                <fieldset>
+                    <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFolder()">Create
+                    </div>
+                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closeModal()">Cancel
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="cssmenu">
+    <ul id="cssmenuList">
+        <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
+    </ul>
+</div>
+</body>
+<script>
+    jQuery(document).ready(function ($) {
+        $(window).on("load", function () {
+
+            $("#preloader").fadeOut(500);
+
+        });
+    });
+    $('html').bind('keypress', function (e) {
+        if (e.keyCode == 13) {
+            return false;
+        }
+    });
+    window.onscroll = function () {
+        myFunction()
+    };
+
+    // Get the navbar
+    var navbar = document.getElementById("navbar");
+
+    // Get the offset position of the navbar
+    var sticky = navbar.offsetTop;
+
+    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    function myFunction() {
+        if (window.pageYOffset >= sticky) {
+            navbar.classList.add("sticky")
+        } else {
+            navbar.classList.remove("sticky");
+        }
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        // document.getElementById("fileList").style.marginLeft= "0";
+        //document.getElementById("navbar").style.marginLeft = "0px";
+        document.getElementById("displayname").setAttribute("placeholder", "");
+    }
+
+    var counter = 0;
+
+    function changesorticon() {
+        if (document.getElementById("sortarrow").className === "fas fa-arrow-up") {
+            document.getElementById("sortarrow").className = "fas fa-arrow-down";
+        } else {
+            document.getElementById("sortarrow").className = "fas fa-arrow-up";
+        }
+    }
+    let onCommitPress;
+
+    function setOnCommitPress(func) {
+        onCommitPress = func;
+    }
+
+    $('#commitBtn').click(function () {
+        if (onCommitPress)
+            onCommitPress($('#commitMessageInput').val());
+        document.getElementById('commitModal').style.display="none";
+       document.getElementById('commitMessageInput').value="";
+        swal("Success", 'Commited', "success");
+    });
+
+    function share() {
+        var tester = document.getElementById("sharer").value;
+        if (tester === "") {
+            swal("Uh oh!", "You forgot to enter a username", "warning");
+            return;
+        }
+        var temp = "Shared with ";
+        temp += tester;
+        swal("Success", temp, "success");
+        closesharemodal();
+    }
+
+    function closesharemodal() {
+        var dodal = document.getElementById('shareModal');
+        dodal.style.display = "none";
+    }
+
+    var test = "white";
+
+    function switcher() {
+        if (document.getElementById("letscheck").checked === true) {
+            document.getElementById("fileform").style.display = "none";
+            document.getElementById("folderform").style.display = "block";
+            document.getElementById("fileheader").style.display = "none";
+            document.getElementById("folderheader").style.display = "block";
+        } else {
+            document.getElementById("fileform").style.display = "block";
+            document.getElementById("folderform").style.display = "none";
+            document.getElementById("fileheader").style.display = "block";
+            document.getElementById("folderheader").style.display = "none";
+        }
+    }
+
+    function typeUpdater(filer) {
+        var name = filer;
+        var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+        var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+        var temp = "";
+        for (i = 0; i < array.length; i++) {
+            if (name.substring(name.indexOf(".")) === array[i]) {
+                temp = actual[i];
+                document.getElementById("filechoose").value = actual[i];
+            }
+        }
+        return temp;
+    }
+
+    function closeModal() {
+        var modal = document.getElementById('myModal');
+        modal.style.display = "none";
+    }
+
+    function openModal(name) {
+        var modal = document.getElementById(name);
+        modal.style.display = "block";
+    }
+
+    let fetchFileContents;
+
+    function setFetchFileContents(func) {
+        fetchFileContents = func;
+    }
+
+    function addFile(name, onclick, sha) {
+        var node = document.createElement("LI");
+        var link = document.createElement("A");
+        var icon = document.createElement("I");
+        var namer = document.createElement("LABEL");
+        namer.innerHTML = name;
+        namer.style.textAlign = "center";
+        var temp = "file";
+        temp += counter;
+        node.id = temp;
+        node.draggable = "true";
+        node.setAttribute("ondragstart", "drag(event)");
+        var temp = "far fa-file-code outline";
+        //var temp = "icon-";
+        //temp+=typeUpdater();
+        //temp += " outline";
+        icon.className = temp;
+        icon.style.color = test;
+        icon.style.fontSize = "4.5em";
+        node.className = "animated tada";
+        node.onclick = function () {
+            onclick();
+        };
+        node.ondragend = function () {
+            fetchFileContents(sha);
+        };
+        link.appendChild(icon);
+        link.appendChild(namer);
+        node.appendChild(link);
+        if (namer.innerHTML === "") {
+            swal("Uh oh!", "You forgot to name your file", "warning");
+        } else {
+            document.getElementById("fileList").appendChild(node);
+            document.getElementById('myModal').style.display = "none";
+            counter++;
+            test = "white";
+        }
+    }
+
+    let onCreateFile;
+
+    function setOnCreateFile(func) {
+        onCreateFile = func;
+    }
+
+    function addNewFile() {
+        let filename = document.getElementById("filename").value;
+        addFile(filename, function () {
+        }, null);
+        if (onCreateFile)
+            onCreateFile(filename);
+        document.getElementById("filename").value = "";
+    }
+
+    function addFolder(name, href, onclick, isPrivate) {
+        var node = document.createElement("LI");
+        var link = document.createElement("A");
+        var icon = document.createElement("SPAN");
+        var namer = document.createElement("LABEL");
+        namer.style.textAlign = "center";
+        node.draggable = "true";
+        node.setAttribute("ondragstart", "drag(event)");
+        node.setAttribute("ondrop", "moveFolder(event)");
+        node.setAttribute("ondragover", "allowDrop(event)");
+        var temp = "folder";
+        temp += counter;
+        node.id = temp;
+        namer.innerHTML = name;
+        if (isPrivate == null) {
+            icon.className = "far fa-folder-open outline";
+        } else if (isPrivate) {
+            icon.className = "fas fa-lock outline";
+        } else {
+            icon.className = "fas fa-book outline";
+        }
+        icon.style.color = test;
+        icon.style.fontSize = "4.5em";
+        node.className = "animated tada";
+        node.onclick = onclick;
+        link.setAttribute('href', '#' + href);
+        link.appendChild(icon);
+        link.appendChild(namer);
+        node.appendChild(link);
+        if (namer.innerHTML === "") {
+            swal("Uh oh!", "You forgot to name your folder", "warning");
+        } else {
+            document.getElementById("fileList").appendChild(node);
+            document.getElementById('myModal').style.display = "none";
+            counter++;
+            test = "white";
+        }
+    }
+
+    var curPath = "";
+
+    function setCurPath(path) {
+        curPath = path;
+    }
+
+    function addNewFolder() {
+        var name = document.getElementById("foldername").value;
+        addFolder(name, curPath + name, null);
+        document.getElementById("foldername").value = "";
+    }
+
+    function clearFileList() {
+        $('#fileList').find('li').remove();
+    }
+
+    function addBranch(name, href, onclick) {
+        let dropdown = $('#branchesDropdown');
+        let link = $('<a>');
+        link.text(name);
+        link.attr('href', href);
+        link.click(onclick);
+        link.appendTo(dropdown);
+        $('</br>').appendTo(dropdown);
+    }
+
+    function clearBranches() {
+        $('#branchesDropdown').empty();
+    }
+
+    function showFileContents(contents) {
+        document.getElementById("preview").innerText = contents;
+    }
+
+    function updateBreadCrumbs(prePath, path, repo) {
+        let list = $('#cssmenuList');
+        list.find('li').not($('#cssmenuListHome')).remove();
+        list.prepend('<li><a href="' + prePath + '">' + repo + '</a></li>');
+        path.split('/').forEach(comp => {
+            if (comp !== "") {
+                let newPath = path.substring(0, path.indexOf(comp) + comp.length);
+                let href = prePath + (newPath === "" ? "" : "/") + newPath;
+                list.prepend('<li><a href="' + href + '">' + comp + '</a></li>');
+            }
+        });
+    }
+</script>
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    let onFileDelete;
+
+    function setOnFileDelete(func) {
+        onFileDelete = func;
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        let filename = $('#' + data).text();
+        if (document.getElementById(data).nodeName == "LI") {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover " + filename,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        if (onFileDelete)
+                            onFileDelete(filename);
+                        swal("Poof! Your file has been deleted!", {
+                            icon: "success",
+                        });
+                        $('#' + data).remove();
+                    } else {
+                        swal("Your file is safe!");
+                    }
+                });
+        }
+    }
+
+    function infodrop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        document.getElementById("mySidenav").style.width = "100%";
+        var bemp = document.getElementById(data);
+        var temp = bemp.getElementsByTagName("LABEL");
+        var name = temp[0].innerHTML;
+        fetchFileContents(name);
+        document.getElementById("displayname").value = name;
+        document.getElementById("displaytype").value = typeUpdater(name);
+    }
+
+    function dropper(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        if (document.getElementById(data).nodeName == "LI") {
+            document.getElementById('shareModal').style.display="block";
+        }
+    }
+
+    function moveFolder(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        document.getElementById(data).style.display = "none";
+
+    }
+
+    function setCurBranchName(name) {
+        $('#curBranchName').text(name);
+    }
+</script>
+<script>
+    function sortListDir() {
+        changesorticon();
+        var list, i, switching, b, c, shouldSwitch, dir, j, switchcount = 0;
+        list = document.getElementById("fileList");
+        switching = true;
+        //Set the sorting direction to ascending:
+        dir = "asc";
+        //Make a loop that will continue until no switching has been done:
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            b = list.getElementsByTagName("LI");
+            //Loop through all list-items:
+            for (i = 0; i < (b.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*check if the next item should switch place with the current item,
+                based on the sorting direction (asc or desc):*/
+                if (dir == "asc") {
+                    if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+                        /*if next item is alphabetically lower than current item,
+                        mark as a switch and break the loop:*/
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (b[i].innerHTML.toLowerCase() < b[i + 1].innerHTML.toLowerCase()) {
+                        /*if next item is alphabetically higher than current item,
+                        mark as a switch and break the loop:*/
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                b[i].parentNode.insertBefore(b[i + 1], b[i]);
+                switching = true;
+                //Each time a switch is done, increase switchcount by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+</html>

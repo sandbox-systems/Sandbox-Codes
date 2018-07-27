@@ -5,22 +5,27 @@
 		COPYRIGHT SANDBOX LLC
 	*/
 
-	//require "checklogin.php";
+	require "checklogin.php";
 	$text = json_decode(file_get_contents("languages/en-US.json"), true);
 ?>
 
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" ng-app="playground">
 	<head>
 		<title><?php echo $text["title"]; ?></title>
 		<link rel="stylesheet" type="text/css" href="css/playground.css" />
 		<link href="node_modules/fine-uploader/all.fine-uploader/fine-uploader-new.css" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="https://togetherjs.com/togetherjs-min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+        <script src="controller.js"></script>
 	</head>
 	<body style="background-color:rgba(255,255,255,0.2);">
     <div id="myModal" class="modal">
@@ -132,9 +137,8 @@
 			<!-- *************************************************** -->
 			<!-- ******************* FILE MANAGER ****************** -->
 			<!-- *************************************************** -->
-			<div id="filemanager">
-                <div>
-                </div>
+			<div id="filemanager" ng-controller="controller">
+                <ul style="color: black;" ng-bind-html="scan"></ul>
             </div>
 
 			<!-- *************************************************** -->
@@ -187,7 +191,7 @@
 		<div id="terminal">
 			<iframe id="consoleFrame" src="http://localhost:7681/" width=100% height=100%></iframe>
 		</div>
-            </div>
+		
 		<script src="ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script src="ace_editor/src-noconflict/ext-language_tools.js"></script>
 		<script>
@@ -376,7 +380,7 @@
 						text: "<?php echo $text["createFilePrompt"]; ?>"
 					}).then((value) => {
 						ext = value.split(".")[1];
-						//active_file = active_dir + "<?php echo DIRECTORY_SEPARATOR; ?>" + value;
+						active_file = active_dir + "<?php echo DIRECTORY_SEPARATOR; ?>" + value;
 						  $.ajax({	
 							type: "POST",
 							url: "newFile.php",
@@ -507,7 +511,7 @@
 					  },
 						text:"<?php echo $text["createFilePrompt"]; ?>"
 					}).then((value) => {
-						//active_dir += "<?php echo DIRECTORY_SEPARATOR; ?>" + value;
+						active_dir += "<?php echo DIRECTORY_SEPARATOR; ?>" + value;
 						  $.ajax({	
 							type: "POST",
 							url: "newFolder.php",
@@ -680,7 +684,7 @@
 						},
 						dataType: "text",
 						success: function(data){
-							document.getElementById("filemanager").innerHTML = data;
+							//document.getElementById("filemanager").innerHTML = data;
 							$("#filemanager .file").draggable({
 								revert: "invalid"
 							});
@@ -701,7 +705,7 @@
 					var fromPath = drop.draggable.attr("data-wd");
 					var toPath = $(this).attr("data-wd");
 					if($(this).hasClass("file")){
-						//toPath = toPath.substring(0,toPath.lastIndexOf("<?php echo DIRECTORY_SEPARATOR; ?>"));
+						toPath = toPath.substring(0,toPath.lastIndexOf("<?php echo DIRECTORY_SEPARATOR; ?>"));
 					}
 					console.log("From: "+fromPath+"\nTo: "+toPath);
 					$.ajax({	
@@ -784,6 +788,15 @@
 					});
 				}
 				
+				/****************************************************
+				 ********************* COLLAB ***********************
+				 ****************************************************/
+				function collab(){
+					var TogetherJSConfig_dontShowClicks = true;
+					var TogetherJSConfig_cloneClicks = true;
+					TogetherJS(this);
+				}
+
 				/****************************************************
 				 ****************** CURSOR MENUS ********************
 				 ****************************************************/
@@ -914,6 +927,14 @@
 					}
 				});
 				
+				editor.commands.addCommand({
+					name: "collab",
+					bindKey: {win: "Ctrl-k", mac: "Command-k"},
+					exec: function() {
+						collab();
+					}
+				});
+
 			});
             function shareFile(){
                 swal({

@@ -1,4 +1,4 @@
-/**
+/*
  * Route file manager paths to respective templates and requests
  *
  * @author Shivashriganesh Mahato
@@ -12,7 +12,7 @@ castleApp.config(function ($routeProvider, $locationProvider) {
             redirectTo: '/home'
         })
         .when('/home', {
-            templateUrl: 'home.html'
+            templateUrl:'home.html'
         })
         .when('/playground', {
 

@@ -2,7 +2,7 @@
 <html ng-app="castle">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
-    <link rel="icon" href="images/logo-king.png">
+ <link rel="icon" href="images/logo-king.png">
     <link rel="stylesheet" href="css/animate.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
@@ -15,9 +15,14 @@
     <base href="/Castle.html">
 </head>
 <style>
-    body {
+    html{
         background-image: url("images/blur.jpg");
+        background-position: center;
         background-size: cover;
+        background-repeat: no-repeat;
+    }
+    body {
+        height: 100%;
         font-family: "Lato";
         overflow: hidden;
         transition: background-color .5s;
@@ -69,22 +74,22 @@
             <td><a href="#/home"><img src="images/white-logo.png" class=otherpic></a></td>
         </tr>
         <tr>
-            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fa fa-search"></i></a></td>
+            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fa fa-search fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a href="#/playground"><i class="fa fa-terminal"></i></a></td>
+            <td><a href="#/playground"><i class="fa fa-terminal fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a href="#/treasury"><i class="fa fa-archive"></i></a></td>
+            <td><a href="#/treasury"><i class="fa fa-archive fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a href="#/chat"><i class="fa fa-comments-o"></i></a></td>
+            <td><a href="#/chat"><i class="fa fa-comments-o fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a onclick="return false"><i class="fa fa-bars"></i></a></td>
+            <td><a onclick="return false"><i class="fa fa-bars fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a onClick="openNav()" style="cursor: pointer"><img src="images/Stock.jpg" alt="Avatar" class="userpic"></a>
+            <td><a onClick="openNav()" style="cursor: pointer"><img src="images/profiletemp.png" alt="Avatar" class="userpic"></a>
             </td>
         </tr>
     </table>
@@ -140,7 +145,7 @@
 
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
+       document.getElementById("main").style.marginLeft = "0";
         document.body.style.backgroundColor = "white";
     }
 

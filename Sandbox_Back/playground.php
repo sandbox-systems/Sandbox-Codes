@@ -16,16 +16,16 @@
 		<link rel="stylesheet" type="text/css" href="Sandbox_Back/css/playground.css" />
 		<link href="node_modules/fine-uploader/all.fine-uploader/fine-uploader-new.css" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>
+<!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
+<!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>-->
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		<script src="https://togetherjs.com/togetherjs-min.js"></script>
-<!--        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>-->
-<!--        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>-->
-        <script src="controller.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+        <script src="Sandbox_Back/controller.js"></script>
 	</head>
 	<body style="background-color:rgba(255,255,255,0.2);">
     <div id="myModal" class="modal">
@@ -136,8 +136,8 @@
 			<!-- *************************************************** -->
 			<!-- ******************* FILE MANAGER ****************** -->
 			<!-- *************************************************** -->
-			<div id="filemanager" ng-controller="controller">
-                <ul style="color: black;" ng-bind-html="scan"></ul>
+			<div id="filemanager">
+                <ul style="color: black;" ng-bind-html="scan2"></ul>
             </div>
 
 			<!-- *************************************************** -->
@@ -677,7 +677,7 @@
 				function scan(){
 					$.ajax({	
 						type: "POST",
-						url: "scan.php",
+						url: "Sandbox_Back/scan.php",
 						data: {
 							scandir: ""
 						},

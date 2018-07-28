@@ -77,7 +77,7 @@
     transform: rotate(360deg);
   }
 }
-.container {
+.tempcont {
   position: relative;
     height: 200px;
     width: 200px;
@@ -90,19 +90,8 @@
   height: 100%;
 border-radius: 800px 800px 800px 800px;
 }
-.overlay {
-  position: absolute;
-  bottom: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  width: 100%;
-  height:0;
-  transition: .5s ease;
-border-radius: 800px 800px 800px 800px;
-    padding: 30%;
-}
 
-.container:hover .overlay {
+.tempcont:hover .overlay {
   bottom: 0;
   height: 100%;
 }
@@ -111,7 +100,6 @@ border-radius: 800px 800px 800px 800px;
   font-size: 20px;
   position: relative;
   overflow: hidden;
-top: 25%;
 }
 .upload-buttonn {
 position: absolute;
@@ -131,7 +119,7 @@ position: absolute;
   display: inline-block;
   width: 100%;
   height: 100%;
-  font-size: 1.5rem;
+  font-size: 1rem;
   background: transparent;
   color: #FDFCFD;  
 }
@@ -140,14 +128,14 @@ position: absolute;
   display: inline-block;
   width: 80%;
   height: 100%;
-  font-size: 1.5rem;
+  font-size: 1rem;
   background: transparent;
   color: #FDFCFD;  
 }
 .login__row {
   position: relative;
   width: 90%;
-  height: 5rem;
+  height: 3rem;
 background-color: rgba(0,0,0,0.15);
     margin-right: 3%;
     text-align: left;
@@ -157,7 +145,7 @@ background-color: rgba(0,0,0,0.15);
 .categ_row {
   position: relative;
   width: 65%;
-  height: 5rem;
+  height: 3rem;
 background-color: rgba(0,0,0,0.4);
     text-align: center;
     border-radius: 10px;
@@ -167,7 +155,7 @@ background-color: rgba(0,0,0,0.4);
 .update_row {
   position: relative;
   width: 80%;
-  height: 5rem;
+  height: 3rem;
 background-color: rgba(0,0,0,0.15);
     text-align: left;
     margin-right: 3%;
@@ -180,7 +168,7 @@ background-color: rgba(0,0,0,0.15);
 .switch {
   position: relative;
   width: 10%;
-  height: 5rem;
+  height: 3rem;
     float: right;
     padding: 2px;
     right: -12%;
@@ -190,7 +178,9 @@ background-color: rgba(0,0,0,0.15);
 		padding-right: 5%;
     }
 .switch input {display:none;}
-
+#settingsBody{
+  font-size: 62.5%;
+}
 .slider {
   position: absolute;
   cursor: pointer;

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html ng-app="castle">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
  <link rel="icon" href="images/logo-king.png">
     <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.19/angular-ui-router.min.js"></script>
@@ -49,10 +50,10 @@
     }
 </style>
 <body>
-<div id="mySidenav" class="sidenav">
+<div id="mySidenav" style="    background-color: #8B4D93;" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a>
-        <div class="container">
+        <div class="container" style="padding-left: 0px;">
             <img src="images/sree.jpg" alt="PIC" class="image">
             <div class="overlay1">
                 <div class="text">{{user.name}}</div>
@@ -60,7 +61,7 @@
         </div>
     </a>
     <a href="index.html">Main Site</a>
-    <a href="Settings.html" target="mainframe">Settings</a>
+    <a ui-sref="settings">Settings</a>
     <a href="Pricing.html">Upgrade/Pricing</a>
     <a href="Login.html">Logout</a>
     <img src="images/white-logo.png" class="milk">
@@ -69,27 +70,27 @@
     <div id="routedTemplate" ui-view></div>
 </div>
 <div class="icon-bar" id="taskbar">
-    <table style="height: 100%">
+    <table style="height: 100%;">
         <tr>
             <td><a ui-sref="home"><img src="images/white-logo.png" class=otherpic></a></td>
         </tr>
         <tr>
-            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fa fa-search fa-2x"></i></a></td>
+            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fas fa-search fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="playground"><i class="fa fa-terminal fa-2x"></i></a></td>
+            <td><a ui-sref="playground"><i class="fas fa-terminal fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="treasury"><i class="fa fa-archive fa-2x"></i></a></td>
+            <td><a ui-sref="treasury"><i class="fas fa-archive fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="chat"><i class="fa fa-comments-o fa-2x"></i></a></td>
+            <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a onclick="return false"><i class="fa fa-bars fa-2x"></i></a></td>
+            <td><a onclick="return false"><i class="fas fa-bars fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a onClick="openNav()" style="cursor: pointer"><img src="images/profiletemp.png.png" alt="Avatar" class="userpic"></a>
+            <td><a onClick="openNav()" style="cursor: pointer"><img src="images/profiletemp.png" alt="Avatar" class="userpic"></a>
             </td>
         </tr>
     </table>
@@ -124,10 +125,10 @@
                         </svg>
                     </button>
                     <div class="searchoptions animated bounceIn" onclick="searchSO()" id="so" style="cursor: pointer;">
-                        <i class="fa fa-stack-overflow" style="margin-right: 3%;"></i> Search on Stack Overflow...
+                        <i class="fab fa-stack-overflow" style="margin-right: 3%;"></i> Search on Stack Overflow...
                     </div>
                     <div onclick="searchGoogle()" class="searchoptions animated bounceIn" id="go"
-                         style="cursor: pointer;"><i class="fa fa-google" style="margin-right: 3%;"></i> Search on
+                         style="cursor: pointer;"><i class="fab fa-google" style="margin-right: 3%;"></i> Search on
                         Google...
                     </div>
                 </div>
@@ -149,17 +150,17 @@
         document.body.style.backgroundColor = "white";
     }
 
-    function openNav1() {
-        document.getElementById("mySidenav1").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
-        document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
-    }
-
-    function closeNav1() {
-        document.getElementById("mySidenav1").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
-        document.body.style.backgroundColor = "white";
-    }
+    // function openNav1() {
+    //     document.getElementById("mySidenav1").style.width = "250px";
+    //    // document.getElementById("main").style.marginLeft = "250px";
+    //     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    // }
+    //
+    // function closeNav1() {
+    //     document.getElementById("mySidenav1").style.width = "0";
+    //     //document.getElementById("main").style.marginLeft = "0";
+    //     document.body.style.backgroundColor = "white";
+    // }
 
     function openSearch() {
         document.getElementById("routedTemplate").style.filter = "blur(13px)";

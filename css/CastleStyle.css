@@ -125,6 +125,8 @@
 
 .icon-bar a:hover {
     background-color: #000; /* Add a hover color */
+    color:white;
+    text-decoration: none;
 }
 
 .wrapper {
@@ -136,7 +138,7 @@
 	//overflow-y: hidden;
 	//margin-top: -0.75%;
     float:right;
-    top:-8px;
+    //top:-8px;
 }
 .wrapper iframe {
     position: relative;
@@ -166,7 +168,6 @@
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #8B4D93;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -183,6 +184,7 @@
 
 .sidenav a:hover, .offcanvas a:focus{
     color: #f1f1f1;
+    text-decoration: none;
 }
 
 .sidenav .closebtn {
@@ -243,20 +245,20 @@ border-radius: 10px 10px 10px 10px;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
 }
-input[type=text] {
-    position: absolute;
-    width: 90%;
-    right: 5%;
-    font-size: 16px;
-    box-sizing: border-box;
-    border: 0px solid gray;
-    color: white;
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 40px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
+/*input[type=text] {*/
+    /*//position: absolute;*/
+    /*width: 90%;*/
+    /*right: 5%;*/
+    /*font-size: 16px;*/
+    /*box-sizing: border-box;*/
+    /*border: 0px solid gray;*/
+    /*color: white;*/
+    /*background-position: 10px 10px;*/
+    /*background-repeat: no-repeat;*/
+    /*padding: 12px 20px 12px 40px;*/
+    /*-webkit-transition: width 0.4s ease-in-out;*/
+    /*transition: width 0.4s ease-in-out;*/
+/*}*/
  .yolo{
      border-radius: 10px;
     }
@@ -284,6 +286,7 @@ input[type=text] {
 }
 
 .sbx-custom__input {
+    float:none;
   display: inline-block;
   -webkit-transition: box-shadow .4s ease, background .4s ease;
   transition: box-shadow .4s ease, background .4s ease;

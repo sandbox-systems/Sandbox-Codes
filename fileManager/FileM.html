@@ -16,8 +16,8 @@
 <!--<div id="preloader">-->
       <!--<div id="loader"></div>-->
     <!--</div>-->
-<div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+<div id="infoNav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeInfoNav()">&times;</a>
     <div style="width: 15%; float: left;">
         <form>
             <fieldset>
@@ -265,8 +265,8 @@
         }
     }
 
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
+    function closeInfoNav() {
+        document.getElementById("infoNav").style.width = "0";
         // document.getElementById("fileList").style.marginLeft= "0";
         //document.getElementById("navbar").style.marginLeft = "0px";
         document.getElementById("displayname").setAttribute("placeholder", "");
@@ -543,7 +543,7 @@
     function infodrop(ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
-        document.getElementById("mySidenav").style.width = "100%";
+        document.getElementById("infoNav").style.width = "100%";
         var bemp = document.getElementById(data);
         var temp = bemp.getElementsByTagName("LABEL");
         var name = temp[0].innerHTML;

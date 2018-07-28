@@ -21,6 +21,10 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router']).config(f
         url: '/chat',
         templateUrl: 'chat.html',
         controller: 'BlankCtrl'
+    }).state('settings',{
+        url:'/settings',
+        templateUrl: 'settings.html',
+        controller: 'BlankCtrl'
     });
 
     $urlRouterProvider.otherwise('/');

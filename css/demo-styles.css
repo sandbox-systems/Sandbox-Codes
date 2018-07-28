@@ -377,7 +377,7 @@ body {
   height: 100%;
   line-height: 1.5;
   font-family: 'Lato', sans-serif;
-  font-weight: 300;
+  //font-weight: 300;
   font-size: 16px;
   //background-size: 100% 100%
 }
@@ -924,14 +924,14 @@ border-radius: 100px;
   width: 300px
 }
 
-input {
-  display: block;
-  line-height: 40px;
-  padding: 0 10px;
-  width: 260px;
-  height: 40px;
-  float: left
-}
+/*input {*/
+  /*display: block;*/
+  /*line-height: 40px;*/
+  /*padding: 0 10px;*/
+  /*width: 260px;*/
+  /*height: 40px;*/
+  /*float: left*/
+/*}*/
 
 #unlock-button {
   background: black;

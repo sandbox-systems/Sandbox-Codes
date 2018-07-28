@@ -5,7 +5,7 @@
 		COPYRIGHT SANDBOX LLC
 	*/
 
-	require "checklogin.php";
+	//require "checklogin.php";
 	$text = json_decode(file_get_contents("languages/en-US.json"), true);
 ?>
 
@@ -23,8 +23,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		<script src="https://togetherjs.com/togetherjs-min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+<!--        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>-->
+<!--        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>-->
         <script src="controller.js"></script>
 	</head>
 	<body style="background-color:rgba(255,255,255,0.2);">

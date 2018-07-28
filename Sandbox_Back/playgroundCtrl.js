@@ -35,9 +35,9 @@ let playgroundCtrl = function ($scope, $http) {
             if (typeof jsonObj == "object") {
                 Object.entries(jsonObj).forEach(([key, value]) => {
                     if (value.type == "blob") {
-                        html += "<li class='file' data-name='" + value.name + "' data-sha='" + value.sha + "'>" + key + "</li>";
+                        html += "<li class='file' data-name='" + value.name + "' data-sha='" + value.sha + "'><i class='far fa-file'></i> " + key + "</li>";
                     } else if (value.type == "tree") {
-                        html += "<li class='dropdownli folder' data-name='" + value.name + "' data-sha='" + value.sha + "'>" + key + "<ul>";
+                        html += "<li class='dropdownli folder' data-name='" + value.name + "' data-sha='" + value.sha + "'><i class='far fa-folder'></i> " + key + "<ul>";
                         traverse(value);
                         html += "</ul></li>";
                     }

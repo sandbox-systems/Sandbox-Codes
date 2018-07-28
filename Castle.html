@@ -42,7 +42,6 @@
         color: black;
         padding: 10px;
         transition: box-shadow .4s ease;
-        cursor: pointer;
     }
 
     .searchoptions:hover {
@@ -110,7 +109,7 @@
         </svg>
         <div class="animated bounceInRight">
             <form novalidate="novalidate" id="covers" onsubmit="return false;" class="searchbox sbx-custom">
-                <div id="outputs" role="search" class="sbx-custom__wrapper">
+                <div role="search" class="sbx-custom__wrapper">
                     <input type="search" name="search" placeholder="Search Sandbox" id="sbxx" autocomplete="off"
                            required="required" class="sbx-custom__input">
                     <button type="submit" title="Submit your search query." class="sbx-custom__submit">
@@ -124,11 +123,11 @@
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-clear-5"></use>
                         </svg>
                     </button>
-                    <div class="searchoptions animated bounceIn" onclick="searchSO()" id="so">
+                    <div class="searchoptions animated bounceIn" onclick="searchSO()" id="so" style="cursor: pointer;">
                         <i class="fa fa-stack-overflow" style="margin-right: 3%;"></i> Search on Stack Overflow...
                     </div>
                     <div onclick="searchGoogle()" class="searchoptions animated bounceIn" id="go"
-                         ><i class="fa fa-google" style="margin-right: 3%;"></i> Search on
+                         style="cursor: pointer;"><i class="fa fa-google" style="margin-right: 3%;"></i> Search on
                         Google...
                     </div>
                 </div>
@@ -191,26 +190,7 @@
         var x = document.getElementById("sbxx").value;
         window.location.replace("www.stackoverflow.com/search?q=" + x);
     }
-    function addOutput(output,type){
-        var div = document.createElement('div');
-        div.className="searchoptions animated bounceIn";
-        var icon = document.createElement('i');
-        icon.style.marginRight='3%';
-        if(type == 'user'){
-            icon.className =  'fas fa-user-circle';
-        }else if(type == 'chatroom'){
-            icon.className =  'fas fa-comments';
-        }else if(type == 'repo'){
-            icon.className =  'fas fa-book';
-        }else if (type == 'folder'){
-            icon.className =  'fas fa-folder-open';
-        }else if(type == 'file'){
-            icon.className =  'fas fa-file';
-        }
-        icon.appendTo(div);
-        div.innerText = output;
-        div.appendTo(document.getElementById('outputs'));
-    }
+
     document.getElementById("sbxx").oninput = function () {
         document.getElementById("so").className = "searchoptions animated bounceIn";
         document.getElementById("go").className = "searchoptions animated bounceIn";

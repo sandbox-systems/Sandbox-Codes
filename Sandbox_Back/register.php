@@ -9,11 +9,16 @@
 
     try {
         $mng = new MongoDB\Driver\Manager("mongodb://sandbox:NhJLmHZb$@localhost:27017/admin");
-        $query = new MongoDB\Driver\Query(["username" => (string)$_POST['username']]);
+        $query = new MongoDB\Driver\Query(['$or' => array(["username" => (string)$_POST["username"]], ["email" => (string)$_POST["email"]])],["limit" => 1]);
         $rows = $mng->executeQuery("sandbox.users", $query);
 
-        if(sizeof($rows->toArray())!=0){
-            throw new Exception("Username already exists.");
+        $row = new IteratorIterator($rows);
+        $row->rewind();
+        if($row->valid()){
+            if($row->current()->username==(string)$_POST["username"])
+                throw new Exception("Username already exists.");
+            else if($row->current()->email==(string)$_POST["email"])
+                throw new Exception("Email already exists.");
         }
         if($_POST['username']==NULL){
             throw new Exception("Username cannot be null.");
@@ -22,18 +27,15 @@
         $ecode = sha1(openssl_random_pseudo_bytes(30));
         $salt = sha1(openssl_random_pseudo_bytes(256));
         $hash = sha1((string)$_POST['password'].$salt);
-        $iv = openssl_random_pseudo_bytes(16);
-        $email_enc = openssl_encrypt($_POST['email'], "AES-256-CBC", $salt, $options=OPENSSL_RAW_DATA, $iv);
 
         $write = new MongoDB\Driver\BulkWrite;
         $newUser = array(
             'username' => (string)$_POST['username'],
             'fname' => (string)$_POST['firstname'],
             'lname' => (string)$_POST['lastname'],
-            'email' => new MongoDB\BSON\Binary($email_enc, MongoDB\BSON\Binary::TYPE_GENERIC),
+            'email' => (string)$_POST["email"],
             'hash' => new MongoDB\BSON\Binary($hash, MongoDB\BSON\Binary::TYPE_GENERIC),
             'salt' => new MongoDB\BSON\Binary($salt, MongoDB\BSON\Binary::TYPE_GENERIC),
-            'iv' => new MongoDB\BSON\Binary($iv, MongoDB\BSON\Binary::TYPE_GENERIC),
             'ecode' => new MongoDB\BSON\Binary($ecode, MongoDB\BSON\Binary::TYPE_GENERIC),
             'everify' => false,
             'github' => (string)"github.com",

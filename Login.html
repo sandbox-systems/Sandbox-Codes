@@ -3,6 +3,7 @@
 <html>
     <link rel="stylesheet" href="css/animate.css">
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
  html{
     background-image: url(images/Wallpaper.jpg);     background-size: cover;
@@ -38,7 +39,7 @@
           </svg>
           <input type="password" class="login__input pass" id="pass" placeholder="Password"/>
         </div>
-        <button type="button" id="letsgo" onclick="javascript:checker()" class="login__submit">Sign in</button>
+        <button type="button" id="letsgo" class="login__submit">Sign in</button>
 		 <p class="login__signup">      Don't have an account? &nbsp;<a id=hello href="SignUp.html">Sign up here</a></p>
         </div>
     </div>
@@ -46,14 +47,69 @@
 </div>
 </body>
 <script>
-	function checker(){
-        var username = document.getElementById("user").value;
-        if(username == "" || document.getElementById("pass").value == ""){
-			swal("Incorrect Login", "Please Try Again", "error");
-			
-		}else{
-			location.replace("Castle.html");
-		}
-	}
+	$("#letsgo").click(function(){
+        $.ajax({
+            type: "POST",
+            url: "Sandbox_Back/login.php",
+            data: {
+                username: $("#user").val(),
+                password: $("#pass").val()
+            },
+            dataType: "text",
+            success: function(data){
+                if(data=="Invalid Login."){
+                    $("#pass").animateCss("hinge");
+                }else if(data=="User authenticated."){
+                    window.location.replace("Castle.html");
+                }
+            },
+            error: function(data){
+                swal({
+                    icon: "error",
+                    title: "Uh...",
+                    text: "There was an error processing your request. That's all I know."
+                })
+            }
+        });
+
+    $("#user, #pass").keypress(function(e) {
+        if(e.which == 13) {
+            $("#letsgo").click();
+        }
+    });
+
+    $.fn.extend({
+        animateCss: function(animationName, callback) {
+            var animationEnd = (function(el) {
+                var animations = {
+                    animation: 'animationend',
+                    OAnimation: 'oAnimationEnd',
+                    MozAnimation: 'mozAnimationEnd',
+                    WebkitAnimation: 'webkitAnimationEnd',
+                };
+
+                for (var t in animations) {
+                    if (el.style[t] !== undefined) {
+                        return animations[t];
+                    }
+                }
+            })(document.createElement('div'));
+
+            this.addClass('animated ' + animationName).one(animationEnd, function() {
+                $(this).removeClass('animated ' + animationName);
+
+                if (typeof callback === 'function') callback();
+            });
+
+            return this;
+        },
+    });
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 </script>
 </html>

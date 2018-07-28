@@ -31,6 +31,7 @@
         $_SESSION["profilepic"] = property_exists($row->current(), "profilepic")?$row->current()->profilepic:"default_profile_pic";
 
         echo "User authenticated.";
+        //header("Location: https://sandboxcodes.com/Castle.html");
 
     }catch(Exception $e){
 	    die($e->getMessage());

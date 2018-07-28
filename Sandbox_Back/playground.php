@@ -137,7 +137,7 @@
 			<!-- ******************* FILE MANAGER ****************** -->
 			<!-- *************************************************** -->
 			<div id="filemanager">
-                <ul style="color: black;" ng-bind-html="scan2"></ul>
+                <ul style="color: black;" ng-bind-html="scan"></ul>
             </div>
 
 			<!-- *************************************************** -->

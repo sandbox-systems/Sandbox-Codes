@@ -14,7 +14,7 @@ let playgroundCtrl = function ($scope, $http) {
         console.log(response.data);
         var resp = response.data;
         if (resp === "UNSYNCED") {
-            swal("GitHub session expired. Please login again to continue.");
+            // swal("GitHub session expired. Please login again to continue.");
             return;
         }
         var dir = {};

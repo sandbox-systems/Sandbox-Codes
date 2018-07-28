@@ -15,10 +15,10 @@ castleApp.config(function ($routeProvider, $locationProvider) {
             templateUrl:'home.html'
         })
         .when('/playground', {
-
+            templateUrl:'Sandbox_Back/playground.php'
         })
         .when('/treasury', {
-            templateUrl: 'FileM.html',
+            templateUrl: 'fileManager/FileM.html',
         })
         .when('/chat', {
             templateUrl: 'chat.html',

@@ -192,8 +192,8 @@
 			<iframe id="consoleFrame" src="http://localhost:7681/" width=100% height=100%></iframe>
 		</div>
 		
-		<script src="ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-		<script src="ace_editor/src-noconflict/ext-language_tools.js"></script>
+		<script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+		<script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
 		<script>
             function switcher(){
                 if(document.getElementById("letscheck").checked === true){

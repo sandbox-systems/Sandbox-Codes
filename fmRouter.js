@@ -4,48 +4,34 @@
  * @author Shivashriganesh Mahato
  */
 
-let fmApp = angular.module('fileManager', ['ngRoute']);
-
-fmApp.config(function ($routeProvider, $locationProvider) {
-    $routeProvider
-        .when('/FileM.html', {
-            redirectTo: '/'
-        })
-        .when('/', {
-            templateUrl: 'templates/projects.html',
-            controller: 'mainController'
-        })
-        .when('/sync', {
-            templateUrl: 'github/sync.php',
-            controller: 'syncController'
-        })
-        .when('/owners/:owner/repos/:repo/branches/:branch', {
-            templateUrl: 'templates/project.html',
-            controller: 'repoController'
-        })
-        .when('/owners/:owner/repos/:repo/branches/:branch/:path*', {
-            templateUrl: 'templates/project.html',
-            controller: 'repoController'
-        })
-        .otherwise({
-            templateUrl: 'templates/404.html'
-        });
-
-    $locationProvider.html5Mode(true);
+let treasury = angular.module('castle.treasury', ['ui.router']).config(function ($stateProvider) {
+    $stateProvider.state('treasury.sync', {
+        url: '/sync',
+        templateUrl: 'fileManager/github/sync.php',
+        controller: 'syncController'
+    }).state('treasury.projects', {
+        url: '/projects',
+        templateUrl: 'fileManager/templates/projects.html',
+        controller: 'projectsController'
+    }).state('treasury.project', {
+        url: '/projects/:owner/:repo/:branch/{path:.*}',
+        templateUrl: 'fileManager/templates/project.html',
+        controller: 'projectController'
+    });
 });
 
-fmApp.controller('mainController', function ($scope, $route, $routeParams, $http, $location) {
+treasury.controller('projectsController', function ($scope, $http, $state) {
     clearFileList();
     setCurBranchName("Select Branch");
 
     $http({
-        url: "requests/getProjects.php",
+        url: "fileManager/requests/getProjects.php",
         data: $.param({}),
         method: "post",
         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
         if (response.data === "UNSYNCED") {
-            $location.path('/sync');
+            $state.go('treasury.sync');
         }
         $scope.repos = response.data;
     });
@@ -54,31 +40,35 @@ fmApp.controller('mainController', function ($scope, $route, $routeParams, $http
     $scope.addRepo = function (id, owner, name, isPrivate) {
         if (!$scope.addedIDs.includes(id)) {
             $scope.addedIDs.push(id);
-            let href = "owners/" + owner + "/repos/" + name + "/branches/master";
-            addFolder(name, href, function () {
+            let sref = "treasury.project({owner: " + owner + ", repo: " + name + ", branch: master})";
+            addFolder(name, sref, function () {
                 window.scrollTo(0, 0);
             }, isPrivate);
         }
     };
+
+    $scope.drag = drag;
+    $scope.moveFolder = moveFolder;
+    $scope.allowDrop = allowDrop;
 });
 
-fmApp.controller('syncController', function ($scope) {
+treasury.controller('syncController', function ($scope) {
     clearFileList();
 });
 
-fmApp.controller('repoController', function ($scope, $routeParams, $http) {
+treasury.controller('projectController', function ($scope, $stateParams, $http) {
     clearFileList();
     clearBranches();
 
     $scope.params = {
-        owner: $routeParams.owner || "",
-        repo: $routeParams.repo || "",
-        path: $routeParams.path || "",
-        branch: $routeParams.branch || "master"
+        owner: $stateParams.owner || "",
+        repo: $stateParams.repo || "",
+        path: $stateParams.path || "",
+        branch: $stateParams.branch || "master"
     };
 
     setCurBranchName($scope.params.branch);
-    updateBreadCrumbs("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
+    updateBreadCrumbs("Castle.html#/treasury/projects/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
         $scope.params.branch, $scope.params.path, $scope.params.repo);
 
     setCurPath("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
@@ -86,7 +76,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
 
     setOnCommitPress(function (msg) {
         $http({
-            url: "requests/saveChanges.php",
+            url: "fileManager/requests/saveChanges.php",
             data: $.param({...$scope.params, ...{message: msg}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
@@ -96,7 +86,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
 
     setOnCreateFile(function (name) {
         $http({
-            url: "requests/createFile.php",
+            url: "fileManager/requests/createFile.php",
             data: $.param({...$scope.params, ...{name: name}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
@@ -106,7 +96,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
 
     setOnFileDelete(function (name) {
         $http({
-            url: "requests/deleteFile.php",
+            url: "fileManager/requests/deleteFile.php",
             data: $.param({...$scope.params, ...{name: name}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
@@ -116,7 +106,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
 
     setFetchFileContents(function (sha) {
         $http({
-            url: "requests/getFileContents.php",
+            url: "fileManager/requests/getFileContents.php",
             data: $.param({...$scope.params, ...{sha: sha}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
@@ -126,7 +116,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
     });
 
     $http({
-        url: "requests/getProjectContents.php",
+        url: "fileManager/requests/getProjectContents.php",
         data: $.param($scope.params),
         method: "post",
         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
@@ -135,7 +125,7 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
     });
 
     $http({
-        url: "github/branches.php",
+        url: "fileManager/github/branches.php",
         data: $.param({
             owner: $scope.params.owner,
             repo: $scope.params.repo
@@ -165,10 +155,10 @@ fmApp.controller('repoController', function ($scope, $routeParams, $http) {
             }, sha)
         }
     };
-    $scope.addBranch = function (name) {
+    $scope.addBranch = function (name, href) {
         if (!$scope.branchesAdded.includes(name)) {
             $scope.branchesAdded.push(name);
-            let href = "owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" + name + "/" +
+            let href = $scope.params.owner + "/" + $scope.params.repo + "/" + name + "/" +
                 $scope.params.path;
             addBranch(name, href, function () {
                 window.scrollTo(0, 0);

@@ -157,7 +157,8 @@
                             <ul id="createRoomFormFriendsList">
                                 <li id="createRoomFormFriendsListItem" ng-repeat="friend in friends track by $index">
                                     <span ng-if="!createRoomFormMemberNames.includes(friend.name)">
-                                        <span ng-click="addCreateRoomFormMember(friend)" id="createRoomFormFriendsListItemContent" >
+                                        <span ng-click="addCreateRoomFormMember(friend)"
+                                              id="createRoomFormFriendsListItemContent">
                                             <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{friend.name}}">
                                             &nbsp;{{friend.name}}
                                         </span>
@@ -226,7 +227,7 @@
                 </div>
                 <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
                     <button class="btn roomBtn"
-                            ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === $index ? -1 : $index)"
+                            ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === rooms.indexOf(room) ? -1 : rooms.indexOf(room))"
                             ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
                         <span class="row">
                             <span class="col-3">

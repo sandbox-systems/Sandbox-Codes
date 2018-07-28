@@ -13,7 +13,7 @@
 <html lang="en" ng-app="playground">
 	<head>
 		<title><?php echo $text["title"]; ?></title>
-		<link rel="stylesheet" type="text/css" href="css/playground.css" />
+		<link rel="stylesheet" type="text/css" href="Sandbox_Back/css/playground.css" />
 		<link href="node_modules/fine-uploader/all.fine-uploader/fine-uploader-new.css" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

@@ -31,7 +31,6 @@
     <div id="myModal" class="modal">
 
         <!-- Modal content -->
-        <span class="close">&times;</span>
         <div class="modal-content" style="border-radius: 64px">
             <div class="modal-header" id="fileheader">Create New File!</div>
             <div class="modal-header" id="folderheader" style="display: none;">Create New Folder!</div>

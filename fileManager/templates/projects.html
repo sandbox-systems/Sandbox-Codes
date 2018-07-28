@@ -1,3 +1,10 @@
 <span ng-repeat="(id, repo) in repos track by $index">
-    {{ addRepo(id, repo.owner, repo.name, repo.isPrivate) }}
+    <li draggable="true" ng-attr-id="'folder' + {{$index}}" class="animated tada draggable">
+        <a ui-sref="treasury.project({owner: '{{repo.owner}}', repo: '{{repo.name}}', branch: 'master', path: ''})">
+            <span ng-class="repo.isPrivate ? 'fas fa-lock outline' : 'fas fa-book outline'"
+                  style="color: white; font-size: 4.5em">
+            </span>
+            {{repo.name}}
+        </a>
+    </li>
 </span>

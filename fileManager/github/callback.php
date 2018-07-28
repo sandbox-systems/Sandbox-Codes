@@ -10,14 +10,14 @@ include 'util.php';
 // TODO Replace session with DB
 
 if (isset($_SESSION['token'])) {
-    header("Location: ../FileM.html");
+    header("Location: ../../Castle.html#/treasury/projects");
 } else {
     $code = $_GET['code'];
     $token = fetchToken($code, $client_id, $client_secret);
 
     if ($token) {
         $_SESSION['token'] = $token;
-        header("Location: ../FileM.html");
+        header("Location: ../../Castle.html#/treasury/projects");
     } else {
         header("Location: sync.php?unsuccessful");
     }

@@ -4,28 +4,31 @@
  * @author Shivashriganesh Mahato
  */
 
-let castleApp = angular.module('castle', ['ngRoute']);
+let castle = angular.module('castle', ['castle.treasury', 'ui.router']).config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    $stateProvider.state('home', {
+        url: '/',
+        templateUrl: 'home.html',
+        controller: 'BlankCtrl'
+    }).state('playground', {
+        url: '/playground',
+        templateUrl: 'Sandbox_Back/playground.php',
+        controller: 'BlankCtrl'
+    }).state('treasury', {
+        url: '/treasury',
+        templateUrl: 'fileManager/FileM.html',
+        controller: 'fmCtrl'
+    }).state('chat', {
+        url: '/chat',
+        templateUrl: 'chat.html',
+        controller: 'BlankCtrl'
+    });
 
-castleApp.config(function ($routeProvider, $locationProvider) {
-    $routeProvider
-        .when('/Castle.html', {
-            redirectTo: '/home'
-        })
-        .when('/home', {
-            templateUrl:'home.html'
-        })
-        .when('/playground', {
+    $urlRouterProvider.otherwise('/');
+});
 
-        })
-        .when('/treasury', {
-            templateUrl: 'FileM.html',
-        })
-        .when('/chat', {
-            templateUrl: 'chat.html',
-        })
-        .otherwise({
-            // 404
-        });
+castle.controller('BlankCtrl', function () {
+});
 
-    $locationProvider.html5Mode(true);
+castle.controller('fmCtrl', function ($state) {
+    $state.go('treasury.projects');
 });

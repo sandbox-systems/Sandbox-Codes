@@ -1,28 +1,21 @@
 <!DOCTYPE html>
-<html ng-app="fileManager">
+<html>
 <head>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="../css/FileMM.css">
     <link rel="stylesheet" href="../css/animate.css">
-    <link rel="stylesheet" href="fileMan.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
-    <script src="router.js"></script>
+    <link rel="stylesheet" href="fileManager/fileMan.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    <base href="/fileManager/FileM.html">
+    <!--<script>hljs.initHighlightingOnLoad();</script>-->
 </head>
 <body>
-<div id="preloader">
-      <div id="loader"></div>
-    </div>
+<!--<div id="preloader">-->
+      <!--<div id="loader"></div>-->
+    <!--</div>-->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <div style="width: 15%; float: left;">
@@ -84,7 +77,7 @@
 </div>
 
 <ul id="fileList">
-    <div id="routedTemplate" ng-view></div>
+    <div ui-view></div>
     <!--<li draggable="true" ondragstart="drag(event)" id="entry"><span id="adder" class="far fa-folder-open outline animated tada" style="color: white; font-size: 4.5em;"></span><label>New Entry!</label></li>-->
 </ul>
 <!-- The Modal -->
@@ -444,7 +437,7 @@
         icon.style.fontSize = "4.5em";
         node.className = "animated tada";
         node.onclick = onclick;
-        link.setAttribute('href', '#' + href);
+        // link.setAttribute('ui-sref', 'chat');
         link.appendChild(icon);
         link.appendChild(namer);
         node.appendChild(link);
@@ -478,7 +471,7 @@
         let dropdown = $('#branchesDropdown');
         let link = $('<a>');
         link.text(name);
-        link.attr('href', href);
+        link.attr('href', 'Castle.html#/treasury/projects/' + href);
         link.click(onclick);
         link.appendTo(dropdown);
         $('</br>').appendTo(dropdown);

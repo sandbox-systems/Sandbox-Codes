@@ -3,7 +3,12 @@
 </span>
 
 <span ng-repeat="(id, dir) in contents.dirs track by $index">
-    {{ addFolder(id, dir) }}
+    <li draggable="true" ng-attr-id="'folder' + {{$index}}" class="animated tada draggable">
+        <a ui-sref="treasury.project({owner: '{{params.owner}}', repo: '{{params.repo}}', branch: '{{params.branch}}', path: '{{params.path + (params.path === '' ? '' : '/') + dir}}'})">
+            <span class="far fa-folder-open outline" style="color: white; font-size: 4.5em"></span>
+            {{dir}}
+        </a>
+    </li>
 </span>
 
 <span ng-repeat="(id, file) in contents.files track by $index">

@@ -95,6 +95,10 @@ border-radius: 800px 800px 800px 800px;
   bottom: 0;
   height: 100%;
 }
+input{
+  border: none;
+  outline: none;
+}
 .text {
   color: white;
   font-size: 20px;

@@ -280,13 +280,20 @@ option{
     color:rebeccapurple;
 }
 .toolbarButton {
-	width: 24%;
-	height: 100%;
-	cursor: pointer;
-	background-color: rgba(0,0,0,0);
-	//border: 0;
-    float:left;
-	color: white;
+    width: 24%;
+    height: 100%;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0);
+/ / border: 0;
+    float: left;
+    color: white;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #fff;
 }
 #addbutton{
 	width:75%;

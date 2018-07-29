@@ -35,7 +35,7 @@
                         <ul style="overflow: scroll;max-height: 100px;">
                         </ul>
                     </fieldset>
-                    <input type="text" id="commitMessageInput" placeholder="Commit Message" title="Commit Message" style="margin-top: 2%">
+                    <input type="text" id="commitMessageInput" class="inputname" placeholder="Commit Message" title="Commit Message" style="margin-top: 2%">
                     <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn" onclick="document.getElementById('commitModal').style.display='none'">
                         Cancel
                     </div>
@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div id="myModal" class="modal">
+    <div id="entryModal" class="modal">
 
         <!-- Modal content -->
         <div class="modal-content" style="border-radius: 64px">
@@ -79,8 +79,8 @@
                         </select>
                     </fieldset>
                     <fieldset style="    margin-top: 2%;">
-                        <div style="float:right; background-color:green; margin-right: 5%" class="goBtn" onclick="addFile()">Create</div>
-                        <div style="float:left; background-color:#FF3366; margin-left: 5%;" class="goBtn" onclick="closeModal()">Cancel</div>
+                        <div style="float:right; background-color:green; margin-right: 5%" class="goBtn" onclick="">Create</div>
+                        <div style="float:left; background-color:#FF3366; margin-left: 5%;" class="goBtn" onclick="document.getElementById('entryModal').style.display='none'">Cancel</div>
                     </fieldset>
                 </form>
                 <form id="folderform" style="display: none;" class="animated fadeIn">
@@ -90,7 +90,7 @@
                     </fieldset>
                     <fieldset style="    margin-top: 2%;">
                         <div style="float:right; background-color:green;margin-right: 5% " class="goBtn" onclick="">Create</div>
-                        <div style="float:left; background-color:#FF3366; margin-left:5%" class="goBtn" onclick="closeModal()">Cancel</div>
+                        <div style="float:left; background-color:#FF3366; margin-left:5%" class="goBtn" onclick="document.getElementById('entryModal').style.display='none'">Cancel</div>
                     </fieldset>
                 </form>
             </div>
@@ -138,7 +138,7 @@
                             </ul>
                         </button>
                         <button type="button" id="btn-add-tab" onclick="document.getElementById('commitModal').style.display='block';" class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
-                        <button value="" onclick="openModal()" class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
+                        <button value="" onclick="document.getElementById('entryModal').style.display='block'" class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
                         <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i></button>
 <!--                        <button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
                     </div>
@@ -236,14 +236,7 @@
                     document.getElementById("folderheader").style.display="none";
                 }
             }
-            function closeModal(){
-                var modal = document.getElementById('myModal');
-                modal.style.display="none";
-            }
-            function openModal(){
-                var modal = document.getElementById('myModal');
-                modal.style.display="block";
-            }
+
             function typeUpdater(){
                 var name = document.getElementById("filename").value;
                 var array =[".java",".py",".js",".html",".css",".cpp",".cs",".m",".rb"];

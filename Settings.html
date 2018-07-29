@@ -78,6 +78,18 @@
     visibility: visible;
     opacity: 1;
 }
+    #sync {
+        margin-left: 70%;
+        width: 100%;
+        outline: none;
+        border: 0;
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+    }
+    #sync:hover{
+        background-image: url('images/profileback.jpg');
+    }
 </style>
 <body>
     <!--<div id="preloader">
@@ -93,6 +105,11 @@
 </div>
 
 <table style="width: 100%">
+    <tr class="animated fadeIn">
+        <td>
+            <button id="sync" class="categ_row">Sync Github Account</button>
+        </td>
+    </tr>
 <tr class="animated fadeIn">
     <td><div class ="categ_row"><div class="text">Name</div></div></td>
 <td><form class="login__row">
@@ -101,7 +118,7 @@
 <tr class="animated fadeIn">
     <td><div class ="categ_row"><div class="text">User Name</div></div></td>
 <td><form class="login__row">
-        <input class="login__input" type="text" placeholder="@therealjohndoe">
+        <input class="login__input" type="text" placeholder="therealjohndoe">
     </form></td>
     </tr>
 	<tr class="animated fadeIn"><td><div class ="categ_row"><div class="text">Password</div></div></td>

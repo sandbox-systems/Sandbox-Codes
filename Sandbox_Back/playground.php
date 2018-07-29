@@ -88,8 +88,6 @@
             <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
                 <div class="container-fluid">
                     <div class="navbar-header" style="width: 20%">
-                        <button value="" onclick="openModal()" class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
-                        <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i></button>
                         <button class="dropdown btn navbar-btn toolbarButton">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="."><span style="color:white" class="fas fa-ellipsis-h fa-2x"></span></a>
                             <ul class="dropdown-menu">

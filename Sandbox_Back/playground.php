@@ -25,7 +25,7 @@
 		<script src="https://togetherjs.com/togetherjs-min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
-        <script src="Sandbox_Back/controller.js"></script>
+        <script src="Sandbox_Back/playgroundCtrl.js"></script>
 	</head>
 	<body style="background-color:rgba(255,255,255,0.2);">
     <div id="myModal" class="modal">

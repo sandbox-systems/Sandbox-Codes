@@ -74,7 +74,6 @@
             $mail->AltBody = "Click this: https://sandboxcodes.com/Sandbox_Back/verifyemail.php?username=".(string)$_POST["username"]."&code=$ecode";
 
             $mail->send();
-            header("Location: https://sandboxcodes.com/Login.html");
         } catch (Exception $e) {
             echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
         }

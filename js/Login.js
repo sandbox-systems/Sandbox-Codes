@@ -25,15 +25,11 @@ $(document).ready(function() {
     ripple($(that), e);
     $(that).addClass("processing");
     setTimeout(function() {
-      $(that).addClass("success");
       setTimeout(function() {
       }, submitPhase2 - 70);
       setTimeout(function() {
-        $login.hide();
-        $login.addClass("inactive");
         animating = false;
-        $(that).removeClass("success processing");
-        location.replace("Castle.html");
+        $(that).removeClass("processing");
       }, submitPhase2);
     }, submitPhase1);
   });

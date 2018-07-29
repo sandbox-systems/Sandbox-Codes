@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="css/animate.css">
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
  html{
     background-image: url(images/Wallpaper.jpg);     background-size: cover;
@@ -63,8 +64,15 @@
                         title:'Whoops',
                         text:'You might have an incorrect username or password'
                     });
+                }else if(data=="Email not verified."){
+                    swal({
+                        icon:'error',
+                        title:'Whoops',
+                        text:'Please verify the email associated with this account.'
+                    });
                 }else if(data=="User authenticated."){
-                    window.location.replace("Castle.html");
+                    $("#letsgo").addClass("sucess");
+                    window.location = "https://sandboxcodes.com/Castle.html";
                 }
             },
             error: function(data){

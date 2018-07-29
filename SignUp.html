@@ -4,6 +4,7 @@
 <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 <link rel="stylesheet" href="css/animate.css">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style>
   html{
@@ -223,8 +224,14 @@
         fixStepIndicator(n)
     }
     function nextPrev(n) {
-        // This function will figure out which tab to display
         var x = document.getElementsByClassName("tab");
+
+        if (currentTab >= x.length-1 && n!=-1) {
+            // ... the form gets submitted:
+            submit_register();
+            return false;
+        }
+        // This function will figure out which tab to display
         // Exit the function if any field in the current tab is invalid:
         if (n == 1 && !validateForm()) return false;
         // Hide the current tab:
@@ -232,10 +239,6 @@
         // Increase or decrease the current tab by 1:
         currentTab = currentTab + n;
         // if you have reached the end of the form...
-        if (currentTab >= x.length) {
-            // ... the form gets submitted:
-            return false;
-        }
         // Otherwise, display the correct tab:
         showTab(currentTab);
     }
@@ -352,8 +355,13 @@
         }
     });
 
-    $("#nextButton").click(function(){
-        if($("#nextButton").html()=="Make Account!"){
+    $("#prevBtn").click(function(){
+       $("#nextBtn").prop("disabled", false);
+    });
+
+    function submit_register(){
+        if($("#nextBtn").html()=="Make Account!"){
+            x = document.getElementsByClassName("tab");
             $.ajax({
                 type: "POST",
                 url: "Sandbox_Back/register.php",
@@ -366,10 +374,10 @@
                 },
                 dataType: "text",
                 success: function(data){
-                    if(data=="Invalid Login."){
-                        $("#pass").animateCss("hinge");
-                    }else if(data=="User authenticated."){
-                        window.location.replace("Castle.html");
+                    if(data=="User successfully created"){
+                        window.location = "https://sandboxcodes.com/Login.html";
+                    }else{
+                        swal(data);
                     }
                 },
                 error: function(data){
@@ -377,10 +385,10 @@
                         icon: "error",
                         title: "Uh...",
                         text: "There was an error processing your request. That's all I know."
-                    })
+                    });
                 }
             });
         }
-    });
+    }
 </script>
 </html>

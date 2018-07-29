@@ -1,6 +1,5 @@
 angular.module("castle.playground", ["ngSanitize"])
     .controller("playground_controller", function($scope, $http) {
-    alert('hi');
     $scope.scan = "";
     $http({
         method: 'POST',

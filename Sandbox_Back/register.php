@@ -39,7 +39,7 @@
             'ecode' => new MongoDB\BSON\Binary($ecode, MongoDB\BSON\Binary::TYPE_GENERIC),
             'everify' => false,
             'github' => (string)"github.com",
-            'features' => (string)$_POST['features'],
+            'features' => "",
             'relax' => true,
             'timestamp' => (new MongoDB\BSON\UTCDateTime())->toDateTime()->format('U.u')
         );

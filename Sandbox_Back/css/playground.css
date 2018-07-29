@@ -280,7 +280,7 @@ option{
     color:rebeccapurple;
 }
 .toolbarButton {
-	width: 32%;
+	width: 24%;
 	height: 100%;
 	cursor: pointer;
 	background-color: rgba(0,0,0,0);

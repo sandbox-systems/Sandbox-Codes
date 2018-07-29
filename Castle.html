@@ -6,8 +6,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.19/angular-ui-router.min.js"></script>
+    <script src="Sandbox_Back/playgroundCtrl.js"></script>
     <script src="fmRouter.js"></script>
     <script src="router.js"></script>
     <link rel="stylesheet" href="css/CastleStyle.css">
@@ -110,7 +112,7 @@
         </svg>
         <div class="animated bounceInRight">
             <form novalidate="novalidate" id="covers" onsubmit="return false;" class="searchbox sbx-custom">
-                <div role="search" class="sbx-custom__wrapper">
+                <div id="outputs" role="search" class="sbx-custom__wrapper">
                     <input type="search" name="search" placeholder="Search Sandbox" id="sbxx" autocomplete="off"
                            required="required" class="sbx-custom__input">
                     <button type="submit" title="Submit your search query." class="sbx-custom__submit">
@@ -207,5 +209,25 @@
         document.getElementById("so").className = "searchoptions animated bounceOut";
         document.getElementById("go").className = "searchoptions animated bounceOut";
         document.getElementById("oc").style.top = "46%";}*/
+    function addOutput(output,type){
+        var div = document.createElement('div');
+        div.className="searchoptions animated bounceIn";
+        var icon = document.createElement('i');
+        icon.style.marginRight="3%";
+        if(type == 'user'){
+            icon.className='fas fa-user-circle';
+        }else if(type == 'chatroom'){
+            icon.className='fas fa-comments';
+        }else if(type=='repo'){
+            icon.className='fas fa-book';
+        }else if(type='folder'){
+            icon.className="fas fa-folder-open";
+        }else if(type=='file'){
+            icon.className="fas fa-file";
+        }
+        icon.appendTo(div);
+        div.innerText=output;
+        div.appendTo(document.getElementById('outputs'));
+    }
 </script>
 </html>

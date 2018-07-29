@@ -4,7 +4,7 @@
  * @author Shivashriganesh Mahato
  */
 
-let castle = angular.module('castle', ['castle.treasury', 'ui.router']).config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSanitize']).config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $stateProvider.state('home', {
         url: '/',
         templateUrl: 'home.html',
@@ -12,7 +12,7 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router']).config(f
     }).state('playground', {
         url: '/playground',
         templateUrl: 'Sandbox_Back/playground.php',
-        controller: 'BlankCtrl'
+        controller: 'playgroundCtrl'
     }).state('treasury', {
         url: '/treasury',
         templateUrl: 'fileManager/FileM.html',
@@ -21,8 +21,8 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router']).config(f
         url: '/chat',
         templateUrl: 'chat.html',
         controller: 'BlankCtrl'
-    }).state('settings',{
-        url:'/settings',
+    }).state('settings', {
+        url: '/settings',
         templateUrl: 'Settings.html',
         controller: 'BlankCtrl'
     });
@@ -36,3 +36,5 @@ castle.controller('BlankCtrl', function () {
 castle.controller('fmCtrl', function ($state) {
     $state.go('treasury.projects');
 });
+
+castle.controller('playgroundCtrl', playgroundCtrl);

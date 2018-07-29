@@ -11,12 +11,12 @@ use \MongoDB\Driver\BulkWrite;
 use \MongoDB\Driver\Exception\Exception;
 use \MongoDB\BSON\ObjectId;
 
-$man = new Manager("mongodb://localhost:27017", ['username' => 'sandbox', 'password' => 'NhJLmHZb$', 'db' => 'admin']);
+$man = new Manager("mongodb://localhost:27017"/*, ['username' => 'sandbox', 'password' => 'NhJLmHZb$', 'db' => 'admin']*/);
 
 abstract class Operators
 {
     const Set = '$set';
-    const Unset = '$unset';
+    const _Unset = '$unset';
     const Increment = '$inc';
     const Push = '$push';
     const Pull = '$pull';

@@ -16,7 +16,7 @@
   <meta charset="UTF-8">
   <title>Sandbox</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-  <script src="Login.js"></script>
+  <script src="js/Login.js"></script>
   <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -58,7 +58,11 @@
             dataType: "text",
             success: function(data){
                 if(data=="Invalid Login."){
-                    $("#pass").animateCss("hinge");
+                    swal({
+                        icon:'error',
+                        title:'Whoops',
+                        text:'You might have an incorrect username or password'
+                    });
                 }else if(data=="User authenticated."){
                     window.location.replace("Castle.html");
                 }

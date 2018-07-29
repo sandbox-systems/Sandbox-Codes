@@ -21,11 +21,31 @@
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
 		<script src="https://togetherjs.com/togetherjs-min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
 	</head>
 	<body style="background-color:rgba(255,255,255,0.2);">
+    <div id="commitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form class="animated fadeIn">
+                    <fieldset>
+                        <label>Files Changed</label>
+                        <ul style="overflow: scroll;max-height: 100px;">
+                        </ul>
+                    </fieldset>
+                    <input type="text" id="commitMessageInput" placeholder="Commit Message" title="Commit Message" style="margin-top: 2%">
+                    <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn" onclick="document.getElementById('commitModal').style.display='none'">
+                        Cancel
+                    </div>
+                    <div style="background-color:green; margin-top:7%" class="goBtn" id="commitBtn">
+                        Go Ahead!
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="myModal" class="modal">
 
         <!-- Modal content -->
@@ -117,7 +137,7 @@
                                 <li><a href="javascript:temper('vibrant_ink')">vibrant_ink</a></li>
                             </ul>
                         </button>
-                        <button type="button" id="btn-add-tab" class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
+                        <button type="button" id="btn-add-tab" onclick="document.getElementById('commitModal').style.display='block';" class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
                         <button value="" onclick="openModal()" class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
                         <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i></button>
 <!--                        <button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
@@ -190,6 +210,19 @@
 		<script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
 		<script>
+            let onCommitPress;
+
+            function setOnCommitPress(func) {
+                onCommitPress = func;
+            }
+
+            $('#commitBtn').click(function () {
+                if (onCommitPress)
+                    onCommitPress($('#commitMessageInput').val());
+                document.getElementById('commitModal').style.display="none";
+                document.getElementById('commitMessageInput').value="";
+                swal("Success", 'Commited', "success");
+            });
             function switcher(){
                 if(document.getElementById("letscheck").checked === true){
                     document.getElementById("fileform").style.display="none";
@@ -800,8 +833,8 @@
 					$(this).attr("oncontextmenu", "return false;");
 					if(element.button == 2){
 						activeRight = $(this).attr("data-wd");
-						$("#foldermenu").css("left", element.pageX+5);
-						$("#foldermenu").css("top", element.pageY+5);
+						$("#foldermenu").css("left", element.pageX+2);
+						$("#foldermenu").css("top", element.pageY+2);
 						$("#foldermenu").fadeIn(100);
 						$("#filemenu").fadeOut(80);
 					}
@@ -857,8 +890,8 @@
 					$(this).attr("oncontextmenu", "return false;");
 					if(element.button == 2){
 						activeRight = $(this).attr("data-wd");
-						$("#filemenu").css("left", element.pageX+5);
-						$("#filemenu").css("top", element.pageY+5);
+						$("#filemenu").css("left", element.pageX+2);
+						$("#filemenu").css("top", element.pageY+2);
 						$("#filemenu").fadeIn(100);
 						$("#foldermenu").fadeOut(80);
 					}

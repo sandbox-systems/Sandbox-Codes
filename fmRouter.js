@@ -80,6 +80,12 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
         });
     });
 
+    setLocalRepoData({
+        owner: $scope.params.owner,
+        repo: $scope.params.repo,
+        branch: $scope.params.branch
+    });
+
     setOnCreateFile(function (name) {
         $http({
             url: "fileManager/requests/createFile.php",

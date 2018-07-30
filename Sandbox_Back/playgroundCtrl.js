@@ -61,32 +61,72 @@ function scan($scope, $http, $sce, $state){
     });
 }
 
+/****************************************************
+ ***************** MANAGER BINDINGS ******************
+ ****************************************************/
 function clickFile(hash, name, key){
-    openTab(hash, editor, key, "hello", "java");
+    openTab(hash, key, "hello");
 }
 
-function openTab(hash, in_editor, key, data, language){
+/****************************************************
+ ****************** TAB BINDINGS ********************
+ ****************************************************/
+
+function openTab(hash, key, data){
+    numTabs++;
     if(angular.element('#tab'+hash)[0]==null){
-        $('#tab-list').append($('<li id="tab'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="closeTab(this)" title="Remove this page">×</button></a></li>'));
+        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
     }
-    activateTab(hash);
-    in_editor.setValue(data, -1);
-    in_editor.getSession().setMode("ace/mode/"+language);
+    activateTab(hash, key);
+    editor.setValue(data, -1);
 }
 
 //Close tab
 function closeTab(element){
     angular.element(element).parent().parent().remove();
+    var openTabs = angular.element("#tab-list > li");
+    if(openTabs.length<1){
+        return;
+    }
+    activateTab(openTabs[0].id.substring(3), angular.element(openTabs[0]).text().slice(0, -1));
 }
 
-function activateTab(hash){
+function activateTab(hash, key){
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
         active_li[0].classList.remove("active");
     }
     angular.element('#tab'+hash).addClass("active");
+    setLanguage(key);
 }
 
-function setLanguage(){
+function tabClick(tab){
+    activateTab(tab.id.substring(3), angular.element(tab).text().slice(0, -1));
+}
 
+function setLanguage(key){
+    if(key.indexOf(".")==-1){
+        swal("Cannot detect file extension to set editor language.");
+        editor.getSession().setMode("ace/mode/text");
+    }
+    var ext = key.split(".")[1];
+    var language = "text";
+    switch(ext){
+        case "java":
+            language = "java";
+            break;
+        case "c":
+            language = "c_cpp";
+            break;
+        case "cpp":
+            language = "c_cpp";
+            break;
+        default:
+            swal({
+                text: "Unsupported file extension. Language not set.",
+                icon: "error",
+                timer: 1000
+            });
+    }
+    editor.getSession().setMode("ace/mode/"+language);
 }

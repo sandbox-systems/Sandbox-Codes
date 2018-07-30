@@ -10,7 +10,7 @@
 ?>
 
 <!DOCTYPE HTML>
-<html lang="en" ng-app="playground">
+<html lang="en">
 	<head>
 		<title><?php echo $text["title"]; ?></title>
 		<link rel="stylesheet" type="text/css" href="Sandbox_Back/css/playground.css" />
@@ -140,7 +140,7 @@
                         <button type="button" id="btn-add-tab" onclick="document.getElementById('commitModal').style.display='block';" class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
                         <button value="" onclick="openModal()" class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
                         <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i></button>
-<!--                        <button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
+<!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
                     </div>
                     <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
 	margin-right: 3%;">
@@ -196,7 +196,6 @@
 		<!-- *************************************************** -->
             <div class="rightcol">
                 <ul id="tab-list" class="nav navbar-nav nav-tabs" >
-                    <li class="active"><a href="">newFile</a></li>
                 </ul>
 		<div id="editor"></div>
 		
@@ -266,12 +265,15 @@
 				 ****************************************************/
 				//active directory files
 				var active_dir = "/Applications/MAMP/htdocs/Sandbox 2.0/Users/aadhi0319";
+				var objhash = "";
 				var active_file = "";
 				var activeRight = "";
 				var ext = "";
-				var name = ""
-				
-				//debug variables
+				var name = "";
+                var numTabs = 0;
+
+
+                //debug variables
 				var debug = true;
 				var breakpointAnchors = [];
 				
@@ -279,14 +281,14 @@
 				 **************** ACE CODE EDITOR  *******************
 				 ****************************************************/
 				ace.require("ace/ext/language_tools");
-				var editor = ace.edit("editor");
+				editor = ace.edit("editor");
 				editor.setOptions({
 					enableBasicAutocompletion: true,
 					enableSnippets: true,
 					enableLiveAutocompletion: false
 				});
 				editor.setTheme("ace/theme/chrome");
-				editor.getSession().setMode("ace/mode/javascript");
+				editor.getSession().setMode("ace/mode/java");
 				editor.getSession().on('change', function() {
 					save(editor, false);					
 				});
@@ -409,7 +411,7 @@
 					}).then((value) => {
 						ext = value.split(".")[1];
 						active_file = active_dir + "<?php echo DIRECTORY_SEPARATOR; ?>" + value;
-						  $.ajax({	
+						  $.ajax({
 							type: "POST",
 							url: "newFile.php",
 							data: {
@@ -751,14 +753,14 @@
 					});
 				}
 				
-				$("#filemanager").on("click",".file",function(element){
+				/*$("#filemanager").on("click",".file",function(element){
 					if($("#filemenu").is(":visible") || $("#foldermenu").is(":visible")){
 						return;
 					}
-					active_file = $(this).attr("data-wd");
-					active_dir = active_file.substring(0, active_file.lastIndexOf("/"));
-					ext = $(this).attr("data-name").split(".")[1];
-					name = $(this).attr("data-name").split(".")[0];
+					active_file = $(this).attr("data-sha");
+					active_dir =
+					ext =
+					name =
 					$.ajax({	
 						type: "POST",
 						url: "readFile.php",
@@ -772,8 +774,8 @@
 						}
 					});
 					return false;
-				});
-				
+				});*/
+
 				$("#filemanager").on("click",".folder",function(element){
 					if($("#filemenu").is(":visible") || $("#foldermenu").is(":visible")){
 						return;
@@ -931,20 +933,17 @@
                 /****************************************************
                  ****************** TAB BINDINGS ********************
                  ****************************************************/
-                var tabID = 0;
-                var numTabs = 0;
-                function newTab(){
+                /*var numTabs = 0;
+                function newTab(hash, in_editor, name, data){
                     numTabs++;
-                    tabID = numTabs;
-                    $('#tab-list').append($('<li><a href="#tab' + tabID + '" role="tab" data-toggle="tab">Tab ' + tabID + '<button class="close" type="button" title="Remove this page">×</button></a></li>'));
-                    $('#tab-content').append($('<div class="tab-pane fade" id="tab' + tabID + '">Tab '+ tabID +' content</div>'));
-                    return tabID;
+                    $('#tab-list').append($('<li class="tab" data-hash="'+hash+'" data-name="'+name+'"><a href="">'+name+'<button class="close" type="button" title="Remove this page">×</button></a></li>'));
+                    in_editor.setValue(data, -1);
+                    in_editor.getSession().setMode("ace/mode/"+ext);
                 }
                 $('#tab-list').on('click','.close',function(){
-                    var tabID = $(this).parents('a').attr('href');
+                    numTabs--;
                     $(this).parents('li').remove();
-                    //$(tabID).remove();
-                });
+                });*/
 
 				/****************************************************
 				 ****************** KEY BINDINGS ********************

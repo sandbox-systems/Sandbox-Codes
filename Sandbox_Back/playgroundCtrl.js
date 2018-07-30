@@ -1,4 +1,13 @@
+var $gscope;
+var $ghttp;
+var $gsce;
+var $gstate;
+
 let playgroundCtrl = function ($scope, $http, $sce, $state) {
+    $gscope = $scope;
+    $ghttp = $http;
+    $gsce = $sce;
+    $gstate = $state;
     $scope.scan = "";
     scan($scope, $http, $sce, $state);
 };
@@ -6,6 +15,10 @@ let playgroundCtrl = function ($scope, $http, $sce, $state) {
 //Global Variables
 var numTabs = 0;
 var editor;
+var owner = "aadhi0319";
+var repo = "ChatBox";
+var branch = "master";
+var notify = true;
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
@@ -14,8 +27,8 @@ function scan($scope, $http, $sce, $state){
         url: 'fileManager/requests/getAllProjectContents.php',
         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'},
         data: $.param({
-            owner: "aadhi0319",
-            repo: "Logger",
+            owner: owner,
+            repo: repo,
             branch: "master",
             path: ""
         })
@@ -65,20 +78,77 @@ function scan($scope, $http, $sce, $state){
  ***************** MANAGER BINDINGS ******************
  ****************************************************/
 function clickFile(hash, name, key){
-    openTab(hash, key, "hello");
+    openTab(hash, key);
+}
+
+/****************************************************
+ ****************** REPO MANIPULATION ***************
+ ****************************************************/
+function readFile(hash){
+    $.ajax({
+        type: "POST",
+        url: "fileManager/requests/getFileContents.php",
+        data: {
+            owner: owner,
+            repo: repo,
+            sha: hash
+        },
+        dataType: "text",
+        success: function(data){
+            editor.setValue(data, -1);
+        },
+        error: function(data){
+            if(notify)
+                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+            return null;
+        }
+    });
+}
+
+function createFile(path, name){
+    if(path==null){
+        path = "";
+    }
+    if(name==null){
+        name = angular.element("#filename").val();
+    }
+    $.ajax({
+        type: "POST",
+        url: "fileManager/requests/createFile.php",
+        data: {
+            owner: owner,
+            repo: repo,
+            branch: branch,
+            path: path,
+            name: name
+        },
+        dataType: "text",
+        success: function(data){
+            console.log(data);
+            if(notify)
+                swal({icon:"success", buttons:false, timer:1000, className:"swal-icon-notification"});
+            angular.element("#entryModal")[0].style.display = "none";
+            angular.element("#filename").val("");
+            scan($gscope, $ghttp, $gsce, $gstate);
+        },
+        error: function(data){
+            if(notify)
+                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+            return null;
+        }
+    });
 }
 
 /****************************************************
  ****************** TAB BINDINGS ********************
  ****************************************************/
 
-function openTab(hash, key, data){
+function openTab(hash, key){
     numTabs++;
-    if(angular.element('#tab'+hash)[0]==null){
-        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
+    if(angular.element('#tab'+hash+key)[0]==null){
+        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+key.replace(".", "")+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
     }
     activateTab(hash, key);
-    editor.setValue(data, -1);
 }
 
 //Close tab
@@ -88,7 +158,7 @@ function closeTab(element){
     if(openTabs.length<1){
         return;
     }
-    activateTab(openTabs[0].id.substring(3), angular.element(openTabs[0]).text().slice(0, -1));
+    activateTab(openTabs[0].id.substring(3, 43), angular.element(openTabs[0]).text().slice(0, -1));
 }
 
 function activateTab(hash, key){
@@ -96,17 +166,18 @@ function activateTab(hash, key){
     if(active_li.length>0){
         active_li[0].classList.remove("active");
     }
-    angular.element('#tab'+hash).addClass("active");
+    angular.element('#tab'+hash+key.replace(".", "")).addClass("active");
     setLanguage(key);
+    readFile(hash);
 }
 
 function tabClick(tab){
-    activateTab(tab.id.substring(3), angular.element(tab).text().slice(0, -1));
+    activateTab(tab.id.substring(3, 43), angular.element(tab).text().slice(0, -1));
 }
 
 function setLanguage(key){
     if(key.indexOf(".")==-1){
-        swal("Cannot detect file extension to set editor language.");
+        //swal("Cannot detect file extension to set editor language.");
         editor.getSession().setMode("ace/mode/text");
     }
     var ext = key.split(".")[1];
@@ -122,11 +193,11 @@ function setLanguage(key){
             language = "c_cpp";
             break;
         default:
-            swal({
+            /*swal({
                 text: "Unsupported file extension. Language not set.",
                 icon: "error",
                 timer: 1000
-            });
+            });*/
     }
     editor.getSession().setMode("ace/mode/"+language);
 }

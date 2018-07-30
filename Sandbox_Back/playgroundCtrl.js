@@ -164,11 +164,15 @@ function updateFile(path, name, content){
         },
         dataType: "text",
         success: function(data){
+<<<<<<< Updated upstream
             active_hash = data['newSha'];
+=======
+
+>>>>>>> Stashed changes
         },
         error: function(data){
-            if(notify)
-                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+            /*if(notify)
+                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});*/
         }
     });
 }
@@ -250,4 +254,26 @@ function setLanguage(key){
             });*/
     }
     editor.getSession().setMode("ace/mode/"+language);
+}
+
+/****************************************************
+ ******************** COMPILE ***********************
+ ****************************************************/
+function compile(){
+    /*$.ajax({
+        type: "POST",
+        url: "Sandbox_Back/compile2.php",
+        data: {
+            key: active_key,
+            code: editor.getValue()
+        },
+        dataType: "text",
+        success: function(data){
+
+        },
+        error: function(data){
+            if(notify)
+                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+        }
+    });*/
 }

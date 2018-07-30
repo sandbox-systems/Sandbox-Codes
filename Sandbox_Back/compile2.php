@@ -1,6 +1,7 @@
 <?php
 	$code = $_POST["code"]; //code to compile
-	$filepath = $_POST["filepath"]; //path to file
+	//$filepath = $_POST["filepath"]; //path to file
+    $filepath = "compile".$_POST["key"];
 	$name = substr(basename($filepath), 0, strrpos(basename($filepath), ".")); //name of file
 	$lang = substr($filepath, strrpos($filepath, ".")+1); //extension without '.'
 	$path = substr($filepath, 0, strrpos($filepath, DIRECTORY_SEPARATOR)); //path without file

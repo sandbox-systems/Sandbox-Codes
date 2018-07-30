@@ -17,7 +17,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
     <!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>-->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!--    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
@@ -139,6 +139,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 </ul>
             </button>
             <button type="button" id="btn-add-tab" onclick="document.getElementById('commitModal').style.display='block';" class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
+            <button onclick="chooseRepo()" class="btn navbar-btn toolbarButton"><i class="fas fa-book fa-2x"></i></button>
             <button value="" onclick="document.getElementById('entryModal').style.display='block'" class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
             <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i></button>
             <!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
@@ -209,6 +210,17 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
 
 
     <script>
+        function chooseRepo() {
+            swal({
+                title:'Select Repo',
+                input:'select',
+                inputOptions:{
+                    'TST' : 'Tester'
+                },
+                inputPlaceholder:'Sandbox',
+                showCancelButton:true
+            });
+        }
         // let onCommitPress;
         //
         // function setOnCommitPress(func) {

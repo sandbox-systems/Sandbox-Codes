@@ -44,11 +44,13 @@ function searchUser($man, $username, $userID, $inputUname, $shouldVerify) {
         $docs = array();
         $cursor = $man->executeQuery("sandbox.users", $query);
         foreach ($cursor as $doc) {
-            unset($doc->_id);
-            unset($doc->roomIDs);
-            $doc->isFriend = $userID == "" ? null : in_array(new ObjectId($userID), $doc->friends);
-            unset($doc->friends);
-            $docs[] = $doc;
+            if ($doc->username != $username) {
+                unset($doc->_id);
+                unset($doc->roomIDs);
+                $doc->isFriend = $userID == "" ? null : in_array(new ObjectId($userID), $doc->friends);
+                unset($doc->friends);
+                $docs[] = $doc;
+            }
         }
         return $docs;
     } catch (Exception $ex) {

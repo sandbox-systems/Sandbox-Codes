@@ -19,6 +19,7 @@ let treasury = angular.module('castle.treasury', ['ui.router']).config(function 
 treasury.controller('projectsController', function ($scope, $http, $state) {
     clearFileList();
     setCurBranchName("Select Branch");
+    setIsViewingInsideRepo(false);
 
     $http({
         url: "fileManager/requests/getProjects.php",
@@ -55,6 +56,7 @@ treasury.controller('syncController', function ($scope) {
 treasury.controller('projectController', function ($scope, $stateParams, $http) {
     clearFileList();
     clearBranches();
+    setIsViewingInsideRepo(true);
 
     $scope.params = {
         owner: $stateParams.owner || "",

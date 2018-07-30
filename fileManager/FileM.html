@@ -59,7 +59,7 @@
     </div>
 </div>
 <div class="topnav animated fadeIn" id="navbar">
-    <a class="okeh" href="javascript:openModal('myModal')">New Entry!</a>
+    <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
     <a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
     <a id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
@@ -164,7 +164,7 @@
                 <fieldset>
                     <div style="float:right; background-color:green; " class="goBtn" onclick="addPublicRepo()">Create
                     </div>
-                    <div style="float:left; background-color:#FF3366; " class="goBtn"
+                    <div id="newPublicRepoGoBtn" style="float:left; background-color:#FF3366; " class="goBtn"
                          onclick="document.getElementById('repoModal').style.display='none'">Cancel
                     </div>
                 </fieldset>
@@ -178,7 +178,7 @@
                 <fieldset>
                     <div style="float:right; background-color:green; " class="goBtn" onclick="addPrivateRepo()">Create
                     </div>
-                    <div style="float:left; background-color:#FF3366; " class="goBtn"
+                    <div id="newPrivateRepoGoBtn" style="float:left; background-color:#FF3366; " class="goBtn"
                          onclick="document.getElementById('repoModal').style.display='none'">Cancel
                     </div>
                 </fieldset>
@@ -278,12 +278,41 @@
 </div>
 </body>
 <script>
-    function addPrivateRepo() {
-
+    let isViewingInsideRepo = false;
+    function setIsViewingInsideRepo(isTrue) {
+        isViewingInsideRepo = isTrue;
     }
 
     function addPublicRepo() {
+        let name = $('#publicRepoName').val();
+        $.ajax({
+            type: "POST",
+            url: "fileManager/requests/createProject.php",
+            data: {
+                name: name,
+                isPrivate: false
+            },
+            success: function (data, status, xhttp) {
+            },
+            dataType: 'json'
+        });
+        window.location.reload();
+    }
 
+    function addPrivateRepo() {
+        let name = $('#privateRepoName').val();
+        $.ajax({
+            type: "POST",
+            url: "fileManager/requests/createProject.php",
+            data: {
+                name: name,
+                isPrivate: true
+            },
+            success: function (data, status, xhttp) {
+            },
+            dataType: 'json'
+        });
+        window.location.reload();
     }
 
     jQuery(document).ready(function ($) {

@@ -53,9 +53,20 @@ angular.module("chat", [])
         };
 
         $scope.chatClient = (function () {
+            function getParameterByName(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, '\\$&');
+                var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, ' '));
+            }
+
             var searchParams = new URLSearchParams(window.location.search);
             var easyrtcid = "";
             var username = searchParams.get('username');
+            var defaultRoom = getParameterByName('group');
             var userPool = {};
             var fileSenders = {};
             var fileSenderPool = {toRemove: {}};
@@ -207,6 +218,16 @@ angular.module("chat", [])
                         $scope.rooms.push(room);
                     });
                     easyrtc.joinRoom(datum.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
+                }
+                console.log(defaultRoom);
+                if (defaultRoom !== null) {
+                    for (let r = 0; r < $scope.rooms.length; r++) {
+                        if ($scope.rooms[r].name === decodeURI(defaultRoom)) {
+                            $scope.chatRoom.changeRoom(r);
+                            $scope.chatRoom.scrollToBottom();
+                            break;
+                        }
+                    }
                 }
             };
 

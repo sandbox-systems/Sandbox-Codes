@@ -221,6 +221,10 @@
             icon.className = 'fas fa-user-circle';
         } else if (type === 'chatroom') {
             icon.className = 'fas fa-comments';
+            div.onclick = function () {
+                location.href = "Castle.html#!/chat?group=" + output.name;
+                closeSearch();
+            };
         } else if (type === 'repo') {
             icon.className = 'fas fa-book';
         } else if (type === 'folder') {
@@ -235,6 +239,7 @@
         if (type === 'user') {
             let addOrRemoveFriendBtn = document.createElement("I");
             addOrRemoveFriendBtn.className = 'fas ' + (output.isFriend ? '' : 'fa-user-plus');
+            addOrRemoveFriendBtn.style.cursor = "pointer";
             addOrRemoveFriendBtn.onclick = function() {
                 if (!output.isFriend) {
                     $.ajax({
@@ -256,6 +261,8 @@
                 }
             };
             div.appendChild(addOrRemoveFriendBtn);
+        } else {
+            div.style.cursor = "pointer";
         }
         document.getElementById('outputs').insertBefore(div, document.getElementById('so'));
     }

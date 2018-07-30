@@ -15,6 +15,5 @@ $_SESSION['changes'][] = array(
     'name' => $name,
     'content' => $content
 );
-var_dump($_SESSION["changes"]);
 
 include 'logChanges.php';

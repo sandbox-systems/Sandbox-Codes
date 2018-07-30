@@ -84,11 +84,8 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                     </select>
                 </fieldset>
                 <fieldset style="    margin-top: 2%;">
-                    <div style="float:right; background-color:green; margin-right: 5%" class="goBtn" onclick="">Create
-                    </div>
-                    <div style="float:left; background-color:#FF3366; margin-left: 5%;" class="goBtn"
-                         onclick="document.getElementById('entryModal').style.display='none'">Cancel
-                    </div>
+                    <div style="float:right; background-color:green; margin-right: 5%" class="goBtn" onclick="createFile(null, null)">Create</div>
+                    <div style="float:left; background-color:#FF3366; margin-left: 5%;" class="goBtn" onclick="document.getElementById('entryModal').style.display='none'">Cancel</div>
                 </fieldset>
             </form>
             <form id="folderform" style="display: none;" class="animated fadeIn">
@@ -97,11 +94,8 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                     <input id="foldername" class="inputname" type="text" autocomplete="off">
                 </fieldset>
                 <fieldset style="    margin-top: 2%;">
-                    <div style="float:right; background-color:green;margin-right: 5% " class="goBtn" onclick="">Create
-                    </div>
-                    <div style="float:left; background-color:#FF3366; margin-left:5%" class="goBtn"
-                         onclick="document.getElementById('entryModal').style.display='none'">Cancel
-                    </div>
+                    <div style="float:right; background-color:green;margin-right: 5% " class="goBtn" ng-click="">Create</div>
+                    <div style="float:left; background-color:#FF3366; margin-left:5%" class="goBtn" onclick="document.getElementById('entryModal').style.display='none'">Cancel</div>
                 </fieldset>
             </form>
         </div>
@@ -360,8 +354,8 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             });
             editor.setTheme("ace/theme/chrome");
             editor.getSession().setMode("ace/mode/java");
-            editor.getSession().on('change', function () {
-                save(editor, false);
+            editor.getSession().on('change', function() {
+                //save(editor, false);
             });
 
             /****************************************************

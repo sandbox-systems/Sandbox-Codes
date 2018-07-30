@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
-          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+          crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="../css/FileMM.css">
     <link rel="stylesheet" href="../css/animate.css">
@@ -34,21 +34,21 @@
                 Last Modified<br>
                 <input type="date" class="infoname" readonly>
             </fieldset>
-            <fieldset>
-                Color<br>
-                <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
-                      onclick="test=document.getElementById('gray').style.backgroundColor"></span>
-                <span id="pink" class="prevBtn" style="background-color: #FC427B;"
-                      onclick="test=document.getElementById('pink').style.backgroundColor"></span>
-                <span id="orange" class="prevBtn" style="background-color: #F97F51;"
-                      onclick="test=document.getElementById('orange').style.backgroundColor"></span>
-                <span id="green" class="prevBtn" style="background-color: #55E6C1;"
-                      onclick="test=document.getElementById('green').style.backgroundColor"></span>
-                <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
-                      onclick="test=document.getElementById('blue').style.backgroundColor"></span>
-                <span id="purple" class="prevBtn" style="background-color: #82589F;"
-                      onclick="test=document.getElementById('purple').style.backgroundColor"></span>
-            </fieldset>
+            <!--<fieldset>-->
+                <!--Color<br>-->
+                <!--<span id="gray" class="prevBtn" style="background-color: #CAD3C8;"-->
+                      <!--onclick="test=document.getElementById('gray').style.backgroundColor"></span>-->
+                <!--<span id="pink" class="prevBtn" style="background-color: #FC427B;"-->
+                      <!--onclick="test=document.getElementById('pink').style.backgroundColor"></span>-->
+                <!--<span id="orange" class="prevBtn" style="background-color: #F97F51;"-->
+                      <!--onclick="test=document.getElementById('orange').style.backgroundColor"></span>-->
+                <!--<span id="green" class="prevBtn" style="background-color: #55E6C1;"-->
+                      <!--onclick="test=document.getElementById('green').style.backgroundColor"></span>-->
+                <!--<span id="blue" class="prevBtn" style="background-color: #1B9CFC;"-->
+                      <!--onclick="test=document.getElementById('blue').style.backgroundColor"></span>-->
+                <!--<span id="purple" class="prevBtn" style="background-color: #82589F;"-->
+                      <!--onclick="test=document.getElementById('purple').style.backgroundColor"></span>-->
+            <!--</fieldset>-->
             <fieldset>
                 Shared With<br>
             </fieldset>
@@ -142,6 +142,45 @@
         </div>
     </div>
 </div>
+<div id="repoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header" id="publicHeader">Create new Public Repo!</div>
+        <div class="modal-header" style="display: none" id="privateHeader">Create new Private Repo!</div>
+        <div class="modal-body">
+            <fieldset>
+                <label class="switch">
+                    <input value="None" id="publicprivate" onchange="switchey()" type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </fieldset>
+            <form class="animated fadeIn" id="publicRepoForm">
+                <fieldset>
+                    Reponame:<br>
+                    <input autocomplete="off" required class="inputname" type="text" id="publicRepoName">
+                </fieldset>
+                <fieldset>
+                    <div style="float:right; background-color:green; " class="goBtn" onclick="addPublicRepo()">Create
+                    </div>
+                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="document.getElementById('repoModal').style.display='none'">Cancel
+                    </div>
+                </fieldset>
+            </form>
+            <form style="display: none" class="animated fadeIn" id="privateRepoForm">
+                </fieldset>
+                <fieldset>
+                    Reponame:<br>
+                    <input autocomplete="off" required class="inputname" type="text" id="privateRepoName">
+                </fieldset>
+                <fieldset>
+                    <div style="float:right; background-color:green; " class="goBtn" onclick="addPrivateRepo()">Create
+                    </div>
+                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="document.getElementById('repoModal').style.display='none'">Cancel
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
 <div id="myModal" class="modal">
 
     <!-- Modal content --></span>
@@ -176,21 +215,21 @@
                         <option value="ruby">Ruby</option>
                     </select>
                 </fieldset>
-                <fieldset>
-                    Color Select:<br>
-                    <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
-                          onclick="test=document.getElementById('gray').style.backgroundColor"></span>
-                    <span id="pink" class="prevBtn" style="background-color: #FC427B;"
-                          onclick="test=document.getElementById('pink').style.backgroundColor"></span>
-                    <span id="orange" class="prevBtn" style="background-color: #F97F51;"
-                          onclick="test=document.getElementById('orange').style.backgroundColor"></span>
-                    <span id="green" class="prevBtn" style="background-color: #55E6C1;"
-                          onclick="test=document.getElementById('green').style.backgroundColor"></span>
-                    <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
-                          onclick="test=document.getElementById('blue').style.backgroundColor"></span>
-                    <span id="purple" class="prevBtn" style="background-color: #82589F;"
-                          onclick="test=document.getElementById('purple').style.backgroundColor"></span>
-                </fieldset>
+                <!--<fieldset>-->
+                    <!--Color Select:<br>-->
+                    <!--<span id="gray" class="prevBtn" style="background-color: #CAD3C8;"-->
+                          <!--onclick="test=document.getElementById('gray').style.backgroundColor"></span>-->
+                    <!--<span id="pink" class="prevBtn" style="background-color: #FC427B;"-->
+                          <!--onclick="test=document.getElementById('pink').style.backgroundColor"></span>-->
+                    <!--<span id="orange" class="prevBtn" style="background-color: #F97F51;"-->
+                          <!--onclick="test=document.getElementById('orange').style.backgroundColor"></span>-->
+                    <!--<span id="green" class="prevBtn" style="background-color: #55E6C1;"-->
+                          <!--onclick="test=document.getElementById('green').style.backgroundColor"></span>-->
+                    <!--<span id="blue" class="prevBtn" style="background-color: #1B9CFC;"-->
+                          <!--onclick="test=document.getElementById('blue').style.backgroundColor"></span>-->
+                    <!--<span id="purple" class="prevBtn" style="background-color: #82589F;"-->
+                          <!--onclick="test=document.getElementById('purple').style.backgroundColor"></span>-->
+                <!--</fieldset>-->
                 <fieldset>
                     <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFile()">Create</div>
                     <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closeModal()">Cancel
@@ -202,21 +241,21 @@
                     Foldername:<br>
                     <input id="foldername" class="inputname" type="text" autocomplete="off">
                 </fieldset>
-                <fieldset>
-                    Color Select:<br>
-                    <span id="gray" class="prevBtn" style="background-color: #CAD3C8;"
-                          onclick="test=document.getElementById('gray').style.backgroundColor"></span>
-                    <span id="pink" class="prevBtn" style="background-color: #FC427B;"
-                          onclick="test=document.getElementById('pink').style.backgroundColor"></span>
-                    <span id="orange" class="prevBtn" style="background-color: #F97F51;"
-                          onclick="test=document.getElementById('orange').style.backgroundColor"></span>
-                    <span id="green" class="prevBtn" style="background-color: #55E6C1;"
-                          onclick="test=document.getElementById('green').style.backgroundColor"></span>
-                    <span id="blue" class="prevBtn" style="background-color: #1B9CFC;"
-                          onclick="test=document.getElementById('blue').style.backgroundColor"></span>
-                    <span id="purple" class="prevBtn" style="background-color: #82589F;"
-                          onclick="test=document.getElementById('purple').style.backgroundColor"></span>
-                </fieldset>
+                <!--<fieldset>-->
+                    <!--Color Select:<br>-->
+                    <!--<span id="gray" class="prevBtn" style="background-color: #CAD3C8;"-->
+                          <!--onclick="test=document.getElementById('gray').style.backgroundColor"></span>-->
+                    <!--<span id="pink" class="prevBtn" style="background-color: #FC427B;"-->
+                          <!--onclick="test=document.getElementById('pink').style.backgroundColor"></span>-->
+                    <!--<span id="orange" class="prevBtn" style="background-color: #F97F51;"-->
+                          <!--onclick="test=document.getElementById('orange').style.backgroundColor"></span>-->
+                    <!--<span id="green" class="prevBtn" style="background-color: #55E6C1;"-->
+                          <!--onclick="test=document.getElementById('green').style.backgroundColor"></span>-->
+                    <!--<span id="blue" class="prevBtn" style="background-color: #1B9CFC;"-->
+                          <!--onclick="test=document.getElementById('blue').style.backgroundColor"></span>-->
+                    <!--<span id="purple" class="prevBtn" style="background-color: #82589F;"-->
+                          <!--onclick="test=document.getElementById('purple').style.backgroundColor"></span>-->
+                <!--</fieldset>-->
                 <fieldset>
                     <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFolder()">Create
                     </div>
@@ -234,6 +273,12 @@
 </div>
 </body>
 <script>
+    function addPrivateRepo(){
+
+    }
+    function addPublicRepo(){
+
+    }
     jQuery(document).ready(function ($) {
         $(window).on("load", function () {
 
@@ -325,6 +370,19 @@
             document.getElementById("folderform").style.display = "none";
             document.getElementById("fileheader").style.display = "block";
             document.getElementById("folderheader").style.display = "none";
+        }
+    }
+    function switchey() {
+        if (document.getElementById("publicprivate").checked === true) {
+            document.getElementById("publicRepoForm").style.display = "none";
+            document.getElementById("privateRepoForm").style.display = "block";
+            document.getElementById("publicHeader").style.display = "none";
+            document.getElementById("privateHeader").style.display = "block";
+        } else {
+            document.getElementById("publicRepoForm").style.display = "block";
+            document.getElementById("privateRepoForm").style.display = "none";
+            document.getElementById("publicHeader").style.display = "block";
+            document.getElementById("privateHeader").style.display = "none";
         }
     }
 

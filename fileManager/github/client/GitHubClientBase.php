@@ -191,6 +191,10 @@ abstract class GitHubClientBase
 		return $this->requestLast($this->lastData);
 	}
 
+	public function getToken() {
+	    return $this->oauthToken;
+    }
+
 	/**
 	 * do a github request and return array
 	 *
@@ -199,7 +203,7 @@ abstract class GitHubClientBase
 	 * @param array $data
 	 * @return array
 	 */
-	protected function doRequest($url, $method, $data, $contentType = null, $filePath = null)
+	public function doRequest($url, $method, $data, $contentType = null, $filePath = null)
 	{
 		if($method == 'FILE')
 			$url = $this->uploadUrl . $url;

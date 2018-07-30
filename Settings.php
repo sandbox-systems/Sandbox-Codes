@@ -1,6 +1,11 @@
 <?php
 
 include 'fileManager/github/sync.php';
+include_once 'fileManager/initDB.php';
+
+session_start();
+$user = getDocuments($man, "users", ['username' => 'jdoe1'], [])[0];
+//$user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
 
 ?>
 
@@ -128,7 +133,7 @@ include 'fileManager/github/sync.php';
             </td>
             <td>
                 <form class="login__row">
-                    <input class="login__input" type="text" placeholder="John Doe">
+                    <input id="nameInput" class="login__input" type="text" value="<?php echo $user->name ?>">
                 </form>
             </td>
         </tr>
@@ -140,7 +145,7 @@ include 'fileManager/github/sync.php';
             </td>
             <td>
                 <form class="login__row">
-                    <input class="login__input" type="text" placeholder="therealjohndoe">
+                    <input id="usernameInput" class="login__input" type="text" value="<?php echo $user->username ?>">
                 </form>
             </td>
         </tr>
@@ -169,8 +174,13 @@ include 'fileManager/github/sync.php';
             </td>
             <td>
                 <form class="login__row">
-                    <input class="login__input" type="email" placeholder="johndoe@gmail.com">
+                    <input id="emailInput" class="login__input" type="email" value="<?php echo isset($user->email) ? $user->email : "" ?>">
                 </form>
+            </td>
+        </tr>
+        <tr class="animated fadeIn">
+            <td>
+                <button id="updateProfileSubmitBtn">Save Changes</button>
             </td>
         </tr>
         <!--<tr class="animated fadeIn">
@@ -208,6 +218,21 @@ include 'fileManager/github/sync.php';
 
     $("#imageUpload").change(function () {
         fasterPreview(this);
+    });
+
+    $('#updateProfileSubmitBtn').click(function () {
+        $.ajax({
+            type: "POST",
+            url: "updateProfile.php",
+            data: {
+                'name': $('#nameInput').val(),
+                'username': $('#usernameInput').val(),
+                'email': $('#emailInput').val()
+            },
+            success: function (data, status, xhttp) {
+            },
+            dataType: 'json'
+        });
     });
 </script>
 </html>

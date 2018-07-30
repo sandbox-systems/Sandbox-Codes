@@ -13,7 +13,7 @@ use \MongoDB\BSON\ObjectId;
 
 $man = new Manager("mongodb://localhost:27017", ['username' => 'sandbox', 'password' => 'NhJLmHZb$', 'db' => 'admin']);
 
-abstract class Operators
+abstract class DBUpdateOperators
 {
     const Set = '$set';
     const _Unset = '$unset';

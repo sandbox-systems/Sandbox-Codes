@@ -218,7 +218,6 @@
         var icon = document.createElement('I');
         icon.style.marginRight = "3%";
         if (type === 'user') {
-
             icon.className = 'fas fa-user-circle';
         } else if (type === 'chatroom') {
             icon.className = 'fas fa-comments';
@@ -231,13 +230,39 @@
         }
         div.appendChild(icon);
         let span = document.createElement("SPAN");
-        span.innerText = output['name'];
+        span.innerHTML = output['name'] + '&nbsp;&nbsp;&nbsp;&nbsp;';
         div.appendChild(span);
-        document.getElementById('outputs').appendChild(div);
+        if (type === 'user') {
+            let addOrRemoveFriendBtn = document.createElement("I");
+            addOrRemoveFriendBtn.className = 'fas ' + (output.isFriend ? '' : 'fa-user-plus');
+            addOrRemoveFriendBtn.onclick = function() {
+                if (!output.isFriend) {
+                    $.ajax({
+                        type: "POST",
+                        url: "addFriend.php",
+                        data: {
+                            user: output.username
+                        },
+                        success: function (res, status, jqXHR) {
+                            Object.keys(res).forEach(key => {
+                                if (!isNaN(key)) {
+                                    addOutput(res[key], res['type']);
+                                }
+                            });
+                        },
+                        dataType: 'json'
+                    });
+                    this.remove();
+                }
+            };
+            div.appendChild(addOrRemoveFriendBtn);
+        }
+        document.getElementById('outputs').insertBefore(div, document.getElementById('so'));
     }
 
     $('#sbxx').on('input', function () {
         let val = $('#sbxx').val();
+        $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
         if (val !== "") {
             $.ajax({
                 type: "POST",
@@ -246,8 +271,6 @@
                     input: val
                 },
                 success: function (res, status, jqXHR) {
-                    console.log(res);
-                    $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
                     Object.keys(res).forEach(key => {
                         if (!isNaN(key)) {
                             addOutput(res[key], res['type']);

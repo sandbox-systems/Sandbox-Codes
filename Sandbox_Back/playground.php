@@ -210,19 +210,19 @@
 		<script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
 		<script>
-            let onCommitPress;
-
-            function setOnCommitPress(func) {
-                onCommitPress = func;
-            }
-
-            $('#commitBtn').click(function () {
-                if (onCommitPress)
-                    onCommitPress($('#commitMessageInput').val());
-                document.getElementById('commitModal').style.display="none";
-                document.getElementById('commitMessageInput').value="";
-                swal("Success", 'Commited', "success");
-            });
+            // let onCommitPress;
+            //
+            // function setOnCommitPress(func) {
+            //     onCommitPress = func;
+            // }
+            //
+            // $('#commitBtn').click(function () {
+            //     if (onCommitPress)
+            //         onCommitPress($('#commitMessageInput').val());
+            //     document.getElementById('commitModal').style.display="none";
+            //     document.getElementById('commitMessageInput').value="";
+            //     swal("Success", 'Commited', "success");
+            // });
             function switcher(){
                 if(document.getElementById("letscheck").checked === true){
                     document.getElementById("fileform").style.display="none";
@@ -826,8 +826,8 @@
 					$(this).attr("oncontextmenu", "return false;");
 					if(element.button == 2){
 						activeRight = $(this).attr("data-wd");
-						$("#foldermenu").css("left", element.pageX+2);
-						$("#foldermenu").css("top", element.pageY+2);
+						$("#foldermenu").css("left", element.pageX+1);
+						$("#foldermenu").css("top", element.pageY+1);
 						$("#foldermenu").fadeIn(100);
 						$("#filemenu").fadeOut(80);
 					}
@@ -883,8 +883,8 @@
 					$(this).attr("oncontextmenu", "return false;");
 					if(element.button == 2){
 						activeRight = $(this).attr("data-wd");
-						$("#filemenu").css("left", element.pageX+2);
-						$("#filemenu").css("top", element.pageY+2);
+						$("#filemenu").css("left", element.pageX+1);
+						$("#filemenu").css("top", element.pageY+1);
 						$("#filemenu").fadeIn(100);
 						$("#foldermenu").fadeOut(80);
 					}

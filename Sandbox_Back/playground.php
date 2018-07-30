@@ -149,7 +149,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             </button>
             <button value="" onclick="document.getElementById('entryModal').style.display='block'"
                     class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
-            <button value="" id="runButton" class="btn navbar-btn toolbarButton"><i class="fas fa-play fa-2x"></i>
+            <button value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()"><i class="fas fa-play fa-2x"></i>
             </button>
             <!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
         </div>
@@ -231,7 +231,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
     <!-- ******************** TERMINAL ********************* -->
     <!-- *************************************************** -->
     <div id="terminal">
-        <iframe id="consoleFrame" src="http://localhost:7681/" width=100% height=100%></iframe>
+        <iframe id="consoleFrame" src="https://sandboxcodes.com:7681/" width=100% height=100%></iframe>
     </div>
 
 
@@ -391,7 +391,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             /****************************************************
              **************** HELPER FUNCTIONS ******************
              ****************************************************/
-            function compile(in_editor) {
+            /*function compile(in_editor) {
                 $.ajax({
                     type: "POST",
                     url: "compile2.php",
@@ -418,7 +418,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         }
                     }
                 });
-            }
+            }*/
 
             function save(in_editor, notify) {
                 $.ajax({
@@ -461,7 +461,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             }
 
             /****************************************************
-             ************* HELPER FUNCTIONS (FILES) **************
+             ************* HELPER FUNCTIONS (FILES) *************
              ****************************************************/
             function createFile(in_editor) {
                 swal({

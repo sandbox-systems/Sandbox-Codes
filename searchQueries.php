@@ -9,11 +9,19 @@ use \MongoDB\BSON\ObjectId;
 
 include 'fileManager/github/init.php';
 
-$input = $_GET['input'];
+abstract class Types
+{
+    const User = array('type' => 'user');
+    const Chatroom = array('type' => 'chatroom');
+    const File = array('type' => 'file');
+}
+
+$input = $_POST['input'];
 //$curUsername = $_SESSION['username'];
-$curUsername = 'jsmith43';
+$curUsername = 'jdoe1';
 //$userID = $_SESSION['object_id'];
 $userID = '5b2acced5a1857e1fe988db0';
+
 
 /**
  * Search for a user given a search box input and determine whether he/she is a friend
@@ -22,10 +30,11 @@ $userID = '5b2acced5a1857e1fe988db0';
  * @param $username
  * @param $userID
  * @param $inputUname
+ * @param $shouldVerify
  * @return array
  */
-function searchUser($man, $username, $userID, $inputUname) {
-    if ($username == $inputUname) {
+function searchUser($man, $username, $userID, $inputUname, $shouldVerify) {
+    if ($shouldVerify && $username == $inputUname) {
         return [];
     }
     $encodedInput = preg_quote($inputUname);
@@ -83,7 +92,7 @@ function searchRooms($man, $input) {
  */
 function searchFile($client, $man, $username, $owner, $filename) {
     $contents = [];
-    $GHUname = searchUser($man, $username, "", $owner)[0]->GHUsername;
+    $GHUname = searchUser($man, $username, "", $owner, false)[0]->GHUsername;
     $results = $client->search->searchCode($GHUname, $filename);
     foreach ($results as $result) {
         $contents[] = array(
@@ -102,19 +111,16 @@ $userOrFile = '/^@([A-Za-z0-9_.!-]+) ?([^ ]+)?/';
 $otherOrFile = '/^([^ ]+) ?@([A-Za-z0-9_.!-]+)?/';
 if (preg_match($userOrFile, $input, $groups)) {
     if (isset($groups[2])) {
-        echo "File";
-        echo json_encode(searchFile($client, $man, $curUsername, $groups[1], $groups[2]));
+        echo json_encode(searchFile($client, $man, $curUsername, $groups[1], $groups[2]) + Types::File);
     } else {
-        echo "User";
-        echo json_encode(searchUser($man, $curUsername, $userID, $groups[1]));
+        echo json_encode(searchUser($man, $curUsername, $userID, $groups[1], true) + Types::User);
     }
 } else if (preg_match($otherOrFile, $input, $groups)) {
     if (isset($groups[2])) {
-        echo "File";
-        echo json_encode(searchFile($client, $man, $curUsername, $groups[2], $groups[1]));
+        echo json_encode(searchFile($client, $man, $curUsername, $groups[2], $groups[1]) + Types::File);
     } else {
-        echo json_encode(searchRooms($man, $groups[1]));
+        echo json_encode(searchRooms($man, $groups[1]) + Types::Chatroom);
     }
 } else {
-    echo json_encode(searchRooms($man, $input));
+    echo json_encode(searchRooms($man, $input) + Types::Chatroom);
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="castle">
 <head>
- <link rel="icon" href="images/purplelogo.png">
+    <link rel="icon" href="images/purplelogo.png">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
@@ -18,12 +18,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,height=device-height"/>
 </head>
 <style>
-    html{
+    html {
         background-image: url("images/blur.jpg");
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
     }
+
     body {
         height: 100%;
         font-family: "Lato";
@@ -40,7 +41,6 @@
         background-color: rgba(256, 256, 256, 0.5);
         vertical-align: middle;
         font-size: 20px;
-        display: none;
         border-radius: 50px;
         color: black;
         padding: 10px;
@@ -92,7 +92,8 @@
             <td><a onclick="return false"><i class="fas fa-bars fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a onClick="openNav()" style="cursor: pointer"><img src="images/profiletemp.png" alt="Avatar" class="userpic"></a>
+            <td><a onClick="openNav()" style="cursor: pointer"><img src="images/profiletemp.png" alt="Avatar"
+                                                                    class="userpic"></a>
             </td>
         </tr>
     </table>
@@ -148,7 +149,7 @@
 
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
-       //document.getElementById("main").style.marginLeft = "0";
+        //document.getElementById("main").style.marginLeft = "0";
         document.body.style.backgroundColor = "rgba(0,0,0,0)";
     }
 
@@ -204,30 +205,58 @@
             document.getElementById("go").className = "searchoptions animated bounceOut";
         }
         document.getElementById("oc").style.top = "20%";
-    }
+    };
+
     /*document.getElementById("sbxx").onblur = function(){
         document.getElementById("so").className = "searchoptions animated bounceOut";
         document.getElementById("go").className = "searchoptions animated bounceOut";
         document.getElementById("oc").style.top = "46%";}*/
-    function addOutput(output,type){
-        var div = document.createElement('div');
-        div.className="searchoptions animated bounceIn";
-        var icon = document.createElement('i');
-        icon.style.marginRight="3%";
-        if(type == 'user'){
-            icon.className='fas fa-user-circle';
-        }else if(type == 'chatroom'){
-            icon.className='fas fa-comments';
-        }else if(type=='repo'){
-            icon.className='fas fa-book';
-        }else if(type='folder'){
-            icon.className="fas fa-folder-open";
-        }else if(type=='file'){
-            icon.className="fas fa-file";
+
+    function addOutput(output, type) {
+        var div = document.createElement('DIV');
+        div.className = "searchoptions animated bounceIn";
+        var icon = document.createElement('I');
+        icon.style.marginRight = "3%";
+        if (type === 'user') {
+
+            icon.className = 'fas fa-user-circle';
+        } else if (type === 'chatroom') {
+            icon.className = 'fas fa-comments';
+        } else if (type === 'repo') {
+            icon.className = 'fas fa-book';
+        } else if (type === 'folder') {
+            icon.className = "fas fa-folder-open";
+        } else if (type === 'file') {
+            icon.className = "fas fa-file";
         }
-        icon.appendTo(div);
-        div.innerText=output;
-        div.appendTo(document.getElementById('outputs'));
+        div.appendChild(icon);
+        let span = document.createElement("SPAN");
+        span.innerText = output['name'];
+        div.appendChild(span);
+        document.getElementById('outputs').appendChild(div);
     }
+
+    $('#sbxx').on('input', function () {
+        let val = $('#sbxx').val();
+        if (val !== "") {
+            $.ajax({
+                type: "POST",
+                url: "searchQueries.php",
+                data: {
+                    input: val
+                },
+                success: function (res, status, jqXHR) {
+                    console.log(res);
+                    $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
+                    Object.keys(res).forEach(key => {
+                        if (!isNaN(key)) {
+                            addOutput(res[key], res['type']);
+                        }
+                    });
+                },
+                dataType: 'json'
+            });
+        }
+    });
 </script>
 </html>

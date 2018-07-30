@@ -1,6 +1,6 @@
-let playgroundCtrl = function ($scope, $http, $sce) {
+let playgroundCtrl = function ($scope, $http, $sce, $state) {
     $scope.scan = "";
-    scan($scope, $http, $sce);
+    scan($scope, $http, $sce, $state);
 };
 
 //Global Variables
@@ -8,7 +8,7 @@ var numTabs = 0;
 var editor;
 
 //Scan current repo
-function scan($scope, $http, $sce){
+function scan($scope, $http, $sce, $state){
     $http({
         method: 'POST',
         url: 'fileManager/requests/getAllProjectContents.php',
@@ -23,7 +23,7 @@ function scan($scope, $http, $sce){
         console.log(response.data);
         var resp = response.data;
         if (resp === "UNSYNCED") {
-            swal("GitHub session expired. Please login again to continue.");
+            $state.go('settings', {unsynced: true});
             return;
         }
         var dir = {};

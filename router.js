@@ -23,8 +23,11 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
         controller: 'BlankCtrl'
     }).state('settings', {
         url: '/settings',
-        templateUrl: 'Settings.html',
-        controller: 'BlankCtrl'
+        templateUrl: 'Settings.php',
+        controller: 'settingsCtrl',
+        params: {
+            unsynced: false
+        }
     });
 
     $urlRouterProvider.otherwise('/');
@@ -38,3 +41,9 @@ castle.controller('fmCtrl', function ($state) {
 });
 
 castle.controller('playgroundCtrl', playgroundCtrl);
+
+castle.controller('settingsCtrl', function ($scope, $stateParams) {
+    if ($stateParams.unsynced) {
+        swal("Hey!", "Please sync into Github", "info");
+    }
+});

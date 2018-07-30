@@ -5,11 +5,7 @@
  */
 
 let treasury = angular.module('castle.treasury', ['ui.router']).config(function ($stateProvider) {
-    $stateProvider.state('treasury.sync', {
-        url: '/sync',
-        templateUrl: 'fileManager/github/sync.php',
-        controller: 'syncController'
-    }).state('treasury.projects', {
+    $stateProvider.state('treasury.projects', {
         url: '/projects',
         templateUrl: 'fileManager/templates/projects.html',
         controller: 'projectsController'
@@ -31,7 +27,7 @@ treasury.controller('projectsController', function ($scope, $http, $state) {
         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
         if (response.data === "UNSYNCED") {
-            $state.go('treasury.sync');
+            $state.go('settings', {unsynced: true});
         }
         $scope.repos = response.data;
     });

@@ -76,7 +76,7 @@ function clickFile(hash, name, key){
 function openTab(hash, key, data){
     numTabs++;
     if(angular.element('#tab'+hash)[0]==null){
-        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="closeTab(this)" title="Remove this page">×</button></a></li>'));
+        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
     }
     activateTab(hash, key);
     editor.setValue(data, -1);

@@ -441,4 +441,8 @@ border-radius: 10px 10px 10px 10px;
             transform: none;
     opacity: 1;
   }
-} 
+}
+
+#changesList {
+    list-style: none;
+}

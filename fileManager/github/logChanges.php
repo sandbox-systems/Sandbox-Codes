@@ -69,4 +69,17 @@ $tree = array_values($tree);
 $newTreeSha = $client->git->trees->createTree($owner, $repo, $tree)->getSha();
 $_SESSION['tree'] = $newTreeSha;
 include 'saveTree.php';
+
+$newTree = $client->git->trees->getTreeRecursively($owner, $repo, $newTreeSha);
+//var_dump($newTree);
+foreach ($baseTree->getTree() as &$item) {
+    $change = $_SESSION['changes'][0];
+    if ($item->getPath() == $change['path'] . ($change['path'] == '' ? '' : '/') . $change['name']) {
+        header('Content-Type: application/json');
+        echo json_encode(array(
+            'newSha' => $item->getSha()
+        ));
+    }
+}
+
 $_SESSION['changes'] = array();

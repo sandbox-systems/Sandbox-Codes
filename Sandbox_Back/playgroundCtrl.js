@@ -164,7 +164,7 @@ function updateFile(path, name, content){
         },
         dataType: "text",
         success: function(data){
-            console.log(data);
+            active_hash = data['newSha'];
         },
         error: function(data){
             if(notify)

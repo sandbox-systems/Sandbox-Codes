@@ -9,16 +9,12 @@ include 'util.php';
 
 // TODO Replace session with DB
 
-if (isset($_SESSION['token'])) {
+$code = $_GET['code'];
+$token = fetchToken($code, $client_id, $client_secret);
+
+if ($token) {
+    $_SESSION['token'] = $token;
     header("Location: ../../Castle.html#/settings");
 } else {
-    $code = $_GET['code'];
-    $token = fetchToken($code, $client_id, $client_secret);
-
-    if ($token) {
-        $_SESSION['token'] = $token;
-        header("Location: ../../Castle.html#/settings");
-    } else {
-        header("Location: ../../Castle.html#/settings?unsuccessful");
-    }
+    header("Location: ../../Castle.html#/settings?unsuccessful");
 }

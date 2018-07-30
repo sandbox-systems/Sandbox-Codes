@@ -13,7 +13,6 @@ $branch = $_POST['branch'];
 $path = $_POST['path'];
 $name = $_POST['name'];
 $content = $_POST['content'];
-$sha = $_POST['sha'];
 
 if ($storageMethod == "GITHUB") {
     include '../github/logFileUpdate.php';

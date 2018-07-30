@@ -19,6 +19,10 @@ var owner = "aadhi0319";
 var repo = "ChatBox";
 var branch = "master";
 var notify = true;
+var active_name = null;
+var active_path = null;
+var active_hash = null;
+var active_key = null;
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
@@ -78,7 +82,7 @@ function scan($scope, $http, $sce, $state){
  ***************** MANAGER BINDINGS ******************
  ****************************************************/
 function clickFile(hash, name, key){
-    openTab(hash, key);
+    openTab(hash, name, key);
 }
 
 /****************************************************
@@ -139,23 +143,58 @@ function createFile(path, name){
     });
 }
 
+setInterval(function(){
+    if(active_path!=null && active_name!=null){
+        updateFile(active_path, active_name, editor.getValue());
+    }
+    }, 10000);
+
+function updateFile(path, name, content){
+    console.log(active_path+" "+active_name+" "+content);
+    $.ajax({
+        type: "POST",
+        url: "fileManager/requests/updateFile.php",
+        data: {
+            owner: owner,
+            repo: repo,
+            branch: branch,
+            path: path,
+            name: name,
+            content: content
+        },
+        dataType: "text",
+        success: function(data){
+            console.log(data);
+        },
+        error: function(data){
+            if(notify)
+                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+        }
+    });
+}
+
 /****************************************************
  ****************** TAB BINDINGS ********************
  ****************************************************/
 
-function openTab(hash, key){
+function openTab(hash, name, key){
     numTabs++;
     if(angular.element('#tab'+hash+key)[0]==null){
-        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+key.replace(".", "")+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
+        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+key.replace(".", "")+'" data-path="'+name+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
     }
     activateTab(hash, key);
 }
 
 //Close tab
 function closeTab(element){
+    numTabs--;
     angular.element(element).parent().parent().remove();
     var openTabs = angular.element("#tab-list > li");
     if(openTabs.length<1){
+        active_path = null;
+        active_name = null;
+        active_key = null;
+        active_hash = null;
         return;
     }
     activateTab(openTabs[0].id.substring(3, 43), angular.element(openTabs[0]).text().slice(0, -1));
@@ -166,9 +205,20 @@ function activateTab(hash, key){
     if(active_li.length>0){
         active_li[0].classList.remove("active");
     }
-    angular.element('#tab'+hash+key.replace(".", "")).addClass("active");
-    setLanguage(key);
+    var tab = angular.element('#tab'+hash+key.replace(".", ""))
+    tab.addClass("active");
+    active_name = tab.text().slice(0, -1);
+    active_path = tab[0].attributes["data-path"].value;
+    active_path = active_path.substring(0, active_path.lastIndexOf("/"));
+    if(active_path.indexOf("/")==-1){
+        active_path = "";
+    }
+    active_hash = hash;
+    active_key = key;
     readFile(hash);
+    setLanguage(key);
+    var active_li = angular.element('#tab-list > .active');
+
 }
 
 function tabClick(tab){

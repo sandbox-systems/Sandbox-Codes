@@ -16,7 +16,7 @@ let playgroundCtrl = function ($scope, $http, $sce, $state) {
 var numTabs = 0;
 var editor;
 var owner = "aadhi0319";
-var repo = "ChatBox";
+var repo = "Sandbox";
 var branch = "master";
 var notify = true;
 var active_name = null;
@@ -165,6 +165,10 @@ function updateFile(path, name, content){
         dataType: "text",
         success: function(data){
             active_hash = data['newSha'];
+            var active_li = angular.element('#tab-list > .active');
+            if(active_li.length>0){
+                active_li[0].attributes["data-hash"].value = active_hash;
+            }
         },
         error: function(data){
             if(notify)
@@ -180,9 +184,9 @@ function updateFile(path, name, content){
 function openTab(hash, name, key){
     numTabs++;
     if(angular.element('#tab'+hash+key)[0]==null){
-        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+hash+key.replace(".", "")+'" data-path="'+name+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
+        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+name+'" data-hash="'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
     }
-    activateTab(hash, key);
+    activateTab(hash, name);
 }
 
 //Close tab
@@ -197,18 +201,18 @@ function closeTab(element){
         active_hash = null;
         return;
     }
-    activateTab(openTabs[0].id.substring(3, 43), angular.element(openTabs[0]).text().slice(0, -1));
+    activateTab(hash, openTabs[0].id.substring(3));
 }
 
-function activateTab(hash, key){
+function activateTab(hash, path){
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
         active_li[0].classList.remove("active");
     }
-    var tab = angular.element('#tab'+hash+key.replace(".", ""))
+    var tab = angular.element('#tab'+path)
     tab.addClass("active");
     active_name = tab.text().slice(0, -1);
-    active_path = tab[0].attributes["data-path"].value;
+    active_path = tab[0].id.substring(3).value;
     active_path = active_path.substring(0, active_path.lastIndexOf("/"));
     if(active_path.indexOf("/")==-1){
         active_path = "";
@@ -222,7 +226,7 @@ function activateTab(hash, key){
 }
 
 function tabClick(tab){
-    activateTab(tab.id.substring(3, 43), angular.element(tab).text().slice(0, -1));
+    activateTab(tab.attributes["data-hash"].value);
 }
 
 function setLanguage(key){

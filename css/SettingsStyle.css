@@ -81,7 +81,9 @@
   position: relative;
     height: 200px;
     width: 200px;
-    left: 40vw;
+    display: block;
+  margin-right: auto;
+  margin-left: auto;
 }
     
 .nokeh {

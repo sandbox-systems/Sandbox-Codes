@@ -169,13 +169,13 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         </tr>
         <tr style="display: none;" class="animated fadeIn" id="rpholder">
             <td>
-                <div class ="categ_row"
+                <div class ="categ_row">
                     <div class="text">Reinput Password</div>
                 </div>
             </td>
             <td>
-                <form class="login_row">
-                    <input style="margin-left: 2%;"class="login__input" type="password" id="rpassword">
+                <form class="login__row">
+                    <input class="login__input" type="password" id="rpassword">
                 </form>
             </td>
         </tr>

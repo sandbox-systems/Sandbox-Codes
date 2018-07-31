@@ -9,7 +9,7 @@ include "global.php";
 
 $owner = $_POST['owner'];
 $repo = $_POST['repo'];
-$username = $_POST['username'];
+$usernames = $_POST['usernames'];
 
 if ($storageMethod == "GITHUB") {
     include '../github/addCollaborator.php';

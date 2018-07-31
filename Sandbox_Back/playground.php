@@ -173,51 +173,51 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
     <!-- *************************************************** -->
     <!-- ******************* CURSOR MENUS ****************** -->
     <!-- *************************************************** -->
-    <div id="foldermenu">
-        <li id="folderNewFile" class="contextMenuItem"><span class="fas fa-file"></span> <?php echo $text["newFile"]; ?>
-        </li>
-        <li id="folderNewFolder" class="contextMenuItem"><span
-                    class="fas fa-folder"></span> <?php echo $text["newFolder"]; ?></li>
-        <li id="folderRenameFolder" class="contextMenuItem"><span
-                    class="fas fa-pencil-alt"></span> <?php echo $text["renameFolder"]; ?></li>
-        <li id="folderDuplicateFolder" class="contextMenuItem"><span
-                    class="fas fa-copy"></span> <?php echo $text["duplicateFolder"]; ?></li>
-        <div class="lineBreak"></div>
-        <li id="folderDownloadFolder" class="contextMenuItem"><span
-                    class="fas fa-cloud-download-alt"></span> <?php echo $text["downloadFolder"]; ?></li>
-        <li id="folderUpload" class="contextMenuItem"><span
-                    class="fas fa-cloud-upload-alt"></span> <?php echo $text["upload"]; ?></li>
-        <div class="lineBreak"></div>
-        <li id="folderEmpty" class="contextMenuItem"><span
-                    class="fas fa-folder-open"></span> <?php echo $text["emptyFolder"]; ?></li>
-        <li id="folderDelete" class="contextMenuItem"><span
-                    class="fas fa-trash"></span> <?php echo $text["deleteFolder"]; ?></li>
-        <div class="lineBreak"></div>
-        <li id="folderRefresh" class="contextMenuItem"><span
-                    class="fas fa-sync-alt"></span> <?php echo $text["refreshFiles"]; ?></li>
-    </div>
-
-    <div id="filemenu">
-        <li id="folderNewFile" class="contextMenuItem"><span class="fas fa-file"></span> <?php echo $text["newFile"]; ?>
-        </li>
-        <li id="folderNewFolder" class="contextMenuItem"><span
-                    class="fas fa-folder"></span> <?php echo $text["newFolder"]; ?></li>
-        <li id="folderRenameFolder" class="contextMenuItem"><span
-                    class="fas fa-pencil-alt"></span> <?php echo $text["renameFile"]; ?></li>
-        <li id="folderDuplicateFolder" class="contextMenuItem"><span
-                    class="fas fa-copy"></span> <?php echo $text["duplicateFile"]; ?></li>
-        <div class="lineBreak"></div>
-        <li id="folderDownloadFolder" class="contextMenuItem"><span
-                    class="fas fa-cloud-download-alt"></span> <?php echo $text["downloadFolder"]; ?></li>
-        <li id="folderUpload" class="contextMenuItem"><span
-                    class="fas fa-cloud-upload-alt"></span> <?php echo $text["upload"]; ?></li>
-        <div class="lineBreak"></div>
-        <li id="folderDelete" class="contextMenuItem"><span
-                    class="fas fa-trash"></span> <?php echo $text["deleteFile"]; ?></li>
-        <div class="lineBreak"></div>
-        <li id="folderRefresh" class="contextMenuItem"><span
-                    class="fas fa-sync-alt"></span> <?php echo $text["refreshFiles"]; ?></li>
-    </div>
+<!--    <div id="foldermenu">-->
+<!--        <li id="folderNewFile" class="contextMenuItem"><span class="fas fa-file"></span> --><?php //echo $text["newFile"]; ?>
+<!--        </li>-->
+<!--        <li id="folderNewFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-folder"></span> --><?php //echo $text["newFolder"]; ?><!--</li>-->
+<!--        <li id="folderRenameFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-pencil-alt"></span> --><?php //echo $text["renameFolder"]; ?><!--</li>-->
+<!--        <li id="folderDuplicateFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-copy"></span> --><?php //echo $text["duplicateFolder"]; ?><!--</li>-->
+<!--        <div class="lineBreak"></div>-->
+<!--        <li id="folderDownloadFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-cloud-download-alt"></span> --><?php //echo $text["downloadFolder"]; ?><!--</li>-->
+<!--        <li id="folderUpload" class="contextMenuItem"><span-->
+<!--                    class="fas fa-cloud-upload-alt"></span> --><?php //echo $text["upload"]; ?><!--</li>-->
+<!--        <div class="lineBreak"></div>-->
+<!--        <li id="folderEmpty" class="contextMenuItem"><span-->
+<!--                    class="fas fa-folder-open"></span> --><?php //echo $text["emptyFolder"]; ?><!--</li>-->
+<!--        <li id="folderDelete" class="contextMenuItem"><span-->
+<!--                    class="fas fa-trash"></span> --><?php //echo $text["deleteFolder"]; ?><!--</li>-->
+<!--        <div class="lineBreak"></div>-->
+<!--        <li id="folderRefresh" class="contextMenuItem"><span-->
+<!--                    class="fas fa-sync-alt"></span> --><?php //echo $text["refreshFiles"]; ?><!--</li>-->
+<!--    </div>-->
+<!---->
+<!--    <div id="filemenu">-->
+<!--        <li id="folderNewFile" class="contextMenuItem"><span class="fas fa-file"></span> --><?php //echo $text["newFile"]; ?>
+<!--        </li>-->
+<!--        <li id="folderNewFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-folder"></span> --><?php //echo $text["newFolder"]; ?><!--</li>-->
+<!--        <li id="folderRenameFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-pencil-alt"></span> --><?php //echo $text["renameFile"]; ?><!--</li>-->
+<!--        <li id="folderDuplicateFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-copy"></span> --><?php //echo $text["duplicateFile"]; ?><!--</li>-->
+<!--        <div class="lineBreak"></div>-->
+<!--        <li id="folderDownloadFolder" class="contextMenuItem"><span-->
+<!--                    class="fas fa-cloud-download-alt"></span> --><?php //echo $text["downloadFolder"]; ?><!--</li>-->
+<!--        <li id="folderUpload" class="contextMenuItem"><span-->
+<!--                    class="fas fa-cloud-upload-alt"></span> --><?php //echo $text["upload"]; ?><!--</li>-->
+<!--        <div class="lineBreak"></div>-->
+<!--        <li id="folderDelete" class="contextMenuItem"><span-->
+<!--                    class="fas fa-trash"></span> --><?php //echo $text["deleteFile"]; ?><!--</li>-->
+<!--        <div class="lineBreak"></div>-->
+<!--        <li id="folderRefresh" class="contextMenuItem"><span-->
+<!--                    class="fas fa-sync-alt"></span> --><?php //echo $text["refreshFiles"]; ?><!--</li>-->
+<!--    </div>-->
 </div>
 <!-- *************************************************** -->
 <!-- ***************** ACE CODE EDITOR ***************** -->

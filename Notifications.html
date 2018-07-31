@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+</head>
+<style>
+    body{
+        background:url("images/blur.jpg");
+    }
+    .entry{
+        width: 90%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: rgba(255,255,255,0.5);
+        text-align: center;
+        font-size: 2em;
+        margin-top: 2%;
+        padding: 1%;
+        cursor: pointer;
+        border-radius: 50px;
+    }
+    .entry:hover{
+        box-shadow: 0px 5px 8px 0px rgba(256, 256, 256, 0.4);
+    }
+    .close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 12px 16px 12px 16px;
+    }
+
+    .close:hover {
+        background-color: #f44336;
+        color: white;
+    }
+</style>
+<body>
+    <button onclick="addEntry('poopidyscoop','repo')">temp</button>
+    <ul id="notificationlist" style="list-style: none">
+        <li><div class="entry">Testttt</div></li>
+    </ul>
+</body>
+<script>
+    var holder;
+    function addEntry(entry,type) {
+        var icon = document.createElement('I');
+        icon.style.marginRight = "3%";
+        if (type === 'user') {
+            icon.className = 'fas fa-user-circle';
+        } else if (type === 'chatroom') {
+            icon.className = 'fas fa-comments';
+        } else if (type === 'repo') {
+            icon.className = 'fas fa-book';
+        } else if (type === 'folder') {
+            icon.className = "fas fa-folder-open";
+        } else if (type === 'file') {
+            icon.className = "fas fa-file";
+        }
+        var holder = document.createElement('DIV');
+        holder.className="entry animated bounceIn"
+        holder.appendChild(icon);
+        let span = document.createElement("SPAN");
+        span.innerHTML = entry + '&nbsp;&nbsp;&nbsp;&nbsp;';
+        holder.appendChild(span);
+        var list = document.createElement('LI');
+        list.appendChild(holder);
+        document.getElementById('notificationlist').appendChild(list);
+    }
+    var myNodelist = document.getElementsByTagName("LI");
+    var i;
+    for (i = 0; i < myNodelist.length; i++) {
+        var span = document.createElement("SPAN");
+        var txt = document.createTextNode("\u00D7");
+        span.className = "close";
+        span.appendChild(txt);
+        myNodelist[i].appendChild(span);
+    }
+
+    // Click on a close button to hide the current list item
+    var close = document.getElementsByClassName("close");
+    var i;
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function() {
+            var div = this.parentElement;
+            div.style.display = "none";
+        }
+    }
+</script>
+</html>

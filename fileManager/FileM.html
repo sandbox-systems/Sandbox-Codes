@@ -688,17 +688,15 @@
     function dropper(ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
-        if (document.getElementById(data).nodeName == "LI") {
             document.getElementById('shareModal').style.display = "block";
-        }
     }
 
-    function moveFolder(ev) {
-        ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
-        document.getElementById(data).style.display = "none";
-
-    }
+    // function moveFolder(ev) {
+    //     ev.preventDefault();
+    //     var data = ev.dataTransfer.getData("text");
+    //     document.getElementById(data).style.display = "none";
+    //
+    // }
 
     function setCurBranchName(name) {
         $('#curBranchName').text(name);

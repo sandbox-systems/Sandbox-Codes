@@ -15,6 +15,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 <!--<link rel="stylesheet" href="css/style.css" type="text/css">-->
 <link rel="stylesheet" href="css/animate.css">
 <link rel="stylesheet" href="css/SettingsStyle.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
 <style>
     input {
         outline: none;
@@ -90,7 +91,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         opacity: 1;
     }
 
-    #sync {
+    .alonebutton {
         margin-left: 70%;
         width: 100%;
         outline: none;
@@ -102,7 +103,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         text-decoration: none;
     }
 
-    #sync:hover {
+    .alonebutton:hover {
         background-image: url('images/profileback.jpg');
     }
 </style>
@@ -122,7 +123,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <table style="width: 100%">
         <tr class="animated fadeIn">
             <td>
-                <a href="<?php echo $url; ?>" id="sync" class="categ_row">Sync Github Account</a>
+                <a href="<?php echo $url; ?>" id="sync" class="categ_row alonebutton">Sync Github Account</a>
             </td>
         </tr>
         <tr class="animated fadeIn">
@@ -157,12 +158,24 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             </td>
             <td>
                 <form class="update_row">
-                    <input style="margin-left: 2%;" class="theotherone" type="password" id="password">
+                    <input style="margin-left: 2%;" class="theotherone" type="password" id="password" oninput="passwordCheck()">
                     <label class="switch">
                         <input value="None" type="checkbox"
                                onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'">
                         <span class="slider"></span>
                     </label>
+                </form>
+            </td>
+        </tr>
+        <tr style="display: none;" class="animated fadeIn" id="rpholder">
+            <td>
+                <div class ="categ_row"
+                    <div class="text">Reinput Password</div>
+                </div>
+            </td>
+            <td>
+                <form class="login_row">
+                    <input style="margin-left: 2%;"class="login__input" type="password" id="rpassword">
                 </form>
             </td>
         </tr>
@@ -180,7 +193,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         </tr>
         <tr class="animated fadeIn">
             <td>
-                <button id="updateProfileSubmitBtn">Save Changes</button>
+                <button class="alonebutton" id="updateProfileSubmitBtn">Save Changes</button>
             </td>
         </tr>
         <!--<tr class="animated fadeIn">
@@ -198,6 +211,17 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 </div>
 </body>
 <script>
+    var passwordB = 'true';
+    function passwordCheck(){
+        var initial = document.getElementById('password');
+        var rp = document.getElementById('rpholder');
+        rp.style.display="block";
+        if(document.getElementById('rpassword').value === initial){
+            passwordB = true;
+        }else{
+            passwordB = false;
+        }
+    }
     jQuery(document).ready(function ($) {
         $(window).on("load", function () {
 
@@ -221,18 +245,29 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     });
 
     $('#updateProfileSubmitBtn').click(function () {
-        $.ajax({
-            type: "POST",
-            url: "updateProfile.php",
-            data: {
-                'name': $('#nameInput').val(),
-                'username': $('#usernameInput').val(),
-                'email': $('#emailInput').val()
-            },
-            success: function (data, status, xhttp) {
-            },
-            dataType: 'json'
-        });
+        if(passwordB) {
+            $.ajax({
+                type: "POST",
+                url: "updateProfile.php",
+                data: {
+                    'name': $('#nameInput').val(),
+                    'username': $('#usernameInput').val(),
+                    'email': $('#emailInput').val()
+                },
+                success: function (data, status, xhttp) {
+                },
+                dataType: 'json'
+            });
+            swal({
+                position: 'top-end',
+                type: 'success',
+                title: 'Your settings have been saved',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }else{
+            swal('Whoops!','Check your password','error');
+        }
     });
 </script>
 </html>

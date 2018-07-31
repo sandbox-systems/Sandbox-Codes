@@ -45,7 +45,7 @@ treasury.controller('projectsController', function ($scope, $http, $state) {
     };
 
     $scope.drag = drag;
-    $scope.moveFolder = moveFolder;
+    //$scope.moveFolder = moveFolder;
     $scope.allowDrop = allowDrop;
 });
 
@@ -66,7 +66,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
     };
 
     setCurBranchName($scope.params.branch);
-    updateBreadCrumbs("Castle.html#/treasury/projects/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
+    updateBreadCrumbs("Castle.php#/treasury/projects/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
         $scope.params.branch, $scope.params.path, $scope.params.repo);
 
     setCurPath("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +

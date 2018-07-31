@@ -62,6 +62,7 @@ if (isset($_SESSION['changes'])) {
         }
     }
 }
+
 // Reset indices to ensure array is created when encoding to json
 $tree = array_values($tree);
 
@@ -71,9 +72,8 @@ $_SESSION['tree'] = $newTreeSha;
 include 'saveTree.php';
 
 $newTree = $client->git->trees->getTreeRecursively($owner, $repo, $newTreeSha);
-//var_dump($newTree);
-foreach ($baseTree->getTree() as &$item) {
-    $change = $_SESSION['changes'][0];
+$change = $_SESSION['changes'][$owner . $repo . $branch . $path . $name];
+foreach ($newTree->getTree() as &$item) {
     if ($item->getPath() == $change['path'] . ($change['path'] == '' ? '' : '/') . $change['name']) {
         header('Content-Type: application/json');
         echo json_encode(array(

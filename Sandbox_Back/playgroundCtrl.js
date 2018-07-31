@@ -15,14 +15,13 @@ let playgroundCtrl = function ($scope, $http, $sce, $state) {
 //Global Variables
 var numTabs = 0;
 var editor;
-var owner = "aadhi0319";
-var repo = "Sandbox";
+var owner = "";
+var repo = "";
 var branch = "master";
 var notify = true;
 var active_name = null;
 var active_path = null;
 var active_hash = null;
-var active_key = null;
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
@@ -37,7 +36,6 @@ function scan($scope, $http, $sce, $state){
             path: ""
         })
     }).then(function successCallback(response) {
-        console.log(response.data);
         var resp = response.data;
         if (resp === "UNSYNCED") {
             $state.go('settings', {unsynced: true});
@@ -74,6 +72,9 @@ function scan($scope, $http, $sce, $state){
         traverse(dir);
         $scope.scan = $sce.trustAsHtml(html);
     }, function errorCallback(response) {
+        if(repo===""){
+            chooseRepo();
+        }
         $scope.scan = "Error fetching data: " + JSON.stringify(response);
     });
 }
@@ -81,6 +82,43 @@ function scan($scope, $http, $sce, $state){
 /****************************************************
  ***************** MANAGER BINDINGS ******************
  ****************************************************/
+function chooseRepo(){
+    var inputOptionsPromise = new Promise(function (resolve) {
+        $.ajax({
+            type: "POST",
+            url: "fileManager/requests/getProjects.php",
+            data: {
+
+            },
+            dataType: "json",
+            success: function(data){
+                var y = {};
+                for(var i in data){
+                    y[data[i].name+"לא"+data[i].owner] = data[i].name
+                }
+                resolve(y)
+            },
+            error: function(data){
+                if(notify)
+                    swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+                return null;
+            }
+        });
+    });
+
+    swal({
+        title: 'Select Repo',
+        input: 'select',
+        inputOptions: inputOptionsPromise,
+        showCancelButton: true
+    }).then(function(result){
+        results = result.value.toString().split("לא");
+        repo = results[0];
+        owner = results[1];
+        scan($gscope, $ghttp, $gsce, $gstate);
+    });
+}
+
 function clickFile(hash, name, key){
     openTab(hash, name, key);
 }
@@ -143,6 +181,48 @@ function createFile(path, name){
     });
 }
 
+function deleteFile(path, name){
+    console.log(path+" "+name);
+    swal({
+        title: "Danger Zone",
+        text: "Are you sure you want to delete this file? Well, if you change your mind GitHub is a thing.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        console.log(owner+" "+repo+" "+branch+" "+path+" "+name);
+        if (willDelete) {
+            $.ajax({
+                type: "POST",
+                url: "fileManager/requests/deleteFile.php",
+                data: {
+                    owner: owner,
+                    repo: repo,
+                    branch: branch,
+                    path: path,
+                    name: name
+                },
+                dataType: "text",
+                success: function (data) {
+                    swal({
+                        icon: "success",
+                        buttons: false,
+                        timer: 1000,
+                        className: "swal-icon-notification"
+                    });
+                    scan($gscope, $ghttp, $gsce, $gstate);
+                },
+                error: function (data) {
+                    console.log(JSON.stringify(data));
+                    swal("Could not delete file.", {
+                        icon: "error",
+                    });
+                }
+            });
+        }
+    });
+}
+
 setInterval(function(){
     if(active_path!=null && active_name!=null){
         updateFile(active_path, active_name, editor.getValue());
@@ -150,7 +230,7 @@ setInterval(function(){
     }, 10000);
 
 function updateFile(path, name, content){
-    console.log(active_path+" "+active_name+" "+content);
+    console.log(name);
     $.ajax({
         type: "POST",
         url: "fileManager/requests/updateFile.php",
@@ -162,15 +242,13 @@ function updateFile(path, name, content){
             name: name,
             content: content
         },
-        dataType: "text",
-        success: function(data){
-            active_hash = data['newSha'];
-            var active_li = angular.element('#tab-list > .active');
-            if(active_li.length>0){
-                active_li[0].attributes["data-hash"].value = active_hash;
-            }
+        dataType: "json",
+        success: function(data) {
+            active_hash = data["newSha"];
+            updateHash(active_hash);
         },
         error: function(data){
+            console.log(JSON.stringify(data));
             if(notify)
                 swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
         }
@@ -183,8 +261,8 @@ function updateFile(path, name, content){
 
 function openTab(hash, name, key){
     numTabs++;
-    if(angular.element('#tab'+hash+key)[0]==null){
-        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+name+'" data-hash="'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
+    if(angular.element('#tab'+name.replace(/[.\/]/g, ""))[0]==null){
+        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+name.replace(/[.\/]/g, "")+'" data-path="'+name+'" data-hash="'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
     }
     activateTab(hash, name);
 }
@@ -195,46 +273,43 @@ function closeTab(element){
     angular.element(element).parent().parent().remove();
     var openTabs = angular.element("#tab-list > li");
     if(openTabs.length<1){
+        editor.setValue("", -1);
         active_path = null;
         active_name = null;
-        active_key = null;
         active_hash = null;
         return;
     }
-    activateTab(hash, openTabs[0].id.substring(3));
+    activateTab(openTabs[0].attributes["data-hash"].value, openTabs[0].attributes["data-path"].value);
 }
 
 function activateTab(hash, path){
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
+        angular.element(active_li[0]).text().slice(0, -1);
+        updateFile(path, angular.element(active_li[0]).text().slice(0, -1), editor.getValue())
         active_li[0].classList.remove("active");
     }
-    var tab = angular.element('#tab'+path)
+    var tab = angular.element('#tab'+path.replace(/[.\/]/g, ""));
     tab.addClass("active");
     active_name = tab.text().slice(0, -1);
-    active_path = tab[0].id.substring(3).value;
+    active_path = tab[0].attributes["data-path"].value;
     active_path = active_path.substring(0, active_path.lastIndexOf("/"));
-    if(active_path.indexOf("/")==-1){
-        active_path = "";
-    }
     active_hash = hash;
-    active_key = key;
     readFile(hash);
-    setLanguage(key);
-    var active_li = angular.element('#tab-list > .active');
-
+    updateFile(active_path, active_name, editor.getValue());
+    setLanguage(name);
 }
 
 function tabClick(tab){
-    activateTab(tab.attributes["data-hash"].value);
+    activateTab(tab.attributes["data-hash"].value, tab.attributes["data-path"].value);
 }
 
-function setLanguage(key){
-    if(key.indexOf(".")==-1){
+function setLanguage(name){
+    if(name.indexOf(".")==-1){
         //swal("Cannot detect file extension to set editor language.");
         editor.getSession().setMode("ace/mode/text");
     }
-    var ext = key.split(".")[1];
+    var ext = name.split(".")[1];
     var language = "text";
     switch(ext){
         case "java":
@@ -254,6 +329,13 @@ function setLanguage(key){
             });*/
     }
     editor.getSession().setMode("ace/mode/"+language);
+}
+
+function updateHash(hash){
+    var active_li = angular.element('#tab-list > .active');
+    if(active_li.length>0){
+        active_li[0].attributes["data-hash"].value = hash;
+    }
 }
 
 /****************************************************

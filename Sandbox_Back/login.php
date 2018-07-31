@@ -32,7 +32,7 @@
         $_SESSION["object_id"] = $row->current()->_id;
 
         echo "User authenticated.";
-        //header("Location: https://sandboxcodes.com/Castle.html");
+        //header("Location: https://sandboxcodes.com/Castle.php");
 
     }catch(Exception $e){
 	    die($e->getMessage());

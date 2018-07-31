@@ -114,7 +114,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 <div class="settingscont">
     <div class="tempcont animated fadeIn">
         <div id="profile-container">
-            <image id="profileImage" src="images/profiletemp.png"/>
+            <image id="profileImage" src="<?php echo $user->profilepic ?>"/>
         </div>
         <input id="imageUpload" type="file"
                name="profile_photo" placeholder="Photo" required="" capture>
@@ -212,6 +212,8 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 </body>
 <script>
     var passwordB = 'true';
+    var hasImagedChanged = false;
+
     function passwordCheck(){
         var initial = document.getElementById('password');
         var rp = document.getElementById('rpholder');
@@ -242,15 +244,40 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 
     $("#imageUpload").change(function () {
         fasterPreview(this);
+	hasImageChanged = true;
+	console.log(this.files[0]);
     });
 
-    $('#updateProfileSubmitBtn').click(function () {
-        if(passwordB) {
-            $.ajax({
+    let updateProfile = function() {
+	$.ajax({
                 type: "POST",
                 url: "updateProfile.php",
                 data: {
                     'name': $('#nameInput').val(),
+                    'username': $('#usernameInput').val(),
+                    'email': $('#emailInput').val()
+                },
+                success: function (data, status, xhttp) {
+                },
+                dataType: 'json'
+            });
+            swal({
+                position: 'top-end',
+                type: 'success',
+                title: 'Your settings have been saved',
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+    };
+
+    $('#updateProfileSubmitBtn').click(function () {
+        if(passwordB) {
+	    
+            $.ajax({
+                type: "POST",
+                url: "updateProfile.php",
+                data:                     'name': $('#nameInput').val(),
                     'username': $('#usernameInput').val(),
                     'email': $('#emailInput').val()
                 },

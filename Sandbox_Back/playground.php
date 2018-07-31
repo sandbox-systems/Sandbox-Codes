@@ -4,7 +4,7 @@
     @date   20 November 2017
     COPYRIGHT SANDBOX LLC
 */
-//require "checklogin.php";
+require "../checklogin.php";
 $text = json_decode(file_get_contents("languages/en-US.json"), true);
 ?>
 
@@ -18,7 +18,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
     <!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>-->
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
@@ -212,7 +212,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
         <li id="folderUpload" class="contextMenuItem"><span
                     class="fas fa-cloud-upload-alt"></span> <?php echo $text["upload"]; ?></li>
         <div class="lineBreak"></div>
-        <li id="folderDelete" class="contextMenuItem"><span
+        <li id="fileDelete" class="contextMenuItem"><span
                     class="fas fa-trash"></span> <?php echo $text["deleteFile"]; ?></li>
         <div class="lineBreak"></div>
         <li id="folderRefresh" class="contextMenuItem"><span
@@ -269,7 +269,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             });
         }
 
-        function chooseRepo() {
+        /*function chooseRepo() {
             swal({
                 title: 'Select Repo',
                 input: 'select',
@@ -279,7 +279,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 inputPlaceholder: 'Sandbox',
                 showCancelButton: true
             });
-        }
+        }*/
 
         // let onCommitPress;
         //
@@ -335,6 +335,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             var objhash = "";
             var active_file = "";
             var activeRight = "";
+            var activeRightElem = null;
             var ext = "";
             var name = "";
             var numTabs = 0;
@@ -560,41 +561,12 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 document.getElementById("download").src = "downloadFile.php?filepath=" + encodeURIComponent(filepath);
             }
 
-            function deleteFile(filepath) {
-                swal({
-                    title: "<?php echo $text["deleteFileConfirmTitle"]; ?>",
-                    text: "<?php echo $text["deleteFileConfirmText"]; ?> \"" + filepath.substring(filepath.lastIndexOf("/") + 1) + "\".",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            type: "POST",
-                            url: "deleteFile.php",
-                            data: {
-                                filepath: filepath
-                            },
-                            dataType: "text",
-                            success: function (data) {
-                                swal({
-                                    icon: "success",
-                                    buttons: false,
-                                    timer: 1000,
-                                    className: "swal-icon-notification"
-                                });
-                                scan();
-                            },
-                            error: function (data) {
-                                swal("<?php echo $text["deleteFileError"]; ?>", {
-                                    icon: "error",
-                                });
-                                scan();
-                            }
-                        });
-                    }
-                });
-            }
+            /*function deleteFileLocal() {
+                var deleteli = document.getElementsByClassName("file")[0]
+                var path = deleteli.attributes["onclick"].value.split('", "')[1];
+                var name = angular.element(deleteli).text().substring(1);
+                deleteFile(path, name);
+            }*/
 
             /****************************************************
              ************ HELPER FUNCTIONS (FOLDERS) *************
@@ -911,7 +883,9 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             $("#filemanager").on("mousedown", ".folder", function (element) {
                 $(this).attr("oncontextmenu", "return false;");
                 if (element.button == 2) {
+                    console.log(activeRightElem);
                     activeRight = $(this).attr("data-wd");
+                    activeRightElem = this;
                     $("#foldermenu").css("left", element.pageX + 1);
                     $("#foldermenu").css("top", element.pageY + 1);
                     $("#foldermenu").fadeIn(100);
@@ -969,6 +943,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 $(this).attr("oncontextmenu", "return false;");
                 if (element.button == 2) {
                     activeRight = $(this).attr("data-wd");
+                    activeRightElem = this;
                     $("#filemenu").css("left", element.pageX + 1);
                     $("#filemenu").css("top", element.pageY + 1);
                     $("#filemenu").fadeIn(100);
@@ -1000,7 +975,10 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             });
 
             $("#fileDelete").on("click", function () {
-                deleteFile(activeRight);
+                var path = activeRightElem.attributes['onclick'].value.split('\", \"')[1];
+                path = path.substring(0, path.lastIndexOf("/"));
+                var name = angular.element(activeRightElem).text().substring(1);
+                deleteFile(path, name);
             });
 
             $("#fileRefresh").on("click", function () {

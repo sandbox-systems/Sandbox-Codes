@@ -14,7 +14,7 @@ $token = fetchToken($code, $client_id, $client_secret);
 
 if ($token) {
     $_SESSION['token'] = $token;
-    header("Location: ../../Castle.html#/settings");
+    header("Location: ../../Castle.php#/settings");
 } else {
-    header("Location: ../../Castle.html#/settings?unsuccessful");
+    header("Location: ../../Castle.php#/settings?unsuccessful");
 }

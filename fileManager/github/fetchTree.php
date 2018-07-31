@@ -17,6 +17,7 @@ if (!isset($_SESSION['tree']) || !isset($_SESSION['repoName']) || !isset($_SESSI
     $_SESSION['repoBranch'] != $eBranch) {
     // Fetch all documents that match this repo (should only match 0-1 documents)
     $docs = getDocuments($man, "repos", ['owner' => $eOwner, 'name' => $eRepo], []);
+
     // Fetch from DB if entry exists for current branch (i.e. changes had been saved)
     // If entry does not exist, there are no local changes and the tree must be fetched from Github HEAD
     if (sizeof($docs) == 1 && property_exists($docs[0], $eBranch)) {

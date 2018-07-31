@@ -66,7 +66,7 @@ if (isset($_SESSION['changes'])) {
 $tree = array_values($tree);
 
 // Create new tree object from local version and store sha
-$newTree = $client->git->trees->createTree($owner, $repo, $tree)->getSha();
+$newTreeSha = $client->git->trees->createTree($owner, $repo, $tree)->getSha();
 $_SESSION['tree'] = $newTreeSha;
 include 'saveTree.php';
 

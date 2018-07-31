@@ -28,15 +28,16 @@ try {
         $hash = sha1((string)$_POST['password'].$salt);
 
         $write = new MongoDB\Driver\BulkWrite;
+        $name = (string)$_POST['firstname'] . ' ' . (string)$_POST['lastname'];
         $newUser = array(
             'username' => (string)$_POST['username'],
-            'fname' => (string)$_POST['firstname'],
-            'lname' => (string)$_POST['lastname'],
+            'name' => $name,
             'email' => (string)$_POST["email"],
             'hash' => new MongoDB\BSON\Binary($hash, MongoDB\BSON\Binary::TYPE_GENERIC),
             'salt' => new MongoDB\BSON\Binary($salt, MongoDB\BSON\Binary::TYPE_GENERIC),
             'ecode' => new MongoDB\BSON\Binary($ecode, MongoDB\BSON\Binary::TYPE_GENERIC),
             'everify' => false,
+            'profilepic' => "https://ui-avatars.com/api/?font-size=0.3&rounded=true&color=9370db&background=fff&name=$name",
             'github' => (string)"github.com",
             'features' => "",
             'relax' => true,

@@ -4,8 +4,8 @@ include 'fileManager/github/sync.php';
 include_once 'fileManager/initDB.php';
 
 session_start();
-$user = getDocuments($man, "users", ['username' => 'jdoe1'], [])[0];
-//$user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
+//$user = getDocuments($man, "users", ['username' => 'jdoe1'], [])[0];
+$user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
 
 ?>
 

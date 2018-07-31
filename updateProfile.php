@@ -3,8 +3,8 @@
 include_once 'fileManager/initDB.php';
 
 session_start();
-$user = getDocuments($man, "users", ['username' => 'jdoe1'], [])[0];
-//$user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
+//$user = getDocuments($man, "users", ['username' => 'jdoe1'], [])[0];
+$user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
 
 $name = $_POST['name'];
 $username = $_POST['username'];
@@ -22,8 +22,8 @@ if ($email != $user->email) {
 }
 
 if (!empty($newData)) {
-    updateDocument($man, "users", ['username' => 'jdoe1'], DBUpdateOperators::Set, $newData);
-    //updateDocument($man, "users", ['username' => $_SESSION['username']], DBUpdateOperators::Set, $newData);
+//    updateDocument($man, "users", ['username' => 'jdoe1'], DBUpdateOperators::Set, $newData);
+    updateDocument($man, "users", ['username' => $_SESSION['username']], DBUpdateOperators::Set, $newData);
 }
 
 header('Content-Type: application/json');

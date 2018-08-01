@@ -73,21 +73,33 @@ angular.module("chat", [])
             var typingTimer = null;
 
             var connect = function () {
-                easyrtc.setUsername(username);
-                easyrtc.connect('sandbox-chat', function (eid) {
-                    easyrtcid = eid;
-                    callbacks.connectSuccess(eid);
-                }, callbacks.failure);
+                $.ajax({
+                    type: "POST",
+                    url: 'https://sandboxcodes.com/getUsername.php',
+                    data: {},
+                    success: function (data, status, xhttp) {
+                        username = data.username;
 
-                easyrtc.setPeerListener(peerListener);
-                easyrtc.addEventListener("roomOccupant", roomOccupantListener);
+                        easyrtc.setSocketUrl("https://sandboxcodes.com/chat/");
+                        easyrtc.setUsername(username);
+                        easyrtc.connect('sandbox-chat', function (eid) {
+                            console.log("WORKED");
+                            easyrtcid = eid;
+                            callbacks.connectSuccess(eid);
+                        }, callbacks.failure);
 
-                easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
-                easyrtc.setServerListener(serverListener);
+                        easyrtc.setPeerListener(peerListener);
+                        easyrtc.addEventListener("roomOccupant", roomOccupantListener);
 
-                // [0] converts jQuerySelector to DOMString
-                easyrtc_ft.buildDragNDropRegion($('#attachModal')[0], fileCollectionHandler);
-                easyrtc_ft.buildFileReceiver(callbacks.fileReceiveAcceptReject, fileReceiveHandler, function (sender, status) {
+                        easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
+                        easyrtc.setServerListener(serverListener);
+
+                        // [0] converts jQuerySelector to DOMString
+                        easyrtc_ft.buildDragNDropRegion($('#attachModal')[0], fileCollectionHandler);
+                        easyrtc_ft.buildFileReceiver(callbacks.fileReceiveAcceptReject, fileReceiveHandler, function (sender, status) {
+                        });
+                    },
+                    dataType: "json"
                 });
             };
 

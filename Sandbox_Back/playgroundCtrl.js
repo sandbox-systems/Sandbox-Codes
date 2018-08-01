@@ -10,6 +10,7 @@ let playgroundCtrl = function ($scope, $http, $sce, $state) {
     $gstate = $state;
     $scope.scan = "";
     scan($scope, $http, $sce, $state);
+    //toggleCollab();
 };
 
 //Global Variables
@@ -22,6 +23,8 @@ var notify = true;
 var active_name = null;
 var active_path = null;
 var active_hash = null;
+var hashes = {};
+var tempContents = {};
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
@@ -59,7 +62,8 @@ function scan($scope, $http, $sce, $state){
             if (typeof jsonObj == "object") {
                 Object.entries(jsonObj).forEach(([key, value]) => {
                     if (value.type == "blob") {
-                        html += "<li class='file' onclick='clickFile(\""+value.sha+"\", \""+value.name+"\", \""+key+"\")'><i class='far fa-file'></i> " + key + "</li>";
+                        hashes[value.name] = value.sha;
+                        html += "<li class='file' onclick='clickFile(\""+value.name+"\", \""+key+"\")'><i class='far fa-file'></i> " + key + "</li>";
                     } else if (value.type == "tree") {
                         html += "<li class='dropdownli folder' data-name='" + value.name + "' data-sha='" + value.sha + "'><i class='fas fa-folder'></i> " + key + "<ul>";
                         traverse(value);
@@ -115,18 +119,19 @@ function chooseRepo(){
         results = result.value.toString().split("לא");
         repo = results[0];
         owner = results[1];
+        hashes = {};
         scan($gscope, $ghttp, $gsce, $gstate);
     });
 }
 
-function clickFile(hash, name, key){
-    openTab(hash, name, key);
+function clickFile(name, key){
+    openTab(hashes[name], name, key);
 }
 
 /****************************************************
  ****************** REPO MANIPULATION ***************
  ****************************************************/
-function readFile(hash){
+function readFile(hash, onRead){
     $.ajax({
         type: "POST",
         url: "fileManager/requests/getFileContents.php",
@@ -138,8 +143,10 @@ function readFile(hash){
         dataType: "text",
         success: function(data){
             editor.setValue(data, -1);
+            onRead(data);
         },
         error: function(data){
+console.log("FILE");
             if(notify)
                 swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
             return null;
@@ -166,7 +173,7 @@ function createFile(path, name){
         },
         dataType: "text",
         success: function(data){
-            console.log(data);
+console.log("CREATE");
             if(notify)
                 swal({icon:"success", buttons:false, timer:1000, className:"swal-icon-notification"});
             angular.element("#entryModal")[0].style.display = "none";
@@ -182,7 +189,6 @@ function createFile(path, name){
 }
 
 function deleteFile(path, name){
-    console.log(path+" "+name);
     swal({
         title: "Danger Zone",
         text: "Are you sure you want to delete this file? Well, if you change your mind GitHub is a thing.",
@@ -190,7 +196,6 @@ function deleteFile(path, name){
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
-        console.log(owner+" "+repo+" "+branch+" "+path+" "+name);
         if (willDelete) {
             $.ajax({
                 type: "POST",
@@ -225,12 +230,16 @@ function deleteFile(path, name){
 
 setInterval(function(){
     if(active_path!=null && active_name!=null){
-        updateFile(active_path, active_name, editor.getValue());
+        updateFile(active_path, active_name, editor.getValue(), false);
     }
     }, 10000);
 
-function updateFile(path, name, content){
-    console.log(name);
+function updateFile(path, name, content, altCallback){
+console.log("PATH: " + path);
+console.log("NAME: " + name);
+console.log("CONTENT: " + content);
+    let fullPath = path + (path === "" ? "" : "/") + name;
+    tempContents[fullPath] = content;
     $.ajax({
         type: "POST",
         url: "fileManager/requests/updateFile.php",
@@ -244,8 +253,13 @@ function updateFile(path, name, content){
         },
         dataType: "json",
         success: function(data) {
-            active_hash = data["newSha"];
-            updateHash(active_hash);
+console.log(data["newSha"]);
+            if (!altCallback) {
+                active_hash = data["newSha"];
+                updateHash(active_hash);
+            } else {
+                altCallback(data["newSha"]);
+            }
         },
         error: function(data){
             console.log(JSON.stringify(data));
@@ -270,6 +284,16 @@ function openTab(hash, name, key){
 //Close tab
 function closeTab(element){
     numTabs--;
+    let oldTab = angular.element(element).parent().parent()[0];
+    let oldTabFullPath = oldTab.attributes["data-path"].value;
+    let oldContents = editor.getValue();
+    let isOldTabPathDeep = oldTabFullPath.indexOf('/') !== -1;
+    let oldTabPath = !isOldTabPathDeep ? "" : oldTabFullPath.substring(0, oldTabFullPath.lastIndexOf('/'));
+    let oldTabName = !isOldTabPathDeep ? oldTabFullPath : oldTabFullPath.substring(oldTabFullPath.lastIndexOf('/') + 1, oldTabFullPath.length);
+    updateFile(oldTabPath, oldTabName, oldContents, function (newSha) {
+        hashes[oldTabFullPath] = newSha;
+    });
+    delete tempContents[oldTabFullPath];
     angular.element(element).parent().parent().remove();
     var openTabs = angular.element("#tab-list > li");
     if(openTabs.length<1){
@@ -285,8 +309,7 @@ function closeTab(element){
 function activateTab(hash, path){
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
-        angular.element(active_li[0]).text().slice(0, -1);
-        updateFile(path, angular.element(active_li[0]).text().slice(0, -1), editor.getValue())
+        updateFile("", angular.element(active_li[0]).text().slice(0, -1), editor.getValue(), false);
         active_li[0].classList.remove("active");
     }
     var tab = angular.element('#tab'+path.replace(/[.\/]/g, ""));
@@ -295,8 +318,13 @@ function activateTab(hash, path){
     active_path = tab[0].attributes["data-path"].value;
     active_path = active_path.substring(0, active_path.lastIndexOf("/"));
     active_hash = hash;
-    readFile(hash);
-    updateFile(active_path, active_name, editor.getValue());
+    if (tempContents.hasOwnProperty(path)) {
+        editor.setValue(tempContents[path], -1);
+    } else {
+        readFile(hash, function (contents) {
+            tempContents[path] = contents;
+        });
+    }
     setLanguage(name);
 }
 
@@ -332,12 +360,32 @@ function setLanguage(name){
 }
 
 function updateHash(hash){
+    let fullPath = active_path + (active_path === "" ? "" : "/") + active_name;
+    hashes[fullPath] = hash;
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
         active_li[0].attributes["data-hash"].value = hash;
     }
 }
 
+/****************************************************
+ ********************* COLLABORATION ****************
+ ****************************************************/
+function toggleCollab(){
+    var TogetherJSConfig_siteName = "sandboxcodes";
+    var TogetherJSConfig_toolName = "collab";
+    var TogetherJSConfig_autoStart = true;
+    var TogetherJSConfig_cloneClicks = false;
+    var TogetherJSConfig_includeHashInUrl = true;
+    var TogetherJSConfig_dontShowClicks = true;
+    var TogetherJSConfig_suppressInvite = true;
+    var TogetherJSConfig_findRoom = repo+owner+active_path;
+    var TogetherJSConfig_getUserName = function () {return owner;};
+    var TogetherJSConfig_getUserAvatar = function () {return "";};
+    TogetherJS(this);
+}
+
+//TogetherJSConfig_siteName
 /****************************************************
  ******************** COMPILE ***********************
  ****************************************************/

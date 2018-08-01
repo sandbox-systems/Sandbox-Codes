@@ -9,7 +9,13 @@ var queries = require("./queries");
 
 // Setup express http application
 var httpApp = express();
-httpApp.use(serveStatic('static', {'index': ['chat.html']}));
+/*httpApp.get('//', function(req, res) {
+    res.sendFile("chat.html", {root: 'static'});
+});*/
+/*httpApp.get('/chat', function(req, res) {
+    res.send(serveStatic('chat/static', {'index': ['chat.html']}));
+});*/
+httpApp.use('/', serveStatic('static', {'index': ['chat.html']}));
 
 var db, dbClient;
 var dbUrl = 'mongodb://localhost:27017';
@@ -55,6 +61,7 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
 
     easyrtc.events.on("easyrtcMsg", function (conObj, msg, socketCallback, next) {
         var roomID, memberID;
+        console.log("HI");
         // Upon receiving easyrtcid from client on connect, send back user and room data
         if (msg.msgType === "clientConnection") {
             var username = msg.msgData.username;

@@ -9,6 +9,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 $name = $_POST['name'];
 $username = $_POST['username'];
 $email = $_POST['email'];
+$profilepic = $_POST['profilepic'];
 $newData = [];
 
 if ($name != $user->name) {
@@ -19,6 +20,9 @@ if ($username != $user->username) {
 }
 if ($email != $user->email) {
     $newData['email'] = $email;
+}
+if ($profilepic != '0') {
+    $newData['profilepic'] = $profilepic;
 }
 
 if (!empty($newData)) {

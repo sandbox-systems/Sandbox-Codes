@@ -116,8 +116,10 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         <div id="profile-container">
             <image id="profileImage" src="<?php echo $user->profilepic ?>"/>
         </div>
-        <input id="imageUpload" type="file"
-               name="profile_photo" placeholder="Photo" required="" capture>
+        <form enctype="multipart/form-data" id="imageUploadForm">
+            <input id="imageUpload" type="file"
+                   name="profile_photo" placeholder="Photo" required="" capture>
+        </form>
     </div>
 
     <table style="width: 100%">
@@ -212,7 +214,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 </body>
 <script>
     var passwordB = 'true';
-    var hasImagedChanged = false;
+    var newProfilepic = null;
 
     function passwordCheck(){
         var initial = document.getElementById('password');
@@ -244,54 +246,55 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 
     $("#imageUpload").change(function () {
         fasterPreview(this);
-	hasImageChanged = true;
-	console.log(this.files[0]);
+        uploadPicture();
     });
+
+    let uploadPicture = function() {
+        let data = new FormData($('#imageUploadForm')[0]);
+        $.ajax({
+            type: "POST",
+            url: "uploadPic.php",
+            contentType: false,
+            processData: false,
+            data: data,
+            dataType: 'html',
+            success: function (data, status, xhttp) {
+                if (!data.startsWith("https://sandboxcodes.com")) {
+                    swal("Whoops!", data, "error");
+                } else {
+                    newProfilepic = data;
+                }
+            },
+            dataType: 'text'
+        });
+    };
 
     let updateProfile = function() {
 	$.ajax({
-                type: "POST",
-                url: "updateProfile.php",
-                data: {
-                    'name': $('#nameInput').val(),
-                    'username': $('#usernameInput').val(),
-                    'email': $('#emailInput').val()
-                },
-                success: function (data, status, xhttp) {
-                },
-                dataType: 'json'
-            });
-            swal({
-                position: 'top-end',
-                type: 'success',
-                title: 'Your settings have been saved',
-                showConfirmButton: false,
-                timer: 1500
-            });
-
+            type: "POST",
+            url: "updateProfile.php",
+            data: {
+                'name': $('#nameInput').val(),
+                'username': $('#usernameInput').val(),
+                'email': $('#emailInput').val(),
+                'profilepic': newProfilepic || '0'
+            },
+            success: function (data, status, xhttp) {
+            },
+            dataType: 'json'
+        });
+        swal({
+            position: 'top-end',
+            type: 'success',
+            title: 'Your settings have been saved',
+            showConfirmButton: false,
+            timer: 1500
+        });
     };
 
     $('#updateProfileSubmitBtn').click(function () {
         if(passwordB) {
-	    
-            $.ajax({
-                type: "POST",
-                url: "updateProfile.php",
-                data:                     'name': $('#nameInput').val(),
-                    'username': $('#usernameInput').val(),
-                    'email': $('#emailInput').val()
-                },
-                success: function (data, status, xhttp) {
-                },
-                dataType: 'json'
-            });
-            swal({
-                position: 'top-end',
-                type: 'success',
-                title: 'Your settings have been saved',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            updateProfile();
         }else{
             swal('Whoops!','Check your password','error');
         }

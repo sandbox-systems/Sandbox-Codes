@@ -2,7 +2,7 @@
 /*
     @author Aadhithya Kannan
     @date   20 November 2017
-    COPYRIGHT SANDBOX LLC
+    COPYRIGHT SANDBOX SYSTEMS LLC
 */
 require "../checklogin.php";
 $text = json_decode(file_get_contents("languages/en-US.json"), true);
@@ -16,9 +16,6 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
     <link href="Sandbox_Back/node_modules/fine-uploader/all.fine-uploader/fine-uploader-new.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-    <!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
-    <!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script>-->
-        <!--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
@@ -268,17 +265,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             });
         }
 
-        /*function chooseRepo() {
-            swal({
-                title: 'Select Repo',
-                input: 'select',
-                inputOptions: {
-                    'TST': 'Tester'
-                },
-                inputPlaceholder: 'Sandbox',
-                showCancelButton: true
-            });
-        }*/
+
 
         // let onCommitPress;
         //
@@ -1036,13 +1023,8 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
         function shareFile() {
             swal({
                 title: 'Share With',
-                content: {
-                    element: "input",
-                    attributes: {
-                        placeholder: "@johndoe",
-                        type: "text",
-                    },
-                },
+                input:'text',
+                showCancelButton:true
             });
         }
     </script>

@@ -201,19 +201,8 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 </div>
 </body>
 <script>
-    var passwordB = 'true';
     var newProfilepic = null;
 
-    function passwordCheck(){
-        var initial = document.getElementById('password');
-        var rp = document.getElementById('rpholder');
-        rp.style.display="block";
-        if(document.getElementById('rpassword').value === initial){
-            passwordB = true;
-        }else{
-            passwordB = false;
-        }
-    }
     jQuery(document).ready(function ($) {
         $(window).on("load", function () {
 
@@ -281,7 +270,14 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     };
 
     $('#updateProfileSubmitBtn').click(function () {
-        if(passwordB) {
+        swal({
+            title:'Reinput Password to Submit',
+            input:'text',
+            showCancelButton:true,
+            confirmButtonText:'Submit',
+            showLoaderOnConfirm:true
+        });
+        if(//hash of passwords match){
             updateProfile();
         }else{
             swal('Whoops!','Check your password','error');

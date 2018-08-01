@@ -20,12 +20,14 @@ $baseTree = $client->git->trees->getTreeRecursively($owner, $repo, $_SESSION['tr
 // Collect only path, mode, type, and sha/contents of blobs/subtrees in working tree
 $tree = array();
 foreach ($baseTree->getTree() as &$item) {
-    $tree[] = array(
-        "path" => $item->getPath(),
-        "mode" => $item->getMode(),
-        "type" => $item->getType(),
-        "sha" => $item->getSha()
-    );
+    if ($item->getType() == "blob") {
+        $tree[] = array(
+            "path" => $item->getPath(),
+            "mode" => $item->getMode(),
+            "type" => $item->getType(),
+            "sha" => $item->getSha()
+        );
+    }
 }
 
 // Apply changes to model of local tree

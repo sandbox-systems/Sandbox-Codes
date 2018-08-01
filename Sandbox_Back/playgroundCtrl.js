@@ -25,6 +25,7 @@ var active_path = null;
 var active_hash = null;
 var hashes = {};
 var tempContents = {};
+var isReading = false;
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
@@ -125,13 +126,15 @@ function chooseRepo(){
 }
 
 function clickFile(name, key){
-    openTab(hashes[name], name, key);
+    if (!isReading)
+        openTab(hashes[name], name, key);
 }
 
 /****************************************************
  ****************** REPO MANIPULATION ***************
  ****************************************************/
-function readFile(hash, onRead){
+function readFile(hash, onRead) {
+    isReading = true;
     $.ajax({
         type: "POST",
         url: "fileManager/requests/getFileContents.php",
@@ -142,13 +145,16 @@ function readFile(hash, onRead){
         },
         dataType: "text",
         success: function(data){
-            editor.setValue(data, -1);
-            onRead(data);
+            content = atob(data)
+console.log(content);
+            editor.setValue(content, -1);
+            onRead(content);
+            isReading = false;
         },
         error: function(data){
-console.log("FILE");
+console.log("READING FILE FAILURE");
             if(notify)
-                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-icon-notification"});
             return null;
         }
     });
@@ -235,9 +241,8 @@ setInterval(function(){
     }, 10000);
 
 function updateFile(path, name, content, altCallback){
-console.log("PATH: " + path);
-console.log("NAME: " + name);
-console.log("CONTENT: " + content);
+    if (isReading)
+        return;
     let fullPath = path + (path === "" ? "" : "/") + name;
     tempContents[fullPath] = content;
     $.ajax({
@@ -253,7 +258,6 @@ console.log("CONTENT: " + content);
         },
         dataType: "json",
         success: function(data) {
-console.log(data["newSha"]);
             if (!altCallback) {
                 active_hash = data["newSha"];
                 updateHash(active_hash);
@@ -274,6 +278,8 @@ console.log(data["newSha"]);
  ****************************************************/
 
 function openTab(hash, name, key){
+    if (isReading)
+        return;
     numTabs++;
     if(angular.element('#tab'+name.replace(/[.\/]/g, ""))[0]==null){
         $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+name.replace(/[.\/]/g, "")+'" data-path="'+name+'" data-hash="'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
@@ -283,6 +289,8 @@ function openTab(hash, name, key){
 
 //Close tab
 function closeTab(element){
+    if (isReading)
+        return;
     numTabs--;
     let oldTab = angular.element(element).parent().parent()[0];
     let oldTabFullPath = oldTab.attributes["data-path"].value;
@@ -307,6 +315,8 @@ function closeTab(element){
 }
 
 function activateTab(hash, path){
+    if (isReading)
+        return;
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
         updateFile("", angular.element(active_li[0]).text().slice(0, -1), editor.getValue(), false);
@@ -329,6 +339,8 @@ function activateTab(hash, path){
 }
 
 function tabClick(tab){
+    if (isReading)
+        return;
     activateTab(tab.attributes["data-hash"].value, tab.attributes["data-path"].value);
 }
 

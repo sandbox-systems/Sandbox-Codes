@@ -8,6 +8,6 @@
 include 'init.php';
 
 $blob = $client->git->blobs->getBlob($owner, $repo, $sha);
-$content = base64_decode($blob->getContent());
+$content = $blob->getContent();
 
 echo $content;

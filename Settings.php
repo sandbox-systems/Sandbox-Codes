@@ -216,6 +216,9 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     var passwordB = 'true';
     var newProfilepic = null;
 
+    <?php if ($wasSuccessful) { ?>
+    <?php } ?>
+
     function passwordCheck(){
         var initial = document.getElementById('password');
         var rp = document.getElementById('rpholder');
@@ -289,6 +292,8 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             title: 'Your settings have been saved',
             showConfirmButton: false,
             timer: 1500
+        }).then(function () {
+            window.location.reload();
         });
     };
 

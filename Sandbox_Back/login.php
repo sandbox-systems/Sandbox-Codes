@@ -29,7 +29,7 @@
         $_SESSION["fname"] = $row->current()->fname;
         $_SESSION["lname"] = $row->current()->lname;
         $_SESSION["profilepic"] = property_exists($row->current(), "profilepic")?$row->current()->profilepic:"default_profile_pic";
-        $_SESSION["object_id"] = $row->current()->_id;
+        $_SESSION["object_id"] = (string) $row->current()->_id;
 
         echo "User authenticated.";
         //header("Location: https://sandboxcodes.com/Castle.php");

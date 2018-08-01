@@ -7,7 +7,11 @@ use \MongoDB\Driver\Query;
 use \MongoDB\Driver\Exception\Exception;
 use \MongoDB\BSON\ObjectId;
 
+session_start();
 include 'fileManager/github/init.php';
+include 'fileManager/initDB.php';
+
+header('Content-Type: application/json');
 
 abstract class Types
 {
@@ -17,11 +21,10 @@ abstract class Types
 }
 
 $input = $_POST['input'];
-//$curUsername = $_SESSION['username'];
-$curUsername = 'jdoe1';
-//$userID = $_SESSION['object_id'];
-$userID = '5b2acced5a1857e1fe988db0';
-
+$curUsername = $_SESSION['username'];
+//$curUsername = 'jdoe1';
+$userID = $_SESSION['object_id'];
+//$userID = '5b2acced5a1857e1fe988db0';
 
 /**
  * Search for a user given a search box input and determine whether he/she is a friend
@@ -38,18 +41,25 @@ function searchUser($man, $username, $userID, $inputUname, $shouldVerify) {
         return [];
     }
     $encodedInput = preg_quote($inputUname);
-    $filter = ['username' => ['$regex' => $encodedInput]];
+    $filter = ['username' => ['$regex' => '^' . $encodedInput]];
     $query = new Query($filter, []);
+
     try {
         $docs = array();
         $cursor = $man->executeQuery("sandbox.users", $query);
         foreach ($cursor as $doc) {
-            if ($doc->username != $username) {
-                unset($doc->_id);
-                unset($doc->roomIDs);
-                $doc->isFriend = $userID == "" ? null : in_array(new ObjectId($userID), $doc->friends);
-                unset($doc->friends);
-                $docs[] = $doc;
+            if ($shouldVerify ? $doc->username != $username : true) {
+                $foundUser = array(
+                    'username' => $doc->username,
+                    'name' => $doc->name,
+                    'isFriend' => $userID == "" ? null : in_array(new ObjectId($userId), $doc->friends)
+                );
+                if (userID != "") {
+                    $foundUser['isRequested'] = count(getDocuments($man, "requests", ['$or' => array(['fromID' => (string) $doc->_id, 'to' => $userID], ['fromID' => $userID, 'to' => (string) $doc->_id])], [])) > 0;
+                }
+                if (isset($doc->GHUsername))
+                    $foundUser['ghUsername'] = $doc->GHUsername;
+                $docs[] = $foundUser;
             }
         }
         return $docs;
@@ -94,18 +104,26 @@ function searchRooms($man, $input) {
  */
 function searchFile($client, $man, $username, $owner, $filename) {
     $contents = [];
-    $GHUname = searchUser($man, $username, "", $owner, false)[0]->GHUsername;
-    $results = $client->search->searchCode($GHUname, $filename);
-    foreach ($results as $result) {
-        $contents[] = array(
-            'name' => $result->name,
-            'path' => $result->path
-        );
+    $users = searchUser($man, $username, "", $owner, false);
+    foreach ($users as $user) {
+        if (!isset($user['ghUsername'])) {
+            if (!isset($contents['notsynced'])) {
+                $contents['notsynced'] = array();
+            }
+            $contents['notsynced'][] = $user['username'] == $username ? '' : $user['name'];
+            continue;
+        }
+        $GHUname = $user['ghUsername'];
+        $results = $client->search->searchCode($GHUname, $filename);
+        foreach ($results as $result) {
+            $contents[] = array(
+                'name' => $result->name,
+                'path' => $result->path
+            );
+        }
     }
     return $contents;
 }
-
-header('Content-Type: application/json');
 
 // @user (filename)
 $userOrFile = '/^@([A-Za-z0-9_.!-]+) ?([^ ]+)?/';

@@ -105,7 +105,7 @@ function chooseRepo(){
             },
             error: function(data){
                 if(notify)
-                    swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+                    swal({icon:"error",  timer:1000, });
                 return null;
             }
         });
@@ -154,7 +154,7 @@ console.log(content);
         error: function(data){
 console.log("READING FILE FAILURE");
             if(notify)
-                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-icon-notification"});
+                swal({type:"error",  timer:1000});
             return null;
         }
     });
@@ -181,14 +181,14 @@ function createFile(path, name){
         success: function(data){
 console.log("CREATE");
             if(notify)
-                swal({icon:"success", buttons:false, timer:1000, className:"swal-icon-notification"});
+                swal({type:"success",  timer:1000, });
             angular.element("#entryModal")[0].style.display = "none";
             angular.element("#filename").val("");
             scan($gscope, $ghttp, $gsce, $gstate);
         },
         error: function(data){
             if(notify)
-                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+                swal({type:"error",  timer:1000, });
             return null;
         }
     });
@@ -198,7 +198,7 @@ function deleteFile(path, name){
     swal({
         title: "Danger Zone",
         text: "Are you sure you want to delete this file? Well, if you change your mind GitHub is a thing.",
-        icon: "warning",
+        type: "warning",
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
@@ -216,17 +216,15 @@ function deleteFile(path, name){
                 dataType: "text",
                 success: function (data) {
                     swal({
-                        icon: "success",
-                        buttons: false,
+                        type: "success",
                         timer: 1000,
-                        className: "swal-icon-notification"
                     });
                     scan($gscope, $ghttp, $gsce, $gstate);
                 },
                 error: function (data) {
                     console.log(JSON.stringify(data));
                     swal("Could not delete file.", {
-                        icon: "error",
+                        type: "error",
                     });
                 }
             });
@@ -268,7 +266,7 @@ function updateFile(path, name, content, altCallback){
         error: function(data){
             console.log(JSON.stringify(data));
             if(notify)
-                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+                swal({type:"error",  timer:1000, });
         }
     });
 }
@@ -415,7 +413,7 @@ function compile(){
         },
         error: function(data){
             if(notify)
-                swal({icon:"error", buttons:false, timer:1000, className:"swal-icon-notification"});
+                swal({icon:"error",  timer:1000, });
         }
     });*/
 }

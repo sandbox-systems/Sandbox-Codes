@@ -122,7 +122,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         </form>
     </div>
 
-    <table style="width: 100%">
+    <table style="width: 100%;height: 33em;">
         <tr class="animated fadeIn">
             <td>
                 <a href="<?php echo $url; ?>" id="sync" class="categ_row alonebutton">Sync Github Account</a>
@@ -183,7 +183,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         </tr>
         <tr class="animated fadeIn">
             <td>
-                <button class="alonebutton" id="updateProfileSubmitBtn">Save Changes</button>
+                <button class="alonebutton categ_row" id="updateProfileSubmitBtn">Save Changes</button>
             </td>
         </tr>
         <!--<tr class="animated fadeIn">

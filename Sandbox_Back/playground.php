@@ -65,20 +65,20 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                     <input id="filename" class="inputname" type="text" oninput="typeUpdater()" autocomplete="off"
                            required>
                 </fieldset>
-                <fieldset style="    margin-top: 2%;">
-                    File type:
-                    <select id="filechoose">
-                        <option value="java">Java</option>
-                        <option value="python">Python</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="html">HTML</option>
-                        <option value="css">CSS</option>
-                        <option value="cplusplus">C++</option>
-                        <option value="objc">Objective-C</option>
-                        <option value="csharp">C#</option>
-                        <option value="ruby">Ruby</option>
-                    </select>
-                </fieldset>
+<!--                <fieldset style="    margin-top: 2%;">-->
+<!--                    File type:-->
+<!--                    <select id="filechoose">-->
+<!--                        <option value="java">Java</option>-->
+<!--                        <option value="python">Python</option>-->
+<!--                        <option value="javascript">JavaScript</option>-->
+<!--                        <option value="html">HTML</option>-->
+<!--                        <option value="css">CSS</option>-->
+<!--                        <option value="cplusplus">C++</option>-->
+<!--                        <option value="objc">Objective-C</option>-->
+<!--                        <option value="csharp">C#</option>-->
+<!--                        <option value="ruby">Ruby</option>-->
+<!--                    </select>-->
+<!--                </fieldset>-->
                 <fieldset style="    margin-top: 2%;">
                     <div style="float:right; background-color:green; margin-right: 5%" class="goBtn" onclick="createFile(null, null)">Create</div>
                     <div style="float:left; background-color:#FF3366; margin-left: 5%;" class="goBtn" onclick="document.getElementById('entryModal').style.display='none'">Cancel</div>
@@ -294,18 +294,18 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             }
         }
 
-        function typeUpdater() {
-            var name = document.getElementById("filename").value;
-            var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
-            var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
-            var temp = "";
-            for (i = 0; i < array.length; i++) {
-                if (name.substring(name.indexOf(".")) === array[i]) {
-                    temp = actual[i];
-                    document.getElementById("filechoose").value = actual[i];
-                }
-            }
-        }
+        // function typeUpdater() {
+        //     var name = document.getElementById("filename").value;
+        //     var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+        //     var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+        //     var temp = "";
+        //     for (i = 0; i < array.length; i++) {
+        //         if (name.substring(name.indexOf(".")) === array[i]) {
+        //             temp = actual[i];
+        //             document.getElementById("filechoose").value = actual[i];
+        //         }
+        //     }
+        // }
 
         function temper(theme) {
             var editor = ace.edit('editor');
@@ -394,7 +394,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                             swal({
                                 content: htmldiv,
                                 className: "swal-compiled",
-                                buttons: false
+
                             });
                         } else {
                             $("#consoleFrame").attr("src", "http://localhost:7680/");
@@ -418,11 +418,11 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                     dataType: "text",
                     success: function (data) {
                         if (notify)
-                            swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "success", timer: 1000});
                     },
                     error: function (data) {
                         if (notify)
-                            swal({icon: "error", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "error", timer: 1000});
                     }
                 });
             }
@@ -471,7 +471,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         },
                         dataType: "text",
                         success: function (data) {
-                            swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "success", timer: 1000});
                             //replace with readfile later
                             $.ajax({
                                 type: "POST",
@@ -488,7 +488,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                             scan();
                         },
                         error: function (data) {
-                            swal({icon: "error", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "error", timer: 1000});
                         }
                     });
                 });
@@ -515,11 +515,11 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         },
                         dataType: "text",
                         success: function (data) {
-                            swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "success", timer: 1000});
                             scan();
                         },
                         error: function (data) {
-                            swal({icon: "error", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "error", timer: 1000,});
                         }
                     });
                 });
@@ -534,11 +534,11 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                     },
                     dataType: "text",
                     success: function (data) {
-                        swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                        swal({type: "success", timer: 1000});
                         scan();
                     },
                     error: function (data) {
-                        swal({icon: "error", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                        swal({type: "error", timer: 1000});
                     }
                 });
             }
@@ -577,11 +577,11 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         },
                         dataType: "text",
                         success: function (data) {
-                            swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "success",  timer: 1000});
                             scan();
                         },
                         error: function (data) {
-                            swal({icon: "error", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "error",  timer: 1000});
                         }
                     });
                 });
@@ -608,11 +608,11 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         },
                         dataType: "text",
                         success: function (data) {
-                            swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "success",  timer: 1000});
                             scan();
                         },
                         error: function (data) {
-                            swal({icon: "error", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                            swal({type: "error",  timer: 1000});
                         }
                     });
                 });
@@ -627,11 +627,11 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                     },
                     dataType: "text",
                     success: function (data) {
-                        swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                        swal({type: "success",  timer: 1000});
                         scan();
                     },
                     error: function (data) {
-                        swal({icon: "error", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                        swal({type: "error",  timer: 1000});
                     }
                 });
             }
@@ -644,7 +644,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 swal({
                     title: "<?php echo $text["emptyFolderConfirmTitle"]; ?>",
                     text: "<?php echo $text["emptyFolderConfirmText"]; ?> \"" + folderpath.substring(folderpath.lastIndexOf("/") + 1) + "\".",
-                    icon: "warning",
+                    type: "warning",
                     buttons: true,
                     dangerMode: true,
                 }).then((willDelete) => {
@@ -658,16 +658,14 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                             dataType: "text",
                             success: function (data) {
                                 swal({
-                                    icon: "success",
-                                    buttons: false,
+                                    type: "success",
                                     timer: 1000,
-                                    className: "swal-icon-notification"
                                 });
                                 scan();
                             },
                             error: function (data) {
                                 swal("<?php echo $text["emptyFolderError"]; ?>", {
-                                    icon: "error",
+                                    type: "error",
                                 });
                                 scan();
                             }
@@ -680,7 +678,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 swal({
                     title: "<?php echo $text["deleteFolderTitle"]; ?>",
                     text: "<?php echo $text["deleteFolderTextBefore"]; ?> \"" + folderpath.substring(folderpath.lastIndexOf("/") + 1) + "\" <?php echo $text["deleteFolderTextAfter"]; ?>",
-                    icon: "warning",
+                    type: "warning",
                     buttons: true,
                     dangerMode: true,
                 }).then((willDelete) => {
@@ -695,16 +693,15 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                             dataType: "text",
                             success: function (data) {
                                 swal({
-                                    icon: "success",
-                                    buttons: false,
+                                    type: "success",
+
                                     timer: 1000,
-                                    className: "swal-icon-notification"
                                 });
                                 scan();
                             },
                             error: function (data) {
                                 swal("<?php echo $text["deleteFolderError"]; ?>", {
-                                    icon: "error",
+                                    type: "error",
                                 });
                                 scan();
                             }
@@ -783,7 +780,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                     },
                     dataType: "text",
                     success: function (data) {
-                        swal({icon: "success", buttons: false, timer: 1000, className: "swal-icon-notification"});
+                        swal({type: "success",  timer: 1000});
                         scan();
                     }
                 });
@@ -846,7 +843,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         console.log(uploadBox);
                         swal({
                             content: uploadBox,
-                            buttons: false,
+
                             className: "swal-uploadBox"
                         });
                     }

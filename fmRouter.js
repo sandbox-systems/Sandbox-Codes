@@ -6,14 +6,22 @@
 
 let treasury = angular.module('castle.treasury', ['ui.router']).config(function ($stateProvider) {
     $stateProvider.state('treasury.projects', {
-        url: '/projects',
+        url: '/',
         templateUrl: 'fileManager/templates/projects.html',
         controller: 'projectsController'
+    }).state('treasury.projectRoot', {
+        url: '/:owner/:repo/:branch',
+        controller: 'rootCtrl'
     }).state('treasury.project', {
-        url: '/projects/:owner/:repo/:branch/{path:.*}',
+        url: '/:owner/:repo/:branch/{path:.*}',
         templateUrl: 'fileManager/templates/project.html',
         controller: 'projectController'
     });
+});
+
+treasury.controller('rootCtrl', function ($state, $stateParams) {
+    $state.go('treasury.project', {owner: $stateParams.owner, repo: $stateParams.repo,
+        branch: $stateParams.branch, path: ""});
 });
 
 treasury.controller('projectsController', function ($scope, $http, $state) {
@@ -45,7 +53,6 @@ treasury.controller('projectsController', function ($scope, $http, $state) {
     };
 
     $scope.drag = drag;
-    //$scope.moveFolder = moveFolder;
     $scope.allowDrop = allowDrop;
 });
 

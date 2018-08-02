@@ -4,7 +4,7 @@ require "../../checklogin.php";
 
 try{
     $usersha = escapeshellcmd(sha1($_SESSION["username"]));
-    $options = array(CURLOPT_URL => "http:/v1.24/containers/$usersha/start",
+    $options = array(CURLOPT_URL => "http:/v1.24/containers/$usersha/stop",
         CURLOPT_UNIX_SOCKET_PATH => "/var/run/docker.sock",
         CURLOPT_POST => 0,
         CURLOPT_POSTFIELDS => array(),
@@ -19,10 +19,10 @@ try{
 
     switch($status){
         case 204:
-            echo "Container started successfully.";
+            echo "Container stopped successfully.";
             break;
         case 304:
-            throw new Exception("Container already started.");
+            throw new Exception("Container already stopped.");
         case 404:
             throw new Exception("Container does not exist.");
         case 505:
@@ -31,5 +31,4 @@ try{
 }catch(Exception $e){
     die($e->getMessage());
 }
-
 ?>

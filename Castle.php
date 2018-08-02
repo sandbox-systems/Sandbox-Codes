@@ -30,6 +30,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <title>Sandbox</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,height=device-height"/>
+    <!--<base href="/Castle.html">-->
 </head>
 <style>
     html {
@@ -97,7 +98,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             <td><a ui-sref="playground"><i class="fas fa-terminal fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="treasury"><i class="fas fa-archive fa-2x"></i></a></td>
+            <td><a ui-sref="treasury.projects"><i class="fas fa-archive fa-2x"></i></a></td>
         </tr>
         <tr>
             <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"></i></a></td>
@@ -303,7 +304,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                     input: val
                 },
                 success: function (res, status, jqXHR) {console.log(res);
-                    /*if (res.hasOwnProperty('notsynced')) {
+                    if (res.hasOwnProperty('notsynced')) {
                         res.notsynced.forEach(result => {
                             addOutput(result === "" ? "Sync Github Account" : result + " hasn't synced his/her Github account yet", "error");
                         });
@@ -313,7 +314,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                         if (!isNaN(key)) {
                             addOutput(res[key], res['type']);
                         }
-                    });*/
+                    });
                 },
                 error: function (res, status, xhttp) {
                     if (res.responseText === "UNSYNCED") {
@@ -321,7 +322,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                         location.href = "Castle.php#!/settings";
                     }
                 },
-                dataType: 'text'
+                dataType: 'json'
             });
         }
     });

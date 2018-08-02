@@ -6,7 +6,7 @@
 
 let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSanitize']).config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $stateProvider.state('home', {
-        url: '/',
+        url: '/home',
         templateUrl: 'home.html',
         controller: 'BlankCtrl'
     }).state('playground', {
@@ -15,8 +15,9 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
         controller: 'playgroundCtrl'
     }).state('treasury', {
         url: '/treasury',
+        abstract: true,
         templateUrl: 'fileManager/FileM.html',
-        controller: 'fmCtrl'
+        controller: 'BlankCtrl'
     }).state('chat', {
         url: '/chat',
         templateUrl: 'chat.html',
@@ -34,14 +35,12 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
         controller: 'notificationsCtrl'
     });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/home');
+    /*$locationProvider.hashPrefix('');
+    $locationProvider.html5Mode(true);*/
 });
 
 castle.controller('BlankCtrl', function () {
-});
-
-castle.controller('fmCtrl', function ($state) {
-    $state.go('treasury.projects');
 });
 
 castle.controller('playgroundCtrl', playgroundCtrl);

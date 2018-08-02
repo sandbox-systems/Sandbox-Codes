@@ -10,6 +10,7 @@
 <style>
     body{
         background:url("images/blur.jpg");
+        font-family: 'Lato';
     }
     .entry{
         width: 90%;
@@ -33,16 +34,29 @@
         top: 0;
         padding: 12px 16px 12px 16px;
     }
-
-    .close:hover {
-        background-color: #f44336;
-        color: white;
+    .close:hover{
+        color:white;
+    }
+    #topbar{
+        position: fixed;
+        width: 100%;
+        //background-color: rgba(255,255,255,0.4);
+        top:0;
+        left: 0;
+    }
+    button{
+        background-color: transparent;
+        color:white;
+        border: white;
+        float:right;
+        font-size: 2em;
+        border: solid 1px white;
     }
 </style>
 <body>
-    <button onclick="addEntry('poopidyscoop','repo')">temp</button>
+<div id="topbar">
+    <button onclick="document.getElementById('notificationlist').innerHTML=''">Clear</button></div>
     <ul id="notificationlist" style="list-style: none">
-        <li><div class="entry">Testttt</div></li>
     </ul>
 </body>
 <script>
@@ -66,29 +80,15 @@
         holder.appendChild(icon);
         let span = document.createElement("SPAN");
         span.innerHTML = entry + '&nbsp;&nbsp;&nbsp;&nbsp;';
+        let ban = document.createElement('SPAN');
+        ban.innerHTML='x';
+        ban.className='close';
+        ban.setAttribute('onclick',"this.parentElement.style.display='none'")
         holder.appendChild(span);
+        holder.appendChild(ban);
         var list = document.createElement('LI');
         list.appendChild(holder);
         document.getElementById('notificationlist').appendChild(list);
-    }
-    var myNodelist = document.getElementsByTagName("LI");
-    var i;
-    for (i = 0; i < myNodelist.length; i++) {
-        var span = document.createElement("SPAN");
-        var txt = document.createTextNode("\u00D7");
-        span.className = "close";
-        span.appendChild(txt);
-        myNodelist[i].appendChild(span);
-    }
-
-    // Click on a close button to hide the current list item
-    var close = document.getElementsByClassName("close");
-    var i;
-    for (i = 0; i < close.length; i++) {
-        close[i].onclick = function() {
-            var div = this.parentElement;
-            div.style.display = "none";
-        }
     }
 </script>
 </html>

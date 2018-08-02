@@ -169,18 +169,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                 </form>
             </td>
         </tr>
-        <tr style="display: none;" class="animated fadeIn" id="rpholder">
-            <td>
-                <div class ="categ_row">
-                    <div class="text">Reinput Password</div>
-                </div>
-            </td>
-            <td>
-                <form class="login__row">
-                    <input class="login__input" type="password" id="rpassword">
-                </form>
-            </td>
-        </tr>
         <tr class="animated fadeIn">
             <td>
                 <div class="categ_row">
@@ -213,7 +201,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 </div>
 </body>
 <script>
-    var passwordB = 'true';
+    var passwordB = true;
     var newProfilepic = null;
 
     <?php if ($wasSuccessful) { ?>
@@ -229,6 +217,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             passwordB = false;
         }
     }
+
     jQuery(document).ready(function ($) {
         $(window).on("load", function () {
 
@@ -298,7 +287,14 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     };
 
     $('#updateProfileSubmitBtn').click(function () {
-        if(passwordB) {
+        swal({
+            title:'Reinput Password to Submit',
+            input:'text',
+            showCancelButton:true,
+            confirmButtonText:'Submit',
+            showLoaderOnConfirm:true
+        });
+        if(//hash of passwords match){
             updateProfile();
         }else{
             swal('Whoops!','Check your password','error');

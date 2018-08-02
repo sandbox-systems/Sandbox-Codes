@@ -115,7 +115,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
         }).then(function (response) {
-            showFileContents(response.data);
+            showFileContents(atob(response.data));
         });
     });
 

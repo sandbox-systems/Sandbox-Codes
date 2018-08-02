@@ -103,7 +103,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"></i></a></td>
         </tr>
         <tr>
-            <td><a onclick="return false"><i class="fas fa-bars fa-2x"></i></a></td>
+            <td><a ui-sref="notifications"><i class="fas fa-bell fa-2x"></i></a></td>
         </tr>
         <tr>
             <td><a onClick="openNav()" style="cursor: pointer"><img src="<?php echo $user->profilepic ?>" alt="Avatar"
@@ -262,7 +262,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         div.appendChild(span);
         if (type === 'user') {
             let addOrRemoveFriendBtn = document.createElement("I");
-console.log(output.isRequested);
             addOrRemoveFriendBtn.className = 'fas ' + (!(output.isFriend || output.isRequested) ? 'fa-user-plus' : '');
             addOrRemoveFriendBtn.style.cursor = "pointer";
             addOrRemoveFriendBtn.onclick = function() {
@@ -303,8 +302,8 @@ console.log(output.isRequested);
                 data: {
                     input: val
                 },
-                success: function (res, status, jqXHR) {
-                    if (res.hasOwnProperty('notsynced')) {
+                success: function (res, status, jqXHR) {console.log(res);
+                    /*if (res.hasOwnProperty('notsynced')) {
                         res.notsynced.forEach(result => {
                             addOutput(result === "" ? "Sync Github Account" : result + " hasn't synced his/her Github account yet", "error");
                         });
@@ -314,9 +313,15 @@ console.log(output.isRequested);
                         if (!isNaN(key)) {
                             addOutput(res[key], res['type']);
                         }
-                    });
+                    });*/
                 },
-                dataType: 'json'
+                error: function (res, status, xhttp) {
+                    if (res.responseText === "UNSYNCED") {
+                        closeSearch();
+                        location.href = "Castle.php#!/settings";
+                    }
+                },
+                dataType: 'text'
             });
         }
     });

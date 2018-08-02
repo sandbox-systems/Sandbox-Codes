@@ -37,7 +37,9 @@ try{
     curl_close($ch);
     $resp = json_decode($resp);
     foreach ($resp as $container){
-        echo $container->Names[0];
+        if(substr($container->Names[0], 1)==$usersha){
+            throw new Exception("Container already running.");
+        }
     }
 }catch(Exception $e){
     die($e->getMessage());

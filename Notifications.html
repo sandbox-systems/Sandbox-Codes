@@ -48,11 +48,37 @@
         font-size: 2em;
         border: solid 1px white;
     }
+    .thumb-up:hover {
+        color: #28a745;
+    }
+    .thumb-down:hover {
+        color: #dc3545;
+    }
 </style>
 <body>
 <div id="topbar">
     <button onclick="document.getElementById('notificationlist').innerHTML=''">Clear</button></div>
     <ul id="notificationlist" style="list-style: none;height: 100vh">
+        <li ng-repeat="notif in notifications">
+            <div class="entry animated bounceIn">
+                <i style="margin-right: 3%;" class="fas"
+                    ng-class="notif.type === 'friend' || notif.type === 'friendResponse' ? 'fa-user-circle' :
+                        notif.type === 'chatroom' ? 'fa-comments' :
+                        notif.type === 'repo' ? 'fa-book' :
+                        notif.type === 'folder' ? 'fa-folder-open' :
+                        notif.type === 'file' ? 'fa-file' : ''"></i>
+                <span>
+                    {{notif.content}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span ng-if="notif.type === 'friend'">
+                        <i class="thumb-up fas fa-thumbs-up" ng-click="friendRequestRespond(notif.from, notif.fromID, true)"></i>&nbsp;&nbsp;
+                        <i class="thumb-down fas fa-thumbs-down" ng-click="friendRequestRespond(notif.from, notif.fromID, false)"></i>
+                    </span>
+                </span>
+                <span class="close" onclick="this.parentElement.style.display='none'" ng-if="notif.type !== 'friend'" ng-click="deleteNotif(notif.notifID)">
+                    x
+                </span>
+            </div>
+        </li>
     </ul>
 </body>
 <script>
@@ -75,7 +101,7 @@
         holder.className="entry animated bounceIn"
         holder.appendChild(icon);
         let span = document.createElement("SPAN");
-        span.innerHTML = entry + '&nbsp;&nbsp;&nbsp;&nbsp;';
+        span.innerHTML = entry.content + '&nbsp;&nbsp;&nbsp;&nbsp;';
         let ban = document.createElement('SPAN');
         ban.innerHTML='x';
         ban.className='close';

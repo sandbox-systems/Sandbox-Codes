@@ -1087,5 +1087,10 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
             });
         }
     </script>
+</div>
+<div id="onFileReadOverlay">
+    <div id="playgroundOverlay"></div>
+    <div class="loader"></div>
+</div>
 </body>
 </html>

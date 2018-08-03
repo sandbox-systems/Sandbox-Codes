@@ -135,6 +135,7 @@ function clickFile(name, key){
  ****************************************************/
 function readFile(hash, onRead) {
     isReading = true;
+    $('#onFileReadOverlay').fadeIn();
     $.ajax({
         type: "POST",
         url: "fileManager/requests/getFileContents.php",
@@ -150,6 +151,7 @@ console.log(content);
             editor.setValue(content, -1);
             onRead(content);
             isReading = false;
+            $('#onFileReadOverlay').fadeOut();
         },
         error: function(data){
 console.log("READING FILE FAILURE");

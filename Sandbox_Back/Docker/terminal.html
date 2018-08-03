@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>User Terminal</title>
+        <script src="/node_modules/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        <script>
+            var socket = io('http://localhost/');
+            socket.on('connect', function () {
+                socket.send('hi');
+
+                socket.on('message', function (msg) {
+                    console.log(msg.toString());
+                });
+            });
+        </script>
+    </body>
+</html>

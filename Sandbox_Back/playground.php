@@ -162,7 +162,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
     <div class="container-fluid">
         <div class="navbar-header" style="width: 20%">
             <button class="dropdown btn navbar-btn toolbarButton">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="."><span style="color:white"
+                <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                                  class="fas fa-ellipsis-h fa-2x"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="javascript:temper('chrome')">chrome</a></li>

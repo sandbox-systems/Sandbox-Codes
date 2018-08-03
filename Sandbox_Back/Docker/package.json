@@ -1,0 +1,11 @@
+{
+  "name": "docker_terminal",
+  "version": "1.0.0",
+  "description": "The docker terminal that connects through websockets.",
+  "main": "terminal.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

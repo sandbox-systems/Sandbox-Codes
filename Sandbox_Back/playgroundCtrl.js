@@ -25,6 +25,7 @@ var active_path = null;
 var active_hash = null;
 var hashes = {};
 var tempContents = {};
+var fileFlags = {};
 var isReading = false;
 
 //Scan current repo
@@ -101,7 +102,7 @@ function chooseRepo(){
                 for(var i in data){
                     y[data[i].name+"לא"+data[i].owner] = data[i].name
                 }
-                resolve(y)
+                resolve(y);
             },
             error: function(data){
                 if(notify)
@@ -117,11 +118,16 @@ function chooseRepo(){
         inputOptions: inputOptionsPromise,
         showCancelButton: true
     }).then(function(result){
-        results = result.value.toString().split("לא");
-        repo = results[0];
-        owner = results[1];
-        hashes = {};
-        scan($gscope, $ghttp, $gsce, $gstate);
+        if (!result.dismiss) {
+            angular.forEach(angular.element("#tab-list .close"), function(value, key){
+                closeTab(value);
+            });
+            results = result.value.toString().split("לא");
+            repo = results[0];
+            owner = results[1];
+            hashes = {};
+            scan($gscope, $ghttp, $gsce, $gstate);
+        }
     });
 }
 
@@ -245,6 +251,7 @@ function updateFile(path, name, content, altCallback){
         return;
     let fullPath = path + (path === "" ? "" : "/") + name;
     tempContents[fullPath] = content;
+    fileFlags[fullPath].hasUpdated = false;
     $.ajax({
         type: "POST",
         url: "fileManager/requests/updateFile.php",
@@ -264,9 +271,10 @@ function updateFile(path, name, content, altCallback){
             } else {
                 altCallback(data["newSha"]);
             }
+            fileFlags[fullPath].hasUpdated = true;
         },
         error: function(data){
-            console.log(JSON.stringify(data));
+            console.log("UPDATE: " + JSON.stringify(data));
             if(notify)
                 swal({type:"error",  timer:1000, });
         }
@@ -280,6 +288,14 @@ function updateFile(path, name, content, altCallback){
 function openTab(hash, name, key){
     if (isReading)
         return;
+    if (!fileFlags[name]) {
+        fileFlags[name] = {};
+    } else {
+        if (!fileFlags[name].hasUpdated) {
+            swal({icon:"error",  timer:2000, title: "Not yet!", text: "This file is still being saved"});
+            return;
+        }
+    }
     numTabs++;
     if(angular.element('#tab'+name.replace(/[.\/]/g, ""))[0]==null){
         $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+name.replace(/[.\/]/g, "")+'" data-path="'+name+'" data-hash="'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
@@ -298,9 +314,11 @@ function closeTab(element){
     let isOldTabPathDeep = oldTabFullPath.indexOf('/') !== -1;
     let oldTabPath = !isOldTabPathDeep ? "" : oldTabFullPath.substring(0, oldTabFullPath.lastIndexOf('/'));
     let oldTabName = !isOldTabPathDeep ? oldTabFullPath : oldTabFullPath.substring(oldTabFullPath.lastIndexOf('/') + 1, oldTabFullPath.length);
-    updateFile(oldTabPath, oldTabName, oldContents, function (newSha) {
-        hashes[oldTabFullPath] = newSha;
-    });
+    if (oldTabFullPath === active_path + (active_path === "" ? "" : "/") + active_name) {
+        updateFile(oldTabPath, oldTabName, oldContents, function (newSha) {
+            hashes[oldTabFullPath] = newSha;
+        });
+    }
     delete tempContents[oldTabFullPath];
     angular.element(element).parent().parent().remove();
     var openTabs = angular.element("#tab-list > li");
@@ -335,7 +353,7 @@ function activateTab(hash, path){
             tempContents[path] = contents;
         });
     }
-    setLanguage(name);
+    setLanguage(active_name);
 }
 
 function tabClick(tab){

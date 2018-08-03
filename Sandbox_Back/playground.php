@@ -23,7 +23,58 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
     <script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
 </head>
+<style>
+    .notenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: rebeccapurple;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        border-left: solid 5px mediumpurple;
+    }
+
+    .notenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .notenav a:hover {
+        color: #f1f1f1;
+    }
+
+    .sidenav .notenav {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+
+
+    @media screen and (max-height: 450px) {
+        .notenav {padding-top: 15px;}
+        .notenav a {font-size: 18px;}
+    }
+    textarea{
+        width:100%;
+        height:83%;}
+
+</style>
 <body style="background-color:rgba(255,255,255,0.2);">
+<div id="notenavv" class="notenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNoteNav()">&times;</a>
+    <textarea></textarea>
+</div>
+
 <div id="commitModal" class="modal">
     <div class="modal-content">
         <div class="modal-body">
@@ -151,10 +202,10 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
         </div>
         <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
 	margin-right: 3%;">
-            <img class="bordered-circle-green" src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
-            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
-            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">
-            <button onclick="shareFile()" id="addpeople"><span class="fas fa-plus"></span></button>
+<!--            <img class="bordered-circle-green" src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
+<!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
+<!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
+            <button onclick="openNoteNav()" id="addpeople"><span class="fas fa-plus"></span></button>
         </div>
     </div>
 </nav>
@@ -232,6 +283,17 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
 
 
     <script>
+        function openNoteNav() {
+            document.getElementById("notenavv").style.width = "250px";
+            //document.getElementById("main").style.marginLeft = "250px";
+            //document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+        }
+
+        function closeNoteNav() {
+            document.getElementById("notenavv").style.width = "0";
+            //document.getElementById("main").style.marginLeft= "0";
+            //document.body.style.backgroundColor = "white";
+        }
         function showCommitModal() {
             document.getElementById('commitModal').style.display = 'block';
             $.ajax({

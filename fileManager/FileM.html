@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="fileManager/fileMan.css">
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <!--<script>hljs.initHighlightingOnLoad();</script>-->
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 </head>
 <body>
 <!--<div id="preloader">-->
@@ -20,7 +19,7 @@
     <a href="javascript:void(0)" class="closebtn" onclick="closeInfoNav()">&times;</a>
     <div style="width: 15%; float: left;">
         <form>
-            <fieldset>
+            <fieldset style="color: black;">
                 Name<br>
                 <input id="displayname" type="text" class="infoname">
                 FileType<br>
@@ -28,11 +27,11 @@
                 <!--Description<br>-->
                 <!--<input type="text" class="infoname">-->
                 Size<br>
-                <input type="text" class="infoname" readonly>
+                <input id="displaysize" type="text" class="infoname" readonly>
                 Created<br>
-                <input type="date" class="infoname" readonly>
+                <input id="displaycreated" type="date" class="infoname" readonly>
                 Last Modified<br>
-                <input type="date" class="infoname" readonly>
+                <input id="displayedited" type="date" class="infoname" readonly>
             </fieldset>
             <!--<fieldset>-->
             <!--Color<br>-->
@@ -272,9 +271,9 @@
     </div>
 </div>
 <div id="cssmenu">
-    <ul id="cssmenuList">
+    <!--<ul id="cssmenuList">
         <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
-    </ul>
+    </ul>-->
 </div>
 </body>
 <script>
@@ -315,7 +314,8 @@
         window.location.reload();
     }
 
-    jQuery(document).ready(function ($) {
+    $(function () {
+        //hljs.initHighlightingOnLoad();
         $(window).on("load", function () {
 
             $("#preloader").fadeOut(500);
@@ -491,7 +491,7 @@
         fetchFileContents = func;
     }
 
-    function addFile(name, onclick, sha) {
+    function addFile(name, onclick, sha, path) {
         var node = document.createElement("LI");
         var link = document.createElement("A");
         var icon = document.createElement("I");
@@ -515,7 +515,7 @@
             onclick();
         };
         node.ondragend = function () {
-            fetchFileContents(sha);
+            fetchFileContents(sha, path);
         };
         link.appendChild(icon);
         link.appendChild(namer);
@@ -604,7 +604,7 @@
         let dropdown = $('#branchesDropdown');
         let link = $('<a>');
         link.text(name);
-        link.attr('href', 'Castle.php#/treasury/projects/' + href);
+        link.attr('href', 'Castle.php#!/treasury/' + href);
         link.click(onclick);
         link.appendTo(dropdown);
         $('</br>').appendTo(dropdown);
@@ -614,12 +614,15 @@
         $('#branchesDropdown').empty();
     }
 
-    function showFileContents(contents) {
+    function showFileContents(contents, size, created, edited) {
         document.getElementById("preview").innerText = contents;
+        document.getElementById("displaysize").value = size + " KB";
+        document.getElementById("displaycreated").value = created;
+        document.getElementById("displayedited").value = edited;
     }
 
     function updateBreadCrumbs(prePath, path, repo) {
-        let list = $('#cssmenuList');
+        /*let list = $('#cssmenuList');
         list.find('li').not($('#cssmenuListHome')).remove();
         list.prepend('<li><a href="' + prePath + '">' + repo + '</a></li>');
         path.split('/').forEach(comp => {
@@ -628,7 +631,7 @@
                 let href = prePath + (newPath === "" ? "" : "/") + newPath;
                 list.prepend('<li><a href="' + href + '">' + comp + '</a></li>');
             }
-        });
+        });*/
     }
 </script>
 <script>
@@ -680,7 +683,6 @@
         var bemp = document.getElementById(data);
         var temp = bemp.getElementsByTagName("LABEL");
         var name = temp[0].innerHTML;
-        fetchFileContents(name);
         document.getElementById("displayname").value = name;
         document.getElementById("displaytype").value = typeUpdater(name);
     }

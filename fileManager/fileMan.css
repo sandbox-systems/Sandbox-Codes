@@ -426,6 +426,7 @@ option {
     width: 90%;
     border: 0px;
     background-color: white;
+    color: black;
 }
 
 #preloader {

@@ -30,7 +30,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <title>Sandbox</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,height=device-height"/>
-    <!--<base href="/Castle.html">-->
+    <base href="/Castle.php">
 </head>
 <style>
     html {

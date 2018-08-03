@@ -36,8 +36,8 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
     });
 
     $urlRouterProvider.otherwise('/home');
-    /*$locationProvider.hashPrefix('');
-    $locationProvider.html5Mode(true);*/
+    $locationProvider.hashPrefix('');
+    $locationProvider.html5Mode(true);
 });
 
 castle.controller('BlankCtrl', function () {

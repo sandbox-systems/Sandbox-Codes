@@ -73,7 +73,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
     };
 
     setCurBranchName($scope.params.branch);
-    updateBreadCrumbs("Castle.php#/treasury/projects/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
+    updateBreadCrumbs("Castle.php#!/treasury/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
         $scope.params.branch, $scope.params.path, $scope.params.repo);
 
     setCurPath("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +
@@ -115,14 +115,14 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
         });
     });
 
-    setFetchFileContents(function (sha) {
+    setFetchFileContents(function (sha, path) {
         $http({
-            url: "fileManager/requests/getFileContents.php",
-            data: $.param({...$scope.params, ...{sha: sha}}),
+            url: "fileManager/requests/getFileDetails.php",
+            data: $.param({...$scope.params, ...{sha: sha, path: path}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
         }).then(function (response) {
-            showFileContents(atob(response.data));
+            showFileContents(atob(response.data.content), response.data.size, response.data.created, response.data.edited);
         });
     });
 
@@ -163,7 +163,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
         if (!$scope.addedIDs.files.includes(id)) {
             $scope.addedIDs.files.push(id);
             addFile(name, function () {
-            }, sha)
+            }, sha, $scope.params.path + ($scope.params.path === "" ? "" : "/") + name)
         }
     };
     $scope.addBranch = function (name, href) {

@@ -1,0 +1,12 @@
+{
+  "name": "dockerSocket",
+  "version": "1.0.0",
+  "description": "Docker websocket connect",
+  "main": "dockerServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Aadhithya Kannan",
+  "license": "ISC"
+}

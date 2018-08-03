@@ -28,7 +28,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
         height: 100%;
         width: 0;
         position: fixed;
-        z-index: 1;
+        z-index: 10;
         top: 0;
         right: 0;
         background-color: rebeccapurple;
@@ -45,6 +45,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
         color: #818181;
         display: block;
         transition: 0.3s;
+        float:right;
     }
 
     .notenav a:hover {
@@ -205,7 +206,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
 <!--            <img class="bordered-circle-green" src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
 <!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
 <!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
-            <button onclick="openNoteNav()" id="addpeople"><span class="fas fa-plus"></span></button>
+            <button onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
         </div>
     </div>
 </nav>

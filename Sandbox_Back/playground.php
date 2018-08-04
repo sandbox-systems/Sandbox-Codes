@@ -43,9 +43,8 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
         text-decoration: none;
         font-size: 25px;
         color: #818181;
-        display: block;
+        display: inline-block;
         transition: 0.3s;
-        float:right;
     }
 
     .notenav a:hover {
@@ -72,7 +71,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
 </style>
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNoteNav()">&times;</a>
+    <a href="javascript:void(0)" class="closebtn" style="float:right;" onclick="closeNoteNav()">&times;</a>
     <textarea></textarea>
 </div>
 

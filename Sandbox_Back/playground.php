@@ -46,9 +46,8 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         text-decoration: none;
         font-size: 25px;
         color: #818181;
-        display: block;
+        display: inline-block;
         transition: 0.3s;
-        float:right;
     }
 
     .notenav a:hover {

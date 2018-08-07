@@ -43,6 +43,13 @@ html, body {
     margin: 40px;
 }
 
+#selfInfoImg, .chatProfilePic {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 #searchBox {
     width: 80%;
     margin-left: 10%;

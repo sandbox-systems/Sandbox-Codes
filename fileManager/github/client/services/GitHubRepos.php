@@ -207,7 +207,8 @@ class GitHubRepos extends GitHubService {
 
         $post_data = array(
             "name" => $repo,
-            "private" => $private == "false" ? false : true
+            "private" => $private == "false" ? false : true,
+            "auto_init" => true
         );
 
         $ch = curl_init();

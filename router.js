@@ -19,7 +19,7 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
         templateUrl: 'fileManager/FileM.html',
         controller: 'BlankCtrl'
     }).state('chat', {
-        url: '/chat',
+        url: '/luau',
         templateUrl: 'chat.html',
         controller: 'BlankCtrl'
     }).state('settings', {
@@ -35,7 +35,26 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
         controller: 'notificationsCtrl'
     });
 
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise(function($injector, $location) {
+        let state = $injector.get("$state");
+        if ($location.path() === "/treasury") {
+            state.go('treasury.projects');
+        } else {
+            state.go('home');
+        }
+        return $location.path();
+    });
+    $urlRouterProvider.rule(function($injector, $location) {
+        var path = $location.path();
+        if (path === "/treasury/") {
+            var hasTrailingSlash = path[path.length-1] === '/';
+
+            if (hasTrailingSlash) {
+                var newPath = path.substr(0, path.length - 1);
+                return newPath;
+            }
+        }
+    });
     $locationProvider.hashPrefix('');
     $locationProvider.html5Mode(true);
 });

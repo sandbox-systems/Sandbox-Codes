@@ -7,9 +7,7 @@ use \MongoDB\Driver\Query;
 use \MongoDB\Driver\Exception\Exception;
 use \MongoDB\BSON\ObjectId;
 
-session_start();
 include 'fileManager/github/init.php';
-include 'fileManager/initDB.php';
 
 header('Content-Type: application/json');
 

@@ -271,7 +271,7 @@ angular.module("chat", [])
                         if (requestData.processed[i].accepted) {
                             createAndAddFriend(requestData.processed[i].to);
                         } else {
-                            alert("Your friend request to " + requestData.processed[i].to + " was denied");
+                            //alert("Your friend request to " + requestData.processed[i].to + " was denied");
                         }
                     }
                 }
@@ -279,7 +279,7 @@ angular.module("chat", [])
 
             var handleNotifications = function (notifData) {
                 notifData.forEach(notification => {
-                    alert(notification.message)
+                    //alert(notification.message)
                 });
             };
 
@@ -307,9 +307,9 @@ angular.module("chat", [])
                 } else if (msgType === "friendRequestAccepted") {
                     createAndAddFriend(msgData);
                 } else if (msgType === "friendRequestDenied") {
-                    alert("Your friend request to " + msgData.name + " was denied");
+                    //alert("Your friend request to " + msgData.name + " was denied");
                 } else if (msgType === "unfriend") {
-                    alert("You were unfriended by " + msgData.name + ".");
+                    //alert("You were unfriended by " + msgData.name + ".");
                     removeFriend(msgData.id);
                 } else if (msgType === "leavingRoom") {
                     var room = getRoomByID(msgData.room);

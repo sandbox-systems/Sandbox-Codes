@@ -15,5 +15,4 @@ $data = json_decode(file_get_contents('https://api.github.com/user', false, $con
 
 $ghUsername = $data->login;
 updateDocument($man, "users", ['username' => $_SESSION['username']],
-    DBUpdateOperators::Set, ['GHUsername' => $ghUsername]);
-
+    DBUpdateOperators::Set, ['GHUsername' => $ghUsername, 'githubToken' => $_SESSION['token']]);

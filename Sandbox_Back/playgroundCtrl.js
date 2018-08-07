@@ -35,6 +35,7 @@ var directories = {};
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
+    $('#onFileReadOverlay').fadeIn();
     $http({
         method: 'POST',
         url: 'fileManager/requests/getAllProjectContents.php',
@@ -85,6 +86,7 @@ function scan($scope, $http, $sce, $state){
 
         traverse(dir);
         $scope.scan = $sce.trustAsHtml(html);
+        $('#onFileReadOverlay').fadeOut();
     }, function errorCallback(response) {
         if(repo===""){
             chooseRepo();

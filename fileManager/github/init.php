@@ -7,7 +7,7 @@
 include 'util.php';
 
 // Get access token from callback code and setup client with it
-if (!setupToken($client)) {
+if (!isTokenReady($man, $client)) {
     echo "UNSYNCED";
     die();
 }

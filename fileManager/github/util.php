@@ -59,14 +59,40 @@ function fetchToken($code, $client_id, $client_secret)
 /**
  * Setup client with access code.
  */
-function setupToken($client)
-{
+function setupToken($man, $client) {
+    $user = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[0];
     if (isset($_SESSION['token'])) {
+        $client->setOauthToken($_SESSION['token']);
+        return true;
+    } else if (isset($user->githubToken)) {
+        $_SESSION['token'] = $user->githubToken;
         $client->setOauthToken($_SESSION['token']);
         return true;
     } else {
         return false;
     }
+}
+
+/**
+ * Ensure the token is valid and can be used to make requests
+ *
+ * @param $client GitHubClient
+ * @return bool
+ */
+function isTokenValid($client) {
+    try {
+        $client->users->getTheAuthenticatedUser();
+        return true;
+    } catch (GitHubClientException $e) {
+        return false;
+    }
+}
+
+/**
+ * Ensure that the token is ready for use (set up and validated)
+ */
+function isTokenReady($man, $client) {
+    return setupToken($man, $client) && isTokenValid($client);
 }
 
 /**

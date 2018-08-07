@@ -12,10 +12,9 @@ include 'util.php';
 $code = $_GET['code'];
 $token = fetchToken($code, $client_id, $client_secret);
 
-var_dump($man);
 if ($token) {
     $_SESSION['token'] = $token;
-    include 'saveUsername.php';
+    include 'saveGHUserData.php';
     header("Location: ../../Castle.php#/settings");
 } else {
     header("Location: ../../Castle.php#/settings?unsuccessful");

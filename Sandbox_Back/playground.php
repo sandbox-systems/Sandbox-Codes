@@ -76,7 +76,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
     <a href="javascript:void(0)" onclick="saveNotes()"><i class="fas fa-save"></i></a>
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNoteNav()">&times;</a>
+    <a href="javascript:void(0)" style="float:right;" class="closebtn" onclick="closeNoteNav()">&times;</a>
     <textarea id="notesContent"><?php echo $notes ?></textarea>
 </div>
 

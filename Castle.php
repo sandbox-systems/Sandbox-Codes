@@ -74,15 +74,12 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <a>
         <div class="container" style="padding-left: 0px;">
             <img src="<?php echo $user->profilepic ?>" alt="PIC" class="image">
-            <div class="overlay1">
-                <div class="text"><?php echo $user->name ?></div>
-            </div>
         </div>
     </a>
-    <a href="index.html">Main Site</a>
+    <a href="sandboxcodes.com">Main Site</a>
     <a ui-sref="settings">Settings</a>
     <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
-    <a href="Login.html">Logout</a>
+    <a href="sandboxcodes.com/Login.html">Logout</a>
     <img src="images/white-logo.png" class="milk">
 </div>
 <div class="wrapper">

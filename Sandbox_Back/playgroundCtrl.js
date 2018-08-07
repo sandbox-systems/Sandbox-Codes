@@ -3,12 +3,16 @@ var $ghttp;
 var $gsce;
 var $gstate;
 
-let playgroundCtrl = function ($scope, $http, $sce, $state) {
+let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $stateParams) {
     $gscope = $scope;
     $ghttp = $http;
     $gsce = $sce;
     $gstate = $state;
     $scope.scan = "";
+    if ($stateParams.repo !== undefined) {
+        owner = $stateParams.repo.split("/")[0];
+        repo = $stateParams.repo.split("/")[1];
+    }
     scan($scope, $http, $sce, $state);
     //toggleCollab();
 };
@@ -27,6 +31,7 @@ var hashes = {};
 var tempContents = {};
 var fileFlags = {};
 var isReading = false;
+var directories = {};
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
@@ -60,15 +65,18 @@ function scan($scope, $http, $sce, $state){
         }
         var html = "";
 
-        function traverse(jsonObj) {
+        function traverse(jsonObj, dirObject) {
+            var dirObj = dirObject || directories;
             if (typeof jsonObj == "object") {
                 Object.entries(jsonObj).forEach(([key, value]) => {
                     if (value.type == "blob") {
                         hashes[value.name] = value.sha;
                         html += "<li class='file' onclick='clickFile(\""+value.name+"\", \""+key+"\")'><i class='far fa-file'></i> " + key + "</li>";
                     } else if (value.type == "tree") {
+                        let relName = /[^/]*$/.exec(value.name)[0];
+                        dirObj[relName] = {};
                         html += "<li class='dropdownli folder' data-name='" + value.name + "' data-sha='" + value.sha + "'><i class='fas fa-folder'></i> " + key + "<ul>";
-                        traverse(value);
+                        traverse(value, dirObj[relName]);
                         html += "</ul></li>";
                     }
                 });
@@ -80,6 +88,8 @@ function scan($scope, $http, $sce, $state){
     }, function errorCallback(response) {
         if(repo===""){
             chooseRepo();
+        } else {
+            swal({type: "error", title: "Uh oh!", text: "We couldn't find a repository named " + repo + " under " + owner + "'s account"});
         }
         $scope.scan = "Error fetching data: " + JSON.stringify(response);
     });
@@ -139,7 +149,7 @@ function clickFile(name, key){
 /****************************************************
  ****************** REPO MANIPULATION ***************
  ****************************************************/
-function readFile(hash, onRead) {
+function readFile(hash, onRead, altOnRead) {
     isReading = true;
     $('#onFileReadOverlay').fadeIn();
     $.ajax({
@@ -152,8 +162,11 @@ function readFile(hash, onRead) {
         },
         dataType: "text",
         success: function(data){
-            content = atob(data)
-console.log(content);
+            content = atob(data);
+            if (altOnRead) {
+                altOnRead(content);
+                return;
+            }
             editor.setValue(content, -1);
             onRead(content);
             isReading = false;
@@ -168,7 +181,7 @@ console.log("READING FILE FAILURE");
     });
 }
 
-function createFile(path, name){
+function createFile(path, name, content, shouldStopLoading){
     if(path==null){
         path = "";
     }
@@ -183,16 +196,23 @@ function createFile(path, name){
             repo: repo,
             branch: branch,
             path: path,
-            name: name
+            name: name,
+            content: content || ""
         },
-        dataType: "text",
+        dataType: "json",
         success: function(data){
-console.log("CREATE");
+console.log(data);
             if(notify)
                 swal({type:"success",  timer:1000, });
+            var fullPath = path + (path === "" ? "" : "/") + name;
+//            hashes[fullPath] = 
             angular.element("#entryModal")[0].style.display = "none";
             angular.element("#filename").val("");
             scan($gscope, $ghttp, $gsce, $gstate);
+            if (shouldStopLoading) {
+                isReading = false;
+                $('#onFileReadOverlay').fadeOut();
+            }
         },
         error: function(data){
             if(notify)
@@ -202,7 +222,40 @@ console.log("CREATE");
     });
 }
 
-function deleteFile(path, name){
+function deleteFile(path, name, shouldBeDirect){
+    function makeRequest() {
+        $.ajax({
+            type: "POST",
+            url: "fileManager/requests/deleteFile.php",
+            data: {
+                owner: owner,
+                repo: repo,
+                branch: branch,
+                path: path,
+                name: name
+            },
+            dataType: "text",
+            success: function (data) {
+                if (!shouldBeDirect) {
+                    swal({
+                        type: "success",
+                        timer: 1000,
+                    });
+                    scan($gscope, $ghttp, $gsce, $gstate);
+                }
+            },
+            error: function (data) {
+                console.log(JSON.stringify(data));
+                swal("Could not delete file.", {
+                    type: "error",
+                });
+            }
+        });
+    }
+    if (shouldBeDirect) {
+        makeRequest();
+        return;
+    }
     swal({
         title: "Danger Zone",
         text: "Are you sure you want to delete this file? Well, if you change your mind GitHub is a thing.",
@@ -211,33 +264,99 @@ function deleteFile(path, name){
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
-            $.ajax({
-                type: "POST",
-                url: "fileManager/requests/deleteFile.php",
-                data: {
-                    owner: owner,
-                    repo: repo,
-                    branch: branch,
-                    path: path,
-                    name: name
-                },
-                dataType: "text",
-                success: function (data) {
-                    swal({
-                        type: "success",
-                        timer: 1000,
-                    });
-                    scan($gscope, $ghttp, $gsce, $gstate);
-                },
-                error: function (data) {
-                    console.log(JSON.stringify(data));
-                    swal("Could not delete file.", {
-                        type: "error",
-                    });
-                }
-            });
+            makeRequest();
         }
     });
+}
+
+function duplicateFile(fullPath) {
+    var path = fullPath.lastIndexOf("/") === -1 ? "" : fullPath.substring(0, fullPath.lastIndexOf("/"));
+    var name = fullPath.lastIndexOf("/") === -1 ? fullPath : fullPath.substring(fullPath.lastIndexOf("/") + 1, fullPath.length);
+
+    swal({
+        title: 'Duplicating file',
+        text: 'What would you like the duplicated file to be called?',
+        type: 'question',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Duplicate',
+        input: 'text',
+        showCancelButton: true
+    }).then((result) => {
+        function isNameValid(str) {
+            if (!str || str.length > 255 || str === name) {
+                return false;
+            }
+            if ((/[<>:"\/\\|?*\x00-\x1F]/g).test(str) || (/^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i).test(str)) {
+                return false;
+            }
+            if (/^\.\.?$/.test(str)) {
+                return false;
+            }
+            return true;
+        }
+        if (isNameValid(result.value)) {
+            readFile(hashes[fullPath], null, function (content) {
+                createFile(path, result.value, content, true);
+            });
+        } else {
+            swal({
+                title: "Oops..",
+                text: "That's not a valid name!",
+                type: 'error',
+                timer: 1500
+            })
+        }
+    });
+}
+
+function renameFile(fullPath) {
+    function makeRequest(newName) {
+        var path = fullPath.lastIndexOf("/") === -1 ? "" : fullPath.substring(0, fullPath.lastIndexOf("/"));
+        var name = fullPath.lastIndexOf("/") === -1 ? fullPath : fullPath.substring(fullPath.lastIndexOf("/") + 1, fullPath.length);
+        readFile(hashes[fullPath], null, function (content) {
+            deleteFile(path, name, true);
+            createFile(path, newName, content, true);
+        });
+    }
+swal({
+  title: 'Renaming file',
+  text: "What would you like to rename this file to?",
+  type: 'question',
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#6c757d',
+  confirmButtonText: 'Rename',
+  input: "text",
+  showCancelButton: true
+}).then((result) => {
+/*
+function isNameValid(str) {
+if (!str || str.length > 255) {
+		return false;
+	}
+
+	if ((/[<>:"\/\\|?*\x00-\x1F]/g).test(str) || (/^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i).test(str)) {
+		return false;
+	}
+
+	if (/^\.\.?$/.test(str)) {
+		return false;
+	}
+
+	return true;
+}
+  if (isNameValid(result.value)) {
+    makeRequest("something.php");
+  } else {
+    swal({
+      title: "Oops..",
+      text: "That's not a valid name!",
+      type: 'error',
+      timer: 2000
+    })
+  }*/
+makeRequest("something.py");
+})
 }
 
 setInterval(function(){
@@ -378,6 +497,41 @@ function setLanguage(name){
             break;
         case "cpp":
             language = "c_cpp";
+            break;
+        case "html":
+        case "htm":
+            language = "html";
+            break;
+        case "css":
+            language = "css";
+            break;
+        case "js":
+            language = "javascript";
+            break;
+        case "php":
+            language = "php";
+            break;
+        case "swift":
+            language = "swift";
+            break;
+        case "py":
+            language = "python";
+            break;
+        case "rb":
+            language = "ruby";
+            break;
+        case "rs":
+            language = "rust";
+            break;
+        case "scala":
+        case "sc":
+            language = "scala";
+            break;
+        case "cs":
+            language = "csharp";
+            break;
+        case "r":
+            language = "r";
             break;
         default:
             /*swal({

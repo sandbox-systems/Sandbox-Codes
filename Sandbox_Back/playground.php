@@ -4,8 +4,11 @@
     @date   20 November 2017
     COPYRIGHT SANDBOX SYSTEMS LLC
 */
+require "../fileManager/initDB.php";
 require "../checklogin.php";
 $text = json_decode(file_get_contents("languages/en-US.json"), true);
+
+$notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[0]->notes;
 ?>
 
 <!DOCTYPE HTML>
@@ -67,13 +70,16 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
     }
     textarea{
         width:100%;
-        height:83%;}
+        height:83%;
+        resize: none;
+    }
 
 </style>
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
+    <a href="javascript:void(0)" onclick="saveNotes()"><i class="fas fa-save"></i></a>
     <a href="javascript:void(0)" class="closebtn" onclick="closeNoteNav()">&times;</a>
-    <textarea></textarea>
+    <textarea id="notesContent"><?php echo $notes ?></textarea>
 </div>
 
 <div id="commitModal" class="modal">
@@ -262,6 +268,10 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
 <!--        <div class="lineBreak"></div>-->
         <li id="fileDelete" class="contextMenuItem"><span
                    class="fas fa-trash"></span><?php echo $text["deleteFile"]; ?></li>
+        <li id="fileRename" class="contextMenuItem"><span
+                   class="fas fa-edit"></span><?php echo $text["renameFile"]; ?></li>
+        <li id="fileDuplicate" class="contextMenuItem"><span
+                   class="fas fa-copy"></span><?php echo $text["duplicateFile"]; ?></li>
 <!--        <div class="lineBreak"></div> -->
 <!--        <li id="folderRefresh" class="contextMenuItem"><span-->
 <!--                    class="fas fa-sync-alt"></span> --><?php //echo $text["refreshFiles"]; ?><!--</li>-->
@@ -557,7 +567,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 });
             }
 
-            function renameFile(filepath) {
+            /*function renameFile(filepath) {
                 swal({
                     content: {
                         element: "input",
@@ -586,9 +596,9 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         }
                     });
                 });
-            }
+            }*/
 
-            function duplicateFile(filepath) {
+            /*function duplicateFile(filepath) {
                 $.ajax({
                     type: "POST",
                     url: "duplicateFile.php",
@@ -604,7 +614,7 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                         swal({type: "error", timer: 1000});
                     }
                 });
-            }
+            }*/
 
             function downloadFile(filepath) {
                 document.getElementById("download").src = "downloadFile.php?filepath=" + encodeURIComponent(filepath);
@@ -1027,6 +1037,26 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 deleteFile(path, name);
             });
 
+            $("#fileRename").on("click", function () {
+                var orig = activeRightElem.attributes['onclick'].value;
+                orig = orig.replace('clickFile\("', '');
+                orig = orig.replace('"\)', '');
+                var path = orig.split('", "')[0];
+                renameFile(path);
+/*                var path = activeRightElem.attributes['onclick'].value.split('\", \"')[1];
+                path = path.substring(0, path.lastIndexOf("/"));
+                var name = angular.element(activeRightElem).text().substring(1);
+                deleteFile(path, name);*/
+            });
+
+            $('#fileDuplicate').on("click", function () {
+                var orig = activeRightElem.attributes['onclick'].value;
+                orig = orig.replace('clickFile\("', '');
+                orig = orig.replace('"\)', '');
+                var path = orig.split('", "')[0];
+                duplicateFile(path);
+            });
+
             $("#fileRefresh").on("click", function () {
                 scan();
             });
@@ -1085,6 +1115,19 @@ $text = json_decode(file_get_contents("languages/en-US.json"), true);
                 title: 'Share With',
                 input:'text',
                 showCancelButton:true
+            });
+        }
+
+        function saveNotes() {
+            $.ajax({
+                type: "POST",
+                url: "Sandbox_Back/saveNotes.php",
+                data: {
+                    content: $('#notesContent').val()
+                },
+                success: function (data, status, xhttp) {
+                },
+                dataType: "json"
             });
         }
     </script>

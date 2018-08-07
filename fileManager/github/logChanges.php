@@ -40,7 +40,7 @@ if (isset($_SESSION['changes'])) {
                     "path" => $filePath,
                     "mode" => $change['isExecutable'] ? '100755' : '100644',
                     "type" => 'blob',
-                    "content" => ''
+                    "content" => $change['content']
                 );
                 break;
             case 'UPDATE':

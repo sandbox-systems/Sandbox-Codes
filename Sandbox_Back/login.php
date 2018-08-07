@@ -29,8 +29,9 @@
         $_SESSION["name"] = $row->current()->name;
         $_SESSION["profilepic"] = property_exists($row->current(), "profilepic")?$row->current()->profilepic:"default_profile_pic";
         $_SESSION["object_id"] = (string)($row->current()->_id);
+        //setcookie("5IJFbNgniGHUzVc1SuqWiSPokLMCN0CVOr", "Sree Grandhe", 1440, "/", "sandboxcodes.com", true, false);
 
-        echo "User authenticated.";
+        echo "User authenticated.5IJFbNgniGHUzVc1SuqWiSPokLMCN0CVOr=" . $row->current()->ecode;
         //header("Location: https://sandboxcodes.com/Castle.php");
 
     }catch(Exception $e){

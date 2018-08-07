@@ -12,7 +12,7 @@ angular.module("chat", [])
         }
     })
     .controller("chatCtrl", function ($scope, $timeout) {
-        $scope.user = new User("", "", "");
+        $scope.user = new User("", "", "", "");
         $scope.rooms = [];
         $scope.friends = [];
         $scope.filesToSend = [];
@@ -63,9 +63,8 @@ angular.module("chat", [])
                 return decodeURIComponent(results[2].replace(/\+/g, ' '));
             }
 
-            var searchParams = new URLSearchParams(window.location.search);
             var easyrtcid = "";
-            var username = searchParams.get('username');
+            var username = "";
             var defaultRoom = getParameterByName('group');
             var userPool = {};
             var fileSenders = {};
@@ -73,33 +72,26 @@ angular.module("chat", [])
             var typingTimer = null;
 
             var connect = function () {
-                $.ajax({
-                    type: "POST",
-                    url: 'https://sandboxcodes.com/getUsername.php',
-                    data: {},
-                    success: function (data, status, xhttp) {
-                        username = data.username;
+                var match = document.cookie.match(new RegExp('(^| )5IJFbNgniGHUzVc1SuqWiSPokLMCN0CVOr=([^;]+)'));
+                if (!match)
+                    return;
+                ecode = match[2];
 
-                        easyrtc.setSocketUrl("https://sandboxcodes.com/chat/");
-                        easyrtc.setUsername(username);
-                        easyrtc.connect('sandbox-chat', function (eid) {
-                            console.log("WORKED");
-                            easyrtcid = eid;
-                            callbacks.connectSuccess(eid);
-                        }, callbacks.failure);
+                //easyrtc.setSocketUrl("https://sandboxcodes.com/chatnode/");
+                easyrtc.connect('sandbox-chat', function (eid) {
+                    easyrtcid = eid;
+                    callbacks.connectSuccess(eid);
+                }, callbacks.failure);
 
-                        easyrtc.setPeerListener(peerListener);
-                        easyrtc.addEventListener("roomOccupant", roomOccupantListener);
+                easyrtc.setPeerListener(peerListener);
+                easyrtc.addEventListener("roomOccupant", roomOccupantListener);
 
-                        easyrtc.sendServerMessage('clientConnection', {username: username}, callbacks.sendServerMsgSuccess, callbacks.failure);
-                        easyrtc.setServerListener(serverListener);
+                easyrtc.sendServerMessage('clientConnection', {ecode: ecode}, callbacks.sendServerMsgSuccess, callbacks.failure);
+                easyrtc.setServerListener(serverListener);
 
-                        // [0] converts jQuerySelector to DOMString
-                        easyrtc_ft.buildDragNDropRegion($('#attachModal')[0], fileCollectionHandler);
-                        easyrtc_ft.buildFileReceiver(callbacks.fileReceiveAcceptReject, fileReceiveHandler, function (sender, status) {
-                        });
-                    },
-                    dataType: "json"
+                // [0] converts jQuerySelector to DOMString
+                easyrtc_ft.buildDragNDropRegion($('#attachModal')[0], fileCollectionHandler);
+                easyrtc_ft.buildFileReceiver(callbacks.fileReceiveAcceptReject, fileReceiveHandler, function (sender, status) {
                 });
             };
 
@@ -179,17 +171,20 @@ angular.module("chat", [])
             };
 
             var fillUser = function (userData) {
+                username = userData.username;
+                easyrtc.setUsername(username);
                 $scope.$apply(function () {
                     $scope.user.id = userData.id;
                     $scope.user.uname = username;
                     $scope.user.name = userData.name;
+                    $scope.user.profilepic = userData.profilepic;
                 });
             };
 
             var fillFriends = function (friendData) {
                 for (var i = 0; i < friendData.length; i++) {
                     var datum = friendData[i];
-                    addFriend(new User(datum.id, datum.uname, datum.name));
+                    addFriend(new User(datum.id, datum.uname, datum.name, datum.profilepic));
                 }
             };
 
@@ -221,7 +216,7 @@ angular.module("chat", [])
                         if (typeof member === "string") {
                             room.addMember(userPool[member]);
                         } else if (typeof member === "object") {
-                            var user = new User(member.id, member.uname, member.name);
+                            var user = new User(member.id, member.uname, member.name, member.profilepic);
                             userPool[member.id] = user;
                             room.addMember(user);
                         }
@@ -382,7 +377,7 @@ angular.module("chat", [])
             };
 
             var createAndAddFriend = function (friendData) {
-                var newFriend = new User(friendData.id, friendData.uname, friendData.name);
+                var newFriend = new User(friendData.id, friendData.uname, friendData.name, friendData.profilepic);
                 newFriend.isOnline = true;
                 addFriend(newFriend);
                 easyrtc.sendServerMessage('setupFriendship', {

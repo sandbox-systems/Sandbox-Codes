@@ -201,8 +201,8 @@ module.exports = {
         });
     },
     // successCB = function (user)
-    getUserFromUname: function (db, uname, successCB) {
-        var query = {username: uname}, user;
+    getUserFromEcode: function (db, ecode, successCB) {
+        var query = {ecode: mongodb.Binary(ecode)}, user;
 
         db.collection("users").find(query).forEach(function (doc) {
             user = doc;

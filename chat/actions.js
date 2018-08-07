@@ -35,13 +35,15 @@ module.exports = {
         return idObjs;
     },
     // callback = function (userData, friendIDs, user)
-    getUserDataFromUname: function (db, username, callback) {
+    getUserDataFromEcode: function (db, ecode, callback) {
         // Get user object with appropriate username
-        queries.getUserFromUname(db, username, function (user) {
+        queries.getUserFromEcode(db, ecode, function (user) {
             // Once user is fetched, only the id and name are sent to the client
             var userData = {};
             userData.id = user._id.toString();
             userData.name = user.name;
+            userData.username = user.username;
+            userData.profilepic = user.profilepic;
 
             // Friend IDs must be cast to ObjectID objects to use in querying
             var friendIDs = module.exports.getObjectIDList(user.friends);

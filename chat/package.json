@@ -10,6 +10,8 @@
   "dependencies": {
     "easyrtc": "file:easyrtc",
     "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
     "mongodb": "^3.0.10",
     "npm": "^6.1.0",
     "serve-static": "^1.8.0",

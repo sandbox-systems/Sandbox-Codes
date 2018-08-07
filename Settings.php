@@ -294,7 +294,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             confirmButtonText:'Submit',
             showLoaderOnConfirm:true
         });
-        if(//hash of passwords match){
+        if(true/*hash of passwords match*/){
             updateProfile();
         }else{
             swal('Whoops!','Check your password','error');

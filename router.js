@@ -10,7 +10,7 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
         templateUrl: 'home.html',
         controller: 'BlankCtrl'
     }).state('playground', {
-        url: '/playground',
+        url: '/playground?repo',
         templateUrl: 'Sandbox_Back/playground.php',
         controller: 'playgroundCtrl'
     }).state('treasury', {

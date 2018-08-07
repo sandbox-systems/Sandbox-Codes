@@ -262,8 +262,8 @@
                                         <div class="chatBubble ownChatBubble">
                                             {{chat.substr(chat.indexOf(':') + 1)}}
                                             <span ng-if="typeof(chat) === 'object'">
-                                                <!--<img class="chatImg" ng-if="chat.type.includes('image')"
-                                                     src="{{chat.url}}">-->
+                                                <img class="chatImg" ng-if="chat.type.includes('image')"
+                                                     src="{{chat.url}}">
                                                 <span ng-if="!chat.type.includes('image')">
                                                     <input class="greenBtn" type="submit"
                                                            style="height: 50px;margin-left: 1%;bottom: 20px"
@@ -283,8 +283,8 @@
                                         <div class="chatBubble otherChatBubble">
                                             {{chat.substr(chat.indexOf(':') + 1)}}
                                             <span ng-if="typeof(chat) === 'object'">
-                                                <!--<img class="chatImg" ng-if="chat.type.includes('image')"
-                                                     src="{{chat.url}}">-->
+                                                <img class="chatImg" ng-if="chat.type.includes('image')"
+                                                     src="{{chat.url}}">
                                                 <span ng-if="!chat.type.includes('image')">
                                                     <input class="greenBtn" type="submit"
                                                            style="height: 50px;margin-left: 1%;bottom: 20px"
@@ -303,7 +303,7 @@
                                 <div class="col-xl-7">
                                     <div>
                                         <div class="chatBubble ownChatBubble">
-                                            <!--<img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">-->
+                                            <img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">
                                             <div ng-if="!chat.type.includes('image')">
                                                 <button class="ownChatFile btn" type="submit"
                                                         ng-click="chat.download()">
@@ -325,7 +325,7 @@
                                 <div class="col-xl-6">
                                     <div>
                                         <div class="chatBubble otherChatBubble">
-                                            <!--<img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">-->
+                                            <img class="chatImg" ng-if="chat.type.includes('image')" src="{{chat.url}}">
                                             <div ng-if="!chat.type.includes('image')">
                                                 <button class="otherChatFile btn" type="submit"
                                                         ng-click="chat.download()">
@@ -449,20 +449,27 @@
     </frosted-glass-container>
 </div>
 
-<script src="https://sandboxcodes.com/chat/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="https://sandboxcodes.com/chat/easyrtc/api/easyrtc.js"></script>
-<script type="text/javascript" src="https://sandboxcodes.com/chat/easyrtc/api/easyrtc_ft.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/easyrtc/easyrtc.js"></script>
+<script type="text/javascript" src="/easyrtc/easyrtc_ft.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<script src="https://sandboxcodes.com/chat/lib/bootstrap/js/bootstrap.js"></script>
-<script src="https://sandboxcodes.com/chat/lib/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="lib/bootstrap/js/bootstrap.js"></script>
+<script src="lib/bootstrap/js/bootstrap.bundle.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-<script src="https://sandboxcodes.com/chat/lib/autosize.min.js"></script>
+<script src="lib/autosize.min.js"></script>
 <script src='https://unpkg.com/frosted-glass/dist/frostedglass.js'></script>
-<script src="https://sandboxcodes.com/chat/scripts/models.js"></script>
-<script src="https://sandboxcodes.com/chat/scripts/chatClient.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="scripts/models.js"></script>
+<script src="scripts/chatClient.js"></script>
 <script>
     $(function () {
+        var getCookie = function(name) {
+            var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return match[2];
+        }
+        console.log(getCookie("5IJFbNgniGHUzVc1SuqWiSPokLMCN0CVOr"));
+
         $('#chatContainer').fadeIn(1000).removeClass('hidden');
 
         $('[data-toggle="popover"]').popover();

@@ -70,7 +70,8 @@
                         title:'Whoops',
                         text:'Please verify the email associated with this account.'
                     });
-                }else if(data=="User authenticated."){
+                }else if(data.startsWith("User authenticated.")){
+                    document.cookie = data.replace("User authenticated.", "");
                     // $("#letsgo").addClass("success");
                     window.location = "https://sandboxcodes.com/Castle.php";
                 }

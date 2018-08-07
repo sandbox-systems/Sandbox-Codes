@@ -1,9 +1,10 @@
-var User = function (id, uname, name) {
+var User = function (id, uname, name, profilepic) {
     this.id = id;
     this.uname = uname;
     this.name = name;
     this.isOnline = false;
     this.isTyping = false;
+    this.profilepic = "";
 };
 
 var Room = function (id, name, chats) {

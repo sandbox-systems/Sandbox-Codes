@@ -26,8 +26,8 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
-    let group = getParameterByName('group');
-    $('iframe').attr('src', 'https://sandboxcodes.com/chat/?username=jdoe1' + (group !== null ? '&group=' + group : ""))
+    let chatGroup = getParameterByName('group');
+    $('iframe').attr('src', 'https://sandboxcodes.com:3000?' + (chatGroup !== null ? 'chatGroup=' + chatGroup : ""))
 </script>
 </body>
 </html>

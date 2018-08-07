@@ -45,6 +45,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         font-family: "Lato";
         overflow: hidden;
         transition: background-color .5s;
+        margin: 0 !important;
     }
 
     .searchoptions {

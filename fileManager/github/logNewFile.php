@@ -14,6 +14,7 @@ $_SESSION['changes'][] = array(
     'type' => 'ADD',
     'path' => $path,
     'name' => $name,
+    'content' => $content,
     'isExecutable' => false
 );
 

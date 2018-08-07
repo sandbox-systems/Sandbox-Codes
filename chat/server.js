@@ -1,9 +1,11 @@
 // Load required modules
-var http = require("http");
+var https = require("https");
+var fs = require("fs");
 var express = require("express");
 var serveStatic = require('serve-static');
 var easyrtc = require("easyrtc");
 var mongodb = require("mongodb");
+//var Cookies = require("js-cookie");
 var actions = require("./actions");
 var queries = require("./queries");
 
@@ -18,7 +20,7 @@ var httpApp = express();
 httpApp.use('/', serveStatic('static', {'index': ['chat.html']}));
 
 var db, dbClient;
-var dbUrl = 'mongodb://localhost:27017';
+var dbUrl = 'mongodb://sandbox:NhJLmHZb$@localhost:27017/admin';
 
 // Connect to MongoDB server
 mongodb.connect(dbUrl, {useNewUrlParser: true}, function (err, client) {
@@ -30,7 +32,10 @@ mongodb.connect(dbUrl, {useNewUrlParser: true}, function (err, client) {
 });
 
 // Start express server
-var webServer = http.createServer(httpApp).listen(3000);
+var webServer = https.createServer({
+    key: fs.readFileSync("/etc/letsencrypt/live/sandboxcodes.com/privkey.pem"),
+    cert: fs.readFileSync("/etc/letsencrypt/live/sandboxcodes.com/fullchain.pem")
+}, httpApp).listen(3000);
 
 // Load and setup socket.io with express server
 var io = require("socket.io").listen(webServer);
@@ -61,15 +66,14 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
 
     easyrtc.events.on("easyrtcMsg", function (conObj, msg, socketCallback, next) {
         var roomID, memberID;
-        console.log("HI");
         // Upon receiving easyrtcid from client on connect, send back user and room data
         if (msg.msgType === "clientConnection") {
-            var username = msg.msgData.username;
+            var ecode = msg.msgData.ecode;
 
             // Contains all processed user IDs
             var userPool = [];
 
-            actions.getUserDataFromUname(db, username, function (userData, friendIDs, user) {
+            actions.getUserDataFromEcode(db, ecode, function (userData, friendIDs, user) {
                 actions.getFriendData(db, user, userPool, friendIDs, function (friendData, roomIDs) {
                     actions.getRoomData(db, userData, userPool, roomIDs, function (roomData) {
                         actions.getPendingRequestDataFor(db, userData.id, function (requestData) {

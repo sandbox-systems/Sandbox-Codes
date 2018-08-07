@@ -17,11 +17,11 @@
 <!--</div>-->
 <div id="infoNav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeInfoNav()">&times;</a>
-    <div style="width: 15%; float: left;">
+    <div style="width: 15%;">
         <form>
             <fieldset style="color: black;">
                 Name<br>
-                <input id="displayname" type="text" class="infoname">
+                <input id="displayname" type="text" class="infoname" readonly>
                 FileType<br>
                 <input id="displaytype" type="text" class="infoname" readonly>
                 <!--Description<br>-->
@@ -105,7 +105,7 @@
     <div class="modal-content">
         <div class="modal-body">
             <fieldset>
-                <input type="text" id="newBranchName" style="margin-top: 2%" placeholder="New Branch Name">
+                <input type="text" id="newBranchName" style="margin-top: 2%" autocomplete="off" placeholder="New Branch Name">
             </fieldset>
             <fieldset>
                 Branch Off Of<br>
@@ -132,7 +132,7 @@
                     </ul>
                 </fieldset>
                 <input type="text" id="commitMessageInput" placeholder="Commit Message" title="Commit Message"
-                       style="margin-top: 2%">
+                       style="margin-top: 2%" autocomplete="off">
                 <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn"
                      onclick="document.getElementById('commitModal').style.display='none'">
                     Cancel
@@ -281,7 +281,6 @@
     function setIsViewingInsideRepo(isTrue) {
         isViewingInsideRepo = isTrue;
     }
-
     function addPublicRepo() {
         let name = $('#publicRepoName').val();
         $.ajax({
@@ -690,7 +689,11 @@
     function dropper(ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
-            document.getElementById('shareModal').style.display = "block";
+		if(isViewingInsideRepo){
+			swal('Whoops!','You can only share repos','info');
+		}else{
+			document.getElementById('shareModal').style.display = "block";
+		}
     }
 
     // function moveFolder(ev) {

@@ -8,7 +8,6 @@ html {
     float: left;
     overflow: hidden;
 }
-
 .dropdown .dropbtn {
     font-size: 16px;
     border: none;
@@ -110,7 +109,7 @@ li > a {
     animation-name: animatetop;
     animation-duration: 0.4s;
     border: 5px solid mediumpurple;
-    border-radius: 50px;
+    border-radius: 15px;
 }
 
 /* Add Animation */

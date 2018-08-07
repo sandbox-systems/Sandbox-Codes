@@ -21,7 +21,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
@@ -106,16 +105,16 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <div id="entryModal" class="modal">
 
     <!-- Modal content -->
-    <div class="modal-content" style="border-radius: 64px">
+    <div class="modal-content" style="border-radius: 15px">
         <div class="modal-header" id="fileheader">Create New File!</div>
         <div class="modal-header" id="folderheader" style="display: none;">Create New Folder!</div>
         <div class="modal-body">
-            <fieldset style="    margin-top: 1%;">
+            <!--<fieldset style="    margin-top: 1%;">
                 <label class="switch">
                     <input value="None" type="checkbox" id="letscheck" onchange="switcher()">
                     <span class="slider"></span>
                 </label>
-            </fieldset>
+            </fieldset>-->
             <form id="fileform" class="animated fadeIn">
                 <fieldset style="    margin-top: 2%;">
                     Filename:<br>
@@ -271,6 +270,8 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                    class="fas fa-edit"></span><?php echo $text["renameFile"]; ?></li>
         <li id="fileDuplicate" class="contextMenuItem"><span
                    class="fas fa-copy"></span><?php echo $text["duplicateFile"]; ?></li>
+        <li id="fileDownload" class="contextMenuItem"><span
+                   class="fas fa-download"></span><?php echo $text["deleteFile"]; ?></li>
 <!--        <div class="lineBreak"></div> -->
 <!--        <li id="folderRefresh" class="contextMenuItem"><span-->
 <!--                    class="fas fa-sync-alt"></span> --><?php //echo $text["refreshFiles"]; ?><!--</li>-->
@@ -291,8 +292,8 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         <iframe id="consoleFrame" src="https://sandboxcodes.com:7681/" width=100% height=100%></iframe>
     </div>
 
-
     <script>
+        chooseRepo();
         function openNoteNav() {
             document.getElementById("notenavv").style.width = "250px";
             //document.getElementById("main").style.marginLeft = "250px";
@@ -500,7 +501,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             }
 
             //not yet tested
-            function readFile(filepath) {
+            /*function readFile(filepath) {
                 $.ajax({
                     type: "POST",
                     url: "readFile.php",
@@ -513,7 +514,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                         editor.getSession().setMode("ace/mode/" + ext);
                     }
                 });
-            }
+            }*/
 
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
@@ -615,9 +616,134 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                 });
             }*/
 
-            function downloadFile(filepath) {
-                document.getElementById("download").src = "downloadFile.php?filepath=" + encodeURIComponent(filepath);
-            }
+            //download.js v3.0, by dandavis; 2008-2014. [CCBY2] see http://danml.com/download.html for tests/usage
+            // v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime
+            // v2 added named files via a[download], msSaveBlob, IE (10+) support, and window.URL support for larger+faster saves than dataURLs
+            // v3 added dataURL and Blob Input, bind-toggle arity, and legacy dataURL fallback was improved with force-download mime and base64 support
+
+            // data can be a string, Blob, File, or dataURL
+
+            function download(data, strFileName, strMimeType) {
+                var self = window, // this script is only for browsers anyway...
+		u = "application/octet-stream", // this default mime also triggers iframe downloads
+		m = strMimeType || u, 
+		x = data,
+		D = document,
+		a = D.createElement("a"),
+		z = function(a){return String(a);},
+
+		B = self.Blob || self.MozBlob || self.WebKitBlob || z,
+		BB = self.MSBlobBuilder || self.WebKitBlobBuilder || self.BlobBuilder,
+		fn = strFileName || "download",
+		blob, 
+		b,
+		ua,
+		fr;
+
+                //if(typeof B.bind === 'function' ){ B=B.bind(self); }
+
+                if(String(this)==="true"){ //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
+		    x=[x, m];
+                    m=x[0];
+                    x=x[1];
+                }
+
+                //go ahead and download dataURLs right away
+                if(String(x).match(/^data\:[\w+\-]+\/[\w+\-]+[,;]/)){
+		    return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
+			navigator.msSaveBlob(d2b(x), fn) : 
+			saver(x) ; // everyone else can save dataURLs un-processed
+                }//end if dataURL passed?
+
+                try{
+                    blob = x instanceof B ? 
+		         x : 
+                              new B([x], {type: m}) ;
+                }catch(y){
+		    if(BB){
+		        b = new BB();
+			b.append([x]);
+			blob = b.getBlob(m); // the blob
+                    }
+                }
+	function d2b(u) {
+		var p= u.split(/[:;,]/),
+		t= p[1],
+		dec= p[2] == "base64" ? atob : decodeURIComponent,
+		bin= dec(p.pop()),
+		mx= bin.length,
+		i= 0,
+		uia= new Uint8Array(mx);
+
+		for(i;i<mx;++i) uia[i]= bin.charCodeAt(i);
+
+		return new B([uia], {type: t});
+	 }
+	  
+	function saver(url, winMode){
+		
+		
+		if ('download' in a) { //html5 A[download] 			
+			a.href = url;
+			a.setAttribute("download", fn);
+			a.innerHTML = "downloading...";
+			D.body.appendChild(a);
+			setTimeout(function() {
+				a.click();
+				D.body.removeChild(a);
+				if(winMode===true){setTimeout(function(){ self.URL.revokeObjectURL(a.href);}, 250 );}
+			}, 66);
+			return true;
+		}
+		
+		//do iframe dataURL download (old ch+FF):
+		var f = D.createElement("iframe");
+		D.body.appendChild(f);
+		if(!winMode){ // force a mime that will download:
+			url="data:"+url.replace(/^data:([\w\/\-\+]+)/, u);
+		}
+		 
+	
+		f.src = url;
+		setTimeout(function(){ D.body.removeChild(f); }, 333);
+		
+	}//end saver 
+		
+
+	if (navigator.msSaveBlob) { // IE10+ : (has Blob, but not a[download] or URL)
+		return navigator.msSaveBlob(blob, fn);
+	} 	
+	
+	if(self.URL){ // simple fast and modern way using Blob and URL:
+		saver(self.URL.createObjectURL(blob), true);
+	}else{
+		// handle non-Blob()+non-URL browsers:
+		if(typeof blob === "string" || blob.constructor===z ){
+			try{
+				return saver( "data:" +  m   + ";base64,"  +  self.btoa(blob)  ); 
+			}catch(y){
+				return saver( "data:" +  m   + "," + encodeURIComponent(blob)  ); 
+			}
+		}
+		
+		// Blob but not URL:
+		fr=new FileReader();
+		fr.onload=function(e){
+			saver(this.result); 
+		};
+		fr.readAsDataURL(blob);
+	}	
+	return true;
+} /* end download() */
+
+            var downloadFile = function (name, fullPath) {
+                readFile(hashes[fullPath], null, function (content) {
+                    isReading = false;
+                    $('#onFileReadOverlay').fadeOut();
+                    download(content, name, "");
+                });
+                // document.getElementById("download").src = "downloadFile.php?filepath=" + encodeURIComponent(filepath);
+            };
 
             /*function deleteFileLocal() {
                 var deleteli = document.getElementsByClassName("file")[0]
@@ -1054,6 +1180,15 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                 orig = orig.replace('"\)', '');
                 var path = orig.split('", "')[0];
                 duplicateFile(path);
+            });
+
+            $('#fileDownload').on("click", function() {
+                var orig = activeRightElem.attributes['onclick'].value;
+                orig = orig.replace('clickFile\("', '');
+                orig = orig.replace('"\)', '');
+                var fullPath = orig.split('", "')[0];
+                var name = orig.split('", "')[1];
+                downloadFile(fullPath, name);
             });
 
             $("#fileRefresh").on("click", function () {

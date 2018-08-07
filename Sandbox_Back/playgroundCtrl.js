@@ -13,7 +13,7 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
         owner = $stateParams.repo.split("/")[0];
         repo = $stateParams.repo.split("/")[1];
     }
-    scan($scope, $http, $sce, $state);
+    //scan($scope, $http, $sce, $state);
     //toggleCollab();
 };
 
@@ -199,13 +199,10 @@ function createFile(path, name, content, shouldStopLoading){
             name: name,
             content: content || ""
         },
-        dataType: "json",
+        dataType: "text",
         success: function(data){
-console.log(data);
             if(notify)
                 swal({type:"success",  timer:1000, });
-            var fullPath = path + (path === "" ? "" : "/") + name;
-//            hashes[fullPath] = 
             angular.element("#entryModal")[0].style.display = "none";
             angular.element("#filename").val("");
             scan($gscope, $ghttp, $gsce, $gstate);
@@ -319,44 +316,40 @@ function renameFile(fullPath) {
             createFile(path, newName, content, true);
         });
     }
-swal({
-  title: 'Renaming file',
-  text: "What would you like to rename this file to?",
-  type: 'question',
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#6c757d',
-  confirmButtonText: 'Rename',
-  input: "text",
-  showCancelButton: true
-}).then((result) => {
-/*
-function isNameValid(str) {
-if (!str || str.length > 255) {
-		return false;
-	}
-
-	if ((/[<>:"\/\\|?*\x00-\x1F]/g).test(str) || (/^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i).test(str)) {
-		return false;
-	}
-
-	if (/^\.\.?$/.test(str)) {
-		return false;
-	}
-
-	return true;
-}
-  if (isNameValid(result.value)) {
-    makeRequest("something.php");
-  } else {
     swal({
-      title: "Oops..",
-      text: "That's not a valid name!",
-      type: 'error',
-      timer: 2000
+        title: 'Renaming file',
+        text: "What would you like to rename this file to?",
+        type: 'question',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Rename',
+        input: "text",
+        showCancelButton: true
+    }).then((result) => {
+        function isNameValid(str) {
+            if (!str || str.length > 255) {
+	        return false;
+            }
+            if ((/[<>:"\/\\|?*\x00-\x1F]/g).test(str) || (/^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i).test(str)) {
+	        return false;
+            }
+            if (/^\.\.?$/.test(str)) {
+            	return false;
+            }
+            return true;
+        }
+        if (isNameValid(result.value)) {
+            makeRequest(result.value);
+        } else {
+            swal({
+                title: "Oops..",
+                text: "That's not a valid name!",
+                type: 'error',
+                timer: 2000
+            })
+        }
+        // makeRequest("something.py");
     })
-  }*/
-makeRequest("something.py");
-})
 }
 
 setInterval(function(){

@@ -22,6 +22,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.19/angular-ui-router.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
     <script src="https://togetherjs.com/togetherjs-min.js"></script>
     <script src="Sandbox_Back/playgroundCtrl.js"></script>
     <script src="fmRouter.js"></script>

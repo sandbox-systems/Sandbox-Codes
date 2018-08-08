@@ -79,7 +79,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <a href="sandboxcodes.com">Main Site</a>
     <a ui-sref="settings">Settings</a>
     <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
-    <a href="sandboxcodes.com/Login.html">Logout</a>
+    <a href="Login.html">Logout</a>
     <img src="images/white-logo.png" class="milk">
 </div>
 <div class="wrapper">

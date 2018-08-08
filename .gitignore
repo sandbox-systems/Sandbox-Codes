@@ -3,7 +3,7 @@
 *.iws
 out/*
 .idea_modules/*
-chat/node_modules/
+**/node_modules/
 composer.phar
 /vendor/
 collaboration/node_modules/

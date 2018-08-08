@@ -1,0 +1,22 @@
+{
+  "name": "collaboration",
+  "version": "1.0.0",
+  "description": "Implementation of IDE collab using ShareJS",
+  "main": "shareServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserchannel": "^2.1.0",
+    "connect": "^3.6.6",
+    "express": "^4.16.3",
+    "reconnecting-websocket": "^4.0.0-rc5",
+    "share": "^0.6.3",
+    "sharedb": "^1.0.0-beta.10",
+    "sharedb-string-binding": "^1.0.0",
+    "websocket-json-stream": "0.0.3",
+    "ws": "^1.1.0"
+  }
+}

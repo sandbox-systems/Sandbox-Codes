@@ -1,15 +1,19 @@
-var http = require('http');
+var https = require('https');
 var express = require('express');
 var ShareDB = require('sharedb');
 var WebSocket = require('ws');
 var serveStatic = require('serve-static');
 var WebSocketJSONStream = require('websocket-json-stream');
+var fs = require('fs');
 
 // Setup express app
 var app = express();
 app.use('/', serveStatic('static', {'index': ['index.html']}));
 
-var server = http.createServer(app);
+var server = https.createServer({
+    key: fs.readFileSync("/etc/letsencrypt/live/sandboxcodes.com/privkey.pem"),
+    cert: fs.readFileSync("/etc/letsencrypt/live/sandboxcodes.com/fullchain.pem")
+}, app);
 server.listen(5555);
 
 // Create ShareDB instance and connection

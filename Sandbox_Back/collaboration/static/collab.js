@@ -31,7 +31,7 @@ function toggleCollab(sessionID, isSessionCreator, editor) {
 
             // Open WebSocket connection to ShareDB server
             const WebSocket = require('reconnecting-websocket');
-            var socket = new WebSocket('ws://' + window.location.host);
+            var socket = new WebSocket('wss://' + window.location.host);
             // Send sessionID to initialize in ShareDB if this user is starting the session
             if (isSessionCreator) {
                 socket.addEventListener('open', () => {

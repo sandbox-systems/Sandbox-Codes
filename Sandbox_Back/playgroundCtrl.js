@@ -395,6 +395,33 @@ function updateFile(path, name, content, altCallback){
     });
 }
 
+function commitChanges() {
+    let msg = document.getElementById('commitMessageInput').value;
+
+    $('#onFileReadOverlay').fadeIn();
+    document.getElementById('commitModal').style.display="none";
+    document.getElementById('commitMessageInput').value="";
+
+    function onFinish() {
+        $('#onFileReadOverlay').fadeOut();
+        swal("Success", 'Commited', "success");
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "fileManager/requests/saveChanges.php",
+        data: {
+            owner: owner,
+            repo: repo,
+            branch: branch,
+            message: msg
+        },
+        success: onFinish,
+        error: onFinish,
+        dataType: "text"
+    });
+}
+
 /****************************************************
  ****************** TAB BINDINGS ********************
  ****************************************************/

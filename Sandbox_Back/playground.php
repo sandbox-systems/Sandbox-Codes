@@ -95,7 +95,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                      onclick="document.getElementById('commitModal').style.display='none'">
                     Cancel
                 </div>
-                <div style="background-color:green; margin-top:7%" class="goBtn" id="commitBtn">
+                <div style="background-color:green; margin-top:7%" onclick="commitChanges()" class="goBtn" id="commitBtn">
                     Go Ahead!
                 </div>
             </form>
@@ -307,6 +307,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }
         function showCommitModal() {
             document.getElementById('commitModal').style.display = 'block';
+            $('#onFileReadOverlay').fadeIn();
             $.ajax({
                 type: "POST",
                 url: 'fileManager/requests/getLocalChanges.php',
@@ -316,6 +317,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     branch: branch
                 },
                 success: function (data, status, xhttp) {
+                    $('#onFileReadOverlay').fadeOut();
                     $('#changesList').empty();
                     let changesList = document.getElementById('changesList');
                     data.forEach(datum => {
@@ -334,25 +336,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                         changesList.appendChild(li);
                     });
                 },
+                error: function (data, status, xhttp) {
+                    $('#onFileReadOverlay').fadeOut();
+                },
                 dataType: 'json'
             });
         }
 
-
-
-        // let onCommitPress;
-        //
-        // function setOnCommitPress(func) {
-        //     onCommitPress = func;
-        // }
-        //
-        // $('#commitBtn').click(function () {
-        //     if (onCommitPress)
-        //         onCommitPress($('#commitMessageInput').val());
-        //     document.getElementById('commitModal').style.display="none";
-        //     document.getElementById('commitMessageInput').value="";
-        //     swal("Success", 'Commited', "success");
-        // });
         function switcher() {
             if (document.getElementById("letscheck").checked === true) {
                 document.getElementById("fileform").style.display = "none";

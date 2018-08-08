@@ -561,4 +561,5 @@ iframe{
 
 #onFileReadOverlay {
     display: none;
+    z-index: 999999;
 }

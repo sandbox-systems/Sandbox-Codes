@@ -12,6 +12,9 @@
 		<title>Sandbox</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+		<script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="css/main.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-  ->
@@ -21,6 +24,18 @@
 		html{
 			font-family: "Lato";
 		}
+		.wave {
+  position: absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index: 1;
+height: 30%;
+}
+
+.wave + .wave {
+  z-index: 2;
+}
 #preloader {
   background-color:rgba(255,255,255,0.9);
   position: fixed;
@@ -190,7 +205,36 @@ hr {
     	margin-top: -0.5%;
 	}
 }
+.uno,
+.dos,.tres,.four,.cinco {
+	background-attachment: fixed;
+	text-align: center;
+	background-size: cover;
+	height: 100vh;
+}
 
+.uno {
+	background-image: url('images/Renderings.svg');
+	
+}
+
+.dos {
+	background-image: url('images/Search.svg');
+}
+.tres{
+	background-image: url('images/Treasury.svg');
+}
+.four{
+background-image: url('images/Chat.svg');
+}
+.cinco{
+	background-image: url('images/Pricing.svg');
+}
+
+p {
+	color: #ffffff;
+	font-size: 2em;
+		}
 .mySlides {display: none;}
     </style>
 	<body>
@@ -216,15 +260,17 @@ hr {
 		<!-- Wrapper -->
 			<div id="wrapper">
 				<!-- Intro -->
-					<section id="intro" class="wrapper style1 fullscreen fade-up">
+					<section id="intro" class="wrapper style1 fullscreen fade-up" style="background-color: whitesmoke">
 						<div class="inner">
-							<h1>Sandbox</h1>
-                            <p>The Right Way to Code</p>
-                            <img src="images/white-logo.png" class="picture">
+							<h1 style="color:mediumpurple;margin-bottom: 0;">Sandbox</h1>
+                            <p style="color: mediumpurple">The Right Way to Code</p>
+                            <img src="images/purplelogo.png" class="picture">
 							<ul class="actions">
 								<li><a href="Login.html" class="button scrolly">Start Coding!</a></li>
 							</ul>
 						</div>
+	<svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><title>Wave</title><defs></defs><path id="feel-the-wave" d=""/></svg>
+<svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave"><title>Wave</title><defs></defs><path id="feel-the-wave-two" d=""/></svg>
 					</section>
 					<section class="wrapper fade-up" style="background-color: rebeccapurple">
 						<div class="inner">
@@ -233,46 +279,43 @@ hr {
 				<!-- One -->
 				<!-- Two -->
 					<section id="one" class="wrapper style3 fade-up">
-						<div class="inner">
-							<h2>Features</h2>
-							<p>Sandbox offers a variety of features that are created in order to streamline the user's experience</p>
-							<div class="features">
-								<section>
-									<span class="icon major fa-code"></span>
+								<section class="uno">
+									<span class="icon major fa-code" style="margin-left: auto;margin-right: auto"></span>
 									<h3>Playground</h3>
-									<p>A new IDE that combines the Cloud and Machine Learning Technology of today with the ease-of-use of forever</p>
+									<p>A new IDE that combines the Cloud and Modern Collaboration Technology of today with the ease-of-use of forever</p>
 								</section>
-								<section>
-									<span class="icon major fa-lock"></span>
-									<h3>Expert Security</h3>
-									<p>Putting security at the forefront of our priorities, we ensure secure information transcations between users and servers</p>
+								<section class="dos">
+									<span class="icon major fa-search" style="margin-left: auto;margin-right: auto"></span>
+									<h3>Quicksand</h3>
+									<p>An advanced search engine tailored to navigate with ease around the site as well as explore the solutions beyond</p>
 								</section>
+<!--
 								<section>
 									<span class="icon major fa-cog"></span>
 									<h3>Custom to You</h3>
 									<p>We offer a wide variety of features that you can customize to your preference in order to make your Sandbox experience truly one-of-a-kind</p>
 								</section>
-								<section>
-									<span class="icon major fa-desktop"></span>
-									<h3>Powerful Processing</h3>
-									<p>In order to provide the best support for you, Sandbox uses top-of-the-line servers to provide you real-time results</p>
+-->
+								<section class="tres">
+									<span class="icon major fa-archive" style="margin-left: auto;margin-right: auto"></span>
+									<h3>Treasury</h3>
+									<p>A file-manager made from top of the line security combined with GitHub backing</p>
 								</section>
-								<section>
-									<span class="icon major fa-chain"></span>
-									<h3>Connectivity</h3>
-									<p>With our principle of social software in mind, Sandbox offers various opportunities to connect with users and create a wholistic experience</p>
+								<section class="four">
+									<span class="icon major fa-comments" style="margin-left: auto;margin-right: auto"></span>
+									<h3>Luau</h3>
+									<p>A fun and productive place to bounce and build new ideas and projects</p>
 								</section>
-								<section>
-									<span class="icon major fa-diamond"></span>
+								<section class="cinco">
+									<span class="icon major fa-diamond" style="margin-left: auto;margin-right: auto"></span>
 									<h3>Pricing per You</h3>
 									<p>In order to make our pricing as affordable as possible, you only pay for the features you use</p>
 								</section>
-							</div>
 							<!--<ul class="actions">
 								<li><a href="#" class="button">Learn more</a></li>
 							</ul>-->
-						</div>
 					</section>
+<!--
 				<section id="two" class="wrapper style2 spotlights">
 							<div class="inner">
 							<h2>Gallery</h2>
@@ -297,6 +340,7 @@ hr {
 								</div>
 								</div>
 				</section>
+-->
 
 				<section class="wrapper fade-up">
 					<div class="inner">
@@ -316,7 +360,6 @@ hr {
 		</div>
 		<!-- Footer -->
 		<!-- Scripts -->
-		<script src="js/jquery-1.8.2.min.js"></script>
         <script async>
 // Set the date we're counting down to
 var countDownDate = new Date("Aug 20, 2018 12:00:00").getTime();
@@ -355,25 +398,40 @@ jQuery(document).ready(function($) {
 
   });
 });
-var slideIndex = 0;
-showSlides();
+//var slideIndex = 0;
+//showSlides();
+//
+//function showSlides() {
+//    var i;
+//    var slides = document.getElementsByClassName("mySlides");
+//    var dots = document.getElementsByClassName("dot");
+//    for (i = 0; i < slides.length; i++) {
+//       slides[i].style.display = "none";  
+//    }
+//    slideIndex++;
+//    if (slideIndex > slides.length) {slideIndex = 1}    
+//    for (i = 0; i < dots.length; i++) {
+//        dots[i].className = dots[i].className.replace(" active", "");
+//    }
+//    slides[slideIndex-1].style.display = "block";  
+//    dots[slideIndex-1].className += " active";
+//    setTimeout(showSlides, 7000); // Change image every 2 seconds
+//}
+$('#feel-the-wave').wavify({
+  height: 80,
+  bones: 4,
+  amplitude: 60,
+  color: '#B289EF',
+  speed: .15
+});
 
-function showSlides() {
-    var i;
-    var slides = document.getElementsByClassName("mySlides");
-    var dots = document.getElementsByClassName("dot");
-    for (i = 0; i < slides.length; i++) {
-       slides[i].style.display = "none";  
-    }
-    slideIndex++;
-    if (slideIndex > slides.length) {slideIndex = 1}    
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-    }
-    slides[slideIndex-1].style.display = "block";  
-    dots[slideIndex-1].className += " active";
-    setTimeout(showSlides, 7000); // Change image every 2 seconds
-}
+$('#feel-the-wave-two').wavify({
+  height: 60,
+  bones: 3,
+  amplitude: 40,
+  color: 'rgba(150, 97, 255, .8)',
+  speed: .25
+});
 
 </script>
 			<script async src="js/jquery.scrollex.min.js"></script>

@@ -43,7 +43,9 @@ try {
             'github' => (string)"github.com",
             'features' => "",
             'relax' => true,
-            'timestamp' => (new MongoDB\BSON\UTCDateTime())->toDateTime()->format('U.u')
+            'timestamp' => (new MongoDB\BSON\UTCDateTime())->toDateTime()->format('U.u'),
+            'roomIDs' => [],
+            'friends' => []
         );
         $write->insert($newUser);
         $mng->executeBulkWrite('sandbox.users', $write);

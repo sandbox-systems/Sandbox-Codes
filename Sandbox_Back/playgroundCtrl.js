@@ -138,6 +138,10 @@ function chooseRepo(){
             repo = results[0];
             owner = results[1];
             hashes = {};
+            fileFlags = {};
+            tempContent = {};
+            directories = {};
+            isReading = false;
             scan($gscope, $ghttp, $gsce, $gstate);
         }
     });
@@ -478,7 +482,7 @@ function activateTab(hash, path){
         return;
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
-        updateFile("", angular.element(active_li[0]).text().slice(0, -1), editor.getValue(), false);
+        updateFile(active_path, angular.element(active_li[0]).text().slice(0, -1), editor.getValue(), false);
         active_li[0].classList.remove("active");
     }
     var tab = angular.element('#tab'+path.replace(/[.\/]/g, ""));

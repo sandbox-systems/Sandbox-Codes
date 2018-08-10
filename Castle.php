@@ -238,7 +238,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         } else if (type === 'chatroom') {
             icon.className = 'fas fa-comments';
             div.onclick = function () {
-                location.href = "Castle.php#!/chat?group=" + output.name;
+                location.href = "luau?group=" + output.name;
                 closeSearch();
             };
         } else if (type === 'repo') {
@@ -251,7 +251,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             icon.className = "fas fa-exclamation-triangle";
             if (output === "Sync Github Account") {
                 div.onclick = function() {
-                    location.href = "Castle.php#!/settings";
+                    location.href = "settings";
                     closeSearch();
                 }
             }
@@ -302,7 +302,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                 data: {
                     input: val
                 },
-                success: function (res, status, jqXHR) {console.log(res);
+                success: function (res, status, jqXHR) {
                     if (res.hasOwnProperty('notsynced')) {
                         res.notsynced.forEach(result => {
                             addOutput(result === "" ? "Sync Github Account" : result + " hasn't synced his/her Github account yet", "error");
@@ -318,7 +318,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                 error: function (res, status, xhttp) {
                     if (res.responseText === "UNSYNCED") {
                         closeSearch();
-                        location.href = "Castle.php#!/settings";
+                        location.href = "settings";
                     }
                 },
                 dataType: 'json'

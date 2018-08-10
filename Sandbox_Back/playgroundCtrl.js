@@ -582,17 +582,7 @@ function updateHash(hash){
  ********************* COLLABORATION ****************
  ****************************************************/
 function toggleCollab(){
-    var TogetherJSConfig_siteName = "sandboxcodes";
-    var TogetherJSConfig_toolName = "collab";
-    var TogetherJSConfig_autoStart = true;
-    var TogetherJSConfig_cloneClicks = false;
-    var TogetherJSConfig_includeHashInUrl = true;
-    var TogetherJSConfig_dontShowClicks = true;
-    var TogetherJSConfig_suppressInvite = true;
-    var TogetherJSConfig_findRoom = repo+owner+active_path;
-    var TogetherJSConfig_getUserName = function () {return owner;};
-    var TogetherJSConfig_getUserAvatar = function () {return "";};
-    TogetherJS(this);
+    
 }
 
 //TogetherJSConfig_siteName

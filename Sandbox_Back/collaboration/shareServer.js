@@ -28,6 +28,7 @@ wss.on('connection', function(ws, req) {
 
     // If session creator sent ID, create new document in ShareDB
     ws.on('message', function (msg) {
+console.log(msg);
         let oMsg = JSON.parse(msg);
         if (oMsg.session) {
             createDocument(oMsg.session);

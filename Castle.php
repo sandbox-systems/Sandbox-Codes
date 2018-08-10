@@ -88,26 +88,26 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 <div class="icon-bar" id="taskbar">
     <table style="height: 100%;">
         <tr>
-            <td><a ui-sref="home"><img src="images/white-logo.png" class=otherpic></a></td>
+            <td><a ui-sref="home"><img src="images/white-logo.png" class=otherpic><title>Home</title></a></td>
         </tr>
         <tr>
-            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fas fa-search fa-2x"></i></a></td>
+            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fas fa-search fa-2x"><title>Quicksand</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="playground"><i class="fas fa-terminal fa-2x"></i></a></td>
+            <td><a ui-sref="playground"><i class="fas fa-terminal fa-2x"><title>Playground</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="treasury.projects"><i class="fas fa-archive fa-2x"></i></a></td>
+            <td><a ui-sref="treasury.projects"><i class="fas fa-archive fa-2x"><title>Treasury</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"></i></a></td>
+            <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"><title>Luau</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="notifications"><i class="fas fa-bell fa-2x"></i></a></td>
+            <td><a ui-sref="notifications"><i class="fas fa-bell fa-2x"><title>Notifications</title></i></a></td>
         </tr>
         <tr>
             <td><a onClick="openNav()" style="cursor: pointer"><img src="<?php echo $user->profilepic ?>" alt="Avatar"
-                                                                    class="userpic"></a>
+                                                                    class="userpic"><title>Menu</title></a>
             </td>
         </tr>
     </table>

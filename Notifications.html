@@ -13,13 +13,12 @@
         display: block;
         margin-left: auto;
         margin-right: auto;
-        background-color: rgba(255,255,255,0.5);
+        background-color: whitesmoke;
         text-align: center;
         font-size: 2em;
-        margin-top: 2%;
         padding: 1%;
         cursor: pointer;
-        border-radius: 50px;
+        border-bottom: solid 2px darkslategray;
     }
     .entry:hover{
         box-shadow: 0px 5px 8px 0px rgba(256, 256, 256, 0.4);
@@ -34,11 +33,13 @@
         color:white;
     }
     #topbar{
-        position: fixed;
-        width: 100%;
-        //background-color: rgba(255,255,255,0.4);
-        top:0;
-        left: 0;
+    position:  relative;
+    width:  70%;
+    margin-right:  auto;
+    margin-left:  auto;
+    margin-top: 5%;
+    font-size: 2em;
+    background-color: whitesmoke;
     }
     button{
         background-color: transparent;
@@ -48,17 +49,29 @@
         font-size: 2em;
         border: solid 1px white;
     }
-    .thumb-up:hover {
+    .thumb-up {
         color: #28a745;
     }
-    .thumb-down:hover {
+    .thumb-down {
         color: #dc3545;
     }
+	#notificationlist{
+		list-style: none;
+		height: 100vh;
+		background-color: #f8f9fa75;
+		padding:  2%;
+		width:  70%;
+		position:  relative;
+		margin-left:  auto;
+		margin-right:  auto;
+		margin-top: 0;
+	}
 </style>
 <body>
 <div id="topbar">
-    <button onclick="document.getElementById('notificationlist').innerHTML=''">Clear</button></div>
-    <ul id="notificationlist" style="list-style: none;height: 100vh">
+	Notifications
+    <button onclick="document.getElementById('notificationlist').innerHTML=''"><i class="fas fa-trash"></i></button></div>
+    <ul id="notificationlist"z>
         <li ng-repeat="notif in notifications">
             <div class="entry animated bounceIn">
                 <i style="margin-right: 3%;" class="fas"

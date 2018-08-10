@@ -265,12 +265,12 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!--                    class="fas fa-cloud-upload-alt"></span> --><?php //echo $text["upload"]; ?><!--</li>-->
 <!--        <div class="lineBreak"></div>-->
         <li id="fileDelete" class="contextMenuItem"><span
-                   class="fas fa-trash"></span><?php echo $text["deleteFile"]; ?></li>
-        <li id="fileRename" class="contextMenuItem"><span
+                   class="fas fa-trash"></span> <?php echo $text["deleteFile"]; ?></li>
+        <li id="fileRename" class="contextMenuItem"> <span
                    class="fas fa-edit"></span><?php echo $text["renameFile"]; ?></li>
-        <li id="fileDuplicate" class="contextMenuItem"><span
+        <li id="fileDuplicate" class="contextMenuItem"> <span
                    class="fas fa-copy"></span><?php echo $text["duplicateFile"]; ?></li>
-        <li id="fileDownload" class="contextMenuItem"><span
+        <li id="fileDownload" class="contextMenuItem"> <span
                    class="fas fa-download"></span><?php echo $text["deleteFile"]; ?></li>
 <!--        <div class="lineBreak"></div> -->
 <!--        <li id="folderRefresh" class="contextMenuItem"><span-->
@@ -1041,11 +1041,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             /****************************************************
              ********************* COLLAB ***********************
              ****************************************************/
-            function collab() {
-                var TogetherJSConfig_dontShowClicks = true;
-                var TogetherJSConfig_cloneClicks = true;
-                TogetherJS(this);
-            }
 
             /****************************************************
              ****************** CURSOR MENUS ********************
@@ -1250,6 +1245,12 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     content: $('#notesContent').val()
                 },
                 success: function (data, status, xhttp) {
+					swal({
+						title:'Saved!',
+						showCancelButton:false,
+						type:'success',
+						timer:1500
+					});
                 },
                 dataType: "json"
             });

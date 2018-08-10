@@ -7,14 +7,59 @@
     <link rel="stylesheet" href="../css/FileMM.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="fileManager/fileMan.css">
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
+<style>
+	.contextMenu {
+    width: 145px;
+    background-color: white;
+//border-radius: 5px;
+    box-shadow: 5px 5px 10px mediumpurple;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color:mediumpurple;
+    display: none;
+    position: absolute;
+}
+
+.contextMenu .contextMenuItem {
+	width: 100%;
+	list-style-type: none;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	cursor: pointer;
+}
+
+.contextMenu .contextMenuItem:hover {
+	background-color: #EBEBEB;
+}
+
+</style>
 <!--<div id="preloader">-->
 <!--<div id="loader"></div>-->
 <!--</div>-->
+	<div class="contextMenu" id="repomenu">
+		<li id="repoShare" class="contextMenuItem"> <span
+                   class="fas fa-user-plus"></span> Share With</li>
+		<li id="repoDelete" class="contextMenuItem"> <span
+                   class="fas fa-trash"></span> Delete</li>
+        <li id="repoPlay" class="contextMenuItem"> <span
+                   class="fas fa-terminal"></span> Open In Playground</li>
+    </div>
+	<div class="contextMenu" id="insidemenu">
+		<li id="fileRename" class="contextMenuItem"> <span
+                   class="fas fa-info-circle"></span> Info</li>
+        <li id="fileRename" class="contextMenuItem"> <span
+                   class="fas fa-pencil-alt"></span> Rename</li>
+		<li id="fileDelete" class="contextMenuItem"> <span
+                   class="fas fa-trash"></span> Delete</li>
+		<li id="filePlay" class="contextMenuItem"> <span
+            class="fas fa-save"></span> Commit</li>
+		<li id="filePlay" class="contextMenuItem"> <span
+            class="fas fa-terminal"></span> Open In Playground</li>
+    </div>
 <div id="infoNav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeInfoNav()">&times;</a>
     <div style="width: 15%;">
@@ -77,7 +122,6 @@
 
 <ul id="fileList">
     <div ui-view></div>
-    <!--<li draggable="true" ondragstart="drag(event)" id="entry"><span id="adder" class="far fa-folder-open outline animated tada" style="color: white; font-size: 4.5em;"></span><label>New Entry!</label></li>-->
 </ul>
 <!-- The Modal -->
 <div id="shareModal" class="modal">
@@ -277,6 +321,7 @@
 </div>
 </body>
 <script>
+
     let isViewingInsideRepo = false;
     function setIsViewingInsideRepo(isTrue) {
         isViewingInsideRepo = isTrue;
@@ -321,6 +366,37 @@
 
         });
     });
+		$("body").on("click", function (element) {
+                $(this).attr("oncontextmenu", "return false;");
+                if (element.button == 0) {
+                    activeRight = "";
+                    $("#repomenu").fadeOut(80);
+					$("#insidemenu").fadeOut(80);
+                }
+            });
+
+            //Context Menu Helpers for FILES
+            $("li").on("mousedown", function (element) {
+                $(this).attr("oncontextmenu", "return false;");
+                if (element.button == 2) {
+                    if(!isViewingInsideRepo){
+						activeRight = $(this).attr("data-wd");
+                    	activeRightElem = this;
+                    	$("#repomenu").css("left", element.pageX + 1);
+                    	$("#repomenu").css("top", element.pageY + 1);
+                    	$("#repomenu").fadeIn(100);
+						$("#insidemenu").fadeOut(80);
+					}else{
+						activeRight = $(this).attr("data-wd");
+						activeRightElem = this;
+						$("#insidemenu").css("left", element.pageX + 1);
+						$("#insidemenu").css("top", element.pageY + 1);
+						$("#insidemenu").fadeIn(100);
+						$("#repomenu").fadeOut(80);
+					}
+                }
+                return false;
+            });
     $('html').bind('keypress', function (e) {
         if (e.keyCode == 13) {
             return false;

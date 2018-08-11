@@ -203,12 +203,12 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 
     function searchGoogle() {
         var x = document.getElementById("sbxx").value;
-        window.location.replace("https://www.google.com/search?q=" + x);
+        window.open("https://www.google.com/search?q=" + x,'_blank');
     }
 
     function searchSO() {
         var x = document.getElementById("sbxx").value;
-        window.location.replace("https://www.stackoverflow.com/search?q=" + x);
+        window.open("https://www.stackoverflow.com/search?q=" + x,'_blank');
     }
 
     document.getElementById("sbxx").oninput = function () {

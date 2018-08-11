@@ -98,17 +98,15 @@ li > a {
 /* Modal Content */
 .modal-content {
     position: relative;
-    background-color: whitesmoke;
+    background-color: white;
     margin: auto;
     padding: 0;
-    border: 1px solid #888;
     width: 40%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
     animation-duration: 0.4s;
-    border: 5px solid mediumpurple;
     border-radius: 15px;
 }
 
@@ -151,11 +149,9 @@ li > a {
 }
 
 .modal-header {
-    padding: 2px 16px;
-    background-color: mediumpurple;
-    color: white;
-    border-top-left-radius: 200px;
-    border-top-right-radius: 200px;
+    padding: 5px 16px;
+    color: black;
+    border-bottom: solid 2px #dadada;
 }
 
 .modal-body {
@@ -184,7 +180,6 @@ li > a {
 .slider {
     position: absolute;
     cursor: pointer;
-    border-radius: 10px;
     top: 0;
     left: 0;
     right: 0;
@@ -204,7 +199,6 @@ li > a {
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
-    border-radius: 10px;
 }
 
 input:checked + .slider {
@@ -296,24 +290,8 @@ button {
     outline: none;
     width: 95%;
 }
-
-#commitMessageInput{
-    background-color: rgba(0, 0, 0, 0);
-    border-top: 0px;
-    border-right: 0px;
-    border-left: 0px;
-    border-bottom: 2px solid gray;
-    outline: none;
-    width: 95%;
-}
-#newBranchName{
-    background-color: rgba(0, 0, 0, 0);
-    border-top: 0px;
-    border-right: 0px;
-    border-left: 0px;
-    border-bottom: 2px solid gray;
-    outline: none;
-    width: 95%;
+.inputname:focus{
+    border-bottom: 2px solid mediumpurple;
 }
 select {
     outline: none;

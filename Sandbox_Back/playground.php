@@ -164,7 +164,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
     <div class="container-fluid">
-        <div class="navbar-header" style="width: 20%">
+        <div class="navbar-header" style="width: 92%">
             <button title="Theme" class="dropdown btn navbar-btn toolbarButton">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                                  class="fas fa-ellipsis-h fa-2x"></span></a>

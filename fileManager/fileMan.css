@@ -367,7 +367,7 @@ option {
     z-index: 10;
     top: 0;
     right: 0;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -424,10 +424,19 @@ option {
 .infoname {
     width: 90%;
     border: 0px;
-    background-color: white;
+    background-color: rgba(0,0,0,0);
     color: black;
+    border-bottom: solid 2px black;
 }
-
+#editor{
+    position:  absolute;
+    height: 92%;
+    display:  inline-block;
+    width: 65%;
+    top: 3%;
+    /* right: auto; */
+    left: 22%;
+}
 #preloader {
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;

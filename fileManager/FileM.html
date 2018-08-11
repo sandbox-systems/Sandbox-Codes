@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../css/FileMM.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="fileManager/fileMan.css">
+	<script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
@@ -62,7 +64,7 @@
     </div>
 <div id="infoNav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeInfoNav()">&times;</a>
-    <div style="width: 15%;">
+    <div style="position: absolute;width: 15%;display: inline-block;top: 1%;left: 2%;margin-right: 0px;">
         <form>
             <fieldset style="color: black;">
                 Name<br>
@@ -98,9 +100,7 @@
             <!--</fieldset>-->
         </form>
     </div>
-    <div style="width: 95%">
-        <pre><code id="preview"></code></pre>
-    </div>
+        <div id="editor"></div>
 </div>
 <div class="topnav animated fadeIn" id="navbar">
     <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
@@ -321,7 +321,15 @@
 </div>
 </body>
 <script>
-
+			ace.require("ace/ext/language_tools");
+            var editor = ace.edit("editor");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: false,
+				readOnly:true
+            });
+            editor.setTheme("ace/theme/solarized_dark");
     let isViewingInsideRepo = false;
     function setIsViewingInsideRepo(isTrue) {
         isViewingInsideRepo = isTrue;
@@ -359,7 +367,6 @@
     }
 
     $(function () {
-        //hljs.initHighlightingOnLoad();
         $(window).on("load", function () {
 
             $("#preloader").fadeOut(500);
@@ -690,7 +697,7 @@
     }
 
     function showFileContents(contents, size, created, edited) {
-        document.getElementById("preview").innerText = contents;
+        editor.setValue(contents);
         document.getElementById("displaysize").value = size + " KB";
         document.getElementById("displaycreated").value = created;
         document.getElementById("displayedited").value = edited;

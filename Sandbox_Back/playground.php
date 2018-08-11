@@ -165,7 +165,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
     <div class="container-fluid">
         <div class="navbar-header" style="width: 20%">
-            <button class="dropdown btn navbar-btn toolbarButton">
+            <button title="Theme" class="dropdown btn navbar-btn toolbarButton">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                                  class="fas fa-ellipsis-h fa-2x"></span></a>
                 <ul class="dropdown-menu">
@@ -195,13 +195,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     <li><a href="javascript:temper('vibrant_ink')">vibrant_ink</a></li>
                 </ul>
             </button>
-            <button type="button" id="btn-add-tab" onclick="javascript:showCommitModal()"
+            <button title="Commit" type="button" id="btn-add-tab" onclick="javascript:showCommitModal()"
                     class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
-            <button onclick="chooseRepo()" class="btn navbar-btn toolbarButton"><i class="fas fa-book fa-2x"></i>
+            <button title="Choose Repo" onclick="chooseRepo()" class="btn navbar-btn toolbarButton"><i class="fas fa-book fa-2x"></i>
             </button>
-            <button value="" onclick="document.getElementById('entryModal').style.display='block'"
+            <button title="New Entry" value="" onclick="document.getElementById('entryModal').style.display='block'"
                     class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
-            <button value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()"><i class="fas fa-play fa-2x"></i>
+            <button title="Run" value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()"><i class="fas fa-play fa-2x"></i>
             </button>
             <!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
         </div>

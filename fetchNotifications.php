@@ -6,6 +6,8 @@ session_start();
 
 $notifResults = getDocuments($man, "notifications", ['recipientID' => $_SESSION['object_id']], []);
 $requestResults = getDocuments($man, "requests", ['to' => $_SESSION['object_id']], []);
+updateDocument($man, "notifications", ['unread' => True], DBUpdateOperators::Set, ['unread' => False]);
+updateDocument($man, "requests", ['unread' => True], DBUpdateOperators::Set, ['unread' => False]);
 $results = array_merge($notifResults, $requestResults);
 
 $notifs = [];

@@ -18,9 +18,10 @@ $request = array(
 		"uname" => $fromUsername,
 		"name" => $fromName
     ),
-	"fromID" => $fromID,
-	"to" => (string) $to->_id,
-	"accepted" => null
+    "fromID" => $fromID,
+    "to" => (string) $to->_id,
+    "accepted" => null,
+    "unread" => True
 );
 
 insertDocument($man, "requests", $request);

@@ -297,7 +297,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!--                    class="fas fa-cloud-upload-alt"></span> --><?php //echo $text["upload"]; ?><!--</li>-->
 <!--        <div class="lineBreak"></div>-->
         <li id="fileDelete" class="contextMenuItem"><span
-                   class="fas fa-trash"></span> <?php echo $text["deleteFile"]; ?></li>
+                   class="fas fa-trash"></span><?php echo $text["deleteFile"]; ?></li>
         <li id="fileRename" class="contextMenuItem"> <span
                    class="fas fa-edit"></span><?php echo $text["renameFile"]; ?></li>
         <li id="fileDuplicate" class="contextMenuItem"> <span

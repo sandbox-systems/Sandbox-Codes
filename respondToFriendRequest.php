@@ -18,13 +18,15 @@ if ($accepted == 'true') {
     insertDocument($man, "notifications", array(
         "recipientID" => $fromID,
         "type" => "friendRequestResponse",
-        "content" => $toName . " accepted your friend request!"
+        "content" => $toName . " accepted your friend request!",
+        "unread" => True
     ));
 } else {
     insertDocument($man, "notifications", array(
         "recipientID" => $fromID,
         "type" => "friendRequestResponse",
-        "content" => $toName . " rejected your friend request"
+        "content" => $toName . " rejected your friend request",
+        "unread" => True
     ));
 }
 deleteDocument($man, "requests", ["fromID" => $fromID, "to" => $toID]);

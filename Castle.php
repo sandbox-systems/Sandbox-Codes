@@ -8,6 +8,8 @@ require "checklogin.php";
 session_start();
 
 $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
+$unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SESSION['object_id'], "unread" => True], [])) +
+    count(getDocuments($man, "requests", ['to' => $_SESSION['object_id'], "unread" => True], []));
 
 ?>
 
@@ -110,7 +112,9 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"><title>Luau</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="notifications"><i class="fas fa-bell fa-2x"><title>Notifications</title></i></a></td>
+            <td id="notificationsBtn"><a ui-sref="notifications"><i id="notificationsIcon" class="fas fa-bell fa-2x"><title>Notifications</title></i>
+                <sup><?php echo $unreadNotifs ?></sup>
+                </a></td>
         </tr>
         <tr>
             <td><a onClick="openNav()" style="cursor: pointer"><img src="<?php echo $user->profilepic ?>" alt="Avatar"
@@ -162,6 +166,15 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 </div>
 </body>
 <script>
+    $(function() {
+        let notificationsIcon = $('#notificationsIcon');
+        notificationsIcon.addClass('animated shake');
+        $('#notificationsBtn').hover(function() {
+//            notificationsIcon.removeClass('animated tada');
+            notificationsIcon.addClass('animated shake');
+        });
+    });
+
     function openNav() {
         document.getElementById("mySidenav").style.width = "250px";
         //document.getElementById("main").style.marginLeft = "250px";

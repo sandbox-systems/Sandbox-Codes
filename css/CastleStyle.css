@@ -161,6 +161,7 @@
     bottom:-18%;
 }
 .sidenav {
+    background-color: rgba(125, 80, 150, 0.925);
     height: 100%;
     width: 0;
     position: fixed;
@@ -170,6 +171,7 @@
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    text-align: center;
 }
 
 .sidenav a {
@@ -217,6 +219,8 @@
   height: 64px;
 	object-fit: cover;
 border-radius: 10px 10px 10px 10px;
+   margin-left: auto;
+   margin-right: auto;
 }
 
 .overlay1 {

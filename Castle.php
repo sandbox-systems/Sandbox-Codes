@@ -69,7 +69,19 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     }
 </style>
 <body>
-<div id="mySidenav" style="    background-color: #8B4D93;" class="sidenav">
+<div id="mySidenav" style="background-color: rgba(125, 80, 150, 0.925);width: 250px;" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a>
+        <div class="container" style="padding-left: 0px;">
+            <img src="https://ui-avatars.com/api/?font-size=0.3&amp;rounded=true&amp;color=9370db&amp;background=fff&amp;name=Govind Joshi" alt="PIC" class="image">
+        </div>
+    </a>
+    <a href="https://sandboxcodes.com/index.html">Main Site</a>
+    <a ui-sref="settings" href="/settings">Settings</a>
+    <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
+    <a href="http://sandboxcodes.com/Login.html">Logout</a>
+    <img src="images/white-logo.png" class="milk">
+</div>
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a>
         <div class="container" style="padding-left: 0px;">

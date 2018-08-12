@@ -163,8 +163,8 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
     <div class="container-fluid">
-        <div class="navbar-header" style="width: 20%">
-            <button class="dropdown btn navbar-btn toolbarButton">
+        <div class="navbar-header" style="width: 92%">
+            <button title="Theme" class="dropdown btn navbar-btn toolbarButton">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                                  class="fas fa-ellipsis-h fa-2x"></span></a>
                 <ul class="dropdown-menu">
@@ -194,13 +194,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     <li><a href="javascript:temper('vibrant_ink')">vibrant_ink</a></li>
                 </ul>
             </button>
-            <button type="button" id="btn-add-tab" onclick="javascript:showCommitModal()"
+            <button title="Commit" type="button" id="btn-add-tab" onclick="javascript:showCommitModal()"
                     class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
-            <button onclick="chooseRepo()" class="btn navbar-btn toolbarButton"><i class="fas fa-book fa-2x"></i>
+            <button title="Choose Repo" onclick="chooseRepo()" class="btn navbar-btn toolbarButton"><i class="fas fa-book fa-2x"></i>
             </button>
-            <button value="" onclick="document.getElementById('entryModal').style.display='block'"
+            <button title="New Entry" value="" onclick="document.getElementById('entryModal').style.display='block'"
                     class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
-            <button value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()"><i class="fas fa-play fa-2x"></i>
+            <button title="Run" value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()"><i class="fas fa-play fa-2x"></i>
             </button>
             <!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
         </div>
@@ -264,10 +264,10 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!--                    class="fas fa-cloud-upload-alt"></span> --><?php //echo $text["upload"]; ?><!--</li>-->
 <!--        <div class="lineBreak"></div>-->
         <li id="fileDelete" class="contextMenuItem"><span
-                   class="fas fa-trash"></span><?php echo $text["deleteFile"]; ?></li>
-        <li id="fileRename" class="contextMenuItem"><span
+                   class="fas fa-trash"></span> <?php echo $text["deleteFile"]; ?></li>
+        <li id="fileRename" class="contextMenuItem"> <span
                    class="fas fa-edit"></span><?php echo $text["renameFile"]; ?></li>
-        <li id="fileDuplicate" class="contextMenuItem"><span
+        <li id="fileDuplicate" class="contextMenuItem"> <span
                    class="fas fa-copy"></span><?php echo $text["duplicateFile"]; ?></li>
         <li id="fileDownload" class="contextMenuItem"><span
                    class="fas fa-download"></span><?php echo $text["downloadFile"]; ?></li>
@@ -1040,11 +1040,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             /****************************************************
              ********************* COLLAB ***********************
              ****************************************************/
-            function collab() {
-                var TogetherJSConfig_dontShowClicks = true;
-                var TogetherJSConfig_cloneClicks = true;
-                TogetherJS(this);
-            }
 
             /****************************************************
              ****************** CURSOR MENUS ********************
@@ -1249,6 +1244,12 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     content: $('#notesContent').val()
                 },
                 success: function (data, status, xhttp) {
+					swal({
+						title:'Saved!',
+						showCancelButton:false,
+						type:'success',
+						timer:1500
+					});
                 },
                 dataType: "json"
             });

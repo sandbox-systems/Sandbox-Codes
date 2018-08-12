@@ -16,6 +16,8 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 <link rel="stylesheet" href="css/animate.css">
 <link rel="stylesheet" href="css/SettingsStyle.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 <style>
     input {
         outline: none;
@@ -104,7 +106,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     }
 
     .alonebutton:hover {
-        background-image: url('images/profileback.jpg');
+        background-image: url('images/pic03.jpg');
     }
 </style>
 <body>
@@ -125,7 +127,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <table style="width: 100%;height: 33em;">
         <tr class="animated fadeIn">
             <td>
-                <a href="<?php echo $url; ?>" id="sync" class="categ_row alonebutton">Sync Github Account</a>
+                <a href="<?php echo $url; ?>" id="sync" class="categ_row alonebutton"><i class="fab fa-github"></i>Sync Github Account</a>
             </td>
         </tr>
         <tr class="animated fadeIn">
@@ -278,7 +280,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             dataType: 'json'
         });
         swal({
-            position: 'top-end',
             type: 'success',
             title: 'Your settings have been saved',
             showConfirmButton: false,

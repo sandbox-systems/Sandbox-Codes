@@ -73,7 +73,19 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     }
 </style>
 <body>
-<div id="mySidenav" style="    background-color: #8B4D93;" class="sidenav">
+<div id="mySidenav" style="background-color: rgba(125, 80, 150, 0.925);width: 250px;" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a>
+        <div class="container" style="padding-left: 0px;">
+            <img src="https://ui-avatars.com/api/?font-size=0.3&amp;rounded=true&amp;color=9370db&amp;background=fff&amp;name=Govind Joshi" alt="PIC" class="image">
+        </div>
+    </a>
+    <a href="https://sandboxcodes.com/index.html">Main Site</a>
+    <a ui-sref="settings" href="/settings">Settings</a>
+    <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
+    <a href="http://sandboxcodes.com/Login.html">Logout</a>
+    <img src="images/white-logo.png" class="milk">
+</div>
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a>
         <div class="container" style="padding-left: 0px;">
@@ -92,26 +104,26 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 <div class="icon-bar" id="taskbar">
     <table style="height: 100%;">
         <tr>
-            <td><a ui-sref="home"><img src="images/white-logo.png" class=otherpic></a></td>
+            <td><a ui-sref="home"><img src="images/white-logo.png" class=otherpic><title>Home</title></a></td>
         </tr>
         <tr>
-            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fas fa-search fa-2x"></i></a></td>
+            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fas fa-search fa-2x"><title>Quicksand</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="playground"><i class="fas fa-terminal fa-2x"></i></a></td>
+            <td><a ui-sref="playground"><i class="fas fa-terminal fa-2x"><title>Playground</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="treasury.projects"><i class="fas fa-archive fa-2x"></i></a></td>
+            <td><a ui-sref="treasury.projects"><i class="fas fa-archive fa-2x"><title>Treasury</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"></i></a></td>
+            <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"><title>Luau</title></i></a></td>
         </tr>
         <tr>
-            <td><a ui-sref="notifications"><i class="fas fa-bell fa-2x"></i></a></td>
+            <td><a ui-sref="notifications"><i class="fas fa-bell fa-2x"><title>Notifications</title></i></a></td>
         </tr>
         <tr>
             <td><a onClick="openNav()" style="cursor: pointer"><img src="<?php echo $user->profilepic ?>" alt="Avatar"
-                                                                    class="userpic"></a>
+                                                                    class="userpic"><title>Menu</title></a>
             </td>
         </tr>
     </table>
@@ -207,12 +219,12 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 
     function searchGoogle() {
         var x = document.getElementById("sbxx").value;
-        window.location.replace("https://www.google.com/search?q=" + x);
+        window.open("https://www.google.com/search?q=" + x,'_blank');
     }
 
     function searchSO() {
         var x = document.getElementById("sbxx").value;
-        window.location.replace("https://www.stackoverflow.com/search?q=" + x);
+        window.open("https://www.stackoverflow.com/search?q=" + x,'_blank');
     }
 
     document.getElementById("sbxx").oninput = function () {

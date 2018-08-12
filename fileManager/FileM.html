@@ -7,17 +7,64 @@
     <link rel="stylesheet" href="../css/FileMM.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="fileManager/fileMan.css">
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
+<style>
+	.contextMenu {
+    width: 145px;
+    background-color: white;
+//border-radius: 5px;
+    box-shadow: 5px 5px 10px mediumpurple;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color:mediumpurple;
+    display: none;
+    position: absolute;
+}
+
+.contextMenu .contextMenuItem {
+	width: 100%;
+	list-style-type: none;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	cursor: pointer;
+}
+
+.contextMenu .contextMenuItem:hover {
+	background-color: #EBEBEB;
+}
+
+</style>
 <!--<div id="preloader">-->
 <!--<div id="loader"></div>-->
 <!--</div>-->
+	<div class="contextMenu" id="repomenu">
+		<li id="repoShare" class="contextMenuItem"> <span
+                   class="fas fa-user-plus"></span> Share With</li>
+		<li id="repoDelete" class="contextMenuItem"> <span
+                   class="fas fa-trash"></span> Delete</li>
+        <li id="repoPlay" class="contextMenuItem"> <span
+                   class="fas fa-terminal"></span> Open In Playground</li>
+    </div>
+	<div class="contextMenu" id="insidemenu">
+		<li id="fileRename" class="contextMenuItem"> <span
+                   class="fas fa-info-circle"></span> Info</li>
+        <li id="fileRename" class="contextMenuItem"> <span
+                   class="fas fa-pencil-alt"></span> Rename</li>
+		<li id="fileDelete" class="contextMenuItem"> <span
+                   class="fas fa-trash"></span> Delete</li>
+		<li id="filePlay" class="contextMenuItem"> <span
+            class="fas fa-save"></span> Commit</li>
+		<li id="filePlay" class="contextMenuItem"> <span
+            class="fas fa-terminal"></span> Open In Playground</li>
+    </div>
 <div id="infoNav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeInfoNav()">&times;</a>
-    <div style="width: 15%;">
+    <div style="position: absolute;width: 15%;display: inline-block;top: 1%;left: 2%;margin-right: 0px;">
         <form>
             <fieldset style="color: black;">
                 Name<br>
@@ -53,9 +100,7 @@
             <!--</fieldset>-->
         </form>
     </div>
-    <div style="width: 95%">
-        <pre><code id="preview"></code></pre>
-    </div>
+        <div id="editor"></div>
 </div>
 <div class="topnav animated fadeIn" id="navbar">
     <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
@@ -77,20 +122,19 @@
 
 <ul id="fileList">
     <div ui-view></div>
-    <!--<li draggable="true" ondragstart="drag(event)" id="entry"><span id="adder" class="far fa-folder-open outline animated tada" style="color: white; font-size: 4.5em;"></span><label>New Entry!</label></li>-->
 </ul>
 <!-- The Modal -->
 <div id="shareModal" class="modal">
     <div class="modal-content">
+        <div class="modal-header">Share With</div>
         <div class="modal-body">
             <form class="animated fadeIn">
                 <fieldset>
-                    Share with:<br>
                     <input class="inputname" id="sharer" type="text" autocomplete="off">
                 </fieldset>
                 <fieldset>
-                    <div style="float:right; background-color:green; " class="goBtn" onclick="share()">Share</div>
-                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closesharemodal()">
+                    <div style="float:right; background-color:#00C851; " class="goBtn" onclick="share()">Share</div>
+                    <div style="float:left; background-color:#ff4444; " class="goBtn" onclick="closesharemodal()">
                         Cancel
                     </div>
                 </fieldset>
@@ -103,20 +147,21 @@
 </div>
 <div id="branchModal" class="modal">
     <div class="modal-content">
+        <div class="modal-header">Create new Branch!</div>
         <div class="modal-body">
             <fieldset>
-                <input type="text" id="newBranchName" style="margin-top: 2%" autocomplete="off" placeholder="New Branch Name">
+                <input type="text" class="inputname" id="newBranchName" style="margin-top: 2%" autocomplete="off" placeholder="New Branch Name">
             </fieldset>
             <fieldset>
                 Branch Off Of<br>
                 <select id="branchSelector">
                 </select>
             </fieldset>
-            <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn"
+            <div style="background-color:#ff4444; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn"
                  onclick="document.getElementById('branchModal').style.display='none'">
                 Cancel
             </div>
-            <div style="background-color:green; margin-top:7%" class="goBtn">
+            <div style="background-color:#00C851; margin-top:7%" class="goBtn">
                 Go Ahead!
             </div>
         </div>
@@ -124,20 +169,20 @@
 </div>
 <div id="commitModal" class="modal">
     <div class="modal-content">
+        <div class="modal-header">File Changed</div>
         <div class="modal-body">
             <form class="animated fadeIn">
                 <fieldset>
-                    <label>Files Changed</label>
                     <ul id="changesList" style="overflow: scroll;max-height: 100px;">
                     </ul>
                 </fieldset>
-                <input type="text" id="commitMessageInput" placeholder="Commit Message" title="Commit Message"
+                <input type="text" id="commitMessageInput" placeholder="Commit Message" class="inputname" title="Commit Message"
                        style="margin-top: 2%" autocomplete="off">
-                <div style="background-color:red; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn"
+                <div style="background-color:#ff4444; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn"
                      onclick="document.getElementById('commitModal').style.display='none'">
                     Cancel
                 </div>
-                <div style="background-color:green; margin-top:7%" class="goBtn" id="commitBtn">
+                <div style="background-color:#00C851; margin-top:7%" class="goBtn" id="commitBtn">
                     Go Ahead!
                 </div>
             </form>
@@ -161,9 +206,9 @@
                     <input autocomplete="off" required class="inputname" type="text" id="publicRepoName">
                 </fieldset>
                 <fieldset>
-                    <div style="float:right; background-color:green; " class="goBtn" onclick="addPublicRepo()">Create
+                    <div style="float:right; background-color:#00C851; " class="goBtn" onclick="addPublicRepo()">Create
                     </div>
-                    <div id="newPublicRepoGoBtn" style="float:left; background-color:#FF3366; " class="goBtn"
+                    <div id="newPublicRepoGoBtn" style="float:left; background-color:#ff4444; " class="goBtn"
                          onclick="document.getElementById('repoModal').style.display='none'">Cancel
                     </div>
                 </fieldset>
@@ -175,9 +220,9 @@
                     <input autocomplete="off" required class="inputname" type="text" id="privateRepoName">
                 </fieldset>
                 <fieldset>
-                    <div style="float:right; background-color:green; " class="goBtn" onclick="addPrivateRepo()">Create
+                    <div style="float:right; background-color:#00C851; " class="goBtn" onclick="addPrivateRepo()">Create
                     </div>
-                    <div id="newPrivateRepoGoBtn" style="float:left; background-color:#FF3366; " class="goBtn"
+                    <div id="newPrivateRepoGoBtn" style="float:left; background-color:#ff4444; " class="goBtn"
                          onclick="document.getElementById('repoModal').style.display='none'">Cancel
                     </div>
                 </fieldset>
@@ -235,8 +280,8 @@
                 <!--onclick="test=document.getElementById('purple').style.backgroundColor"></span>-->
                 <!--</fieldset>-->
                 <fieldset>
-                    <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFile()">Create</div>
-                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closeModal()">Cancel
+                    <div style="float:right; background-color:#00C851; " class="goBtn" onclick="addNewFile()">Create</div>
+                    <div style="float:left; background-color:#ff4444; " class="goBtn" onclick="closeModal()">Cancel
                     </div>
                 </fieldset>
             </form>
@@ -277,6 +322,15 @@
 </div>
 </body>
 <script>
+			ace.require("ace/ext/language_tools");
+            var editor = ace.edit("editor");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: false,
+				readOnly:true
+            });
+            editor.setTheme("ace/theme/solarized_dark");
     let isViewingInsideRepo = false;
     function setIsViewingInsideRepo(isTrue) {
         isViewingInsideRepo = isTrue;
@@ -314,13 +368,43 @@
     }
 
     $(function () {
-        //hljs.initHighlightingOnLoad();
         $(window).on("load", function () {
 
             $("#preloader").fadeOut(500);
 
         });
     });
+		$("body").on("click", function (element) {
+                $(this).attr("oncontextmenu", "return false;");
+                if (element.button == 0) {
+                    activeRight = "";
+                    $("#repomenu").fadeOut(80);
+					$("#insidemenu").fadeOut(80);
+                }
+            });
+
+            //Context Menu Helpers for FILES
+            $("li").on("mousedown", function (element) {
+                $(this).attr("oncontextmenu", "return false;");
+                if (element.button == 2) {
+                    if(!isViewingInsideRepo){
+						activeRight = $(this).attr("data-wd");
+                    	activeRightElem = this;
+                    	$("#repomenu").css("left", element.pageX + 1);
+                    	$("#repomenu").css("top", element.pageY + 1);
+                    	$("#repomenu").fadeIn(100);
+						$("#insidemenu").fadeOut(80);
+					}else{
+						activeRight = $(this).attr("data-wd");
+						activeRightElem = this;
+						$("#insidemenu").css("left", element.pageX + 1);
+						$("#insidemenu").css("top", element.pageY + 1);
+						$("#insidemenu").fadeIn(100);
+						$("#repomenu").fadeOut(80);
+					}
+                }
+                return false;
+            });
     $('html').bind('keypress', function (e) {
         if (e.keyCode == 13) {
             return false;
@@ -614,7 +698,7 @@
     }
 
     function showFileContents(contents, size, created, edited) {
-        document.getElementById("preview").innerText = contents;
+        editor.setValue(contents);
         document.getElementById("displaysize").value = size + " KB";
         document.getElementById("displaycreated").value = created;
         document.getElementById("displayedited").value = edited;

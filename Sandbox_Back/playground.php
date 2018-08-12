@@ -22,7 +22,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
-    <script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
 </head>
 <style>
@@ -271,7 +270,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         <li id="fileDuplicate" class="contextMenuItem"><span
                    class="fas fa-copy"></span><?php echo $text["duplicateFile"]; ?></li>
         <li id="fileDownload" class="contextMenuItem"><span
-                   class="fas fa-download"></span><?php echo $text["deleteFile"]; ?></li>
+                   class="fas fa-download"></span><?php echo $text["downloadFile"]; ?></li>
 <!--        <div class="lineBreak"></div> -->
 <!--        <li id="folderRefresh" class="contextMenuItem"><span-->
 <!--                    class="fas fa-sync-alt"></span> --><?php //echo $text["refreshFiles"]; ?><!--</li>-->
@@ -283,7 +282,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <div class="rightcol">
     <ul id="tab-list" class="nav navbar-nav nav-tabs">
     </ul>
-    <div id="editor"></div>
+    <div id="editorContainer"></div>
 
     <!-- *************************************************** -->
     <!-- ******************** TERMINAL ********************* -->
@@ -371,7 +370,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         // }
 
         function temper(theme) {
-            var editor = ace.edit('editor');
+            // var editor = ace.edit('editor');
             editor.setTheme("ace/theme/" + theme);
         }
 
@@ -395,8 +394,8 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             /****************************************************
              **************** ACE CODE EDITOR  *******************
              ****************************************************/
-            ace.require("ace/ext/language_tools");
-            editor = ace.edit("editor");
+            /*ace.require("ace/ext/language_tools");
+            // editor = ace.edit("editor");
             editor.setOptions({
                 enableBasicAutocompletion: true,
                 enableSnippets: true,
@@ -410,7 +409,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 
             /****************************************************
              *************** ACE CODE DEBUGGER  *****************
-             ****************************************************/
+             ****************************************************
             editor.on("guttermousedown", function (e) {
                 if (debug) {
                     var target = e.domEvent.target;
@@ -436,7 +435,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     }
                     e.stop();
                 }
-            });
+            });*/
 
             /****************************************************
              **************** HELPER FUNCTIONS ******************
@@ -1201,7 +1200,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             /****************************************************
              ****************** KEY BINDINGS ********************
              ****************************************************/
-            editor.commands.addCommand({
+            /*editor.commands.addCommand({
                 name: "compile",
                 bindKey: {win: "Ctrl-e", mac: "Command-e"},
                 exec: function () {
@@ -1231,7 +1230,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                 exec: function () {
                     collab();
                 }
-            });
+            });*/
         });
 
         function shareFile() {

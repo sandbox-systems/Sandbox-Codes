@@ -1,3 +1,4 @@
+var username;
 var $gscope;
 var $ghttp;
 var $gsce;
@@ -14,7 +15,22 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
         repo = $stateParams.repo.split("/")[1];
     }
     //scan($scope, $http, $sce, $state);
-    //toggleCollab();
+    $.ajax({
+        type: "POST",
+        url: "Sandbox_Back/getUsername.php",
+        data: {},
+        success: function (data, status, xhttp) {
+            username = data.username;
+            toggleCollab();
+        }, error: function (data) {console.log(data);},
+        dataType: "json"
+    });
+
+    $scope.$on('$destroy', function() {
+        if (active_name !== null) {
+            leaveCurrentCollabSession();
+        }
+    });
 };
 
 //Global Variables
@@ -32,6 +48,16 @@ var tempContents = {};
 var fileFlags = {};
 var isReading = false;
 var directories = {};
+var collab = {
+    config: {
+        apiKey: "AIzaSyBQgPQC1Zzky-8zJbFAO_8bkA29Ycq_kG4",
+        authDomain: "sandbox-9291d.firebaseapp.com",
+        databaseURL: "https://sandbox-9291d.firebaseio.com",
+        projectId: "sandbox-9291d",
+        storageBucket: "sandbox-9291d.appspot.com",
+        messagingSenderId: "177612955416"
+    }
+};
 
 //Scan current repo
 function scan($scope, $http, $sce, $state){
@@ -142,6 +168,7 @@ function chooseRepo(){
             tempContent = {};
             directories = {};
             isReading = false;
+            collab.online = [];
             scan($gscope, $ghttp, $gsce, $gstate);
         }
     });
@@ -360,16 +387,18 @@ function renameFile(fullPath) {
 
 setInterval(function(){
     if(active_path!=null && active_name!=null){
-        updateFile(active_path, active_name, editor.getValue(), false);
+//        updateFile(active_path, active_name, editor.getValue(), false);
     }
     }, 10000);
 
-function updateFile(path, name, content, altCallback){
-    if (isReading)
-        return;
+function updateFile(path, name, content, altCallback, shouldResetCanSave){
     let fullPath = path + (path === "" ? "" : "/") + name;
+    if (isReading || (fileFlags[fullPath] && !fileFlags[fullPath].canSave))
+        return;
     tempContents[fullPath] = content;
-    fileFlags[fullPath].hasUpdated = false;
+    if (!fileFlags[fullPath].hasUpdated)
+        fileFlags[fullPath].hasUpdated = [];
+    fileFlags[fullPath].hasUpdated.push(0);
     $.ajax({
         type: "POST",
         url: "fileManager/requests/updateFile.php",
@@ -389,7 +418,8 @@ function updateFile(path, name, content, altCallback){
             } else {
                 altCallback(data["newSha"]);
             }
-            fileFlags[fullPath].hasUpdated = true;
+            fileFlags[fullPath].canSave = false;
+            fileFlags[fullPath].hasUpdated.pop();
         },
         error: function(data){
             console.log("UPDATE: " + JSON.stringify(data));
@@ -433,25 +463,44 @@ function commitChanges() {
 function openTab(hash, name, key){
     if (isReading)
         return;
-    if (!fileFlags[name]) {
-        fileFlags[name] = {};
-    } else {
-        if (!fileFlags[name].hasUpdated) {
-            swal({icon:"error",  timer:2000, title: "Not yet!", text: "This file is still being saved"});
-            return;
-        }
-    }
-    numTabs++;
-    if(angular.element('#tab'+name.replace(/[.\/]/g, ""))[0]==null){
-        $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+name.replace(/[.\/]/g, "")+'" data-path="'+name+'" data-hash="'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
-    }
-    activateTab(hash, name);
+    $('#onFileReadOverlay').fadeIn();
+    $.ajax({
+        type: "POST",
+        url: "Sandbox_Back/fetchFileSession.php",
+        data: {
+            repo: repo,
+            owner: owner,
+            path: name
+        },
+        success: function (data, status, xhttp) {
+            if (!fileFlags[name]) {
+                fileFlags[name] = {};
+            } else {
+                if (fileFlags[name].hasUpdated.length !== 0) {
+                    swal({icon:"error",  timer:2000, title: "Not yet!", text: "This file is still being saved"});
+                    $('#onFileReadOverlay').fadeOut();
+                    return;
+                }
+            }
+            fileFlags[name].sessionID = data.session;
+            if (data.isNew) {
+                fileFlags[name].canSave = true;
+            }
+            numTabs++;
+            if(angular.element('#tab'+name.replace(/[.\/]/g, ""))[0]==null){
+                 $('#tab-list').append($('<li onclick="tabClick(this)" id="tab'+name.replace(/[.\/]/g, "")+'" data-path="'+name+'" data-hash="'+hash+'"><a role="tab" data-toggle="tab">' + key + '<button class="close" type="button" onclick="event.stopPropagation(); closeTab(this);" title="Remove this page">×</button></a></li>'));
+            }
+            activateTab(hash, name);
+        },
+        dataType: "json"
+    });
 }
 
 //Close tab
 function closeTab(element){
     if (isReading)
         return;
+    leaveCurrentCollabSession();
     numTabs--;
     let oldTab = angular.element(element).parent().parent()[0];
     let oldTabFullPath = oldTab.attributes["data-path"].value;
@@ -462,27 +511,33 @@ function closeTab(element){
     if (oldTabFullPath === active_path + (active_path === "" ? "" : "/") + active_name) {
         updateFile(oldTabPath, oldTabName, oldContents, function (newSha) {
             hashes[oldTabFullPath] = newSha;
-        });
+        }, true);
     }
     delete tempContents[oldTabFullPath];
     angular.element(element).parent().parent().remove();
     var openTabs = angular.element("#tab-list > li");
     if(openTabs.length<1){
-        editor.setValue("", -1);
         active_path = null;
         active_name = null;
         active_hash = null;
         return;
     }
-    activateTab(openTabs[0].attributes["data-hash"].value, openTabs[0].attributes["data-path"].value);
+    activateTab(openTabs[0].attributes["data-hash"].value, openTabs[0].attributes["data-path"].value, true);
 }
 
-function activateTab(hash, path){
+function activateTab(hash, path, hasAlreadyLeftCollabSession){
     if (isReading)
         return;
+    let oldContent = "";
+    if (editor)
+        oldContent = editor.getValue();
+    if (!hasAlreadyLeftCollabSession && active_path !== null) {
+        leaveCurrentCollabSession();
+    }
+    joinCollabSession(fileFlags[path].sessionID, path);
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
-        updateFile(active_path, angular.element(active_li[0]).text().slice(0, -1), editor.getValue(), false);
+        updateFile(active_path, active_name, oldContent, false);
         active_li[0].classList.remove("active");
     }
     var tab = angular.element('#tab'+path.replace(/[.\/]/g, ""));
@@ -491,12 +546,14 @@ function activateTab(hash, path){
     active_path = tab[0].attributes["data-path"].value;
     active_path = active_path.substring(0, active_path.lastIndexOf("/"));
     active_hash = hash;
-    if (tempContents.hasOwnProperty(path)) {
-        editor.setValue(tempContents[path], -1);
-    } else {
-        readFile(hash, function (contents) {
-            tempContents[path] = contents;
-        });
+    if (fileFlags[path].canSave) {
+        if (tempContents.hasOwnProperty(path)) {
+            editor.setValue(tempContents[path], -1);
+        } else {
+            readFile(hash, function (contents) {
+                tempContents[path] = contents;
+            });
+        }
     }
     setLanguage(active_name);
 }
@@ -504,7 +561,35 @@ function activateTab(hash, path){
 function tabClick(tab){
     if (isReading)
         return;
-    activateTab(tab.attributes["data-hash"].value, tab.attributes["data-path"].value);
+    $('#onFileReadOverlay').fadeIn();
+    let hash = tab.attributes["data-hash"].value;
+    let name = tab.attributes["data-path"].value;
+    $.ajax({
+        type: "POST",
+        url: "Sandbox_Back/fetchFileSession.php",
+        data: {
+            repo: repo,
+            owner: owner,
+            path: name
+        },
+        success: function (data, status, xhttp) {
+            if (!fileFlags[name]) {
+                fileFlags[name] = {};
+            } else {
+                if (fileFlags[name].hasUpdated && fileFlags[name].hasUpdated.length !== 0) {
+                    swal({icon:"error",  timer:2000, title: "Not yet!", text: "This file is still being saved"});
+                    $('#onFileReadOverlay').fadeOut();
+                    return;
+                }
+            }
+            fileFlags[name].sessionID = data.session;
+            if (data.isNew) {
+                fileFlags[name].canSave = true;
+            }
+            activateTab(hash, name);
+        },
+        dataType: "json"
+    });
 }
 
 function setLanguage(name){
@@ -582,7 +667,177 @@ function updateHash(hash){
  ********************* COLLABORATION ****************
  ****************************************************/
 function toggleCollab(){
-    
+    // Connect to firebase DB
+    firebase.initializeApp(collab.config);
+}
+
+function addCollabOnline(childSnapshot, previousKey) {
+    // Push added child to online list as appropriate
+    let childUsername = childSnapshot.node_.children_.root_.value.value_;
+    if (childUsername !== username && collab.online.indexOf(childUsername) === -1) {
+        collab.online.push(childUsername);
+    }
+}
+
+function removeCollabOnline(oldChildSnapshot) {
+    // Pop removed child from online list as appropriate
+    let childUsername = oldChildSnapshot.node_.children_.root_.value.value_;
+    let ind = collab.online.indexOf(childUsername);
+    if (childUsername !== username && ind !== -1) {
+        collab.online.splice(ind, 1);
+        let fullPath = active_path + (active_path === "" ? "" : "/") + active_name;
+        if (!fileFlags[fullPath].canSave) {
+            // Allow this user to save if he/she is the new owner
+            fetchCreatorUsername(collab.id, function (creator) {
+                fileFlags[fullPath].canSave = username === creator;
+            });
+        }
+    }
+}
+
+function changeCollabSessionOwner (newOwner) {
+    collab.firepadRef.child("users").child("?creator").set({
+        username: newOwner
+    });
+}
+
+function removeCollabSession (sessionID) {
+    $.ajax({
+        type: "POST",
+        url: "Sandbox_Back/removeCollabSession.php",
+        data: {
+            session: sessionID
+        },
+        success: function (data, status, xhttp) {
+        },
+        dataType: "text"
+    });
+}
+
+function fetchCreatorUsername (sessionID, callback) {
+    collab.firepadRef.child("users").child("?creator").on("value", function (snapshot) {
+        callback(snapshot.val().username);
+    });
+}
+
+function joinCollabSession (id, filename) {
+    collab.id = id;
+    // Generate div to hold ace editor
+    var $div = $('<div />').appendTo($('#editorContainer'));
+    $div.attr('id', 'editor');
+    // Initialize editor
+    setupAce();
+    // Get or upsert reference to location in db where data with id is stored
+    collab.firepadRef = firebase.database().ref(id);
+    // Add current username to users list
+    collab.firepadRef.child("users").child(username).set({
+        username: username
+    });
+    // Bind editor to firepad
+    collab.firepad = Firepad.fromACE(collab.firepadRef, editor, {userId: username});
+    // Define the creator in firebase DB as needed
+    if (fileFlags[filename].canSave) {
+        collab.firepadRef.child("users").child("?creator").set({
+            username: username
+        });
+    }
+    $('#onFileReadOverlay').fadeOut();
+    // Update online list with added or removed children, respectively
+    collab.firepadRef.child("users").on("child_added", addCollabOnline);
+    collab.firepadRef.child("users").on("child_removed", removeCollabOnline);
+}
+
+function leaveCurrentCollabSession () {
+    // Remove this user from firebase DB
+    collab.firepadRef.child("users").child(username).remove();
+    // Clear editor from its container
+    $('#editorContainer').empty();
+    let fullPath = active_path + (active_path === "" ? "" : "/") + active_name;
+    if (collab.online.length > 0) {
+        if (fileFlags[fullPath].canSave) {
+            // Transfer ownership
+            changeCollabSessionOwner(collab.online[0]);
+        }
+    } else {
+        // Remove entire session entry from firebase DB and MDB
+        collab.firepadRef.remove();
+        removeCollabSession(collab.id);
+    }
+    // Reset collab data
+    collab.online = [];
+}
+
+function setupAce() {
+    ace.require("ace/ext/language_tools");
+    editor = ace.edit("editor");
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: false
+    });
+    editor.setTheme("ace/theme/chrome");
+    editor.getSession().setMode("ace/mode/java");
+    editor.getSession().on('change', function() {
+        //save(editor, false);
+    });
+
+    editor.on("guttermousedown", function (e) {
+        if (debug) {
+            var target = e.domEvent.target;
+            if (target.className.indexOf("ace_gutter-cell") == -1) //make sure that user clicked on a gutter cell
+                return;
+            var breakpoints = e.editor.session.getBreakpoints(row, 0);
+            var row = e.getDocumentPosition().row;
+            if (typeof breakpoints[row] === typeof undefined) { //add breakpoint
+                e.editor.session.setBreakpoint(row);
+                breakpointAnchors.push(editor.getSession().getDocument().createAnchor(row, 0));
+                breakpointAnchors[breakpointAnchors.length - 1].on("change", function (element) {
+                    e.editor.session.clearBreakpoint(element.old.row); //moves breakpoint in sync with line of code
+                    e.editor.session.setBreakpoint(element.value.row);
+                });
+            } else { //delete breakpoint
+                e.editor.session.clearBreakpoint(row);
+                breakpointAnchors.forEach(function (element, index) {
+                    if (row == element.row) {
+                        element.detach();
+                        breakpointAnchors.splice(index, 1);
+                    }
+                });
+            }
+            e.stop();
+        }
+    });
+
+    editor.commands.addCommand({
+        name: "compile",
+        bindKey: {win: "Ctrl-e", mac: "Command-e"},
+        exec: function () {
+            compile(editor);
+        }
+    });
+
+    editor.commands.addCommand({
+        name: "saveFile",
+        bindKey: {win: "Ctrl-s", mac: "Command-s"},
+        exec: function () {
+            save(editor, true);
+        }
+    });
+
+    editor.commands.addCommand({
+        name: "newFile",
+        bindKey: {win: "Ctrl-n", mac: "Command-right"},
+        exec: function () {
+            createFile(editor);
+        }
+    });
+    editor.commands.addCommand({
+        name: "collab",
+        bindKey: {win: "Ctrl-k", mac: "Command-k"},
+        exec: function () {
+            collab();
+        }
+    });
 }
 
 //TogetherJSConfig_siteName
@@ -607,3 +862,9 @@ function compile(){
         }
     });*/
 }
+
+$(window).on("unload", function() {
+    if (active_name !== null) {
+        leaveCurrentCollabSession();
+    }
+});

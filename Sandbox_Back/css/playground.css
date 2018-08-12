@@ -563,3 +563,11 @@ iframe{
     display: none;
     z-index: 999999;
 }
+
+.firepad {
+    margin-top: 52px;
+}
+
+.powered-by-firepad {
+    display: none;
+}

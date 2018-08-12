@@ -14,7 +14,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 <!DOCTYPE html>
 <html ng-app="castle">
 <head>
-    <link rel="icon" href="images/purplelogo.png">
+    <link rel="icon" href="images/purplelogo.svg">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
@@ -85,6 +85,9 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
     <a href="http://sandboxcodes.com/Login.html">Logout</a>
     <img src="images/white-logo.png" class="milk">
+    <footer style="
+    color:  white;position: absolute;bottom: 0;
+">© Sandbox Systems LLC 2018</footer>
 </div>
 <div class="wrapper">
     <div id="routedTemplate" ui-view></div>
@@ -189,7 +192,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         document.getElementById("myOverlay").className = "overlay animated fadeIn";
         document.getElementById("myOverlay").style.display = "block";
     }
-
     function closeSearch() {
         document.getElementById("myOverlay").className = "overlay animated fadeOut";
         document.getElementById("myOverlay").style.display = "none";
@@ -200,7 +202,12 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         $('#sbxx').val("");
         $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
     }
-
+    $('#myOverlay').click(function(event){
+        var container = $('#myOverlay');
+        if(container.is(event.target)){
+            closeSearch();
+        }
+    });
     document.querySelector('.searchbox [type="reset"]').addEventListener('click', function () {
         this.parentNode.querySelector('input').focus();
     });

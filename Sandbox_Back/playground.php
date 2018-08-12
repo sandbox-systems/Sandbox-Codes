@@ -70,7 +70,29 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         height:83%;
         resize: none;
     }
-
+    .chip {
+        display: inline-block;
+        padding: 0 25px;
+        height: 50px;
+        font-size: 0px;
+        width: 0%;
+        line-height: 50px;
+        border-radius: 25px;
+        background-color: mediumpurple;
+        transition: width 0.8s;
+    }
+    .chip:hover{
+        width: 100%;
+        font-size: 16px;
+    }
+    .chip img {
+        float: left;
+        margin: 0 10px 0 -25px;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
 </style>
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
@@ -163,7 +185,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
     <div class="container-fluid">
-        <div class="navbar-header" style="width: 92%">
+        <div class="navbar-header" style="width: 86%">
             <button title="Theme" class="dropdown btn navbar-btn toolbarButton">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                                  class="fas fa-ellipsis-h fa-2x"></span></a>
@@ -205,11 +227,22 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             <!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
         </div>
         <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
-	margin-right: 3%;">
+	margin-right: 0%;">
 <!--            <img class="bordered-circle-green" src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
 <!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
 <!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
-            <button onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
+            <button class="rightButton dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
+                                                                        class="fas fa-users"></span></a>
+                <ul class="dropdown-menu">
+                    <li><div class="chip">
+                                <img src="images/Arya.jpg" alt="Person" width="96" height="96">
+                                John Doe
+                            </div></li>
+                </ul>
+
+            </button>
+            <button class="rightButton" onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
         </div>
     </div>
 </nav>
@@ -218,7 +251,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <!-- ******************* FILE MANAGER ****************** -->
     <!-- *************************************************** -->
     <div id="filemanager">
-        <ul style="color: white;white-space: nowrap;padding-left: 0px;height: 100vh" ng-bind-html="scan"></ul>
+        <ul style="color: white;white-space: nowrap;padding-left: 0px;height: 87vh" ng-bind-html="scan"></ul>
     </div>
 
     <!-- *************************************************** -->

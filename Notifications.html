@@ -46,8 +46,7 @@
         color:white;
         border: white;
         float:right;
-        font-size: 2em;
-        border: solid 1px white;
+        padding: 1%;
     }
     .thumb-up {
         color: #28a745;
@@ -59,6 +58,7 @@
 		list-style: none;
 		height: 100vh;
 		background-color: #f8f9fa75;
+        box-shadow: -8px 8px 0px 0px rgba(142,45,226,1);;
 		padding:  2%;
 		width:  70%;
 		position:  relative;
@@ -69,8 +69,7 @@
 </style>
 <body>
 <div id="topbar">
-	Notifications
-    <button onclick="document.getElementById('notificationlist').innerHTML=''"><i class="fas fa-trash"></i></button></div>
+    <button onclick="document.getElementById('notificationlist').innerHTML=''"><i class="fas fa-trash fa-2x"></i></button></div>
     <ul id="notificationlist"z>
         <li ng-repeat="notif in notifications">
             <div class="entry animated bounceIn">

@@ -33,7 +33,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     }
 
     #profile-container {
-        margin-top: 10%;
         width: 150px;
         height: 150px;
         overflow: hidden;
@@ -43,6 +42,8 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         -o-border-radius: 50%;
         border-radius: 50%;
         border: solid 2px white;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     #profile-container img {
@@ -94,7 +95,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     }
 
     .alonebutton {
-        margin-left: 70%;
+        margin-left: 55%;
         width: 100%;
         outline: none;
         border: 0;
@@ -103,6 +104,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         cursor: pointer;
         padding: 13px;
         text-decoration: none;
+        border-right: solid 1px white;
     }
 
     .alonebutton:hover {
@@ -127,7 +129,7 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     <table style="width: 100%;height: 33em;">
         <tr class="animated fadeIn">
             <td>
-                <a href="<?php echo $url; ?>" id="sync" class="categ_row alonebutton"><i class="fab fa-github"></i>Sync Github Account</a>
+                <a href="<?php echo $url; ?>" id="sync" class="categ_row alonebutton"><i class="fab fa-github"></i>&nbsp;  Sync Github Account</a>
             </td>
         </tr>
         <tr class="animated fadeIn">

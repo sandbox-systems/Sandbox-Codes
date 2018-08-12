@@ -246,7 +246,7 @@ option{
 	float: right;
 	margin-right: 3.5%;
 }
-#addpeople{
+.rightButton{
 	background-color: rebeccapurple;
 	border-radius: 500px;
 	border: solid 2px mediumpurple;

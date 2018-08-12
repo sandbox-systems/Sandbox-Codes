@@ -79,6 +79,7 @@
                 <input id="displaycreated" type="date" class="infoname" readonly>
                 Last Modified<br>
                 <input id="displayedited" type="date" class="infoname" readonly>
+                <button class="goBtn" style="width:90%;background-color: mediumpurple;margin-top: 5%;padding: 4px">Open In Playground</button>
             </fieldset>
             <!--<fieldset>-->
             <!--Color<br>-->
@@ -320,7 +321,6 @@
         <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
     </ul>-->
 </div>
-</body>
 <script>
 			ace.require("ace/ext/language_tools");
             var editor = ace.edit("editor");
@@ -409,6 +409,17 @@
         if (e.keyCode == 13) {
             return false;
         }
+    });
+    $('.modal').click(function(event){
+       var container = $('.modal');
+         if(container.is(event.target)){
+            closeModal();
+            closesharemodal();
+            document.getElementById('commitModal').style.display='none';
+             document.getElementById('repoModal').style.display='none';
+            document.getElementById('branchModal').style.display='none';
+
+         }
     });
     window.onscroll = function () {
         myFunction()

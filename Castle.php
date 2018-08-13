@@ -229,7 +229,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         <div class="animated bounceInRight">
             <form novalidate="novalidate" id="covers" onsubmit="return false;" class="searchbox sbx-custom">
                 <div id="outputs" role="search" class="sbx-custom__wrapper">
-                    <input type="search" name="search" placeholder="@username or @username repository or chatname" id="sbxx" autocomplete="off"
+                    <input type="search" name="search" placeholder="@username or @username filename or chatname" id="sbxx" autocomplete="off"
                            required="required" class="sbx-custom__input">
                     <button type="submit" title="Submit your search query." class="sbx-custom__submit">
                         <svg role="img" aria-label="Search">
@@ -269,7 +269,9 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 
     $(function() {
         <?php if ($unreadNotifs > 0) { ?>
-            $('#notificationsSidebarBtn').addClass('animated shake');
+            setTimeout(function () {
+                $('#notificationsSidebarBtn').addClass('animated shake')
+            }, 1500);
         <?php } ?>
     });
 
@@ -416,7 +418,6 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 
     $('#sbxx').on('input', function () {
         let val = $('#sbxx').val();
-        $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
         if (val !== "") {
             $.ajax({
                 type: "POST",
@@ -425,6 +426,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
                     input: val
                 },
                 success: function (res, status, jqXHR) {
+                    $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
                     if (res.hasOwnProperty('notsynced')) {
                         res.notsynced.forEach(result => {
                             addOutput(result === "" ? "Sync Github Account" : result + " hasn't synced his/her Github account yet", "error");

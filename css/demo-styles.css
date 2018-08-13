@@ -348,7 +348,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 * {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  margin: 0;
   padding: 0
 }
 
@@ -406,7 +405,7 @@ header a {
 }
 
 .demo-wrapper {
-  padding: 2em .5em;
+  //padding: 2em .5em;
   width: 100%;
   height: 100%;
   -webkit-perspective: 3300px;
@@ -470,7 +469,8 @@ header a {
 
 .col1,
 .col2,
-.col3 {
+.col3,
+.col4{
   width: 99%;
   margin: 1em auto;
 }
@@ -679,8 +679,6 @@ header a {
 .tile-1 {
 background-color: rgba(0,0,0,0.2);
 color: white;
-border-radius: 100px;
-    border: 7px solid #8B4D93;
 }
 
 .tile-2 {
@@ -706,9 +704,6 @@ border-radius: 100px;
 .tile-5 {
   background-color: rgba(0,0,0,0.2);
   color: white;
-    border: 7px solid #8B4D93;
-        
-border-radius: 100px;
 }
 
 .tile-5:hover {
@@ -719,8 +714,6 @@ border-radius: 100px;
 .tile-6 {
   background-color: rgba(0,0,0,0.2);
   color: white;
-border-radius: 100px;
-    border: 7px solid #8B4D93;
 }
 
 .tile-7,
@@ -958,7 +951,7 @@ border-radius: 100px;
 @media screen and (min-width: 43.75em) {
   .col1,
   .col2,
-  .col3 {
+  .col3,.col4 {
     float: left;
     margin-right: 1%;
     width: 49%
@@ -977,16 +970,15 @@ border-radius: 100px;
 @media screen and (min-width: 64em) {
   .col1,
   .col2,
-  .col3 {
+  .col3,.col4 {
         position: relative;
-    right: 2.5%;
     float: left;
     margin-right: 0.5%;
 	 margin-left: 0.5%;
-    width: 31%;
+    width: 22%;
   }
 
-  .col3 {
+  .col4 {
     margin-right: 0;
   }
 

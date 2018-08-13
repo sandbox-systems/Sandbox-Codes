@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="js/justcontext.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <link rel="stylesheet" href="css/demo-styles.css" />
-    <script src="js/modernizr-1.5.min.js"></script>
 <style>
 html{
     font-family: "Lato";
@@ -51,7 +49,7 @@ li{
   <div class="dashboard clearfix">
     <ul class="tiles">
       <div class="col1 clearfix">
-         <a ui-sref="playground"><li class="tile tile-big tile-6 slideTextLeft">
+         <a ui-sref="playground"><li class="tile tile-big tile-6 slideTextUp">
           <div><p><i class="fa fa-terminal fa-1x"></i> Playground</p></div>
           <div><p>Lets Code!</p></div>
         </li></a>
@@ -63,15 +61,20 @@ li{
         </li></a>
 
       </div>
-            <a ui-sref="notifications"><div class="col3 clearfix">
-          <li class="tile tile-big tile-5">
-          <div><p><i class="fas fa-bell"></i> Notifications</p></div>
+        <a ui-sref="chat"><div class="col3 clearfix slideTextUp">
+          <li class="tile tile-big tile-6 slideTextUp">
+          <div style="padding: 0"><p><i class="fas fa-comments"></i> Luau</p></div>
+              <div><p><font size="+4">The Chat</font></p></div>
         </li>
       </div></a>
+        <a ui-sref="notifications"><div class="col4 clearfix">
+            <li class="tile tile-big tile-6 slideTextUp">
+                <div style="padding: 0"><p><i class="fas fa-bell"></i> Notifications</p></div>
+                <div><p><font size="+4">Friends</font></p></div>
+            </li>
+        </div></a>
     </ul>
   </div>
     </div><!--end dashboard-->
     </body>
-<script src="js/jquery-1.8.2.min.js"></script>
-  <!--<script src="js/scripts.js"></script>-->
 </html>

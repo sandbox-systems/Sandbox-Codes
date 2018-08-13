@@ -1,15 +1,15 @@
 <?php
-
-include 'fileManager/github/sync.php';
-include_once 'fileManager/initDB.php';
-
-require "checklogin.php";
-
-session_start();
-
-$user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
-
-?>
+//
+//include 'fileManager/github/sync.php';
+//include_once 'fileManager/initDB.php';
+//
+//require "checklogin.php";
+//
+//session_start();
+//
+//$user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0];
+//
+//?>
 
 <!DOCTYPE html>
 <html ng-app="castle">
@@ -80,13 +80,13 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
             <img src="<?php echo $user->profilepic ?>" alt="PIC" class="image">
         </div>
     </a>
-    <a href="https://sandboxcodes.com/index.html">Main Site</a>
+    <a style="background-color: mediumpurple;color:white" href="https://sandboxcodes.com/index.html">Main Site</a>
     <a ui-sref="settings">Settings</a>
     <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
-    <a href="http://sandboxcodes.com/Login.html">Logout</a>
-    <img src="images/white-logo.png" class="milk">
+    <a style="background-color: mediumpurple;color:white" href="http://sandboxcodes.com/Login.html">Logout</a>
+    <img src="images/purplelogo.svg" class="milk">
     <footer style="
-    color:  white;position: absolute;bottom: 0;
+    color: mediumpurple;position: absolute;bottom: 0;
 ">© Sandbox Systems LLC 2018</footer>
 </div>
 <div class="wrapper">

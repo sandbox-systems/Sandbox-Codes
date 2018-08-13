@@ -8,121 +8,217 @@
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 </head>
 <style>
-    .entry{
-        width: 90%;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        background-color: whitesmoke;
-        text-align: center;
-        font-size: 2em;
-        padding: 1%;
-        cursor: pointer;
-        border-bottom: solid 2px darkslategray;
-    }
-    .entry:hover{
-        box-shadow: 0px 5px 8px 0px rgba(256, 256, 256, 0.4);
-    }
-    .close {
-        position: absolute;
-        right: 0;
+    #notificationsOverlay {
+        background: #ffffffb0;
+        position: fixed;
         top: 0;
-        padding: 12px 16px 12px 16px;
+        right: 0;
+        bottom: 0;
+        left: 70px;
     }
-    .close:hover{
-        color:white;
+
+    #notificationsFiller {
+        height: 100vh;
     }
-    #topbar{
-    position:  relative;
-    width:  70%;
-    margin-right:  auto;
-    margin-left:  auto;
-    margin-top: 5%;
-    font-size: 2em;
-    background-color: whitesmoke;
+
+    #notificationsContainer {
+        background: #f2f3f4;
+        position: fixed;
+        left: 25%;
+        right: 25%;
+        top: 5%;
+        bottom: 5%;
+        -webkit-box-shadow: -2px 2px 5px 0 rgba(0,0,0,0.25);
+        -moz-box-shadow: -2px 2px 5px 0 rgba(0,0,0,0.25);
+        box-shadow: -2px 2px 5px 0 rgba(0,0,0,0.25);
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
-    button{
-        background-color: transparent;
-        color:white;
-        border: white;
-        float:right;
-        padding: 1%;
+    
+    #notificationsContainer::-webkit-scrollbar {
+        width: 6px;
     }
-    .thumb-up {
-        color: #28a745;
+    
+    #notificationsContainer::-webkit-scrollbar-thumb {
+        background: white;
     }
-    .thumb-down {
+    
+    #notificationsContainer::-webkit-scrollbar-track {
+        background: #312450FF;
+    }
+    
+    #notificationsHeader {
+        background: rgba(129,81,163,0.75);
+        background: -moz-linear-gradient(left, rgba(129,81,163,0.75) 0%, rgba(18,65,142,0.75) 100%);
+        background: -webkit-gradient(left top, right top, color-stop(0%, rgba(129,81,163,0.75)), color-stop(100%, rgba(18,65,142,0.75)));
+        background: -webkit-linear-gradient(left, rgba(129,81,163,0.75) 0%, rgba(18,65,142,0.75) 100%);
+        background: -o-linear-gradient(left, rgba(129,81,163,0.75) 0%, rgba(18,65,142,0.75) 100%);
+        background: -ms-linear-gradient(left, rgba(129,81,163,0.75) 0%, rgba(18,65,142,0.75) 100%);
+        background: linear-gradient(to right, rgba(129,81,163,0.75) 0%, rgba(18,65,142,0.75) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8151a3', endColorstr='#12418e', GradientType=1 );
+        height: 100px;
+    }
+    
+    #notificationsTitle {
+        color: white;
+        position: absolute;
+        left: 0;
+        right: 60px;
+        height: 100px;
+        font-size: 25px;
+    }
+    
+    #notificationsTitle > span, #notificationsTrash > span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+    
+    #notificationsTrash {
+        color: white;
+        position: absolute;
+        left: calc(100% - 60px);
+        right: 0;
+        height: 100px;
+    }
+    
+    #notifications {
+        margin: 0;
+        list-style: none;
+        padding: 10px;
+    }
+    
+    .notification {
+        display: flex;
+        width: 100%;
+        min-height: 80px;
+        margin-bottom: 5px;
+    }
+    
+    .notifIcon {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        width: 90px;
+        color: white;
+        font-size: 45px;
+    }
+    
+    .notifContent {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        word-wrap: break-word;
+        background: white;
+        padding-right: 10px;
+        padding-left: 10px;
+        width: calc(100% - 120px);
+        font-size: 22px;
+    }
+
+    .notifDelete {
+        text-align: center;
+        background: white;
+        padding-top: 4px;
+        width: 30px;
+    }
+
+    .notifDelete > span:hover {
+        cursor: pointer;
         color: #dc3545;
     }
-	#notificationlist{
-		list-style: none;
-		height: 100vh;
-		background-color: #f8f9fa75;
-        box-shadow: -8px 8px 0px 0px rgba(142,45,226,1);;
-		padding:  2%;
-		width:  70%;
-		position:  relative;
-		margin-left:  auto;
-		margin-right:  auto;
-		margin-top: 0;
-	}
+
+    #notificationsTrashBtn {
+        background: transparent;
+        border: none;
+        color: white;
+    }
+
+    #notificationsTrashBtn > i, .thumb-up, .thumb-down, .notifDelete > span {
+        -webkit-transition: color 0.25s linear;
+        -moz-transition: color 0.25s linear;
+        -o-transition: color 0.25s linear;
+        -ms-transition: color 0.25s linear;
+        transition: color 0.25s linear;
+    }
+
+    #notificationsTrashBtn > i:hover {
+        cursor: pointer;
+        color: #dc3545;
+    }
+
+    .thumb-up:hover {
+        cursor: pointer;
+        color: #28a745;
+    }
+
+    .thumb-down:hover {
+        cursor: pointer;
+        color: #dc3545;
+    }
+
+    .friendResponseNotif {
+        background: #7ed6df;
+    }
+
+    .chatroomNotif {
+        background: #ffbe76;
+    }
+
+    .repoNotif {
+        background: #badc58;
+    }
+
+    .folderNotif {
+        background: #f6e58d;
+    }
+
+    .fileNotif {
+        background: #ff7979;
+    }
 </style>
 <body>
-<div id="topbar">
-    <button onclick="document.getElementById('notificationlist').innerHTML=''"><i class="fas fa-trash fa-2x"></i></button></div>
-    <ul id="notificationlist"z>
-        <li ng-repeat="notif in notifications">
-            <div class="entry animated bounceIn">
-                <i style="margin-right: 3%;" class="fas"
-                    ng-class="notif.type === 'friend' || notif.type === 'friendResponse' ? 'fa-user-circle' :
-                        notif.type === 'chatroom' ? 'fa-comments' :
-                        notif.type === 'repo' ? 'fa-book' :
-                        notif.type === 'folder' ? 'fa-folder-open' :
-                        notif.type === 'file' ? 'fa-file' : ''"></i>
-                <span>
-                    {{notif.content}}&nbsp;&nbsp;&nbsp;&nbsp;
+    <div id="notificationsOverlay"></div>
+    <div id="notificationsFiller"></div>
+    <div id="notificationsContainer">
+        <div id="notificationsHeader">
+            <div id="notificationsTitle">
+                <span>NOTIFICATIONS</span>
+            </div>
+            <div id="notificationsTrash">
+                <span><button id="notificationsTrashBtn" onclick="document.getElementById('notifications').innerHTML=''"><i class="fas fa-trash fa-2x"></i></button></span>
+            </div>
+        </div>
+        <div id="notifications">
+            <div class="notification animated bounceIn" ng-repeat="notif in notifications">
+                <div class="notifIcon" ng-class="notif.type === 'friend' || notif.type === 'friendResponse' ? 'friendResponseNotif' :
+                    notif.type === 'chatroom' ? 'chatroomNotif' :
+                    notif.type === 'repo' ? 'repoNotif' :
+                    notif.type === 'folder' ? 'folderNotif' :
+                    notif.type === 'file' ? 'fileNotif' : ''">
+                    <i style="margin-right: 3%;" class="fas"
+                        ng-class="notif.type === 'friend' || notif.type === 'friendResponse' ? 'fa-user-circle' :
+                            notif.type === 'chatroom' ? 'fa-comments' :
+                            notif.type === 'repo' ? 'fa-book' :
+                            notif.type === 'folder' ? 'fa-folder-open' :
+                            notif.type === 'file' ? 'fa-file' : ''"></i>
+                </div>
+                <div class="notifContent">
+                    <span>{{notif.content}}</span>
                     <span ng-if="notif.type === 'friend'">
                         <i class="thumb-up fas fa-thumbs-up" ng-click="friendRequestRespond(notif.from, notif.fromID, true)"></i>&nbsp;&nbsp;
                         <i class="thumb-down fas fa-thumbs-down" ng-click="friendRequestRespond(notif.from, notif.fromID, false)"></i>
                     </span>
-                </span>
-                <span class="close" onclick="this.parentElement.style.display='none'" ng-if="notif.type !== 'friend'" ng-click="deleteNotif(notif.notifID)">
-                    x
-                </span>
+                </div>
+                <div class="notifDelete">
+                    <span class="close" onclick="this.parentElement.parentElement.style.display='none'" ng-if="notif.type !== 'friend'" ng-click="deleteNotif(notif.notifID)">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
             </div>
-        </li>
-    </ul>
+        </div>
+    </div>
 </body>
-<script>
-    var holder;
-    function addEntry(entry,type) {
-        var icon = document.createElement('I');
-        icon.style.marginRight = "3%";
-        if (type === 'user') {
-            icon.className = 'fas fa-user-circle';
-        } else if (type === 'chatroom') {
-            icon.className = 'fas fa-comments';
-        } else if (type === 'repo') {
-            icon.className = 'fas fa-book';
-        } else if (type === 'folder') {
-            icon.className = "fas fa-folder-open";
-        } else if (type === 'file') {
-            icon.className = "fas fa-file";
-        }
-        var holder = document.createElement('DIV');
-        holder.className="entry animated bounceIn"
-        holder.appendChild(icon);
-        let span = document.createElement("SPAN");
-        span.innerHTML = entry.content + '&nbsp;&nbsp;&nbsp;&nbsp;';
-        let ban = document.createElement('SPAN');
-        ban.innerHTML='x';
-        ban.className='close';
-        ban.setAttribute('onclick',"this.parentElement.style.display='none'")
-        holder.appendChild(span);
-        holder.appendChild(ban);
-        var list = document.createElement('LI');
-        list.appendChild(holder);
-        document.getElementById('notificationlist').appendChild(list);
-    }
-</script>
 </html>

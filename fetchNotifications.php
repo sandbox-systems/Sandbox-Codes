@@ -23,6 +23,9 @@ foreach ($results as $result) {
         $notif['type'] = "friendResponse";
         $notif['content'] = $result->content;
         $notif['notifID'] = (string) $result->_id;
+    } else {
+        $notif['type'] = $result->type;
+        $notif['content'] = $result->content;
     }
     $notifs[] = $notif;
 }

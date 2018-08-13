@@ -7,3 +7,4 @@ out/*
 composer.phar
 /vendor/
 collaboration/node_modules/
+*.swp

@@ -50,7 +50,7 @@ function searchUser($man, $username, $userID, $inputUname, $shouldVerify) {
                     'name' => $doc->name,
                     'isFriend' => $userID == "" ? null : in_array($userID, $doc->friends)
                 );
-                if (userID != "") {
+                if ($userID != "") {
                     $foundUser['isRequested'] = count(getDocuments($man, "requests", ['$or' => array(['fromID' => (string) $doc->_id, 'to' => $userID], ['fromID' => $userID, 'to' => (string) $doc->_id])], [])) > 0;
                 }
                 if (isset($doc->GHUsername))

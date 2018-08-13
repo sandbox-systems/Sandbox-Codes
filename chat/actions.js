@@ -78,7 +78,8 @@ module.exports = {
                 friendData.push({
                     id: friends[f]._id.toString(),
                     uname: friends[f].username,
-                    name: friends[f].name
+                    name: friends[f].name,
+                    profilepic: friends[f].profilepic
                 });
             }
 
@@ -132,7 +133,8 @@ module.exports = {
                     var member = {
                         id: members[i]._id.toString(),
                         uname: members[i].username,
-                        name: members[i].name
+                        name: members[i].name,
+                        profilepic: members[i].profilepic
                     };
                     // Room index in roomData was stored so the member can be added to the appropriate room
                     roomData[newMembers[member.id]].members.push(member);

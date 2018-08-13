@@ -11,12 +11,6 @@ var queries = require("./queries");
 
 // Setup express http application
 var httpApp = express();
-/*httpApp.get('//', function(req, res) {
-    res.sendFile("chat.html", {root: 'static'});
-});*/
-/*httpApp.get('/chat', function(req, res) {
-    res.send(serveStatic('chat/static', {'index': ['chat.html']}));
-});*/
 httpApp.use('/', serveStatic('static', {'index': ['chat.html']}));
 
 var db, dbClient;
@@ -47,7 +41,7 @@ easyrtc.setOption("roomDefaultEnable", false);
 var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {    // pub is a public app object
     if (error){
         return console.log(error);
-	}
+    }
     var connect = pub.events.defaultListeners.connection;
     var disconnect = pub.events.defaultListeners.disconnect;
     var roomJoin = pub.events.defaultListeners.roomJoin;

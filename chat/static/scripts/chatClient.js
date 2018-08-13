@@ -598,6 +598,15 @@ angular.module("chat", [])
                 }, 2000);
             };
 
+            var getUserByUsername = function (username) {
+                $scope.userPool.forEach(key => {
+                    if (userPool[key].uname === username) {
+                        return userPool[key];
+                    }
+                });
+                return null;
+            };
+
             var getEasyrtcid = function () {
                 return easyrtcid;
             };
@@ -628,7 +637,8 @@ angular.module("chat", [])
                 sendCollectedFiles: sendCollectedFiles,
                 getFilesToSend: getFilesToSend,
                 updateTypingStatus: updateTypingStatus,
-                clearFilesToSend: clearFilesToSend
+                clearFilesToSend: clearFilesToSend,
+                getUserByUsername: getUserByUsername
             }
         })();
 

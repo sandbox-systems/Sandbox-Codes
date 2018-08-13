@@ -159,7 +159,7 @@
                                     <span ng-if="!createRoomFormMemberNames.includes(friend.name)">
                                         <span ng-click="addCreateRoomFormMember(friend)"
                                               id="createRoomFormFriendsListItemContent">
-                                            <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{friend.name}}">
+                                            <img ng-src="{{friend.profilepic}}">
                                             &nbsp;{{friend.name}}
                                         </span>
                                     </span>
@@ -232,7 +232,7 @@
                         <span class="row">
                             <span class="col-3">
                                 <img ng-if="room.members.length === 1"
-                                     ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{room.members[0].name}}">
+                                     ng-src="{{room.members[0].profilepic}}">
                                 <img ng-if="room.members.length !== 1" width="64" height="64" src="img/group.png">
                             </span>&nbsp;
                             <span class="col-5">
@@ -276,7 +276,7 @@
                             </span>
                             <span class="row" ng-if="!chat.startsWith(user.uname)">
                                 <div class="col-xl-1">
-                                    <img class="chatProfilePic" ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{chat.split(' ')[1] + '+' + chat.substr(0, chat.indexOf(':')).split(' ')[chat.substr(0, chat.indexOf(':')).split(' ').length - 1]}}"/>
+                                    <img class="chatProfilePic" ng-src="chatClient.getUserByUsername(chat.split(' ')[0]).profilepic"/>
                                 </div>
                                 <div class="col-xl-6">
                                     <div>

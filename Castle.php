@@ -24,6 +24,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.19/angular-ui-router.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sweetalert/1.1.2/SweetAlert.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <!--TODO Is this needed?-->
@@ -170,7 +171,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
             <img src="<?php echo $user->profilepic ?>" alt="PIC" class="image">
         </div>
     </a>
-    <a style="background-color: mediumpurple;color:white" href="https://sandboxcodes.com/index.html">Main Site</a>
+    <a style="background-color: mediumpurple;color:white" href="https://sandboxcodes.com/main">Main Site</a>
     <a ui-sref="settings">Settings</a>
     <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
     <a style="background-color: mediumpurple;color:white" href="http://sandboxcodes.com/Login.html">Logout</a>

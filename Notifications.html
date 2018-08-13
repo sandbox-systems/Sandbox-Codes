@@ -187,8 +187,8 @@
             <div id="notificationsTitle">
                 <span>NOTIFICATIONS</span>
             </div>
-            <div id="notificationsTrash">
-                <span><button id="notificationsTrashBtn" onclick="document.getElementById('notifications').innerHTML=''"><i class="fas fa-trash fa-2x"></i></button></span>
+            <div id="notificationsTrash" ng-if="notifications.length > 0">
+                <span><button id="notificationsTrashBtn" ng-click="clearAllNotifications()"><i class="fas fa-trash fa-2x"></i></button></span>
             </div>
         </div>
         <div id="notifications">

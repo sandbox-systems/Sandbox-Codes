@@ -73,26 +73,29 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     .chip {
         display: inline-block;
         padding: 0 25px;
-        height: 50px;
+        height: 40px;
         font-size: 0px;
         width: 0%;
-        line-height: 50px;
+        line-height: 40px;
         border-radius: 25px;
         background-color: mediumpurple;
-        transition: width 0.8s;
+        transition: width 0.5s;
     }
-    .chip:hover{
-        width: 100%;
+
+    .chip:hover {
+        width: 40%;
         font-size: 16px;
     }
+
     .chip img {
         float: left;
         margin: 0 10px 0 -25px;
-        height: 50px;
-        width: 50px;
+        height: 40px;
+        width: 40px;
         border-radius: 50%;
         object-fit: cover;
     }
+
 </style>
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
@@ -234,13 +237,19 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             <button class="rightButton dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                         class="fas fa-users"></span></a>
-                <ul class="dropdown-menu">
-                    <li><div class="chip">
-                                <img src="images/Arya.jpg" alt="Person" width="96" height="96">
-                                John Doe
-                            </div></li>
+                <ul class="dropdown-menu animated bounceIn"
+                    style="left:0;background-color: transparent;border: none;box-shadow: none">
+                    <li>
+                        <div class="chip">
+                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="chip">
+                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">
+                        </div>
+                    </li>
                 </ul>
-
             </button>
             <button class="rightButton" onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
         </div>

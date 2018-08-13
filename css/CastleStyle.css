@@ -161,7 +161,7 @@
     bottom:-18%;
 }
 .sidenav {
-    background-color: rgba(125, 80, 150, 0.925);
+    background-color: whitesmoke;
     height: 100%;
     width: 0;
     position: fixed;
@@ -270,9 +270,8 @@ border-radius: 10px 10px 10px 10px;
 .milk{
     position: absolute;
     filter: opacity(65%);
-    top: 75vh;
+    top: 73vh;
     width: 80%;
-    height: 22%;
     left: 10.5%;
 }
 .sbx-custom {

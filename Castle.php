@@ -54,6 +54,95 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         margin: 0 !important;
     }
 
+#preloader {
+  background-color:rgba(255,255,255,0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999999999;
+}
+
+#loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #9370DB;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+#loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #BA55D3;
+  -webkit-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
+}
+
+#loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #FF00FF;
+  -webkit-animation: spin 1.5s linear infinite;
+  animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+    #notificationsSidebarBtn {
+        text-decoration: none;
+    }
+
+    #notificationsSidebarBtn > sup {
+        position: absolute;
+        color: white;
+        min-width: 20px;
+        border-radius: 50%;
+        line-height: 20px;
+        padding: 2px 4px 2px 4px !important;
+        right: 8px;
+        background: #dc3545;
+    }
+
     .searchoptions {
         position: relative;
         width: 90%;
@@ -111,8 +200,10 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
             <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"><title>Luau</title></i></a></td>
         </tr>
         <tr>
-            <td id="notificationsBtn"><a ui-sref="notifications"><i id="notificationsIcon" class="fas fa-bell fa-2x"><title>Notifications</title></i>
-                <sup><?php echo $unreadNotifs ?></sup>
+            <td id="notificationsBtn"><a id="notificationsSidebarBtn" ui-sref="notifications"><i id="notificationsIcon" class="fas fa-bell fa-2x"><title>Notifications</title></i>
+                <?php if ($unreadNotifs > 0) { ?>
+                    <sup><?php echo $unreadNotifs ?></sup>
+                <?php } ?>
                 </a></td>
         </tr>
         <tr>
@@ -164,14 +255,22 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     </div>
 </div>
 </body>
+<div id="preloader">
+    <div id="loader"></div>
+</div>
 <script>
+    function showPreloader () {
+        $('#preloader').show();
+    }
+
+    function hidePreloader () {
+        $('#preloader').fadeOut();
+    }
+
     $(function() {
-        let notificationsIcon = $('#notificationsIcon');
-        notificationsIcon.addClass('animated shake');
-        $('#notificationsBtn').hover(function() {
-//            notificationsIcon.removeClass('animated tada');
-            notificationsIcon.addClass('animated shake');
-        });
+        <?php if ($unreadNotifs > 0) { ?>
+            $('#notificationsSidebarBtn').addClass('animated shake');
+        <?php } ?>
     });
 
     function openNav() {

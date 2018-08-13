@@ -207,6 +207,11 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
 </div>
 </body>
 <script>
+    showPreloader();
+    $(function () {
+        setTimeout(hidePreloader, 500);
+    });
+
     var passwordB = true;
     var newProfilepic = null;
 

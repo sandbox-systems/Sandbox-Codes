@@ -16,6 +16,11 @@
 <iframe></iframe>
 
 <script>
+    showPreloader();
+    $(function() {
+        setTimeout(hidePreloader, 1000);
+    });
+
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
         name = name.replace(/[\[\]]/g, '\\$&');

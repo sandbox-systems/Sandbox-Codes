@@ -65,7 +65,6 @@ castle.controller('BlankCtrl', function () {
 castle.controller('playgroundCtrl', playgroundCtrl);
 
 castle.controller('settingsCtrl', function ($scope, $stateParams) {
-console.log($stateParams);
     if ($stateParams.unsynced) {
         swal("Hey!", "Please sync into Github", "info");
     }

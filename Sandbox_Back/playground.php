@@ -334,6 +334,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     </div>
 
     <script>
+        $('.modal').click(function(event){
+            var container = $('.modal');
+            if(container.is(event.target)){
+                document.getElementById('commitModal').style.display = 'none';
+                document.getElementById('entryModal').style.display = 'none';
+            }
+        });
         chooseRepo();
         function openNoteNav() {
             document.getElementById("notenavv").style.width = "250px";

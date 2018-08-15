@@ -663,7 +663,7 @@ header a {
   height: 100%;
   text-align: center;
   display: table;
-  padding: 0 1em;
+  padding: 0;
   -webkit-transition: all .3s ease;
   -o-transition: all .3s ease;
   transition: all .3s ease;

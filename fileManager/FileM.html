@@ -531,67 +531,84 @@
         }
         return temp;
     }
+            function addExtension(filer){
+                var name = filer;
+                var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+                var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+                for(var  i =0; i < array.length;i++){
+                    if(document.getElementById("filechoose").value === actual[i]){
+                        filer += array[i];
+                        return filer;
+                    }
+                }
+                return null;
+            }
 
-    function closeModal() {
-        var modal = document.getElementById('myModal');
-        modal.style.display = "none";
-    }
+            function closeModal() {
+                var modal = document.getElementById('myModal');
+                modal.style.display = "none";
+            }
 
-    let localRepoData = {};
+            var localRepoData = {};
 
-    function setLocalRepoData(data) {
-        localRepoData = data;
-    }
+            function setLocalRepoData(data) {
+                localRepoData = data;
+            }
 
-    function openModal(name) {
-        var modal = document.getElementById(name);
-        modal.style.display = "block";
-        if (name === "commitModal") {
-            $.ajax({
-                type: "POST",
-                url: 'fileManager/requests/getLocalChanges.php',
-                data: {
-                    owner: localRepoData.owner,
-                    repo: localRepoData.repo,
-                    branch: localRepoData.branch
-                },
-                success: function (data, status, xhttp) {
-                    $('#changesList').empty();
-                    let changesList = document.getElementById('changesList');
-                    data.forEach(datum => {
-                        let li = document.createElement('LI');
-                        let additions = document.createElement('SPAN');
-                        additions.innerText = '+' + datum.additions + ' ';
-                        additions.style.color = "#28a745";
-                        let deletions = document.createElement('SPAN');
-                        deletions.innerText = '-' + datum.deletions + '  ';
-                        deletions.style.color = "#dc3545";
-                        let name = document.createElement('SPAN');
-                        name.innerText = datum.name;
-                        li.appendChild(additions);
-                        li.appendChild(deletions);
-                        li.appendChild(name);
-                        changesList.appendChild(li);
+            function openModal(name) {
+                var modal = document.getElementById(name);
+                modal.style.display = "block";
+                if (name === "commitModal") {
+                    $.ajax({
+                        type: "POST",
+                        url: 'fileManager/requests/getLocalChanges.php',
+                        data: {
+                            owner: localRepoData.owner,
+                            repo: localRepoData.repo,
+                            branch: localRepoData.branch
+                        },
+                        success: function (data, status, xhttp) {
+                            $('#changesList').empty();
+                            let changesList = document.getElementById('changesList');
+                            data.forEach(datum => {
+                                let li = document.createElement('LI');
+                                let additions = document.createElement('SPAN');
+                                additions.innerText = '+' + datum.additions + ' ';
+                                additions.style.color = "#28a745";
+                                let deletions = document.createElement('SPAN');
+                                deletions.innerText = '-' + datum.deletions + '  ';
+                                deletions.style.color = "#dc3545";
+                                let name = document.createElement('SPAN');
+                                name.innerText = datum.name;
+                                li.appendChild(additions);
+                                li.appendChild(deletions);
+                                li.appendChild(name);
+                                changesList.appendChild(li);
+                            });
+                        },
+                        dataType: 'json'
                     });
-                },
-                dataType: 'json'
-            });
-        }
-    }
+                }
+            }
 
-    let fetchFileContents;
+            var fetchFileContents;
 
-    function setFetchFileContents(func) {
-        fetchFileContents = func;
-    }
+            function setFetchFileContents(func) {
+                fetchFileContents = func;
+            }
 
-    function addFile(name, onclick, sha, path) {
-        var node = document.createElement("LI");
-        var link = document.createElement("A");
-        var icon = document.createElement("I");
-        var namer = document.createElement("LABEL");
-        namer.innerHTML = name;
-        namer.style.textAlign = "center";
+            function addFile(name, onclick, sha, path) {
+                var node = document.createElement("LI");
+                var link = document.createElement("A");
+                var icon = document.createElement("I");
+                var namer = document.createElement("LABEL");
+                if(typeUpdater(name) === ""){
+                    namer.innerHTML = addExtension(name);
+
+                }else{
+                    namer.innerHTML = name;
+                }
+                namer.style.textAlign = "center";
         var temp = "file";
         temp += counter;
         node.id = temp;

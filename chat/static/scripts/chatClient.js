@@ -1,3 +1,18 @@
+var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function formatDate(month, date, hour, minute) {
+    var fHour = hour % 12;
+    var meridiem = hour > 12 ? "PM" : "AM";
+    var fMinute = minute < 10 ? "0" + minute : minute;
+    return months[month] + " " + date + ", " + fHour + ":" + fMinute + " " + meridiem;
+}
+
+function getUTCTimeNow() {
+    var now = new Date();
+    var timestamp = formatDate(now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes());
+    return timestamp;
+}
+
 angular.module("chat", [])
     .directive("selectNgFiles", function () {
         return {
@@ -29,6 +44,20 @@ angular.module("chat", [])
             return (str.length > n) ? str.substr(0, n) + '...' : str;
         };
 
+        $scope.formatGroupTextSub = function (chats) {
+            if (chats.length === 0)
+                return "";
+            var last = chats[chats.length - 1];
+            var name = last.from.name === $scope.user.name ? "You" : last.from.name;
+            var text = name + ": ";
+            if (last.type === "message") {
+                text += last.message;
+            } else {
+                text += last.name;
+            }
+            return $scope.trunc(text, 20);
+        }
+
         $scope.typeof = function (variable) {
             return typeof variable;
         };
@@ -51,6 +80,12 @@ angular.module("chat", [])
             let possExts = ['java', 'cpp', 'py', 'js', 'html', 'css', 'rb', 'cs', 'c', 'swift', 'h', 'm', 'r'];
             return possExts.includes(ext);
         };
+
+        $scope.getLocalTimeNow = function (UTC) {
+            var savedTime = new Date(UTC + " UTC");
+            var time = formatDate(savedTime.getMonth(), savedTime.getDate(), savedTime.getHours(), savedTime.getMinutes());
+            return time;
+        }
 
         $scope.chatClient = (function () {
             function getParameterByName(name, url) {
@@ -96,7 +131,9 @@ angular.module("chat", [])
             };
 
             var fileReceiveHandler = function (from, blob, filename, clientData) {
-                addChatToRoomByID(clientData.room, new SentFile(clientData.fromName, clientData.fromUname, filename, blob));
+                addChatToRoomByID(clientData.room, clientData.fromUname, "file",
+                    new SentFile(getUserByUsername(clientData.fromUname), filename, blob, clientData.timestamp),
+                    clientData.timestamp);
             };
 
             var fileCollectionHandler = function (files) {
@@ -114,14 +151,21 @@ angular.module("chat", [])
             var sendCollectedFiles = function () {
                 var roomID = $scope.chatRoom.getSelectedRoom().id;
                 var keys = Object.keys(fileSenders[roomID]);
+                var timestamp = getUTCTimeNow();
                 for (var i = 0; i < keys.length; i++) {
-                    fileSenders[roomID][keys[i]].sendFiles($scope.filesToSend, $scope.user, roomID);
+                    fileSenders[roomID][keys[i]].sendFiles($scope.filesToSend, $scope.user, roomID, timestamp);
                 }
                 Object.keys($scope.filesToSend).forEach(function (key) {
                     var file = $scope.filesToSend[key];
                     var blob = file.slice();
-                    var sentFile = new SentFile($scope.user.name, $scope.user.uname, file.name, blob, file.type);
-                    addChatToRoomByID(roomID, sentFile);
+                    var sentFile = {
+                        fromUname: $scope.user.uname,
+                        name: file.name,
+                        blob: blob,
+                        type: file.type,
+                        timestamp: timestamp
+                    };
+                    addChatToRoomByID(roomID, sentFile.fromUname, "file", sentFile, timestamp);
                     easyrtc.sendServerMessage('fileMsgDB', {
                         roomID: roomID,
                         file: sentFile
@@ -202,10 +246,13 @@ angular.module("chat", [])
                 for (var i = 0; i < roomData.length; i++) {
                     var datum = roomData[i];
                     for (var c = 0; c < datum.chats.length; c++) {
-                        if (typeof datum.chats[c] === "object") {
+                        if (datum.chats[c].type !== "message") {
                             datum.chats[c].blob = base64_to_blob(datum.chats[c].blob);
-                            datum.chats[c] = new SentFile(datum.chats[c].fromName, datum.chats[c].fromUname,
-                                datum.chats[c].name, datum.chats[c].blob, datum.chats[c].type);
+                            datum.chats[c] = new SentFile(getUserByUsername(datum.chats[c].fromUname),
+                                datum.chats[c].name, datum.chats[c].blob, datum.chats[c].timestamp, datum.chats[c].type);
+                        } else if (datum.chats[c].type === "message") {
+                            datum.chats[c] = new ChatMessage(getUserByUsername(datum.chats[c].fromUname),
+                                datum.chats[c].message, datum.chats[c].timestamp);
                         }
                     }
                     var room = new Room(datum.id, datum.name, datum.chats);
@@ -226,7 +273,6 @@ angular.module("chat", [])
                     });
                     easyrtc.joinRoom(datum.id, null, callbacks.joinRoomSuccess, callbacks.roomFailure);
                 }
-                console.log(defaultRoom);
                 if (defaultRoom !== null) {
                     for (let r = 0; r < $scope.rooms.length; r++) {
                         if ($scope.rooms[r].name === decodeURI(defaultRoom)) {
@@ -489,13 +535,18 @@ angular.module("chat", [])
                 });
             };
 
-            var addChatToRoomByIndex = function (roomIndex, chat) {
-                $scope.rooms[roomIndex].addChat(chat);
+            var addChatToRoomByIndex = function (roomIndex, fromUname, chat, timestamp) {
+                $scope.rooms[roomIndex].addChat(new ChatMessage(getUserByUsername(fromUname), chat, timestamp));
                 $scope.chatRoom.scrollToBottom();
             };
 
-            var addChatToRoomByID = function (roomID, chat) {
-                getRoomByID(roomID).addChat(chat);
+            var addChatToRoomByID = function (roomID, fromUname, type, chat, timestamp) {
+                if (type === "message") {
+                    getRoomByID(roomID).addChat(new ChatMessage(getUserByUsername(fromUname), chat, timestamp));
+                } else {
+                    getRoomByID(roomID).addChat(new SentFile(getUserByUsername(fromUname),
+                                chat.name, chat.blob, timestamp, chat.type));
+                }
                 if (!$scope.chatRoom.isARoomSelected() || roomID !== $scope.chatRoom.getSelectedRoom().id) {
                     easyrtc.sendServerMessage('incUnread', {
                         roomID: roomID,
@@ -599,12 +650,14 @@ angular.module("chat", [])
             };
 
             var getUserByUsername = function (username) {
-                $scope.userPool.forEach(key => {
+                let user = $scope.user;
+                Object.keys(userPool).forEach(key => {
                     if (userPool[key].uname === username) {
-                        return userPool[key];
+                        user = userPool[key];
+                        return;
                     }
                 });
-                return null;
+                return user;
             };
 
             var getEasyrtcid = function () {
@@ -644,35 +697,43 @@ angular.module("chat", [])
 
         $scope.chatRoom = (function () {
             var scrollToBottom = function () {
+                // Wait for chats to be updated
                 $timeout(function () {
                     let log = $("#chat");
                     log.scrollTop(log.prop("scrollHeight"));
                 });
             };
 
-            var addChatToCurRoom = function (uname, name, msg) {
-                $scope.chatClient.addChatToRoomByIndex($scope.selRoomIndex, uname + " " + name + ": " + msg);
+            var addChatToCurRoom = function (msg) {
+                $scope.chatClient.addChatToRoomByIndex($scope.selRoomIndex, msg.fromUname, msg.message, msg.timestamp);
                 scrollToBottom();
             };
 
-            var addChatByID = function (roomID, uname, name, msg) {
-                $scope.chatClient.addChatToRoomByID(roomID, uname + " " + name + ": " + msg);
+            var addChatByID = function (roomID, msg) {
+                $scope.chatClient.addChatToRoomByID(roomID, msg.fromUname, "message", msg.message, msg.timestamp);
                 scrollToBottom();
             };
 
             var handleChat = function (sender, msgType, msgData) {
-                addChatByID(msgData.roomID, msgData.senderUname, msgData.senderName, msgData.msg);
+                addChatByID(msgData.roomID, {fromUname: msgData.senderUname, message: msgData.msg.message,
+                    timestamp: msgData.msg.timestamp});
             };
 
             var sendChat = function (msg) {
                 var uname = $scope.chatClient.getClientUser().uname;
-                var name = $scope.chatClient.getClientUser().name;
-                addChatToCurRoom(uname, name, msg);
+                var timestamp = getUTCTimeNow();
+                var message = {
+                    type: "message",
+                    fromUname: uname,
+                    message: msg,
+                    timestamp: timestamp
+                };
+                addChatToCurRoom(message);
                 easyrtc.sendServerMessage('chatMessageDB', {
                     roomID: getSelectedRoom().id,
-                    chatMsg: uname + " " + name + ": " + msg
+                    chatMsg: message
                 }, callbacks.sendServerMsgSuccess, callbacks.failure);
-                sendData("chatMessage", msg);
+                sendData("chatMessage", {message: msg, timestamp: timestamp});
                 getSelectedRoom().members.forEach(member => {
                     var eidObj = easyrtc.usernameToIds(member.uname)[0];
                     if (eidObj === undefined) {

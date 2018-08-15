@@ -29,12 +29,14 @@ treasury.controller('projectsController', function ($scope, $http, $state) {
     setCurBranchName("Select Branch");
     setIsViewingInsideRepo(false);
 
+    $('#preloader').fadeIn();
     $http({
         url: "fileManager/requests/getProjects.php",
         data: $.param({}),
         method: "post",
         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
+        hidePreloader();
         if (response.data === "UNSYNCED") {
             $state.go('settings', {unsynced: true});
         }
@@ -126,6 +128,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
         });
     });
 
+    $('#preloader').fadeIn();
     $http({
         url: "fileManager/requests/getProjectContents.php",
         data: $.param($scope.params),
@@ -133,6 +136,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
         $scope.contents = response.data;
+        hidePreloader();
     });
 
     $http({

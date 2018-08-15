@@ -65,7 +65,7 @@ angular.module("chat", [])
 
             var easyrtcid = "";
             var username = "";
-            var defaultRoom = getParameterByName('group');
+            var defaultRoom = getParameterByName('chatGroup');
             var userPool = {};
             var fileSenders = {};
             var fileSenderPool = {toRemove: {}};

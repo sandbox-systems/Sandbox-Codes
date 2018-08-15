@@ -136,6 +136,15 @@ function chooseRepo(){
             },
             dataType: "json",
             success: function(data){
+                if (data.length === 0) {
+                    $gstate.go('treasury.projects');
+                    swal({
+                        title: "Hey!",
+                        text: "You don't have any repositories under your account! Create a new repository to start coding!",
+                        type: "info"
+                    });
+                    return;
+                }
                 var y = {};
                 for(var i in data){
                     y[data[i].name+"לא"+data[i].owner] = data[i].name

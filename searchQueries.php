@@ -20,9 +20,7 @@ abstract class Types
 
 $input = $_POST['input'];
 $curUsername = $_SESSION['username'];
-//$curUsername = 'jdoe1';
 $userID = $_SESSION['object_id'];
-//$userID = '5b2acced5a1857e1fe988db0';
 
 /**
  * Search for a user given a search box input and determine whether he/she is a friend
@@ -52,7 +50,7 @@ function searchUser($man, $username, $userID, $inputUname, $shouldVerify) {
                     'name' => $doc->name,
                     'isFriend' => $userID == "" ? null : in_array($userID, $doc->friends)
                 );
-                if (userID != "") {
+                if ($userID != "") {
                     $foundUser['isRequested'] = count(getDocuments($man, "requests", ['$or' => array(['fromID' => (string) $doc->_id, 'to' => $userID], ['fromID' => $userID, 'to' => (string) $doc->_id])], [])) > 0;
                 }
                 if (isset($doc->GHUsername))
@@ -72,9 +70,9 @@ function searchUser($man, $username, $userID, $inputUname, $shouldVerify) {
  * @param $input
  * @return array
  */
-function searchRooms($man, $input) {
+function searchRooms($man, $userID, $input) {
     $encodedInput = preg_quote($input);
-    $filter = ['name' => ['$regex' => $encodedInput]];
+    $filter = ['name' => ['$regex' => $encodedInput], "members.$userID" => ['$exists' => True]];
     $query = new Query($filter, []);
     try {
         $docs = array();
@@ -137,8 +135,8 @@ if (preg_match($userOrFile, $input, $groups)) {
     if (isset($groups[2])) {
         echo json_encode(searchFile($client, $man, $curUsername, $groups[2], $groups[1]) + Types::File);
     } else {
-        echo json_encode(searchRooms($man, $groups[1]) + Types::Chatroom);
+        echo json_encode(searchRooms($man, $userID, $groups[1]) + Types::Chatroom);
     }
 } else {
-    echo json_encode(searchRooms($man, $input) + Types::Chatroom);
+    echo json_encode(searchRooms($man, $userID, $input) + Types::Chatroom);
 }

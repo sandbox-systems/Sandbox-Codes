@@ -24,6 +24,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.19/angular-ui-router.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sweetalert/1.1.2/SweetAlert.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <!--TODO Is this needed?-->
@@ -54,6 +55,95 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         margin: 0 !important;
     }
 
+#preloader {
+  background-color:rgba(255,255,255,0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999999999;
+}
+
+#loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #9370DB;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+#loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #BA55D3;
+  -webkit-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
+}
+
+#loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #FF00FF;
+  -webkit-animation: spin 1.5s linear infinite;
+  animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+    #notificationsSidebarBtn {
+        text-decoration: none;
+    }
+
+    #notificationsSidebarBtn > sup {
+        position: absolute;
+        color: white;
+        min-width: 20px;
+        border-radius: 50%;
+        line-height: 20px;
+        padding: 2px 4px 2px 4px !important;
+        right: 8px;
+        background: #dc3545;
+    }
+
     .searchoptions {
         position: relative;
         width: 90%;
@@ -81,7 +171,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
             <img src="<?php echo $user->profilepic ?>" alt="PIC" class="image">
         </div>
     </a>
-    <a style="background-color: mediumpurple;color:white" href="https://sandboxcodes.com/index.html">Main Site</a>
+    <a style="background-color: mediumpurple;color:white" href="https://sandboxcodes.com/main">Main Site</a>
     <a ui-sref="settings">Settings</a>
     <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
     <a style="background-color: mediumpurple;color:white" href="http://sandboxcodes.com/Login.html">Logout</a>
@@ -111,8 +201,10 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
             <td><a ui-sref="chat"><i class="fas fa-comments fa-2x"><title>Luau</title></i></a></td>
         </tr>
         <tr>
-            <td id="notificationsBtn"><a ui-sref="notifications"><i id="notificationsIcon" class="fas fa-bell fa-2x"><title>Notifications</title></i>
-                <sup><?php echo $unreadNotifs ?></sup>
+            <td id="notificationsBtn"><a id="notificationsSidebarBtn" ui-sref="notifications"><i id="notificationsIcon" class="fas fa-bell fa-2x"><title>Notifications</title></i>
+                <?php if ($unreadNotifs > 0) { ?>
+                    <sup><?php echo $unreadNotifs ?></sup>
+                <?php } ?>
                 </a></td>
         </tr>
         <tr>
@@ -138,7 +230,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         <div class="animated bounceInRight">
             <form novalidate="novalidate" id="covers" onsubmit="return false;" class="searchbox sbx-custom">
                 <div id="outputs" role="search" class="sbx-custom__wrapper">
-                    <input type="search" name="search" placeholder="@username or @username repository or chatname" id="sbxx" autocomplete="off"
+                    <input type="search" name="search" placeholder="@username or @username filename or chatname" id="sbxx" autocomplete="off"
                            required="required" class="sbx-custom__input">
                     <button type="submit" title="Submit your search query." class="sbx-custom__submit">
                         <svg role="img" aria-label="Search">
@@ -164,14 +256,24 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     </div>
 </div>
 </body>
+<div id="preloader">
+    <div id="loader"></div>
+</div>
 <script>
+    function showPreloader () {
+        $('#preloader').show();
+    }
+
+    function hidePreloader () {
+        $('#preloader').fadeOut();
+    }
+
     $(function() {
-        let notificationsIcon = $('#notificationsIcon');
-        notificationsIcon.addClass('animated shake');
-        $('#notificationsBtn').hover(function() {
-//            notificationsIcon.removeClass('animated tada');
-            notificationsIcon.addClass('animated shake');
-        });
+        <?php if ($unreadNotifs > 0) { ?>
+            setTimeout(function () {
+                $('#notificationsSidebarBtn').addClass('animated shake')
+            }, 1500);
+        <?php } ?>
     });
 
     function openNav() {
@@ -317,7 +419,6 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 
     $('#sbxx').on('input', function () {
         let val = $('#sbxx').val();
-        $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
         if (val !== "") {
             $.ajax({
                 type: "POST",
@@ -326,6 +427,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
                     input: val
                 },
                 success: function (res, status, jqXHR) {
+                    $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
                     if (res.hasOwnProperty('notsynced')) {
                         res.notsynced.forEach(result => {
                             addOutput(result === "" ? "Sync Github Account" : result + " hasn't synced his/her Github account yet", "error");

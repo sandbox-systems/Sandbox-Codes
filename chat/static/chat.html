@@ -228,51 +228,58 @@
 
     <frosted-glass-container class="container-fluid">
         <div class="row">
-            <div id="groupsBG" class="fixed-top w-25 fullH"></div>
-            <div id="groups" class="col-3 fullH container-fluid noPadding">
-                <div id="selfInfo">
-                    <img id="selfInfoImg" ng-src="{{user.profilepic}}">
-                    <br><br>
-                    <strong>{{user.name}}</strong>
-                    <br>
-                    @{{user.uname}}
-                </div>
-                <div id="searchBox" class="input-group">
-                    <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."
-                           aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">
-                    <div class="input-group-append">
-                        <button id="searchBoxBtn" class="btn btn-outline-light" type="button" data-toggle="modal"
-                                data-target="#createGroupModal">
-                            <span class="fas fa-plus"></span></button>
+<!--            <span data-toggle="collapse" href="#groupsSidebar" style="position: fixed; left: 20px; top: 20px; z-index: 3;">-->
+                <a class="btn btn-primary" data-toggle="collapse" href="#groupsSidebar" style="position: fixed; left: 20px; top: 20px; z-index: 9999999999;">SOMETHING</a>
+<!--            </span>-->
+            <div id="groupsSidebar" class="collapse" style="position: fixed; width: 100%; left: 0; top: 0; z-index: 9999999998;">
+                <div id="groupsBG" class="fixed-top fullH"></div>
+                <div id="groups" class="fullH container-fluid noPadding">
+                    <div id="selfInfo">
+                        <img id="selfInfoImg" ng-src="{{user.profilepic}}">
+                        <br><br>
+                        <strong>{{user.name}}</strong>
+                        <br>
+                        @{{user.uname}}
                     </div>
-                </div>
-                <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
-                    <button class="btn roomBtn"
-                            ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === rooms.indexOf(room) ? -1 : rooms.indexOf(room))"
-                            ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
-                        <span class="row">
-                            <span class="col-3">
-                                <img class="groupInfoImg" ng-if="room.members.length === 1"
-                                     ng-src="{{room.members[0].profilepic}}">
-                                <img ng-if="room.members.length !== 1" width="64" height="64" src="img/group.png">
-                            </span>&nbsp;
-                            <span class="col-5">
-                                <span class="groupText">
-                                    <strong>{{ room.name }}</strong>
-                                    <br>
-                                    <span class="groupTextSub">
-                                        {{ formatGroupTextSub(room.chats) }}
+                    <div id="searchBox" class="input-group">
+                        <input id="searchBoxInput" type="text" class="form-control" placeholder="Search..."
+                               aria-label="searchbox" aria-describedby="searchbox" ng-model="searchBoxQuery">
+                        <div class="input-group-append">
+                            <button id="searchBoxBtn" class="btn btn-outline-light" type="button" data-toggle="modal"
+                                    data-target="#createGroupModal">
+                                <span class="fas fa-plus"></span></button>
+                        </div>
+                    </div>
+                    <div ng-repeat="room in rooms | filter: searchBoxQuery track by $index">
+                        <button class="btn roomBtn"
+                                ng-click="chatRoom.changeRoom(chatRoom.getSelRoomIndex() === rooms.indexOf(room) ? -1 : rooms.indexOf(room))"
+                                ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
+<a data-toggle="collapse" href="#groupsSidebar">
+                            <span class="row">
+                                <span class="col-3">
+                                    <img class="groupInfoImg" ng-if="room.members.length === 1"
+                                         ng-src="{{room.members[0].profilepic}}">
+                                    <img ng-if="room.members.length !== 1" width="64" height="64" src="img/group.png">
+                                </span>&nbsp;
+                                <span class="col-5">
+                                    <span class="groupText">
+                                        <strong>{{ room.name }}</strong>
+                                        <br>
+                                        <span class="groupTextSub">
+                                            {{ formatGroupTextSub(room.chats) }}
+                                        </span>
                                     </span>
                                 </span>
+                                <span class="col-3" ng-if="room.unread > 0">
+                                    <span class="unreadCount badge badge-pill badge-danger float-right">{{room.unread}}</span>
+                                </span>
                             </span>
-                            <span class="col-3" ng-if="room.unread > 0">
-                                <span class="unreadCount badge badge-pill badge-danger float-right">{{room.unread}}</span>
-                            </span>
-                        </span>
-                    </button>
+</a>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div ng-class="chatRoom.isARoomSelected() ? '' : 'hidden'" id="chat" class="col-9 fullH container-fluid">
+            <div ng-class="chatRoom.isARoomSelected() ? '' : 'hidden'" id="chat" class="col-12 fullH container-fluid">
                 <div id="chatLog">
                     <div class="chatMsg" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
                         <span ng-if="chat.type === 'message'">
@@ -377,7 +384,7 @@
                         </span>
                     </div>
                 </div>
-                <div id="chatInput" class="row container-fluid offset-3 fixed-bottom noPadding">
+                <div id="chatInput" class="row container-fluid fixed-bottom noPadding">
                     <div id="attachBtnOverlay" class="col-1 text-center">
                     <span id="attachBtn" data-toggle="modal" data-target="#attachModal">
                         <span class="fas fa-paperclip"></span>
@@ -394,7 +401,7 @@
                                ng-click="chatRoom.sendChat(chatInputText)" onclick="$('#chatInputBox').val('')">
                     </div>
                 </div>
-                <div id="groupInfo" class="navbar text-dark offset-3 w-75 fixed-top">
+                <div id="groupInfo" class="navbar text-dark fixed-top">
                     <span id="groupSignature" class="float-left">
                         <span class="navbar-brand">
                             <span ng-if="chatRoom.getSelectedRoom().members.length === 1">
@@ -430,7 +437,7 @@
                 </span>
                 </div>
             </div>
-            <div ng-class="!chatRoom.isARoomSelected() ? '' : 'hidden'" id="chatOverlay" class="col-9 fullH">
+            <div ng-class="!chatRoom.isARoomSelected() ? '' : 'hidden'" id="chatOverlay" class="col-12 fullH">
                 <img src="img/Wallpaper.jpg">
                 <div id="noRoomSelectedTxt">
                     Select a group to start chatting

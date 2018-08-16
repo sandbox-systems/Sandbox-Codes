@@ -331,6 +331,7 @@ html, body {
     background: #8848aa;
     color: white;
     float: right;
+    max-width: calc(100% - 37px);
 }
 
 .ownChatBubble::after {
@@ -340,6 +341,37 @@ html, body {
     border-right: 0;
     margin-top: -10px;
     margin-right: -10px;
+}
+
+.ownChatEditMenu {
+    float: right;
+    margin-right: -15px;
+    top: -15px;
+    bottom: 15px;
+}
+
+.ownChatEditMenuFadeOut {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 300ms, opacity 300ms;
+    -webkit-transition: visibility 0s linear 300ms, opacity 300ms;
+    -moz-transition: visibility 0s linear 300ms, opacity 300ms;
+    -o-transition: visibility 0s linear 300ms, opacity 300ms;
+}
+
+.ownChatEditMenuFadeIn {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s linear 0ms, opacity 300ms;
+    -webkit-transition: visibility 0s linear 0ms, opacity 300ms;
+    -moz-transition: visibility 0s linear 0ms, opacity 300ms;
+    -o-transition: visibility 0s linear 0ms, opacity 300ms;
+}
+
+.ownChatEditMenuBtn {
+    font-size: 11px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .chatBubble {

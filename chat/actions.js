@@ -44,6 +44,7 @@ module.exports = {
             userData.name = user.name;
             userData.username = user.username;
             userData.profilepic = user.profilepic;
+            userData.ecode = user.ecode.toString();
 
             // Friend IDs must be cast to ObjectID objects to use in querying
             var friendIDs = module.exports.getObjectIDList(user.friends);

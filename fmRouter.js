@@ -97,6 +97,10 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
         branch: $scope.params.branch
     });
 
+    setOnRepoPlay(function() {
+        console.log("Sedxklcdx");
+    });
+
     setOnCreateFile(function (name) {
         $http({
             url: "fileManager/requests/createFile.php",

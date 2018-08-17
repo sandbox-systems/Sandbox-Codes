@@ -75,7 +75,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
     };
 
     setCurBranchName($scope.params.branch);
-    updateBreadCrumbs("Castle.php#!/treasury/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
+    updateBreadCrumbs("treasury/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
         $scope.params.branch, $scope.params.path, $scope.params.repo);
 
     setCurPath("owners/" + $scope.params.owner + "/repos/" + $scope.params.repo + "/branches/" +

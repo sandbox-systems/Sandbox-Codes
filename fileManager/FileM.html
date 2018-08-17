@@ -317,9 +317,9 @@
     </div>
 </div>
 <div id="cssmenu">
-    <!--<ul id="cssmenuList">
-        <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
-    </ul>-->
+    <ul id="cssmenuList">
+        <li id="cssmenuListHome"><a href="treasury/"><i class="fa fa-home"></i> Home</a></li>
+    </ul>
 </div>
 <script>
     var onRepoPlay;
@@ -712,7 +712,7 @@
         let dropdown = $('#branchesDropdown');
         let link = $('<a>');
         link.text(name);
-        link.attr('href', 'Castle.php#!/treasury/' + href);
+        link.attr('href', 'treasury/' + href);
         link.click(onclick);
         link.appendTo(dropdown);
         $('</br>').appendTo(dropdown);
@@ -730,7 +730,7 @@
     }
 
     function updateBreadCrumbs(prePath, path, repo) {
-        /*let list = $('#cssmenuList');
+        let list = $('#cssmenuList');
         list.find('li').not($('#cssmenuListHome')).remove();
         list.prepend('<li><a href="' + prePath + '">' + repo + '</a></li>');
         path.split('/').forEach(comp => {
@@ -739,7 +739,7 @@
                 let href = prePath + (newPath === "" ? "" : "/") + newPath;
                 list.prepend('<li><a href="' + href + '">' + comp + '</a></li>');
             }
-        });*/
+        });
     }
 </script>
 <script>

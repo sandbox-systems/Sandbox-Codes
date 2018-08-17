@@ -344,9 +344,11 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         showPreloader();
         $(function() {
             setTimeout(hidePreloader, 500);
+
+            if (!/[?&]repo=/.test(window.location.href))
+                chooseRepo();
         });
 
-        chooseRepo();
         function openNoteNav() {
             document.getElementById("notenavv").style.width = "250px";
             //document.getElementById("main").style.marginLeft = "250px";

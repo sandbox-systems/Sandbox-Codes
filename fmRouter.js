@@ -62,7 +62,7 @@ treasury.controller('syncController', function ($scope) {
     clearFileList();
 });
 
-treasury.controller('projectController', function ($scope, $stateParams, $http) {
+treasury.controller('projectController', function ($scope, $stateParams, $http, $state) {
     clearFileList();
     clearBranches();
     setIsViewingInsideRepo(true);
@@ -98,7 +98,7 @@ treasury.controller('projectController', function ($scope, $stateParams, $http) 
     });
 
     setOnRepoPlay(function() {
-        console.log("Sedxklcdx");
+        $state.go('playground', {repo: $scope.params.owner + "/" + $scope.params.repo});
     });
 
     setOnCreateFile(function (name) {

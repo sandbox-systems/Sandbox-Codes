@@ -2,7 +2,7 @@ var months = ["January", "February", "March", "April", "May", "June", "July", "A
 
 function formatDate(month, date, hour, minute) {
     var fHour = hour % 12;
-    var meridiem = hour > 12 ? "PM" : "AM";
+    var meridiem = hour >= 12 ? "PM" : "AM";
     var fMinute = minute < 10 ? "0" + minute : minute;
     return months[month] + " " + date + ", " + fHour + ":" + fMinute + " " + meridiem;
 }
@@ -35,9 +35,14 @@ angular.module("chat", [])
         $scope.createRoomFormMemberNames = [];
         $scope.createRoomFormMembers = [];
         $scope.modalMember = {};
+        $scope.chatToDeleteIndex = -1;
 
         $scope.setModalMember = function (member) {
             $scope.modalMember = member;
+        };
+
+        $scope.setChatToDeleteIndex = function (ind) {
+            $scope.chatToDeleteIndex = ind;
         };
 
         $scope.trunc = function (str, n) {
@@ -85,7 +90,21 @@ angular.module("chat", [])
             var savedTime = new Date(UTC + " UTC");
             var time = formatDate(savedTime.getMonth(), savedTime.getDate(), savedTime.getHours(), savedTime.getMinutes());
             return time;
-        }
+        };
+
+        $scope.setChildEditMenuDisplay = function (event, display) {
+            let elem = angular.element(event.srcElement || event.target);
+            let menu = angular.element(elem[0].nextElementSibling);
+            if (display === "visible") {
+                /*menu.addClass("ownChatEditMenuFadeIn");
+                menu.removeClass("ownChatEditMenuFadeOut");*/
+            } else {
+                if (!elem[0].classList.contains('btn')) {
+                    menu.addClass("ownChatEditMenuFadeOut");
+                    menu.removeClass("ownChatEditMenuFadeIn");
+                }
+            }
+        };
 
         $scope.chatClient = (function () {
             function getParameterByName(name, url) {
@@ -105,6 +124,7 @@ angular.module("chat", [])
             var fileSenders = {};
             var fileSenderPool = {toRemove: {}};
             var typingTimer = null;
+            var ecode = "";
 
             var connect = function () {
                 var match = document.cookie.match(new RegExp('(^| )5IJFbNgniGHUzVc1SuqWiSPokLMCN0CVOr=([^;]+)'));
@@ -216,6 +236,7 @@ angular.module("chat", [])
 
             var fillUser = function (userData) {
                 username = userData.username;
+                ecode = userData.ecode;
                 easyrtc.setUsername(username);
                 $scope.$apply(function () {
                     $scope.user.id = userData.id;
@@ -332,6 +353,10 @@ angular.module("chat", [])
             var peerListener = function (sender, msgType, msgData) {
                 if (msgType === "chatMessage") {
                     $scope.chatRoom.handleChat(sender, msgType, msgData);
+                } else if (msgType === "memberOnline") {
+                    $scope.$apply(function () {
+                        getUserByUsername(msgData.username).isOnline = true;
+                    });
                 } else if (msgType === "removeUser") {
                     removeMemberFromRoom(msgData.roomID, msgData.msg.memberID);
                 } else if (msgType === "addFriendAsMember") {
@@ -376,10 +401,11 @@ angular.module("chat", [])
             };
 
             var enableActiveUsers = function (eData, newToRemove) {
-                Object.keys(eData).forEach(function (roomID) {
+                Object.keys(eData).forEach(roomID => {
                     fileSenders[roomID] = {};
-                    Object.keys(eData[roomID]).forEach(function (eid) {
-                        if (eData[roomID][eid].username !== $scope.user.uname) {
+                    Object.keys(eData[roomID]).forEach(eid => {
+                        easyrtc.sendDataWS(eid, "memberOnline", {username: $scope.user.uname}, null);
+                        /*if (eData[roomID][eid].username !== $scope.user.uname) {
                             if (Object.keys(fileSenderPool.toRemove).includes(eid)) {
                                 delete fileSenderPool.toRemove[eid];
                             }
@@ -392,13 +418,17 @@ angular.module("chat", [])
                             }
                             newToRemove[eid].push(roomID);
                             setOnlineStatus(eData[roomID][eid].username, true);
-                        }
+                        }*/
                     });
                 });
             };
 
             var disableInactiveUsers = function () {
-                if (Object.keys(fileSenderPool.toRemove).length !== 0) {
+                Object.keys(userPool).forEach(key => {
+                    userPool[key].isOnline = false;
+                    userPool[key].isTyping = false;
+                });
+                /*if (Object.keys(fileSenderPool.toRemove).length !== 0) {
                     Object.keys(fileSenderPool.toRemove).forEach(function (eid) {
                         fileSenderPool.toRemove[eid].forEach(function (roomID) {
                             delete fileSenders[roomID][eid];
@@ -406,7 +436,7 @@ angular.module("chat", [])
                         setOnlineStatus(fileSenderPool[eid].uname, false);
                         delete fileSenderPool[eid];
                     });
-                }
+                }*/
             };
 
             var setOnlineStatus = function (uname, isOnline) {
@@ -745,6 +775,11 @@ angular.module("chat", [])
                 });
             };
 
+            var deleteChat = function (index) {
+console.log(index);
+                getSelectedRoom().chats.splice(index, 1);
+            };
+
             var removeUser = function (memberID) {
                 getSelectedRoom().removeMember(memberID);
                 easyrtc.sendServerMessage('removeUserDB', {
@@ -841,6 +876,7 @@ angular.module("chat", [])
                 scrollToBottom: scrollToBottom,
                 handleChat: handleChat,
                 sendChat: sendChat,
+                deleteChat: deleteChat,
                 getSelectedRoom: getSelectedRoom,
                 getSelRoomIndex: getSelRoomIndex,
                 isARoomSelected: isARoomSelected,
@@ -861,27 +897,27 @@ angular.module("chat", [])
 
 let callbacks = (function () {
     let connectSuccess = function (easyrtcid) {
-        console.log("User " + easyrtcid + " connected successfully")
+        // console.log("User " + easyrtcid + " connected successfully")
     };
 
     let sendServerMsgSuccess = function (msgType, msgData) {
-        console.log("Successfully sent msg to server")
+        // console.log("Successfully sent msg to server")
     };
 
     let joinRoomSuccess = function (roomName) {
-        console.log("Successfully joined " + roomName);
+        // console.log("Successfully joined " + roomName);
     };
 
     let leaveRoomSuccess = function (roomName) {
-        console.log("Successfully left " + roomName);
+        // console.log("Successfully left " + roomName);
     };
 
     let leaveRoomFailure = function (errorCode, errorText, roomName) {
-        easyrtc.showError(errorCode, errorText);
+        // easyrtc.showError(errorCode, errorText);
     };
 
     let failure = function (errorCode, errorText) {
-        easyrtc.showError(errorCode, errorText);
+        // easyrtc.showError(errorCode, errorText);
     };
 
     let fileReceiveAcceptReject = function (sender, filenamelist, wasAccepted) {

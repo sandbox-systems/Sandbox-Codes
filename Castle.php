@@ -15,8 +15,8 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 <!DOCTYPE html>
 <html ng-app="castle">
 <head>
-    <link rel="icon" href="images/purplelogo.svg">
-    <link rel="stylesheet" href="css/animate.css">
+    <link rel="icon" href="https://sandboxcodes.com/images/purplelogo.svg">
+    <link rel="stylesheet" href="https://sandboxcodes.com/css/animate.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -26,14 +26,14 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sweetalert/1.1.2/SweetAlert.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
-    <script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://sandboxcodes.com/Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <!--TODO Is this needed?-->
     <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
     <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
-    <script src="Sandbox_Back/playgroundCtrl.js"></script>
-    <script src="fmRouter.js"></script>
-    <script src="router.js"></script>
-    <link rel="stylesheet" href="css/CastleStyle.css">
+    <script src="https://sandboxcodes.com/Sandbox_Back/playgroundCtrl.js"></script>
+    <script src="https://sandboxcodes.com/fmRouter.js"></script>
+    <script src="https://sandboxcodes.com/router.js"></script>
+    <link rel="stylesheet" href="https://sandboxcodes.com/css/CastleStyle.css">
     <title>Sandbox</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,height=device-height"/>

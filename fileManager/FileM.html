@@ -4,12 +4,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
-    <link rel="stylesheet" href="../css/FileMM.css">
-    <link rel="stylesheet" href="../css/animate.css">
-    <link rel="stylesheet" href="fileManager/fileMan.css">
-	<script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
+    <link rel="stylesheet" href="https://sandboxcodes.com/css/FileMM.css">
+    <link rel="stylesheet" href="https://sandboxcodes.com/css/animate.css">
+    <link rel="stylesheet" href="https://sandboxcodes.com/fileManager/fileMan.css">
+	<script src="https://sandboxcodes.com/Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://sandboxcodes.com/Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <base href="/Castle.php/">
 </head>
 <body>
 <style>
@@ -48,7 +49,7 @@
 		<li id="repoDelete" class="contextMenuItem"> <span
                    class="fas fa-trash"></span> Delete</li>
         <li id="repoPlay" class="contextMenuItem"> <span
-                   class="fas fa-terminal"></span> Open In Playground</li>
+                   class="fas fa-terminal"></span> Open Repo In Playground</li>
     </div>
 	<div class="contextMenu" id="insidemenu">
 		<li id="fileInfo" class="contextMenuItem"> <span
@@ -79,7 +80,7 @@
                 <input id="displaycreated" type="date" class="infoname" readonly>
                 Last Modified<br>
                 <input id="displayedited" type="date" class="infoname" readonly>
-                <button class="goBtn" style="width:90%;background-color: mediumpurple;margin-top: 5%;padding: 4px">Open In Playground</button>
+                <button id="goToPlaygroundFromInfoBtn" class="goBtn" style="width:90%;background-color: mediumpurple;margin-top: 5%;padding: 4px">Open In Playground</button>
             </fieldset>
             <!--<fieldset>-->
             <!--Color<br>-->
@@ -317,11 +318,24 @@
     </div>
 </div>
 <div id="cssmenu">
-    <!--<ul id="cssmenuList">
-        <li id="cssmenuListHome"><a href="#/"><i class="fa fa-home"></i> Home</a></li>
-    </ul>-->
+    <ul id="cssmenuList">
+        <li id="cssmenuListHome"><a href="treasury/"><i class="fa fa-home"></i> Home</a></li>
+    </ul>
 </div>
 <script>
+    var onRepoPlay;
+
+    function setOnRepoPlay(func) {
+        onRepoPlay = func;
+    }
+
+    showPreloader();
+    $(function() {
+        setTimeout(hidePreloader, 500);
+        $('#repoPlay').click(onRepoPlay);
+        $('#goToPlaygroundFromInfoBtn').click(onRepoPlay);
+    });
+
 			ace.require("ace/ext/language_tools");
             var editor = ace.edit("editor");
             editor.setOptions({
@@ -715,7 +729,7 @@
         let dropdown = $('#branchesDropdown');
         let link = $('<a>');
         link.text(name);
-        link.attr('href', 'Castle.php#!/treasury/' + href);
+        link.attr('href', 'treasury/' + href);
         link.click(onclick);
         link.appendTo(dropdown);
         $('</br>').appendTo(dropdown);
@@ -733,7 +747,7 @@
     }
 
     function updateBreadCrumbs(prePath, path, repo) {
-        /*let list = $('#cssmenuList');
+        let list = $('#cssmenuList');
         list.find('li').not($('#cssmenuListHome')).remove();
         list.prepend('<li><a href="' + prePath + '">' + repo + '</a></li>');
         path.split('/').forEach(comp => {
@@ -742,7 +756,7 @@
                 let href = prePath + (newPath === "" ? "" : "/") + newPath;
                 list.prepend('<li><a href="' + href + '">' + comp + '</a></li>');
             }
-        });*/
+        });
     }
 </script>
 <script>

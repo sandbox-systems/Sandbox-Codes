@@ -3,18 +3,20 @@ var $gscope;
 var $ghttp;
 var $gsce;
 var $gstate;
+var $gstateParams;
 
 let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $stateParams) {
     $gscope = $scope;
     $ghttp = $http;
     $gsce = $sce;
     $gstate = $state;
+    $gstateParams = $stateParams;
     $scope.scan = "";
     if ($stateParams.repo !== undefined) {
         owner = $stateParams.repo.split("/")[0];
         repo = $stateParams.repo.split("/")[1];
+        scan($scope, $http, $sce, $state);
     }
-    //scan($scope, $http, $sce, $state);
     $.ajax({
         type: "POST",
         url: "Sandbox_Back/getUsername.php",

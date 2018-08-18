@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<link rel="icon" href="images/purplelogo.png">
+<link rel="icon" href="images/logo-king.png">
 <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 <link rel="stylesheet" href="css/animate.css">
@@ -157,14 +157,15 @@
     margin-top: 10px;
   }
 
-  #message p {
-    padding: 10px 35px;
-    font-size: 18px;
-  }
+    #message p {
+        padding: 10px 35px;
+        font-size: 18px;
+    }
 </style>
 <body>
 <img src="images/white-logo.png" id="backlogo">
 <div class="animated zoomIn">
+<<<<<<< HEAD
   <form id="regForm" action="">
     <div class="signuphead"><label style="color: rebeccapurple;">Join Sandbox!</label></div>
     <!-- One "tab" for each step in the form: -->
@@ -200,6 +201,43 @@
       <span class="step"></span>
     </div>
   </form>
+=======
+    <form id="regForm" action="">
+        <div class="signuphead"><label style="color: white;">Join Sandbox!</label></div>
+        <!-- One "tab" for each step in the form: -->
+        <div class="tab"><label class="labeler"style="color: white;">Name</label>
+            <p><input class="logintext" style="text-transform: capitalize" autocomplete="off" placeholder="First name..."  name="fname" id="fname"></p>
+            <p><input class="logintext" style="text-transform: capitalize" autocomplete="off"placeholder="Last name..."  name="lname" id="lname"></p>
+        </div>
+        <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Contact Info</label>
+            <p><input type="email" id="email" class="logintext" autocomplete="off" placeholder="E-mail..."  name="email"></p>
+        </div></div>
+        <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Login Info</label>
+            <p><input class="logintext"autocomplete="off"placeholder="Username..."  name="uname" id="uname"></p>
+            <p><input class="logintext"autocomplete="off"placeholder="Password..."  name="pword" id="psw" type="password"></p>
+            <p><input class="logintext"autocomplete="off"placeholder="Re-enter Password..."  name="rpword" id="rpsw" type="password"></p>
+            <div id="message" class="animated fadeIn">
+                <h3>Password must contain the following:</h3>
+                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                <p id="number" class="invalid">A <b>number</b></p>
+                <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+            </div>
+        </div></div>
+        <div style="overflow:auto;">
+            <div style="float:right;">
+                <button class="previous"type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                <button type="button"class="next" id="nextBtn" onclick="nextPrev(1)">Next</button>
+            </div>
+        </div>
+        <!-- Circles which indicates the steps of the form: -->
+        <div style="text-align:center;">
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+        </div>
+    </form>
+>>>>>>> origin/master
 </div>
 </body>
 <script>
@@ -356,7 +394,7 @@
     });
 
     $("#prevBtn").click(function(){
-       $("#nextBtn").prop("disabled", false);
+        $("#nextBtn").prop("disabled", false);
     });
 
     function submit_register(){

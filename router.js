@@ -39,6 +39,8 @@ let castle = angular.module('castle', ['castle.treasury', 'ui.router', 'ngSaniti
         let state = $injector.get("$state");
         if ($location.path() === "/treasury") {
             state.go('treasury.projects');
+        } else if ($location.path() === "/main") {
+            window.location = "https://sandboxcodes.com/";
         } else {
             state.go('home');
         }
@@ -65,7 +67,6 @@ castle.controller('BlankCtrl', function () {
 castle.controller('playgroundCtrl', playgroundCtrl);
 
 castle.controller('settingsCtrl', function ($scope, $stateParams) {
-console.log($stateParams);
     if ($stateParams.unsynced) {
         swal("Hey!", "Please sync into Github", "info");
     }
@@ -102,6 +103,32 @@ castle.controller('notificationsCtrl', function ($scope, $http) {
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;', 'Accept': 'application/json'}
         });
     }
+    $scope.clearAllNotifications = function () {
+/*        swal({
+            title: "Are you sure?",
+            text: "You're about to delete all your notifications forever!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                swal("All clear!", {
+                    icon: "success",
+                });*/
+                $scope.notifications = [];
+                $http({
+                    url: 'clearNotifications.php',
+                    data: {},
+                    method: "post",
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;', 'Accept': 'application/json'}
+                });
+/*            } else {
+                swal("Your notifications are safe!");
+            }
+        });*/
+    }
+
     $http({
         url: 'fetchNotifications.php',
         data: {},

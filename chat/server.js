@@ -100,10 +100,10 @@ var easyrtcServer = easyrtc.listen(httpApp, io, null, function (error, pub) {   
             queries.addChat(db, roomID, chatMsg);
         } else if (msg.msgType === "fileMsgDB") {
             roomID = msg.msgData.roomID;
-            var file = msg.msgData.file;
-            file.blob = Buffer.from(file.blob).toString('base64');
+            var chat = msg.msgData.file;
+            chat.blob = Buffer.from(chat.blob).toString('base64');
 
-            queries.addChat(db, roomID, file);
+            queries.addChat(db, roomID, chat);
         } else if (msg.msgType === "removeUserDB") {
             roomID = msg.msgData.roomID;
             memberID = msg.msgData.memberID;

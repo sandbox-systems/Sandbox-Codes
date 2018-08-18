@@ -4,7 +4,7 @@ var User = function (id, uname, name, profilepic) {
     this.name = name;
     this.isOnline = false;
     this.isTyping = false;
-    this.profilepic = "";
+    this.profilepic = profilepic;
 };
 
 var Room = function (id, name, chats) {
@@ -37,14 +37,21 @@ var Room = function (id, name, chats) {
     };
 };
 
-var SentFile = function (fromName, fromUname, name, blob, type) {
-    this.fromName = fromName;
-    this.fromUname = fromUname;
+var ChatMessage = function (from, message, timestamp) {
+    this.type = "message";
+    this.from = from;
+    this.message = message;
+    this.timestamp = timestamp;
+};
+
+var SentFile = function (from, name, blob, timestamp, type) {
+    this.from = from;
     this.name = name;
     this.blob = Object.prototype.toString.call(this.blob) === "[object ArrayBuffer]" ?
         new Blob([this.blob]) : blob;
     this.url = window.URL.createObjectURL(this.blob);
     this.type = type || blob.type;
+    this.timestamp = timestamp;
 
     this.download = function () {
         easyrtc_ft.saveAs(this.blob, this.name);
@@ -55,8 +62,8 @@ var FileSender = function (easyrtcid, uname) {
     this.fileSender = easyrtc_ft.buildFileSender(easyrtcid, null, null);
     this.uname = uname;
 
-    this.sendFiles = function (files, from, roomID) {
+    this.sendFiles = function (files, from, roomID, timestamp) {
         console.log(easyrtcid);
-        this.fileSender(files, true, {fromUname: from.uname, fromName: from.name, room: roomID});   // Assumes binary
+        this.fileSender(files, true, {fromUname: from.uname, fromName: from.name, room: roomID, timestamp: timestamp});   // Assumes binary
     };
 };

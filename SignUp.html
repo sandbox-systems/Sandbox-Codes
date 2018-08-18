@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="css/animate.css">
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<title>Sandbox</title>
 <style>
   html{
     background-image: url(images/blur.jpg);
@@ -13,18 +14,17 @@
     font-family: "Lato";
   }
   .logintext {
-    width: 95%;
+    width: 80%;
     padding: 15px;
     margin: 5px 0 22px 0;
     display: inline-block;
-    border: none;
-    background: rgba(0,0,0,0.1);
-    border-radius: 10px;
+    background: whitesmoke;
+    border-bottom: 2px solid gray;
   }
   /* Add a background color when the inputs get focus */
   .logintext:focus {
     outline: none;
-    border: solid 2px mediumpurple;
+    border-bottom: solid 2px mediumpurple;
   }
   /* Set a style for all buttons */
   .loginbutton:hover {
@@ -77,12 +77,12 @@
     background-color: #ffdddd;
   }
   #regForm {
-    background-color: rgba(0,0,0,0.2);
-    border-radius: 30px;
+    background-color: rgba(245,245,245,0.85);
     margin: 100px auto;
     font-family: Lato;
-    padding: 40px;
-    width: 70%;
+    padding: 30px;
+    width: 30%;
+    text-align: center;
     min-width: 300px;
   }
   /* Mark the steps that are finished and valid: */
@@ -92,17 +92,17 @@
   input, button {
     outline: none;
     border: none;
-    color: white;
+    color: rebeccapurple;
   }
   #prevBtn {
     position: relative;
-    width: 100%;
+    width: 48%;
     padding: 5px;
     height: 2%;
     color: white;
-    background: #FF3366;
-    font-size: 1.5rem;
-    border-radius: 3rem;
+    background: #dc3545;
+    font-size: 1.35rem;
+    border-radius: 5px;
     cursor: pointer;
     overflow: visible;
     margin-bottom: 10px;
@@ -111,13 +111,13 @@
   }
   #nextBtn {
     position: relative;
-    width: 100%;
+    width: 48%;
     padding: 5px;
     height: 2%;
     color: white;
-    background: mediumseagreen;
-    font-size: 1.5rem;
-    border-radius: 3rem;
+    background: #28a745;
+    font-size: 1.35rem;
+    border-radius: 5px;
     cursor: pointer;
     overflow:visible;
     -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
@@ -166,16 +166,16 @@
 <img src="images/white-logo.png" id="backlogo">
 <div class="animated zoomIn">
   <form id="regForm" action="">
-    <div class="signuphead"><label style="color: white;">Register:</label></div>
+    <div class="signuphead"><label style="color: rebeccapurple;">Join Sandbox!</label></div>
     <!-- One "tab" for each step in the form: -->
-    <div class="tab"><label class="labeler"style="color: white;">Name:</label>
+    <div class="tab"><label class="labeler"style="color: mediumpurple;">Name:</label>
       <p><input class="logintext" style="text-transform: capitalize" autocomplete="off" placeholder="First name..."  name="fname" id="fname"></p>
       <p><input class="logintext" style="text-transform: capitalize" autocomplete="off"placeholder="Last name..."  name="lname" id="lname"></p>
     </div>
-    <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Contact Info:</label>
+    <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: mediumpurple;">Contact Info:</label>
       <p><input type="email" id="email" class="logintext" autocomplete="off" placeholder="E-mail..."  name="email"></p>
     </div></div>
-    <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Login Info:</label>
+    <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: mediumpurple;">Login Info:</label>
       <p><input class="logintext"autocomplete="off"placeholder="Username..."  name="uname" id="uname"></p>
       <p><input class="logintext"autocomplete="off"placeholder="Password..."  name="pword" id="psw" type="password"></p>
       <p><input class="logintext"autocomplete="off"placeholder="Re-enter Password..."  name="rpword" id="rpsw" type="password"></p>
@@ -188,7 +188,7 @@
       </div>
     </div></div>
     <div style="overflow:auto;">
-      <div style="float:right;">
+      <div>
         <button class="previous"type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
         <button type="button"class="next" id="nextBtn" onclick="nextPrev(1)">Next</button>
       </div>

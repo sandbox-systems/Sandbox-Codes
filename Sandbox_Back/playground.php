@@ -103,6 +103,10 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <a href="javascript:void(0)" style="float:right;" class="closebtn" onclick="closeNoteNav()">&times;</a>
     <textarea id="notesContent"><?php echo $notes ?></textarea>
 </div>
+<div id="chatNav" class="notenav">
+    <a href="javascript:void(0)" style="float:right;" class="closebtn" onclick="closeNoteNav()">&times;</a>
+    <iframe src="localhost:9000" style="width:100%;height:100%"></iframe>
+</div>
 
 <div id="commitModal" class="modal">
     <div class="modal-content">
@@ -251,6 +255,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     </li>
                 </ul>
             </button>
+<!--            <button class="rightButton" onclick="openChatNav()" id="openChat"><span class="fas fa-comments"></span></button>-->
             <button class="rightButton" onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
         </div>
     </div>
@@ -341,15 +346,24 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                 document.getElementById('entryModal').style.display = 'none';
             }
         });
+        showPreloader();
+        $(function() {
+            setTimeout(hidePreloader, 500);
+        });
+
         chooseRepo();
         function openNoteNav() {
             document.getElementById("notenavv").style.width = "250px";
             //document.getElementById("main").style.marginLeft = "250px";
             //document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
         }
+        function openChatNav() {
+            document.getElementById("chatNav").style.width = "33%";
+        }
 
         function closeNoteNav() {
             document.getElementById("notenavv").style.width = "0";
+            document.getElementById("chatNav").style.width = "0";
             //document.getElementById("main").style.marginLeft= "0";
             //document.body.style.backgroundColor = "white";
         }

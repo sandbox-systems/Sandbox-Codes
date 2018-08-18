@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-grid.css"/>
@@ -231,7 +230,7 @@
                             ng-class="chatRoom.getSelRoomIndex() === $index ? 'selectedRoomBtn' : ''">
                         <span class="row">
                             <span class="col-3">
-                                <img ng-if="room.members.length === 1"
+                                <img class="groupInfoImg" ng-if="room.members.length === 1"
                                      ng-src="{{room.members[0].profilepic}}">
                                 <img ng-if="room.members.length !== 1" width="64" height="64" src="img/group.png">
                             </span>&nbsp;
@@ -240,7 +239,7 @@
                                     <strong>{{ room.name }}</strong>
                                     <br>
                                     <span class="groupTextSub">
-                                        {{ room.chats.length > 0 ? trunc(typeof(room.chats[room.chats.length - 1]) === 'object' ? room.chats[room.chats.length - 1].fromName + ": " + room.chats[room.chats.length - 1].name : room.chats[room.chats.length - 1].substr(room.chats[room.chats.length - 1].indexOf(' ') + 1), 20) : "" }}
+                                        {{ formatGroupTextSub(room.chats) }}
                                     </span>
                                 </span>
                             </span>
@@ -254,51 +253,39 @@
             <div ng-class="chatRoom.isARoomSelected() ? '' : 'hidden'" id="chat" class="col-9 fullH container-fluid">
                 <div id="chatLog">
                     <div class="chatMsg" ng-repeat="chat in rooms[selRoomIndex].chats track by $index">
-                        <span ng-if="typeof(chat) === 'string'">
-                            <span class="row" ng-if="chat.startsWith(user.uname)">
+                        <span ng-if="chat.type === 'message'">
+                            <span class="row" ng-if="chat.from.uname === user.uname">
                                 <div class="col-xl-5"></div>
                                 <div class="col-xl-7">
                                     <div>
                                         <div class="chatBubble ownChatBubble">
-                                            {{chat.substr(chat.indexOf(':') + 1)}}
-                                            <span ng-if="typeof(chat) === 'object'">
-                                                <img class="chatImg" ng-if="chat.type.includes('image')"
-                                                     ng-src="{{chat.url}}">
-                                                <span ng-if="!chat.type.includes('image')">
-                                                    <input class="greenBtn" type="submit"
-                                                           style="height: 50px;margin-left: 1%;bottom: 20px"
-                                                           value="{{chat.name}}" ng-click="chat.download()"/>
-                                                </span>
-                                            </span>
+                                            {{chat.message}}
                                         </div>
                                     </div>
                                 </div>
+                                <div class="w-100">
+                                    <span class="ownTimestamp">{{getLocalTimeNow(chat.timestamp)}}</span>
+                                </div>
                             </span>
-                            <span class="row" ng-if="!chat.startsWith(user.uname)">
+                            <span class="row" ng-if="chat.from.uname !== user.uname">
                                 <div class="col-xl-1">
-                                    <img class="chatProfilePic" ng-src="chatClient.getUserByUsername(chat.split(' ')[0]).profilepic"/>
+                                    <img class="chatProfilePic" ng-src="{{chat.from.profilepic}}"/>
                                 </div>
                                 <div class="col-xl-6">
                                     <div>
                                         <div class="chatBubble otherChatBubble">
-                                            {{chat.substr(chat.indexOf(':') + 1)}}
-                                            <span ng-if="typeof(chat) === 'object'">
-                                                <img class="chatImg" ng-if="chat.type.includes('image')"
-                                                     ng-src="{{chat.url}}">
-                                                <span ng-if="!chat.type.includes('image')">
-                                                    <input class="greenBtn" type="submit"
-                                                           style="height: 50px;margin-left: 1%;bottom: 20px"
-                                                           value="{{chat.name}}" ng-click="chat.download()"/>
-                                                </span>
-                                            </span>
+                                            {{chat.message}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-5"></div>
+                                <div class="w-100">
+                                    <span class="otherTimestamp">{{getLocalTimeNow(chat.timestamp)}}</span>
+                                </div>
                             </span>
                         </span>
-                        <span ng-if="typeof(chat) === 'object'">
-                            <span class="row" ng-if="chat.fromUname === user.uname">
+                        <span ng-if="chat.type !== 'message'">
+                            <span class="row" ng-if="chat.from.uname === user.uname">
                                 <div class="col-xl-5"></div>
                                 <div class="col-xl-7">
                                     <div>
@@ -317,10 +304,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="w-100">
+                                    <span class="ownTimestamp">{{getLocalTimeNow(chat.timestamp)}}</span>
+                                </div>
                             </span>
-                            <span class="row" ng-if="chat.fromUname !== user.uname">
+                            <span class="row" ng-if="chat.from.uname !== user.uname">
                                 <div class="col-xl-1">
-                                    <img class="chatProfilePic" ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{chat.fromName}}"/>
+                                    <img class="chatProfilePic" ng-src="{{chat.from.profilepic}}"/>
                                 </div>
                                 <div class="col-xl-6">
                                     <div>
@@ -340,6 +330,9 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-5"></div>
+                                <div class="w-100">
+                                    <span class="otherTimestamp">{{getLocalTimeNow(chat.timestamp)}}</span>
+                                </div>
                             </span>
                         </span>
                     </div>
@@ -364,7 +357,11 @@
                 <div id="groupInfo" class="navbar text-dark offset-3 w-75 fixed-top">
                     <span id="groupSignature" class="float-left">
                         <span class="navbar-brand">
-                            <span class="rounded-circle nicePurpleBG text-light p-2">
+                            <span ng-if="chatRoom.getSelectedRoom().members.length === 1">
+                                <img class="groupImg" ng-src="{{chatRoom.getSelectedRoom().members[0].profilepic}}">
+                            </span>
+                            <span ng-if="chatRoom.getSelectedRoom().members.length > 1"
+                                class="rounded-circle nicePurpleBG text-light p-2">
                                 <span class="fas fa-users"></span></span>
                             &nbsp;<span id="groupName" data-toggle="modal" data-target="#renameGroupModal">{{chatRoom.getSelectedRoom().name}}</span>
                             <sup id="editGroupData">
@@ -376,10 +373,10 @@
                     <span id="onlineMembersContainer">
                         <span ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">
                             <span ng-if="member.isOnline">
-                                <img class="onlineMember bordered-circle-green" data-toggle="popover" data-html="true"
+                                <img class="onlineMember bordered-circle-green groupInfoImg" data-toggle="popover" data-html="true"
                                      data-content="<strong>{{member.name}}</strong><br/>@{{member.uname}}"
                                      data-placement="top"
-                                     ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{member.name}}"/>
+                                     ng-src="{{member.profilepic}}"/>
                                 <img ng-if="member.isTyping" class="onlineMemberTyping" src="img/typing.png"/>
                                 &nbsp;
                             </span>
@@ -412,7 +409,7 @@
                 </span>
                 <hr class="divider"/>
                 <div class="moreGroupInfoUser" ng-repeat="member in chatRoom.getSelectedRoom().members track by $index">
-                    <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{member.name}}"/>
+                    <img class="groupInfoImg" ng-src="{{member.profilepic}}"/>
                     &nbsp;{{member.name}}<br>
                     <span class="removeGroupMember" data-toggle="modal" data-target="#removeFromGroupModal"
                           title="Kick from group" ng-click="setModalMember(member)">
@@ -432,7 +429,7 @@
                 <hr class="divider"/>
                 <div class="moreGroupInfoFriend" ng-repeat="friend in chatClient.getFriends() track by $index">
                     <span ng-if="!chatRoom.hasMember(friend)">
-                        <img ng-src="https://ui-avatars.com/api/?font-size=0.3&rounded=true&background=8848aa&color=fff&name={{friend.name}}"/>
+                        <img class="groupInfoImg" ng-src="{{friend.profilepic}}"/>
                         &nbsp;{{friend.name}}<br>
                         <span class="addGroupMember" title="Add to group" ng-click="chatRoom.addFriendAsMember(friend)">
                             <span class="fas fa-plus"></span>

@@ -137,12 +137,12 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         <div class="modal-header" id="fileheader">Create New File!</div>
         <div class="modal-header" id="folderheader" style="display: none;">Create New Folder!</div>
         <div class="modal-body">
-            <!--<fieldset style="    margin-top: 1%;">
+            <fieldset style="    margin-top: 1%;">
                 <label class="switch">
                     <input value="None" type="checkbox" id="letscheck" onchange="switcher()">
                     <span class="slider"></span>
                 </label>
-            </fieldset>-->
+            </fieldset>
             <form id="fileform" class="animated fadeIn">
                 <fieldset style="    margin-top: 2%;">
                     Filename:<br>
@@ -236,25 +236,23 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
 	margin-right: 0%;">
 <!--            <img class="bordered-circle-green" src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
-<!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
-<!--            <img src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
-            <button class="rightButton dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
-                                                                        class="fas fa-users"></span></a>
-                <ul class="dropdown-menu animated bounceIn"
-                    style="left:0;background-color: transparent;border: none;box-shadow: none">
-                    <li>
-                        <div class="chip">
-                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">
-                        </div>
-                    </li>
-                    <li>
-                        <div class="chip">
-                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">
-                        </div>
-                    </li>
-                </ul>
-            </button>
+<!--            <button class="rightButton dropdown">-->
+<!--                <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"-->
+<!--                                                                        class="fas fa-users"></span></a>-->
+<!--                <ul class="dropdown-menu animated bounceIn"-->
+<!--                    style="left:0;background-color: transparent;border: none;box-shadow: none">-->
+<!--                    <li>-->
+<!--                        <div class="chip">-->
+<!--                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <div class="chip">-->
+<!--                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </button>-->
 <!--            <button class="rightButton" onclick="openChatNav()" id="openChat"><span class="fas fa-comments"></span></button>-->
             <button class="rightButton" onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
         </div>
@@ -339,6 +337,31 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     </div>
 
     <script>
+        function typeUpdater(filer) {
+            var name = filer;
+            var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+            var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+            var temp = "";
+            for (i = 0; i < array.length; i++) {
+                if (name.substring(name.indexOf(".")) === array[i]) {
+                    temp = actual[i];
+                    document.getElementById("filechoose").value = actual[i];
+                }
+            }
+            return temp;
+        }
+        function addExtension(filer){
+            var name = filer;
+            var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+            var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+            for(var  i =0; i < array.length;i++){
+                if(document.getElementById("filechoose").value === actual[i]){
+                    filer += array[i];
+                    return filer;
+                }
+            }
+            return null;
+        }
         $('.modal').click(function(event){
             var container = $('.modal');
             if(container.is(event.target)){

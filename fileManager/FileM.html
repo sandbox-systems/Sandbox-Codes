@@ -38,6 +38,12 @@
 .contextMenu .contextMenuItem:hover {
 	background-color: #EBEBEB;
 }
+    .show{
+        display: block;
+    }
+    .hide{
+        display:none;
+    }
 
 </style>
 <!--<div id="preloader">-->
@@ -106,14 +112,14 @@
 </div>
 <div class="topnav animated fadeIn" id="navbar">
     <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
-    <a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
-    <a id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
+    <a ng-class="isViewingInsideRepo ? 'show':'hide'" ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
+    <a ng-class="isViewingInsideRepo ? 'hide':'show'" id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
     <a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
             class="fas fa-trash"></span> Trash</a>
-    <a href="javascript:sortListDir()" id="sortclick"><span id="sortarrow" class="fas fa-arrow-up"></span> Sort</a>
-    <a href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
-    <div class="dropdown">
+    <!--<a href="javascript:sortListDir()" id="sortclick"><span id="sortarrow" class="fas fa-arrow-up"></span> Sort</a>-->
+    <a ng-class="isViewingInsideRepo ? 'show':'hide'" href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
+    <div class="dropdown" ng-class="isViewingInsideRepo ? 'show':'hide'">
         <button class="dropbtn" onclick="openModal('branchModal')">
             <span class="fas fa-code-branch"></span> <span id="curBranchName">Select Branch</span>
         </button>

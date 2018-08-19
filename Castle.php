@@ -168,7 +168,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a>
-        <div class="container" style="padding-left: 0px;">
+        <div class="profileCont" style="padding-left: 0px;">
             <img src="<?php echo $user->profilepic ?>" alt="PIC" class="image">
         </div>
     </a>

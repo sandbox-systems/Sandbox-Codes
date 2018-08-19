@@ -4,6 +4,12 @@
 
     require '../composer/vendor/autoload.php';
 try {
+        $username = $_POST['username'];
+        if (!preg_match("/^[A-Za-z0-9.\-_]+$/", $username)) {
+            echo "Your username can only contain numbers, letters, periods, hyphens, and underscores.";
+            die();
+        }
+
         $mng = new MongoDB\Driver\Manager("mongodb://sandbox:NhJLmHZb$@localhost:27017/admin");
         $query = new MongoDB\Driver\Query(['$or' => array(["username" => (string)$_POST["username"]], ["email" => (string)$_POST["email"]])],["limit" => 1]);
         $rows = $mng->executeQuery("sandbox.users", $query);
@@ -16,7 +22,7 @@ try {
             else if($row->current()->email==(string)$_POST["email"])
                 throw new Exception("Email already exists.");
         }
-        if($_POST['username']==NULL){
+        if($username==NULL){
             throw new Exception("Username cannot be null.");
         }
 
@@ -32,7 +38,7 @@ try {
         $write = new MongoDB\Driver\BulkWrite;
         $name = (string)$_POST['firstname'] . ' ' . (string)$_POST['lastname'];
         $newUser = array(
-            'username' => (string)$_POST['username'],
+            'username' => (string)$username,
             'name' => $name,
             'email' => (string)$_POST["email"],
             'hash' => new MongoDB\BSON\Binary($hash, MongoDB\BSON\Binary::TYPE_GENERIC),

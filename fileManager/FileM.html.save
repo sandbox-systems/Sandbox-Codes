@@ -112,14 +112,14 @@
 </div>
 <div class="topnav animated fadeIn" id="navbar">
     <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
-    <a ng-class="isViewingInsideRepo ? 'show':'hide'" ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
-    <a ng-class="isViewingInsideRepo ? 'hide':'show'" id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
+    <a id="infobutton" ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
+    <a id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
-    <a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
+    <a id="trashbuttonFM" ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
             class="fas fa-trash"></span> Trash</a>
     <!--<a href="javascript:sortListDir()" id="sortclick"><span id="sortarrow" class="fas fa-arrow-up"></span> Sort</a>-->
-    <a ng-class="isViewingInsideRepo ? 'show':'hide'" href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
-    <div class="dropdown" ng-class="isViewingInsideRepo ? 'show':'hide'">
+    <a href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
+    <div id="branchesdropdown" class="dropdown">
         <button class="dropbtn" onclick="openModal('branchModal')">
             <span class="fas fa-code-branch"></span> <span id="curBranchName">Select Branch</span>
         </button>
@@ -172,7 +172,7 @@
             <div style="background-color:#00C851; margin-top:7%" class="goBtn">
                 Go Ahead!
             </div>
-        </div>
+       </div>
     </div>
 </div>
 <div id="commitModal" class="modal">
@@ -405,15 +405,13 @@
 
             //Context Menu Helpers for FILES
             $("body").on("mousedown", function (element) {
-                if (element.target.toString() !== "[object HTMLSpanElement]")
-                    return;
                 $(this).attr("oncontextmenu", "return false;");
                 if (element.button == 2) {
                     if(!isViewingInsideRepo){
 						activeRight = $(this).attr("data-wd");
                     	activeRightElem = this;
-                    	$("#repomenu").css("left", element.pageX + 1);
-                    	$("#repomenu").css("top", element.pageY + 1);
+                    	$("#repomenu").css("left", element.pageX);
+                    	$("#repomenu").css("top", element.pageY);
                     	$("#repomenu").fadeIn(100);
 						$("#insidemenu").fadeOut(80);
 					}else{
@@ -753,6 +751,7 @@
         document.getElementById("displaycreated").value = created;
         document.getElementById("displayedited").value = edited;
     }
+
 
     function updateBreadCrumbs(prePath, path, repo) {
         let list = $('#cssmenuList');

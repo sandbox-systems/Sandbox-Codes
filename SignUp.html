@@ -36,131 +36,125 @@
     /* The Modal (background) */
     /* Style the horizontal ruler */
 
-    /* The Close Button (x) */
-    /* Clear floats */
-    .clearfix::after {
-        content: "";
-        clear: both;
-        display: table;
+  /* The Close Button (x) */
+  /* Clear floats */
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  label{
+    font-size: 30px;
+  }
+  .labeler{
+    font-size: 20px;
+  }
+  /* Change styles for cancel button and signup button on extra small screens */
+  @media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+      width: 100%;
+      border-radius: 10px;
     }
-    label{
-        font-size: 30px;
-    }
-    .labeler{
-        font-size: 20px;
-    }
-    /* Change styles for cancel button and signup button on extra small screens */
-    @media screen and (max-width: 300px) {
-        .cancelbtn, .signupbtn {
-            width: 100%;
-            border-radius: 10px;
-        }
-    }
-    .step {
-        height: 15px;
-        width: 15px;
-        margin: 0 2px;
-        background-color: #bbbbbb;
-        border: none;
-        border-radius: 50%;
-        display: inline-block;
-        opacity: 0.5;
-    }
-    .step.active {
-        opacity: 1;
-    }
-    .tab {
-        display: none;
-    }
-    input.invalid {
-        background-color: #ffdddd;
-    }
-    #regForm {
-        background-color: rgba(0,0,0,0.2);
-        margin: 100px auto;
-        font-family: monospace;
-        text-align: center;
-        padding: 40px;
-        width: 70%;
-        min-width: 300px;
-    }
-    /* Mark the steps that are finished and valid: */
-    .step.finish {
-        background-color: orchid;
-    }
-    input, button {
-        outline: none;
-        border: none;
-        color: white;
-    }
-    #prevBtn {
-        position: relative;
-        width: 100%;
-        padding: 5px;
-        height: 2%;
-        color: white;
-        background: linear-gradient(to left, rgba(100, 43, 115, 0.5), rgba(198, 66, 110, 0.5));
-        font-size: 1.35rem;
-        border-radius: 5px;
-        cursor: pointer;
-        font-family: monospace;
-        overflow: visible;
-        margin-bottom: 10px;
-        -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-        transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-    }
-    #closebutton
-    {
-
-    }
-    #nextBtn {
-        position: relative;
-        width: 100%;
-        padding: 5px;
-        height: 2%;
-        color: white;
-        background: linear-gradient(to left, rgba(100, 43, 115, 0.5), rgba(198, 66, 110, 0.5));;
-        font-size: 1.35rem;
-        font-family: monospace;
-        border-radius: 5px;
-        cursor: pointer;
-        overflow:visible;
-        -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-        transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-    }
-    #backlogo{
-        z-index: -100;
-        width: 25%;
-        position: absolute;
-        left: 35%;
-        top: 30%;
-        filter: blur(5px) brightness(70%);
-    }
-    .valid {
-        color: mediumseagreen;
-    }
-    .valid:before {
-        position: relative;
-        left: -35px;
-        content: "✔";
-    }
-    /* Add a red text color and an "x" when the requirements are wrong */
-    .invalid {
-        color: #FF3366;
-    }
-    .invalid:before {
-        position: relative;
-        left: -35px;
-        content: "✖";
-    }
-    #message {
-        display:none;
-        background: rgba(0,0,0,0);
-        color: white;
-        position: relative;
-        padding: 20px;
-        margin-top: 10px;
-    }
+  }
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+  .step.active {
+    opacity: 1;
+  }
+  .tab {
+    display: none;
+  }
+  input.invalid {
+    background-color: #ffdddd;
+  }
+  #regForm {
+    background-color: rgba(245,245,245,0.85);
+    margin: 100px auto;
+    font-family: Lato;
+    padding: 30px;
+    width: 30%;
+    text-align: center;
+    min-width: 300px;
+  }
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #4CAF50;
+  }
+  input, button {
+    outline: none;
+    border: none;
+    color: rebeccapurple;
+  }
+  #prevBtn {
+    position: relative;
+    width: 48%;
+    padding: 5px;
+    height: 2%;
+    color: white;
+    background: #dc3545;
+    font-size: 1.35rem;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: visible;
+    margin-bottom: 10px;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+  }
+  #nextBtn {
+    position: relative;
+    width: 48%;
+    padding: 5px;
+    height: 2%;
+    color: white;
+    background: #28a745;
+    font-size: 1.35rem;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow:visible;
+    -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+    transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
+  }
+  #backlogo{
+    z-index: -100;
+    width: 25%;
+    position: absolute;
+   left: 35%;
+    top: 30%;
+    filter: blur(5px) brightness(70%);
+  }
+  .valid {
+    color: mediumseagreen;
+  }
+  .valid:before {
+    position: relative;
+    left: -35px;
+    content: "✔";
+  }
+  /* Add a red text color and an "x" when the requirements are wrong */
+  .invalid {
+    color: #FF3366;
+  }
+  .invalid:before {
+    position: relative;
+    left: -35px;
+    content: "✖";
+  }
+  #message {
+    display:none;
+    background: rgba(0,0,0,0);
+    color: white;
+    position: relative;
+    padding: 20px;
+    margin-top: 10px;
+  }
 
     #message p {
         padding: 10px 35px;
@@ -170,41 +164,41 @@
 <body>
 <img src="images/white-logo.png" id="backlogo">
 <div class="animated zoomIn">
-    <form id="regForm" action="">
-        <div class="signuphead"><label style="color: white;">Join Sandbox!</label></div>
-        <!-- One "tab" for each step in the form: -->
-        <div class="tab"><label class="labeler"style="color: white;">Name</label>
-            <p><input class="logintext" style="text-transform: capitalize" autocomplete="off" placeholder="First name..."  name="fname" id="fname"></p>
-            <p><input class="logintext" style="text-transform: capitalize" autocomplete="off"placeholder="Last name..."  name="lname" id="lname"></p>
-        </div>
-        <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Contact Info</label>
-            <p><input type="email" id="email" class="logintext" autocomplete="off" placeholder="E-mail..."  name="email"></p>
-        </div></div>
-        <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Login Info</label>
-            <p><input class="logintext" style="text-transform: lowercase" autocomplete="off"placeholder="Username..."  name="uname" id="uname"></p>
-            <p><input class="logintext"autocomplete="off"placeholder="Password..."  name="pword" id="psw" type="password"></p>
-            <p><input class="logintext"autocomplete="off"placeholder="Re-enter Password..."  name="rpword" id="rpsw" type="password"></p>
-            <div id="message" class="animated fadeIn">
-                <h3>Password must contain the following:</h3>
-                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-                <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-                <p id="number" class="invalid">A <b>number</b></p>
-                <p id="length" class="invalid">Minimum <b>8 characters</b></p>
-            </div>
-        </div></div>
-        <div style="overflow:auto;">
-            <div style="float:right;">
-                <button class="previous"type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                <button type="button"class="next" id="nextBtn" onclick="nextPrev(1)">Next</button>
-            </div>
-        </div>
-        <!-- Circles which indicates the steps of the form: -->
-        <div style="text-align:center;">
-            <span class="step"></span>
-            <span class="step"></span>
-            <span class="step"></span>
-        </div>
-    </form>
+  <form id="regForm" action="">
+    <div class="signuphead"><label style="color: rebeccapurple;">Join Sandbox!</label></div>
+    <!-- One "tab" for each step in the form: -->
+    <div class="tab"><label class="labeler"style="color: mediumpurple;">Name:</label>
+      <p><input class="logintext" style="text-transform: capitalize" autocomplete="off" placeholder="First name..."  name="fname" id="fname"></p>
+      <p><input class="logintext" style="text-transform: capitalize" autocomplete="off"placeholder="Last name..."  name="lname" id="lname"></p>
+    </div>
+    <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: mediumpurple;">Contact Info:</label>
+      <p><input type="email" id="email" class="logintext" autocomplete="off" placeholder="E-mail..."  name="email"></p>
+    </div></div>
+    <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: mediumpurple;">Login Info:</label>
+      <p><input class="logintext" style="text-transform: lowercase" autocomplete="off"placeholder="Username..."  name="uname" id="uname"></p>
+      <p><input class="logintext"autocomplete="off"placeholder="Password..."  name="pword" id="psw" type="password"></p>
+      <p><input class="logintext"autocomplete="off"placeholder="Re-enter Password..."  name="rpword" id="rpsw" type="password"></p>
+      <div id="message" class="animated fadeIn">
+        <h3>Password must contain the following:</h3>
+        <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+        <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+        <p id="number" class="invalid">A <b>number</b></p>
+        <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+      </div>
+    </div></div>
+    <div style="overflow:auto;">
+      <div>
+        <button class="previous"type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+        <button type="button"class="next" id="nextBtn" onclick="nextPrev(1)">Next</button>
+      </div>
+    </div>
+    <!-- Circles which indicates the steps of the form: -->
+    <div style="text-align:center;">
+      <span class="step"></span>
+      <span class="step"></span>
+      <span class="step"></span>
+    </div>
+  </form>
 </div>
 </body>
 <script>
@@ -382,13 +376,19 @@
                     if(data=="User successfully created"){
                         swal(
                             {
-                                type: "success",
+                                icon: "success",
                                 title: "Almost there!",
-                                text: "Check your email for an activation email from us!"}
+                                text: "Check your email for an activation email from us!"
+                            },
+                            function () {
+                                window.location = "https://sandboxcodes.com/Login.html";
+                            }
                         )
-                        window.location = "https://sandboxcodes.com/Login.html";
                     }else{
-                        swal(data);
+                        swal({
+                            icon: "error",
+                            title: data
+                        });
                     }
                 },
                 error: function(data){

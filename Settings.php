@@ -156,7 +156,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                 </form>
             </td>
         </tr>
-<!--
         <tr class="animated fadeIn">
             <td>
                 <div class="categ_row">
@@ -174,7 +173,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                 </form>
             </td>
         </tr>
--->
         <tr class="animated fadeIn">
             <td>
                 <div class="categ_row">

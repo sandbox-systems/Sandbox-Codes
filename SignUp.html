@@ -181,7 +181,7 @@
             <p><input type="email" id="email" class="logintext" autocomplete="off" placeholder="E-mail..."  name="email"></p>
         </div></div>
         <div class="tab"><div class="animated fadeIn"><label class="labeler"style="color: white;">Login Info</label>
-            <p><input class="logintext"autocomplete="off"placeholder="Username..."  name="uname" id="uname"></p>
+            <p><input class="logintext" style="text-transform: lowercase" autocomplete="off"placeholder="Username..."  name="uname" id="uname"></p>
             <p><input class="logintext"autocomplete="off"placeholder="Password..."  name="pword" id="psw" type="password"></p>
             <p><input class="logintext"autocomplete="off"placeholder="Re-enter Password..."  name="rpword" id="rpsw" type="password"></p>
             <div id="message" class="animated fadeIn">
@@ -371,7 +371,7 @@
                 type: "POST",
                 url: "Sandbox_Back/register.php",
                 data: {
-                    username: $("#uname").val(),
+                    username: $("#uname").val().toLowerCase(),
                     password: $("#psw").val(),
                     email: $("#email").val(),
                     firstname: $("#fname").val(),

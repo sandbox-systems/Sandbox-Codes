@@ -67,7 +67,7 @@
 		<li id="fileSave" class="contextMenuItem"> <span
             class="fas fa-save"></span> Commit</li>
 		<li id="fileOpen" class="contextMenuItem"> <span
-            class="fas fa-terminal"></span> Open In Playground</li>
+            class="fas fa-terminal"></span> Open Repo In Playground</li>
     </div>
 <div id="infoNav" class="FMsidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeInfoNav()">&times;</a>
@@ -86,7 +86,7 @@
                 <input id="displaycreated" type="date" class="infoname" readonly>
                 Last Modified<br>
                 <input id="displayedited" type="date" class="infoname" readonly>
-                <button id="goToPlaygroundFromInfoBtn" class="goBtn" style="width:90%;background-color: mediumpurple;margin-top: 5%;padding: 4px">Open In Playground</button>
+                <button id="goToPlaygroundFromInfoBtn" class="goBtn" style="width:90%;background-color: mediumpurple;margin-top: 5%;padding: 4px">Open Repo In Playground</button>
             </fieldset>
             <!--<fieldset>-->
             <!--Color<br>-->
@@ -112,7 +112,8 @@
 </div>
 <div class="topnav animated fadeIn" id="navbar">
     <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
-    <a ng-class="isViewingInsideRepo ? 'show':'hide'" ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
+    <!-- ng-class="isViewingInsideRepo ? 'show':'hide'" -->
+    <a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>
     <a ng-class="isViewingInsideRepo ? 'hide':'show'" id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
     <a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
@@ -339,7 +340,9 @@
     $(function() {
         setTimeout(hidePreloader, 500);
         $('#repoPlay').click(onRepoPlay);
-        $('#goToPlaygroundFromInfoBtn').click(onRepoPlay);
+        $('#goToPlaygroundFromInfoBtn').click(function() {
+            onRepoPlay();
+        });
     });
 
 			ace.require("ace/ext/language_tools");
@@ -351,7 +354,7 @@
 				readOnly:true
             });
             editor.setTheme("ace/theme/solarized_dark");
-    let isViewingInsideRepo = false;
+    var isViewingInsideRepo = false;
     function setIsViewingInsideRepo(isTrue) {
         isViewingInsideRepo = isTrue;
     }
@@ -479,7 +482,7 @@
         }
     }
 
-    let onCommitPress;
+    var onCommitPress;
 
     function setOnCommitPress(func) {
         onCommitPress = func;
@@ -663,7 +666,7 @@
         }
     }
 
-    let onCreateFile;
+    var onCreateFile;
 
     function setOnCreateFile(func) {
         onCreateFile = func;
@@ -776,7 +779,7 @@
         ev.dataTransfer.setData("text", ev.target.id);
     }
 
-    let onFileDelete;
+    var onFileDelete;
 
     function setOnFileDelete(func) {
         onFileDelete = func;

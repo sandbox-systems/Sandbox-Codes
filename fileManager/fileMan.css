@@ -558,3 +558,7 @@ option {
 #cssmenu ul li.active + li a {
     box-shadow: none;
 }
+
+.ownerNameHidden {
+    display: none;
+}

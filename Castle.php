@@ -3,7 +3,7 @@
 include 'fileManager/github/sync.php';
 include_once 'fileManager/initDB.php';
 
-require "checklogin.php";
+ require "checklogin.php";
 
 session_start();
 

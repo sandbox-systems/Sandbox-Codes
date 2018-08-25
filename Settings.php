@@ -95,8 +95,8 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
     }
 
     .alonebutton {
-        margin-left: 55%;
-        width: 100%;
+        margin-left: 70%;
+        width: 70%;
         outline: none;
         border: 0;
         color: white;
@@ -104,7 +104,6 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
         cursor: pointer;
         padding: 13px;
         text-decoration: none;
-        border-right: solid 1px white;
     }
 
     .alonebutton:hover {

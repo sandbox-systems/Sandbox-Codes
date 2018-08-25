@@ -16,10 +16,10 @@
 .settingscont{
   padding-top: 2%;
   margin-top: 2%;
-  background-color:  rgba(255,255,255,0.5);
+  background-color:  rgba(255,255,255,0.1);
   width: 70%;
   margin-left:  auto;
-  box-shadow: -8px 8px 0px 0px rgba(142,45,226,1);
+  box-shadow: -8px 8px 0px 0px rgba(142,45,226,0.5);
   margin-right:  auto;
   margin-bottom: 2%;
 }
@@ -130,10 +130,8 @@ position: absolute;
   display: inline-block;
   width: 100%;
   height: 100%;
-  font-size: 1rem;
-  border-bottom: solid 2px mediumpurple;
+  font-size: 0.9rem;
   background: transparent;
-  color: #FDFCFD;  
 }
 .theotherone {
     position: relative;
@@ -159,7 +157,6 @@ position: absolute;
 background:linear-gradient(to right, rgba(128, 0, 128,0.5), rgba(255, 192, 203,0));
     text-align: center;
     float: left;
-  border-right:solid 1px white ;
 }
 .update_row {
   position: relative;

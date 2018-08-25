@@ -192,6 +192,35 @@
             </div>
         </div>
         <div id="notifications">
+            <div id="div1" ng-if="notifications.length === 0" class="ng-scope">
+                <p style="
+                    font-size:128px;
+                    text-align:center;
+                    border-radius: 50%;
+                    border-style:solid;
+                    color: lightgray;
+                    margin-left: auto;
+                    width: 200px;
+                    height: 200px;
+                    margin-right: auto;
+                    margin-bottom: 0px;
+                    ">✓
+                </p>
+                <p style="
+                    text-align:  center;
+                    color:  darkgray;
+                    font-size: 30px;
+                    font-family:  lato;
+                ">You're All Caught Up!</p>
+
+                <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+                    function fadein()
+                    {
+                        $("#div1").fadeIn(3000);
+                    }
+                    window.onload = fadein();
+                </script>
+            </div>
             <div class="notification animated bounceIn" ng-repeat="notif in notifications">
                 <div class="notifIcon" ng-class="notif.type === 'friend' || notif.type === 'friendResponse' ? 'friendResponseNotif' :
                     notif.type === 'chatroom' ? 'chatroomNotif' :

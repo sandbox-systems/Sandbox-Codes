@@ -155,23 +155,23 @@ $user = getDocuments($man, "users", ['username' => $_SESSION['username']], [])[0
                 </form>
             </td>
         </tr>
-        <tr class="animated fadeIn">
-            <td>
-                <div class="categ_row">
-                    <div class="text">Password</div>
-                </div>
-            </td>
-            <td>
-                <form class="update_row">
-                    <input style="margin-left: 2%;" class="theotherone" type="password" id="password" oninput="passwordCheck()">
-                    <label class="switch">
-                        <input value="None" type="checkbox"
-                               onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'">
-                        <span class="slider"></span>
-                    </label>
-                </form>
-            </td>
-        </tr>
+<!--        <tr class="animated fadeIn">-->
+<!--            <td>-->
+<!--                <div class="categ_row">-->
+<!--                    <div class="text">Password</div>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <form class="update_row">-->
+<!--                    <input style="margin-left: 2%;" class="theotherone" type="password" id="password" oninput="passwordCheck()">-->
+<!--                    <label class="switch">-->
+<!--                        <input value="None" type="checkbox"-->
+<!--                               onchange="document.getElementById('password').type = this.checked ? 'text' : 'password'">-->
+<!--                        <span class="slider"></span>-->
+<!--                    </label>-->
+<!--                </form>-->
+<!--            </td>-->
+<!--        </tr>-->
         <tr class="animated fadeIn">
             <td>
                 <div class="categ_row">

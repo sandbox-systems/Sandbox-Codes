@@ -333,7 +333,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <!-- ******************** TERMINAL ********************* -->
     <!-- *************************************************** -->
     <div id="terminal">
-        <iframe id="consoleFrame" src="https://sandboxcodes.com:7681/" width=100% height=100%></iframe>
+        <iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>
     </div>
 
     <script>

@@ -14,6 +14,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+                <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
 		<script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="css/main.css" />
@@ -274,7 +275,7 @@ p {
 					</section>
 					<section class="wrapper fade-up" style="background-color: rebeccapurple">
 						<div class="inner">
-					<iframe id="yellow" frameborder="0" width="100%" class="videowrapper" src="https://biteable.com/watch/embed/intro-video-1875233" allowfullscreen="true"></iframe></div></section>
+					<iframe id="yellow" frameborder="0" width="100%" class="videowrapper" src="" allowfullscreen="true"></iframe></div></section>
 				
 				<!-- One -->
 				<!-- Two -->
@@ -398,7 +399,7 @@ jQuery(document).ready(function($) {
   $(window).on("load",function (){
 
 	$("#preloader").fadeOut(500);
-
+        document.getElementById('yellow').src = "https://biteable.com/watch/embed/intro-video-1875233";
   });
 });
 //var slideIndex = 0;

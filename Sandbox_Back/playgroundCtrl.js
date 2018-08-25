@@ -12,6 +12,7 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
     $gstate = $state;
     $gstateParams = $stateParams;
     $scope.scan = "";
+    $scope.online = [];
     if ($stateParams.repo !== undefined) {
         owner = $stateParams.repo.split("/")[0];
         repo = $stateParams.repo.split("/")[1];
@@ -687,6 +688,9 @@ function addCollabOnline(childSnapshot, previousKey) {
     let childUsername = childSnapshot.node_.children_.root_.value.value_;
     if (childUsername !== username && collab.online.indexOf(childUsername) === -1) {
         collab.online.push(childUsername);
+        $gscope.$apply(function() {
+            $gscope.online.push(childUsername);
+        });
     }
 }
 

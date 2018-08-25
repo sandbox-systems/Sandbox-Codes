@@ -264,6 +264,7 @@
                     <select id="filechoose">
                         <option value="java">Java</option>
                         <option value="python">Python</option>
+                        <option value="php">PHP</option>
                         <option value="javascript">JavaScript</option>
                         <option value="html">HTML</option>
                         <option value="css">CSS</option>
@@ -545,8 +546,8 @@
 
     function typeUpdater(filer) {
         var name = filer;
-        var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
-        var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+        var array = [".java", ".py",".php", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+        var actual = ["java", "python","php", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
         var temp = "";
         for (i = 0; i < array.length; i++) {
             if (name.substring(name.indexOf(".")) === array[i]) {
@@ -554,19 +555,22 @@
                 document.getElementById("filechoose").value = actual[i];
             }
         }
+        if(name.substring(name.indexOf(".")) === ".md"){
+            temp = "skip";
+        }
         return temp;
     }
             function addExtension(filer){
                 var name = filer;
-                var array = [".java", ".py", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
-                var actual = ["java", "python", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+                var array = [".java", ".py",".php", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+                var actual = ["java", "python","php", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
                 for(var  i =0; i < array.length;i++){
                     if(document.getElementById("filechoose").value === actual[i]){
                         filer += array[i];
                         return filer;
                     }
                 }
-                return null;
+                return "";
             }
 
             function closeModal() {
@@ -656,7 +660,7 @@
         link.appendChild(icon);
         link.appendChild(namer);
         node.appendChild(link);
-        if (namer.innerHTML === "") {
+        if (name === "") {
             swal("Uh oh!", "You forgot to name your file", "warning");
         } else {
             document.getElementById("fileList").appendChild(node);

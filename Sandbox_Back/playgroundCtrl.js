@@ -13,6 +13,7 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
     $gstateParams = $stateParams;
     $scope.scan = "";
     $scope.online = [];
+    $scope.isRepoOpen = false;
     if ($stateParams.repo !== undefined) {
         owner = $stateParams.repo.split("/")[0];
         repo = $stateParams.repo.split("/")[1];
@@ -181,6 +182,7 @@ function chooseRepo(){
             directories = {};
             isReading = false;
             collab.online = [];
+            $gscope.isRepoOpen = true;
             scan($gscope, $ghttp, $gsce, $gstate);
         }
     });
@@ -405,11 +407,12 @@ setInterval(function(){
 
 function updateFile(path, name, content, altCallback, shouldResetCanSave){
     let fullPath = path + (path === "" ? "" : "/") + name;
-    if (isReading || (fileFlags[fullPath] && !fileFlags[fullPath].canSave))
+    if (!$('#onFileReadOverlay').is(":hidden") || isReading || (fileFlags[fullPath] && fileFlags[fullPath].canSave === false))
         return;
     tempContents[fullPath] = content;
     if (!fileFlags[fullPath].hasUpdated)
         fileFlags[fullPath].hasUpdated = [];
+console.log(fileFlags);
     fileFlags[fullPath].hasUpdated.push(0);
     $.ajax({
         type: "POST",
@@ -436,7 +439,7 @@ function updateFile(path, name, content, altCallback, shouldResetCanSave){
         error: function(data){
             console.log("UPDATE: " + JSON.stringify(data));
             if(notify)
-                swal({type:"error",  timer:1000, });
+                swal({type:"error",  title: "Uh Oh!", text: "Could not update file", timer:3000});
         }
     });
 }
@@ -800,7 +803,7 @@ function setupAce() {
         if (debug) {
             var target = e.domEvent.target;
             if (target.className.indexOf("ace_gutter-cell") == -1) //make sure that user clicked on a gutter cell
-                return;
+               return;
             var breakpoints = e.editor.session.getBreakpoints(row, 0);
             var row = e.getDocumentPosition().row;
             if (typeof breakpoints[row] === typeof undefined) { //add breakpoint
@@ -859,8 +862,8 @@ function setupAce() {
 /****************************************************
  ******************** COMPILE ***********************
  ****************************************************/
-function compile(){
-    /*$.ajax({
+/*function compile(){
+    $.ajax({
         type: "POST",
         url: "Sandbox_Back/compile2.php",
         data: {
@@ -875,7 +878,11 @@ function compile(){
             if(notify)
                 swal({icon:"error",  timer:1000, });
         }
-    });*/
+    });
+}*/
+
+function compile(){
+	swal(editor.getValue());
 }
 
 $(window).on("unload", function() {

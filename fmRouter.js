@@ -121,16 +121,19 @@ treasury.controller('projectController', function ($scope, $stateParams, $http, 
         });
     });
 
-    setFetchFileContents(function (sha, path) {
+    function showFileInfo (sha, path) {
         $http({
             url: "fileManager/requests/getFileDetails.php",
-            data: $.param({...$scope.params, ...{sha: sha, path: path}}),
+            data: $.param({...$scope.params, ...{sha: sha, path: $scope.params.path + ($scope.params.path === "" ? "" : "/") + path}}),
             method: "post",
             headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
         }).then(function (response) {
             showFileContents(atob(response.data.content), response.data.size, response.data.created, response.data.edited);
         });
-    });
+    };
+
+    setFetchFileContents(showFileInfo);
+    setOnFileInfo(showFileInfo);
 
     $('#preloader').fadeIn();
     $http({

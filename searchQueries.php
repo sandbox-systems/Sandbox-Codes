@@ -125,18 +125,22 @@ function searchFile($client, $man, $username, $owner, $filename) {
 $userOrFile = '/^@([A-Za-z0-9_.!-]+) ?([^ ]+)?/';
 // other/filename (@user)
 $otherOrFile = '/^([^ ]+) ?@([A-Za-z0-9_.!-]+)?/';
+$outArr = [];
 if (preg_match($userOrFile, $input, $groups)) {
     if (isset($groups[2])) {
-        echo json_encode(searchFile($client, $man, $curUsername, $groups[1], $groups[2]) + Types::File);
+        $outArr = searchFile($client, $man, $curUsername, $groups[1], $groups[2]) + Types::File;
     } else {
-        echo json_encode(searchUser($man, $curUsername, $userID, $groups[1], true) + Types::User);
+        $outArr = searchUser($man, $curUsername, $userID, $groups[1], true) + Types::User;
     }
 } else if (preg_match($otherOrFile, $input, $groups)) {
     if (isset($groups[2])) {
-        echo json_encode(searchFile($client, $man, $curUsername, $groups[2], $groups[1]) + Types::File);
+        $outArr = searchFile($client, $man, $curUsername, $groups[2], $groups[1]) + Types::File;
     } else {
-        echo json_encode(searchRooms($man, $userID, $groups[1]) + Types::Chatroom);
+        $outArr = searchRooms($man, $userID, $groups[1]) + Types::Chatroom;
     }
 } else {
-    echo json_encode(searchRooms($man, $userID, $input) + Types::Chatroom);
+    $outArr = searchRooms($man, $userID, $input) + Types::Chatroom;
 }
+
+echo json_encode(array_slice($outArr, count($outArr) - 6));
+

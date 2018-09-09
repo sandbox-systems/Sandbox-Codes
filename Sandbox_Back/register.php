@@ -51,7 +51,8 @@ try {
             'relax' => true,
             'timestamp' => (new MongoDB\BSON\UTCDateTime())->toDateTime()->format('U.u'),
             'roomIDs' => [],
-            'friends' => []
+            'friends' => [],
+            'theme' => 'chrome'
         );
         $write->insert($newUser);
         $mng->executeBulkWrite('sandbox.users', $write);

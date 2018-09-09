@@ -86,8 +86,8 @@
                 <input id="displaycreated" type="date" class="infoname" readonly>
                 Last Modified<br>
                 <input id="displayedited" type="date" class="infoname" readonly>
-                <a><span class="fas fa-trash-o"></span></a>
-                <a><span title="Open Repo In Playground" class="fas fa-terminal"></span></a>
+                <a><span id="displaytrash" class="fas fa-trash-o"></span></a>
+                <a><span id="displayopeninplayground" title="Open Repo In Playground" class="fas fa-terminal"></span></a>
                 <!--<button id="goToPlaygroundFromInfoBtn" class="goBtn" style="width:90%;background-color: mediumpurple;margin-top: 5%;padding: 4px">Open Repo In Playground</button>-->
             </fieldset>
             <!--<fieldset>-->
@@ -118,8 +118,8 @@
     <!--<a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>-->
     <a ng-class="isViewingInsideRepo ? 'hide':'show'" id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
-    <!--<a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span-->
-            <!--class="fas fa-trash"></span> Trash</a>-->
+    <a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
+            class="fas fa-trash"></span> Trash</a>
     <!--<a href="javascript:sortListDir()" id="sortclick"><span id="sortarrow" class="fas fa-arrow-up"></span> Sort</a>-->
     <a ng-class="isViewingInsideRepo ? 'show':'hide'" href="javascript:openModal('commitModal')" id="commit"><span class="fas fa-save"></span> Commit</a>
     <div class="dropdown" ng-class="isViewingInsideRepo ? 'show':'hide'">
@@ -346,6 +346,16 @@
         $('#goToPlaygroundFromInfoBtn').click(function() {
             onRepoPlay();
         });
+        $(document).click(function (event) {
+            let target = event.target;
+            if (target.classList.contains("fa-file-code")) {
+                let children = target.parentNode.children;
+                let sha = children[0].innerText;
+                let name = children[2].innerText;
+                showPreloader();
+                onFileInfo(sha, name);
+            }
+        });
     });
 
 			ace.require("ace/ext/language_tools");
@@ -393,6 +403,33 @@
         window.location.reload();
     }
 
+    var onFileInfo;
+    function setOnFileInfo (func) {
+        onFileInfo = func;
+    }
+
+    var onFileRename;
+    function setOnFileRename (func) {
+        onFileRename = func;
+    }
+
+    var onFileDelete;
+    function setOnFileDelete (func) {
+        onFileDelete = func;
+    }
+
+    var onFileShare;
+    function setOnFileShare (func) {
+        onFileShare = func;
+    }
+
+    var onFileSave;
+    function setOnFileSave (func) {
+        onFileSave = func;
+    }
+
+    var rightClickedElem;
+
     $(function () {
         $(window).on("load", function () {
 
@@ -411,8 +448,9 @@
 
             //Context Menu Helpers for FILES
             $("body").on("mousedown", function (element) {
-                if (element.target.toString() !== "[object HTMLSpanElement]")
+                if (element.target.toString() !== "[object HTMLSpanElement]OUT" && element.target.toString() !== "[object HTMLElement]")
                     return;
+                rightClickedElem = element.target;
                 $(this).attr("oncontextmenu", "return false;");
                 if (element.button == 2) {
                     if(!isViewingInsideRepo){
@@ -433,6 +471,42 @@
                 }
                 return false;
             });
+
+            $('#fileInfo').click(function () {
+                let sha = $(rightClickedElem).siblings('span')[0].innerText;
+                let name = $(rightClickedElem).siblings('label')[0].innerText;
+
+                document.getElementById("infoNav").style.width = "100%";
+                document.getElementById("displayname").value = name;
+                document.getElementById("displaytype").value = typeUpdater(name);
+
+                onFileInfo(sha, name);
+            });
+
+            $('#displaytrash').click(function () {
+                onFileDelete();    
+            });
+
+            $('#displayopeninplayground').click(function () {
+                onFileOpen();
+            });
+
+            $('#fileRename').click(function () {
+                onFileRename();
+            });
+
+            $('#fileDelete').click(function () {
+                onFileDelete();
+            });
+
+            $('#fileSave').click(function () {
+                onFileSave();
+            });
+
+            $('#fileOpen').click(function () {
+                onFileOpen();
+            });
+
     $('html').bind('keypress', function (e) {
         if (e.keyCode == 13) {
             return false;
@@ -562,17 +636,11 @@
         }
         return temp;
     }
-            function addExtension(filer){
-                var name = filer;
-                var array = [".java", ".py",".php", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
-                var actual = ["java", "python","php", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
-                for(var  i =0; i < array.length;i++){
-                    if(document.getElementById("filechoose").value === actual[i]){
-                        filer += array[i];
-                        return filer;
-                    }
-                }
-                return "";
+            function getChosenExtension() {
+                let type = document.getElementById("filechoose").value;
+                let map = {java: ".java", python: ".py", javascript: ".js", html: ".html", css: ".css", cplusplus: ".cpp",
+                    csharp: ".cs", objc: ".m", ruby: ".rb"};
+                return map[type];
             }
 
             function closeModal() {
@@ -633,12 +701,7 @@
                 var link = document.createElement("A");
                 var icon = document.createElement("I");
                 var namer = document.createElement("LABEL");
-                if(typeUpdater(name) === ""){
-                    namer.innerHTML = addExtension(name);
-
-                }else{
-                    namer.innerHTML = name;
-                }
+                namer.innerHTML = name;
                 namer.style.textAlign = "center";
         var temp = "file";
         temp += counter;
@@ -652,13 +715,17 @@
         icon.className = temp;
         icon.style.color = test;
         icon.style.fontSize = "4.5em";
-        node.className = "animated tada";
+        node.className = "animated tada filem-file";
         node.onclick = function () {
             onclick();
         };
         node.ondragend = function () {
             fetchFileContents(sha, path);
         };
+        let metaSha = document.createElement("SPAN");
+        metaSha.style.display = 'none';
+        metaSha.innerText = sha;
+        link.appendChild(metaSha);
         link.appendChild(icon);
         link.appendChild(namer);
         node.appendChild(link);
@@ -679,7 +746,7 @@
     }
 
     function addNewFile() {
-        let filename = document.getElementById("filename").value;
+        let filename = document.getElementById("filename").value + getChosenExtension();
         addFile(filename, function () {
         }, null);
         if (onCreateFile)
@@ -757,10 +824,12 @@
     }
 
     function showFileContents(contents, size, created, edited) {
+        hidePreloader();
         editor.setValue(contents);
         document.getElementById("displaysize").value = size + " KB";
         document.getElementById("displaycreated").value = created;
         document.getElementById("displayedited").value = edited;
+        document.getElementById("infoNav").style.width = "100%";
     }
 
     function updateBreadCrumbs(prePath, path, repo) {

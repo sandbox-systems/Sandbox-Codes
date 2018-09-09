@@ -238,6 +238,37 @@ option{
 	height: 100%;
 	display: inline-block;
 }
+#repoSelectOverlay {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: inline-block;
+    background: #8044a8;
+    -webkit-transition: background-color 2s ease-out;
+    -moz-transition: background-color 2s ease-out;
+    -o-transition: background-color 2s ease-out;
+    transition: background-color 2s ease-out;
+    text-align: center;
+    padding: 0;
+}
+
+#repoSelectOverlay img {
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+
+#noRepoSelectedTxt {
+    color: white;
+    font-size: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .rightcol{
 	position: relative;
 	display: inline-block;

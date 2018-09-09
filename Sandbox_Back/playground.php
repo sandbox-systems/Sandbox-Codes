@@ -95,7 +95,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         border-radius: 50%;
         object-fit: cover;
     }
-
 </style>
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
@@ -193,43 +192,43 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
     <div class="container-fluid">
         <div class="navbar-header" style="width: 86%">
-            <button title="Theme" class="dropdown btn navbar-btn toolbarButton">
+            <button title="Theme" class="dropdown btn navbar-btn toolbarButton" ng-if="isRepoOpen">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                                  class="fas fa-ellipsis-h fa-2x"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="javascript:temper('chrome')">chrome</a></li>
-                    <li><a href="javascript:temper('clouds')">clouds</a></li>
-                    <li><a href="javascript:temper('clouds_midnight')">clouds_midnight</a></li>
-                    <li><a href="javascript:temper('cobalt')">cobalt</a></li>
-                    <li><a href="javascript:temper('crimson_editor')">crimson_editor</a></li>
-                    <li><a href="javascript:temper('dawn')">dawn</a></li>
-                    <li><a href="javascript:temper('eclipse')">eclipse</a></li>
-                    <li><a href="javascript:temper('idle_fingers')">idle_fingers</a></li>
-                    <li><a href="javascript:temper('kr_theme')">kr_theme</a></li>
-                    <li><a href="javascript:temper('merbivore')">merbivore</a></li>
-                    <li><a href="javascript:temper('merbivore_soft')">merbivore_soft</a></li>
-                    <li><a href="javascript:temper('mono_industrial')">mono_industrial</a></li>
-                    <li><a href="javascript:temper('monokai')">monokai</a></li>
-                    <li><a href="javascript:temper('pastel_on_dark')">pastel_on_dark</a></li>
-                    <li><a href="javascript:temper('solarized_dark')">solarized_dark</a></li>
-                    <li><a href="javascript:temper('solarized_light')">solarized_light</a></li>
-                    <li><a href="javascript:temper('text_mate')">text_mate</a></li>
-                    <li><a href="javascript:temper('tomorrow')">tomorrow</a></li>
-                    <li><a href="javascript:temper('tomorrow_night')">tomorrow_night</a></li>
-                    <li><a href="javascript:temper('tomorrow_night_blue')">tomorrow_night_blue</a></li>
-                    <li><a href="javascript:temper('tomorrow_night_bright')">tomorrow_night_bright</a></li>
-                    <li><a href="javascript:temper('tomorrow_night_eighties')">tomorrow_night_eighties</a></li>
-                    <li><a href="javascript:temper('twilight')">twilight</a></li>
-                    <li><a href="javascript:temper('vibrant_ink')">vibrant_ink</a></li>
+                    <li><a href="javascript:temper('chrome')">Chrome</a></li>
+                    <li><a href="javascript:temper('clouds')">Clouds</a></li>
+                    <li><a href="javascript:temper('clouds_midnight')">Clouds Midnight</a></li>
+                    <li><a href="javascript:temper('cobalt')">Cobalt</a></li>
+                    <li><a href="javascript:temper('crimson_editor')">Crimson Editor</a></li>
+                    <li><a href="javascript:temper('dawn')">Dawn</a></li>
+                    <li><a href="javascript:temper('eclipse')">Eclipse</a></li>
+                    <li><a href="javascript:temper('idle_fingers')">Idle Fingers</a></li>
+                    <li><a href="javascript:temper('kr_theme')">KR Theme</a></li>
+                    <li><a href="javascript:temper('merbivore')">Merbivore</a></li>
+                    <li><a href="javascript:temper('merbivore_soft')">Merbivore Soft</a></li>
+                    <li><a href="javascript:temper('mono_industrial')">Mono Industrial</a></li>
+                    <li><a href="javascript:temper('monokai')">Monokai</a></li>
+                    <li><a href="javascript:temper('pastel_on_dark')">Pastel On Dark</a></li>
+                    <li><a href="javascript:temper('solarized_dark')">Solarized Dark</a></li>
+                    <li><a href="javascript:temper('solarized_light')">Solarized Light</a></li>
+                    <li><a href="javascript:temper('text_mate')">Text Mate</a></li>
+                    <li><a href="javascript:temper('tomorrow')">Tomorrow</a></li>
+                    <li><a href="javascript:temper('tomorrow_night')">Tomorrow Night</a></li>
+                    <li><a href="javascript:temper('tomorrow_night_blue')">Tomorrow Night Blue</a></li>
+                    <li><a href="javascript:temper('tomorrow_night_bright')">Tomorrow Night Bright</a></li>
+                    <li><a href="javascript:temper('tomorrow_night_eighties')">Tomorrow Night Eighties</a></li>
+                    <li><a href="javascript:temper('twilight')">Twilight</a></li>
+                    <li><a href="javascript:temper('vibrant_ink')">Vibrant Ink</a></li>
                 </ul>
             </button>
-            <button title="Commit" type="button" id="btn-add-tab" onclick="javascript:showCommitModal()"
+            <button title="Commit" type="button" id="btn-add-tab" onclick="javascript:showCommitModal()" ng-if="isRepoOpen"
                     class="btn navbar-btn toolbarButton"><i class="fas fa-save fa-2x"></i></button>
             <button title="Choose Repo" onclick="chooseRepo()" class="btn navbar-btn toolbarButton"><i class="fas fa-book fa-2x"></i>
             </button>
-            <button title="New Entry" value="" onclick="document.getElementById('entryModal').style.display='block'"
+            <button title="New Entry" value="" onclick="document.getElementById('entryModal').style.display='block'" ng-if="isRepoOpen"
                     class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
-            <button title="Run" value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()"><i class="fas fa-play fa-2x"></i>
+            <button title="Run" value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()" ng-if="isRepoOpen"><i class="fas fa-play fa-2x"></i>
             </button>
             <!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
         </div>
@@ -258,7 +257,15 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         </div>
     </div>
 </nav>
-<div id="leftcol">
+
+<div id="repoSelectOverlay" ng-if="!isRepoOpen">
+    <img src="../images/Wallpaper.jpg">
+    <div id="noRepoSelectedTxt">
+       Select a repository to start coding!
+    </div>
+</div>
+
+<div id="leftcol" ng-if="isRepoOpen">
     <!-- *************************************************** -->
     <!-- ******************* FILE MANAGER ****************** -->
     <!-- *************************************************** -->
@@ -324,7 +331,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <!-- ***************** ACE CODE EDITOR ***************** -->
 <!-- *************************************************** -->
-<div class="rightcol">
+<div class="rightcol" ng-if="isRepoOpen">
     <ul id="tab-list" class="nav navbar-nav nav-tabs">
     </ul>
     <div id="editorContainer"></div>
@@ -1023,7 +1030,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     dataType: "text",
                     success: function (data) {
                         //document.getElementById("filemanager").innerHTML = data;
-                        $("#filemanager .file").draggable({
+                        /*$("#filemanager .file").draggable({
                             revert: "invalid"
                         });
                         $("#filemanager .folder").draggable({
@@ -1034,7 +1041,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                         });
                         $("#filemanager .folder").droppable({
                             drop: drop
-                        });
+		    });*/
                     }
                 });
             }
@@ -1342,6 +1349,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                 dataType: "json"
             });
         }
+
+        let colors = ['#193e87', '#8044a8', '#7b0e75', '#6b142c'];
+        let colorCounter = 2;
+        window.setInterval(function () {
+            $('#repoSelectOverlay').css('background', colors[colorCounter]);
+            colorCounter = (colorCounter + 1) % colors.length;
+        }, 2000);
     </script>
 </div>
 <div id="onFileReadOverlay">

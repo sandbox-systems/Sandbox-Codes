@@ -372,7 +372,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             </script>
         </div>
     </div>
-<div id="htmlLivePreview" style="width: 500px; height: 300px;" ng-bind-html="livePreview"></div>
 
     <script>
         function typeUpdater(filer) {
@@ -1389,43 +1388,58 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
-<div class="rightcol" id="rightcol" style="background:blue">Hello World</div>
+<div class="rightcol" id="rightcol" style="background:blue"><div id="htmlLivePreview" style="width: 500px; height: 300px;" ng-bind-html="livePreview"></div></div>
 <script>
 	var tw = ["20","36","36"];
+	var lstat;
+	var mstat;
+	var rstat;
 	var elements = [document.getElementById('leftcol'),document.getElementById('midcol'),document.getElementById('rightcol')];
 	function updateDisplay(){
-	var status = [document.getElementById('left').checked,document.getElementById('mid').checked,document.getElementById('right').checked];
-		for(var i =0; i < 3; i++){
-			if(status[i]){
-				elements[i].style.display="inline-block";
-			}else{
-				elements[i].style.display="none";
-			}
-		}
+	    lstat = document.getElementById('left').checked;
+	    mstat = document.getElementById('mid').checked;
+	    rstat = document.getElementById('right').checked;
+
+		if(lstat){
+		    elements[0].style.display = "inline-block";
+        }else{
+		    elements[0].style.display="none";
+        }
+        if(mstat){
+            elements[1].style.display = "inline-block";
+        }else{
+            elements[1].style.display="none";
+        }
+        if(rstat){
+            elements[2].style.display = "inline-block";
+        }else{
+            elements[2].style.display="none";
+        }
 		if(status[0] && status[1] && status[2]){
 			for(var i =0; i < 3; i++){
 				elements[i].style.width= tw[i]+"%";
 			}
-		}else if(status[0] && status[1]){
+		}else if(lstat && mstat){
 			elements[0].style.width= "38%";
 			elements[1].style.width= "54%";
 			elements[2].style.width= "36%";
-		}else if(status[0] && status[2]){
+		}else if(lstat && rstat){
 			elements[0].style.width= "38%";
 			elements[2].style.width= "54%";
 			elements[1].style.width= "36%";
-		}else if(status[2] && status[1]){
+		}else if(rstat && mstat){
 			elements[2].style.width= "46%";
 			elements[1].style.width= "46%";
 			elements[0].style.width= "20%";
-		}else if(status[2]){
+		}else if(rstat){
 			elements[2].style.width= "92%";
-		}else if(status[1]){
+		}else if(mstat){
 			elements[1].style.width= "92%";
-		}else if(status[0]){
+		}else if(lstat){
 			elements[0].style.width= "92%";
 		}
 	}
+}
 </script>
 <div id="onFileReadOverlay">
     <div id="playgroundOverlay"></div>

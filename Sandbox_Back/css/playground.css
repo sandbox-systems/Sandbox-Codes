@@ -272,9 +272,8 @@ option{
 .rightcol{
 	position: relative;
 	display: inline-block;
-	width: 76%;
+	width: 36%;
 	height: 100%;
-	float: right;
 	margin-right: 3.5%;
 }
 .rightButton{

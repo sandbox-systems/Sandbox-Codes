@@ -12,9 +12,7 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
     $gstate = $state;
     $gstateParams = $stateParams;
     $scope.scan = "";
-    $scope.livePreview = "";
     $scope.online = [];
-    $scope.isRepoOpen = false;
     if ($stateParams.repo !== undefined) {
         owner = $stateParams.repo.split("/")[0];
         repo = $stateParams.repo.split("/")[1];
@@ -25,7 +23,6 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
         url: "Sandbox_Back/getUsername.php",
         data: {},
         success: function (data, status, xhttp) {
-$scope.livePreview = "<h1>HELLO 2</h1>";
             username = data.username;
             toggleCollab();
         }, error: function (data) {console.log(data);},
@@ -184,7 +181,6 @@ function chooseRepo(){
             directories = {};
             isReading = false;
             collab.online = [];
-            $gscope.isRepoOpen = true;
             scan($gscope, $ghttp, $gsce, $gstate);
         }
     });
@@ -216,9 +212,6 @@ function readFile(hash, onRead, altOnRead) {
                 altOnRead(content);
                 return;
             }
-            $gscope.$apply(function() {
-                $gscope.livePreview = content;
-            });
             editor.setValue(content, -1);
             onRead(content);
             isReading = false;
@@ -412,12 +405,11 @@ setInterval(function(){
 
 function updateFile(path, name, content, altCallback, shouldResetCanSave){
     let fullPath = path + (path === "" ? "" : "/") + name;
-    if (!$('#onFileReadOverlay').is(":hidden") || isReading || (fileFlags[fullPath] && fileFlags[fullPath].canSave === false))
+    if ($('#onFileReadOverlay').is(":hidden") || isReading || (fileFlags[fullPath] && !fileFlags[fullPath].canSave))
         return;
     tempContents[fullPath] = content;
     if (!fileFlags[fullPath].hasUpdated)
         fileFlags[fullPath].hasUpdated = [];
-console.log(fileFlags);
     fileFlags[fullPath].hasUpdated.push(0);
     $.ajax({
         type: "POST",

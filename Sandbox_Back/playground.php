@@ -19,10 +19,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <link href="Sandbox_Back/node_modules/fine-uploader/all.fine-uploader/fine-uploader-new.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="Sandbox_Back/Docker/node_modules/xterm/dist/xterm.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
+    <script src="Sandbox_Back/Docker/node_modules/xterm/dist/xterm.js"></script>
+
 </head>
 <style>
     .notenav {
@@ -339,9 +342,46 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <!-- *************************************************** -->
     <!-- ******************** TERMINAL ********************* -->
     <!-- *************************************************** -->
-    <div id="terminal">
-        <iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>
+    <div id="terminal" style="overflow: hidden;">
+        <!--<iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>-->
+        <div id="consoleFrame">
+            <script>
+                container = document.getElementById('consoleFrame');
+                var term = new Terminal(),
+                    url = 'ws://localhost:4000/echo',
+                    socket = new WebSocket(url);
+
+                term.open(document.getElementById('consoleFrame'));
+
+                var command = "";
+                var numtyped = 0;
+
+                term.on('data', function (data) {
+                    if(data == '\r'){
+                        term.write('\r\n');
+                        command += '\r';
+                        console.log(command);
+                        socket.send(command);
+                        command = "";
+                    }else{
+                        command += data;
+                        console.log(data);
+                        term.write(data);
+                    }
+                });
+
+                term.on('key', function(key, e) {
+                    if(e.which==8)
+                        term.write("\b \b");
+                });
+
+                socket.onmessage = function (e) {
+                    term.write(e.data);
+                }
+            </script>
+        </div>
     </div>
+<div id="htmlLivePreview" style="width: 500px; height: 300px;" ng-bind-html="livePreview"></div>
 
     <script>
         function typeUpdater(filer) {

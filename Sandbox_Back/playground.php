@@ -230,29 +230,20 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
                     class="btn navbar-btn toolbarButton"><i class="fas fa-plus fa-2x"></i></button>
             <button title="Run" value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()" ng-if="isRepoOpen"><i class="fas fa-play fa-2x"></i>
             </button>
-            <!--                        <!--<button type="button" id="btn-add-tab" class="btn btn-primary pull-right">Add Tab</button>-->
-        </div>
+			<div class="btn-group-toggle" data-toggle="buttons" style="position:absolute;left:44%;">
+			  <label class="btn btn-secondary">
+				<input onchange="updateDisplay()" type="checkbox" checked autocomplete="off" id="left"><span class="fas fa-angle-double-left"></span>
+			  </label>
+				<label class="btn btn-secondary">
+				<input type="checkbox" checked onchange="updateDisplay()" autocomplete="off" id="mid"><span class="fas fa-angle-double-up"></span>
+			  </label>
+				<label class="btn btn-secondary">
+				<input type="checkbox" checked autocomplete="off" onchange="updateDisplay()" id="right"><span class="fas fa-angle-double-right">
+			  </label>
+			</div>
+  </div>
         <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
 	margin-right: 0%;">
-<!--            <img class="bordered-circle-green" src="https://ui-avatars.com/api/?size=40&background=a0a0a0&rounded=true">-->
-<!--            <button class="rightButton dropdown">-->
-<!--                <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"-->
-<!--                                                                        class="fas fa-users"></span></a>-->
-<!--                <ul class="dropdown-menu animated bounceIn"-->
-<!--                    style="left:0;background-color: transparent;border: none;box-shadow: none">-->
-<!--                    <li>-->
-<!--                        <div class="chip">-->
-<!--                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                        <div class="chip">-->
-<!--                            <img src="images/Arya.jpg" alt="Person" width="96" height="96">-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </button>-->
-<!--            <button class="rightButton" onclick="openChatNav()" id="openChat"><span class="fas fa-comments"></span></button>-->
             <button class="rightButton" onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
         </div>
     </div>
@@ -331,7 +322,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <!-- ***************** ACE CODE EDITOR ***************** -->
 <!-- *************************************************** -->
-<div class="rightcol" ng-if="isRepoOpen">
+<div class="rightcol" ng-if="isRepoOpen" id="midcol">
     <ul id="tab-list" class="nav navbar-nav nav-tabs">
     </ul>
     <div id="editorContainer"></div>
@@ -339,7 +330,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <!-- *************************************************** -->
     <!-- ******************** TERMINAL ********************* -->
     <!-- *************************************************** -->
-    <div id="terminal">
+    <div id="terminal" style="overflow:scroll">
         <iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>
     </div>
 
@@ -1358,6 +1349,44 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
+<div class="rightcol" id="rightcol" style="background:blue">Hello World</div>
+<script>
+	var tw = ["20","36","36"];
+	var elements = [document.getElementById('leftcol'),document.getElementById('midcol'),document.getElementById('rightcol')];
+	function updateDisplay(){
+	var status = [document.getElementById('left').checked,document.getElementById('mid').checked,document.getElementById('right').checked];
+		for(var i =0; i < 3; i++){
+			if(status[i]){
+				elements[i].style.display="inline-block";
+			}else{
+				elements[i].style.display="none";
+			}
+		}
+		if(status[0] && status[1] && status[2]){
+			for(var i =0; i < 3; i++){
+				elements[i].style.width= tw[i]+"%";
+			}
+		}else if(status[0] && status[1]){
+			elements[0].style.width= "38%";
+			elements[1].style.width= "54%";
+			elements[2].style.width= "36%";
+		}else if(status[0] && status[2]){
+			elements[0].style.width= "38%";
+			elements[2].style.width= "54%";
+			elements[1].style.width= "36%";
+		}else if(status[2] && status[1]){
+			elements[2].style.width= "46%";
+			elements[1].style.width= "46%";
+			elements[0].style.width= "20%";
+		}else if(status[2]){
+			elements[2].style.width= "92%";
+		}else if(status[1]){
+			elements[1].style.width= "92%";
+		}else if(status[0]){
+			elements[0].style.width= "92%";
+		}
+	}
+</script>
 <div id="onFileReadOverlay">
     <div id="playgroundOverlay"></div>
     <div class="loader"></div>

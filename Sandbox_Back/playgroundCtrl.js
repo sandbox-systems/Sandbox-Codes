@@ -25,7 +25,6 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
         url: "Sandbox_Back/getUsername.php",
         data: {},
         success: function (data, status, xhttp) {
-$scope.livePreview = "<h1>HELLO 2</h1>";
             username = data.username;
             toggleCollab();
         }, error: function (data) {console.log(data);},
@@ -198,7 +197,7 @@ function clickFile(name, key){
 /****************************************************
  ****************** REPO MANIPULATION ***************
  ****************************************************/
-function readFile(hash, onRead, altOnRead) {
+function readFile(name, hash, onRead, altOnRead) {
     isReading = true;
     $('#onFileReadOverlay').fadeIn();
     $.ajax({
@@ -216,10 +215,27 @@ function readFile(hash, onRead, altOnRead) {
                 altOnRead(content);
                 return;
             }
-            $gscope.$apply(function() {
-                $gscope.livePreview = content;
-            });
+            if (name.indexOf(".html") !== -1) {
+                $gscope.$apply(function() {
+                    $gscope.livePreview = $gsce.trustAsHtml(content);
+                });
+            } else {
+                $gscope.$apply(function() {
+                    $gscope.livePreview = "";
+                });
+            }
             editor.setValue(content, -1);
+            editor.getSession().on('change', function() {
+                if (name.indexOf(".html") !== -1) {
+                    $gscope.$apply(function() {
+                        $gscope.livePreview = $gsce.trustAsHtml(editor.getValue());
+                    });
+                } else {
+                    $gscope.$apply(function() {
+                        $gscope.livePreview = "";
+                    });
+                }
+            });
             onRead(content);
             isReading = false;
             $('#onFileReadOverlay').fadeOut();
@@ -345,7 +361,7 @@ function duplicateFile(fullPath) {
             return true;
         }
         if (isNameValid(result.value)) {
-            readFile(hashes[fullPath], null, function (content) {
+            readFile(fullPath, hashes[fullPath], null, function (content) {
                 createFile(path, result.value, content, true);
             });
         } else {
@@ -363,7 +379,7 @@ function renameFile(fullPath) {
     function makeRequest(newName) {
         var path = fullPath.lastIndexOf("/") === -1 ? "" : fullPath.substring(0, fullPath.lastIndexOf("/"));
         var name = fullPath.lastIndexOf("/") === -1 ? fullPath : fullPath.substring(fullPath.lastIndexOf("/") + 1, fullPath.length);
-        readFile(hashes[fullPath], null, function (content) {
+        readFile(fullPath, hashes[fullPath], null, function (content) {
             deleteFile(path, name, true);
             createFile(path, newName, content, true);
         });
@@ -569,8 +585,28 @@ function activateTab(hash, path, hasAlreadyLeftCollabSession){
     if (fileFlags[path].canSave) {
         if (tempContents.hasOwnProperty(path)) {
             editor.setValue(tempContents[path], -1);
+            if (active_name.indexOf(".html") !== -1) {
+                $gscope.$apply(function() {
+                    $gscope.livePreview = $gsce.trustAsHtml(editor.getValue());
+                });
+            } else {
+                $gscope.$apply(function() {
+                    $gscope.livePreview = "";
+                });
+            }
+            editor.getSession().on('change', function() {
+                if (active_name.indexOf(".html") !== -1) {
+                    $gscope.$apply(function() {
+                        $gscope.livePreview = $gsce.trustAsHtml(editor.getValue());
+                    });
+                } else {
+                    $gscope.$apply(function() {
+                        $gscope.livePreview = "";
+                    });
+                }
+            });
         } else {
-            readFile(hash, function (contents) {
+            readFile(active_name, hash, function (contents) {
                 tempContents[path] = contents;
             });
         }
@@ -887,8 +923,20 @@ function setupAce() {
 }*/
 
 function compile(){
-	swal(editor.getValue());
+    var ext = active_name.substr(active_name.lastIndexOf('.') + 1);
+    var name = active_name.substring(0, active_name.lastIndexOf("."));
+    switch(ext){
+        case "java":
+            socket.send("mkdir -p ~/code/java/"+name);
+            socket.send("echo "+escapeShell(editor.getValue())+" > "+"~/code/java/"+name+"/"+active_name);
+            socket.send("javac -g ~/code/java/"+name+"/"+active_name);
+            socket.send("java -cp ~/code/java/"+name+" "+name);
+    }
 }
+
+function escapeShell(cmd) {
+    return '"'+cmd.replace(/(["\s'$`\\])/g,'\\$1')+'"';
+};
 
 $(window).on("unload", function() {
     if (active_name !== null) {

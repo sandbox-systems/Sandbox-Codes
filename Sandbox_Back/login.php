@@ -31,6 +31,8 @@
         $_SESSION["object_id"] = (string)($row->current()->_id);
         //setcookie("5IJFbNgniGHUzVc1SuqWiSPokLMCN0CVOr", "Sree Grandhe", 1440, "/", "sandboxcodes.com", true, false);
 
+        include "Docker/runContainer.php";
+
         echo "User authenticated.5IJFbNgniGHUzVc1SuqWiSPokLMCN0CVOr=" . $row->current()->ecode;
         //header("Location: https://sandboxcodes.com/Castle.php");
 

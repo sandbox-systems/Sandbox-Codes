@@ -1,6 +1,6 @@
 <?php
 
-require "../../checklogin.php";
+require "../checklogin.php";
 
 $usersha = escapeshellcmd(sha1($_SESSION["username"]));
 
@@ -9,7 +9,7 @@ try {
     if(strpos($info[0], "Error")!==false){
         throw new Exception("Error: User already has a container.");
     }
-    echo "Container successfully created.";
+    //echo "Container successfully created.";
 }catch(Exception $e){
     die($e->getMessage());
 }

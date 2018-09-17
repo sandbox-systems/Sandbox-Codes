@@ -1,6 +1,6 @@
 <?php
 
-require "../../checklogin.php";
+require "../checklogin.php";
 
 try{
     $usersha = escapeshellcmd(sha1($_SESSION["username"]));
@@ -19,14 +19,19 @@ try{
 
     switch($status){
         case 204:
-            echo "Container started successfully.";
+            //echo "Container started successfully.";
             break;
         case 304:
-            throw new Exception("Container already started.");
+            //Container already started
+            break;
         case 404:
+            //Container does not exist
             throw new Exception("Container does not exist.");
+            break;
         case 505:
+            //Internal server error
             throw new Exception("Internal server error.");
+            break;
     }
 }catch(Exception $e){
     die($e->getMessage());

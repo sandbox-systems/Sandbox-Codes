@@ -601,3 +601,17 @@ iframe{
 .powered-by-firepad {
     display: none;
 }
+
+#rightcol {
+    background: white;
+    height: 84vh;
+    overflow: scroll;
+}
+
+#leftcol {
+    display: none;
+}
+
+.rightcol {
+   display: none;
+}

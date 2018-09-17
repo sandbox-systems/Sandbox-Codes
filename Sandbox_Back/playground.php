@@ -337,12 +337,12 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         <!--<iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>-->
         <div id="consoleFrame">
             <script>
-                container = document.getElementById('consoleFrame');
+                container = document.getElementById('terminal');
                 var term = new Terminal(),
-                    url = 'ws://localhost:4000/echo',
+                    url = 'wss://sandboxcodes.com:4000/echo',
                     socket = new WebSocket(url);
 
-                term.open(document.getElementById('consoleFrame'));
+                term.open(document.getElementById('terminal'));
 
                 var command = "";
                 var numtyped = 0;
@@ -372,7 +372,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             </script>
         </div>
     </div>
-<div id="htmlLivePreview" style="width: 500px; height: 300px;" ng-bind-html="livePreview"></div>
 
     <script>
         function typeUpdater(filer) {
@@ -1389,41 +1388,41 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
-<div class="rightcol" id="rightcol" style="background:blue">Hello World</div>
+<iframe class="rightcol" id="rightcol" srcdoc="{{livePreview}}" frameborder="0"></iframe>
 <script>
 	var tw = ["20","36","36"];
 	var elements = [document.getElementById('leftcol'),document.getElementById('midcol'),document.getElementById('rightcol')];
 	function updateDisplay(){
-	var status = [document.getElementById('left').checked,document.getElementById('mid').checked,document.getElementById('right').checked];
+         	var status = [!document.getElementById('left').checked,!document.getElementById('mid').checked,!document.getElementById('right').checked];
 		for(var i =0; i < 3; i++){
 			if(status[i]){
-				elements[i].style.display="inline-block";
+                                document.getElementById(elements[i].getAttribute("id")).style.display = "inline-block";
 			}else{
-				elements[i].style.display="none";
+                                document.getElementById(elements[i].getAttribute("id")).style.display = "none";
 			}
 		}
 		if(status[0] && status[1] && status[2]){
 			for(var i =0; i < 3; i++){
-				elements[i].style.width= tw[i]+"%";
+				document.getElementById(elements[i].getAttribute("id")).style.width= tw[i]+"%";
 			}
 		}else if(status[0] && status[1]){
-			elements[0].style.width= "38%";
-			elements[1].style.width= "54%";
-			elements[2].style.width= "36%";
+			document.getElementById('leftcol').style.width= "38%";
+			document.getElementById('midcol').style.width= "54%";
+			document.getElementById('rightcol').style.width= "36%";
 		}else if(status[0] && status[2]){
-			elements[0].style.width= "38%";
-			elements[2].style.width= "54%";
-			elements[1].style.width= "36%";
+			document.getElementById('leftcol').style.width= "38%";
+			document.getElementById('rightcol').style.width= "54%";
+			document.getElementById('midcol').style.width= "36%";
 		}else if(status[2] && status[1]){
-			elements[2].style.width= "46%";
-			elements[1].style.width= "46%";
-			elements[0].style.width= "20%";
+			document.getElementById('rightcol').style.width= "46%";
+			document.getElementById('midcol').style.width= "46%";
+			document.getElementById('leftcol').style.width= "20%";
 		}else if(status[2]){
-			elements[2].style.width= "92%";
+			document.getElementById('rightcol').style.width= "92%";
 		}else if(status[1]){
-			elements[1].style.width= "92%";
+			document.getElementById('midcol').style.width= "92%";
 		}else if(status[0]){
-			elements[0].style.width= "92%";
+			document.getElementById('leftcol').style.width= "92%";
 		}
 	}
 </script>

@@ -25,6 +25,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
     <script src="Sandbox_Back/Docker/node_modules/xterm/dist/xterm.js"></script>
+	<link rel="stylesheet" href="css/animate.css">
 
 </head>
 <style>
@@ -98,6 +99,9 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         border-radius: 50%;
         object-fit: cover;
     }
+	.leftcol, .rightcol{
+		transition: width 1s;	
+	}
 </style>
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
@@ -259,7 +263,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     </div>
 </div>
 
-<div id="leftcol" ng-if="isRepoOpen">
+<div id="leftcol" class='animated zoomIn' ng-if="isRepoOpen">
     <!-- *************************************************** -->
     <!-- ******************* FILE MANAGER ****************** -->
     <!-- *************************************************** -->
@@ -325,7 +329,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <!-- ***************** ACE CODE EDITOR ***************** -->
 <!-- *************************************************** -->
-<div class="rightcol" ng-if="isRepoOpen" id="midcol">
+<div class="rightcol animated zoomIn" ng-if="isRepoOpen" id="midcol">
     <ul id="tab-list" class="nav navbar-nav nav-tabs">
     </ul>
     <div id="editorContainer"></div>
@@ -333,7 +337,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <!-- *************************************************** -->
     <!-- ******************** TERMINAL ********************* -->
     <!-- *************************************************** -->
-    <div id="terminal" style="overflow: hidden;">
+    <div id="terminal" style="overflow: scroll;">
         <!--<iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>-->
         <div id="consoleFrame">
             <script>
@@ -1388,43 +1392,58 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
-<iframe class="rightcol" id="rightcol" srcdoc="{{livePreview}}" frameborder="0"></iframe>
+<iframe class="rightcol animated zoomIn" id="rightcol" srcdoc="{{livePreview}}" frameborder="0"></iframe>
 <script>
 	var tw = ["20","36","36"];
+	var lstat;
+	var mstat;
+	var rstat;
 	var elements = [document.getElementById('leftcol'),document.getElementById('midcol'),document.getElementById('rightcol')];
 	function updateDisplay(){
-         	var status = [!document.getElementById('left').checked,!document.getElementById('mid').checked,!document.getElementById('right').checked];
-		for(var i =0; i < 3; i++){
-			if(status[i]){
-                                document.getElementById(elements[i].getAttribute("id")).style.display = "inline-block";
-			}else{
-                                document.getElementById(elements[i].getAttribute("id")).style.display = "none";
-			}
-		}
+	    lstat = document.getElementById('left').checked;
+	    mstat = document.getElementById('mid').checked;
+	    rstat = document.getElementById('right').checked;
+
+		if(lstat){
+		    elements[0].style.display = "inline-block";
+        }else{
+		    elements[0].style.display="none";
+        }
+        if(mstat){
+            elements[1].style.display = "inline-block";
+        }else{
+            elements[1].style.display="none";
+        }
+        if(rstat){
+            elements[2].style.display = "inline-block";
+        }else{
+            elements[2].style.display="none";
+        }
 		if(status[0] && status[1] && status[2]){
 			for(var i =0; i < 3; i++){
 				document.getElementById(elements[i].getAttribute("id")).style.width= tw[i]+"%";
 			}
-		}else if(status[0] && status[1]){
-			document.getElementById('leftcol').style.width= "38%";
-			document.getElementById('midcol').style.width= "54%";
-			document.getElementById('rightcol').style.width= "36%";
-		}else if(status[0] && status[2]){
-			document.getElementById('leftcol').style.width= "38%";
-			document.getElementById('rightcol').style.width= "54%";
-			document.getElementById('midcol').style.width= "36%";
-		}else if(status[2] && status[1]){
-			document.getElementById('rightcol').style.width= "46%";
-			document.getElementById('midcol').style.width= "46%";
-			document.getElementById('leftcol').style.width= "20%";
-		}else if(status[2]){
-			document.getElementById('rightcol').style.width= "92%";
-		}else if(status[1]){
-			document.getElementById('midcol').style.width= "92%";
-		}else if(status[0]){
-			document.getElementById('leftcol').style.width= "92%";
+		}else if(lstat && mstat){
+			elements[0].style.width= "38%";
+			elements[1].style.width= "54%";
+			elements[2].style.width= "36%";
+		}else if(lstat && rstat){
+			elements[0].style.width= "38%";
+			elements[2].style.width= "54%";
+			elements[1].style.width= "36%";
+		}else if(rstat && mstat){
+			elements[2].style.width= "46%";
+			elements[1].style.width= "46%";
+			elements[0].style.width= "20%";
+		}else if(rstat){
+			elements[2].style.width= "100%";
+		}else if(mstat){
+			elements[1].style.width= "100%";
+		}else if(lstat){
+			elements[0].style.width= "100%";
 		}
 	}
+}
 </script>
 <div id="onFileReadOverlay">
     <div id="playgroundOverlay"></div>

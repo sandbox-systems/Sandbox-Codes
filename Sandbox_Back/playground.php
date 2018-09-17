@@ -1400,50 +1400,49 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 	var rstat;
 	var elements = [document.getElementById('leftcol'),document.getElementById('midcol'),document.getElementById('rightcol')];
 	function updateDisplay(){
-	    lstat = document.getElementById('left').checked;
-	    mstat = document.getElementById('mid').checked;
-	    rstat = document.getElementById('right').checked;
+	    lstat = !document.getElementById('left').checked;
+	    mstat = !document.getElementById('mid').checked;
+	    rstat = !document.getElementById('right').checked;
 
 		if(lstat){
-		    elements[0].style.display = "inline-block";
+		    document.getElementById('leftcol').style.display = "inline-block";
         }else{
-		    elements[0].style.display="none";
+		    document.getElementById('leftcol').style.display="none";
         }
         if(mstat){
-            elements[1].style.display = "inline-block";
+            document.getElementById('midcol').style.display = "inline-block";
         }else{
-            elements[1].style.display="none";
+            document.getElementById('midcol').style.display="none";
         }
         if(rstat){
-            elements[2].style.display = "inline-block";
+            document.getElementById('rightcol').style.display = "inline-block";
         }else{
-            elements[2].style.display="none";
+            document.getElementById('rightcol').style.display="none";
         }
-		if(status[0] && status[1] && status[2]){
+		if(lstat && mstat && rstat){
 			for(var i =0; i < 3; i++){
 				document.getElementById(elements[i].getAttribute("id")).style.width= tw[i]+"%";
 			}
 		}else if(lstat && mstat){
-			elements[0].style.width= "38%";
-			elements[1].style.width= "54%";
-			elements[2].style.width= "36%";
+			document.getElementById('leftcol').style.width= "38%";
+			document.getElementById('midcol').style.width= "54%";
+			document.getElementById('rightcol').style.width= "36%";
 		}else if(lstat && rstat){
-			elements[0].style.width= "38%";
-			elements[2].style.width= "54%";
-			elements[1].style.width= "36%";
+			document.getElementById('leftcol').style.width= "38%";
+			document.getElementById('rightcol').style.width= "54%";
+			document.getElementById('midcol').style.width= "36%";
 		}else if(rstat && mstat){
-			elements[2].style.width= "46%";
-			elements[1].style.width= "46%";
-			elements[0].style.width= "20%";
+			document.getElementById('rightcol').style.width= "46%";
+			document.getElementById('midcol').style.width= "46%";
+			document.getElementById('leftcol').style.width= "20%";
 		}else if(rstat){
-			elements[2].style.width= "100%";
+			document.getElementById('rightcol').style.width= "100%";
 		}else if(mstat){
-			elements[1].style.width= "100%";
+			document.getElementById('midcol').style.width= "100%";
 		}else if(lstat){
-			elements[0].style.width= "100%";
+			document.getElementById('leftcol').style.width= "100%";
 		}
 	}
-}
 </script>
 <div id="onFileReadOverlay">
     <div id="playgroundOverlay"></div>

@@ -25,6 +25,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
     <script src="Sandbox_Back/Docker/node_modules/xterm/dist/xterm.js"></script>
+	<link rel="stylesheet" href="css/animate.css">
 
 </head>
 <style>
@@ -98,6 +99,9 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         border-radius: 50%;
         object-fit: cover;
     }
+	.leftcol, .rightcol{
+		transition: width 1s;	
+	}
 </style>
 <body style="background-color:rgba(255,255,255,0.2);">
 <div id="notenavv" class="notenav">
@@ -259,7 +263,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     </div>
 </div>
 
-<div id="leftcol" ng-if="isRepoOpen">
+<div id="leftcol" class='animated zoomIn' ng-if="isRepoOpen">
     <!-- *************************************************** -->
     <!-- ******************* FILE MANAGER ****************** -->
     <!-- *************************************************** -->
@@ -325,7 +329,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <!-- ***************** ACE CODE EDITOR ***************** -->
 <!-- *************************************************** -->
-<div class="rightcol" ng-if="isRepoOpen" id="midcol">
+<div class="rightcol animated zoomIn" ng-if="isRepoOpen" id="midcol">
     <ul id="tab-list" class="nav navbar-nav nav-tabs">
     </ul>
     <div id="editorContainer"></div>
@@ -333,7 +337,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <!-- *************************************************** -->
     <!-- ******************** TERMINAL ********************* -->
     <!-- *************************************************** -->
-    <div id="terminal" style="overflow: hidden;">
+    <div id="terminal" style="overflow: scroll;">
         <!--<iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>-->
         <div id="consoleFrame">
             <script>
@@ -1388,7 +1392,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
-<div class="rightcol" id="rightcol" style="background:blue"><div id="htmlLivePreview" style="width: 500px; height: 300px;" ng-bind-html="livePreview"></div></div>
+<div class="rightcol animated zoomIn" id="rightcol" style="background:blue"><div id="htmlLivePreview" style="width: 500px; height: 300px;" ng-bind-html="livePreview"></div></div>
 <script>
 	var tw = ["20","36","36"];
 	var lstat;
@@ -1432,11 +1436,11 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 			elements[1].style.width= "46%";
 			elements[0].style.width= "20%";
 		}else if(rstat){
-			elements[2].style.width= "92%";
+			elements[2].style.width= "100%";
 		}else if(mstat){
-			elements[1].style.width= "92%";
+			elements[1].style.width= "100%";
 		}else if(lstat){
-			elements[0].style.width= "92%";
+			elements[0].style.width= "100%";
 		}
 	}
 }

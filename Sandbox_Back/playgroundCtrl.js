@@ -14,7 +14,7 @@ let playgroundCtrl = function ($rootScope, $scope, $http, $sce, $state, $statePa
     $scope.scan = "";
     $scope.livePreview = "";
     $scope.online = [];
-    $scope.isRepoOpen = false;
+    $scope.isRepoOpen = $stateParams.repo !== undefined;
     if ($stateParams.repo !== undefined) {
         owner = $stateParams.repo.split("/")[0];
         repo = $stateParams.repo.split("/")[1];

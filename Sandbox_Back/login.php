@@ -1,5 +1,8 @@
 <?php
+    $isInLoginPage = True;
+
     require "../checklogin.php";
+
 	try{
 	    $username = (string)$_POST["username"];
 	    $password = (string)$_POST["password"];

@@ -109,10 +109,10 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <a href="javascript:void(0)" style="float:right;" class="closebtn" onclick="closeNoteNav()">&times;</a>
     <textarea id="notesContent"><?php echo $notes ?></textarea>
 </div>
-<div id="chatNav" class="notenav">
+<!--<div id="chatNav" class="notenav">
     <a href="javascript:void(0)" style="float:right;" class="closebtn" onclick="closeNoteNav()">&times;</a>
     <iframe src="localhost:9000" style="width:100%;height:100%"></iframe>
-</div>
+</div>-->
 
 <div id="commitModal" class="modal">
     <div class="modal-content">

@@ -238,13 +238,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             <button title="Run" value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()" ng-if="isRepoOpen"><i class="fas fa-play fa-2x"></i>
             </button>
 			<div class="btn-group-toggle" data-toggle="buttons" style="position:absolute;left:44%;">
-			  <label class="btn btn-secondary">
+			  <label class="btn btn-default">
 				<input onchange="updateDisplay()" type="checkbox" checked autocomplete="off" id="left"><span class="fas fa-angle-double-left"></span>
 			  </label>
-				<label class="btn btn-secondary">
+				<label class="btn btn-default">
 				<input type="checkbox" checked onchange="updateDisplay()" autocomplete="off" id="mid"><span class="fas fa-angle-double-up"></span>
 			  </label>
-				<label class="btn btn-secondary">
+				<label class="btn btn-default">
 				<input type="checkbox" checked autocomplete="off" onchange="updateDisplay()" id="right"><span class="fas fa-angle-double-right">
 			  </label>
 			</div>
@@ -1411,12 +1411,12 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 				document.getElementById(elements[i].getAttribute("id")).style.width= tw[i]+"%";
 			}
 		}else if(lstat && mstat){
-			document.getElementById('leftcol').style.width= "38%";
-			document.getElementById('midcol').style.width= "54%";
+			document.getElementById('leftcol').style.width= "22%";
+			document.getElementById('midcol').style.width= "66%";
 			document.getElementById('rightcol').style.width= "36%";
 		}else if(lstat && rstat){
-			document.getElementById('leftcol').style.width= "38%";
-			document.getElementById('rightcol').style.width= "54%";
+			document.getElementById('leftcol').style.width= "22%";
+			document.getElementById('rightcol').style.width= "66%";
 			document.getElementById('midcol').style.width= "36%";
 		}else if(rstat && mstat){
 			document.getElementById('rightcol').style.width= "46%";

@@ -74,6 +74,15 @@ treasury.controller('projectController', function ($scope, $stateParams, $http, 
         branch: $stateParams.branch || "master"
     };
 
+    $http({
+        url: "fileManager/requests/getFriendsList.php",
+        data: $.param({}),
+        method: "post",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+    }).then(function (response) {
+        $scope.friendsList = response.data;
+    });
+
     setCurBranchName($scope.params.branch);
     updateBreadCrumbs("treasury/" + $scope.params.owner + "/" + $scope.params.repo + "/" +
         $scope.params.branch, $scope.params.path, $scope.params.repo);

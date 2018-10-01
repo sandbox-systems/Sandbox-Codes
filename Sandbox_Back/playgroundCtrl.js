@@ -422,7 +422,7 @@ function renameFile(fullPath) {
 
 setInterval(function(){
     if(active_path!=null && active_name!=null){
-//        updateFile(active_path, active_name, editor.getValue(), false);
+        updateFile(active_path, active_name, editor.getValue(), false);
     }
     }, 10000);
 
@@ -433,7 +433,6 @@ function updateFile(path, name, content, altCallback, shouldResetCanSave){
     tempContents[fullPath] = content;
     if (!fileFlags[fullPath].hasUpdated)
         fileFlags[fullPath].hasUpdated = [];
-console.log(fileFlags);
     fileFlags[fullPath].hasUpdated.push(0);
     $.ajax({
         type: "POST",
@@ -454,7 +453,7 @@ console.log(fileFlags);
             } else {
                 altCallback(data["newSha"]);
             }
-            fileFlags[fullPath].canSave = false;
+            // fileFlags[fullPath].canSave = false;
             fileFlags[fullPath].hasUpdated.pop();
         },
         error: function(data){
@@ -617,9 +616,11 @@ function activateTab(hash, path, hasAlreadyLeftCollabSession){
 function tabClick(tab){
     if (isReading)
         return;
-    $('#onFileReadOverlay').fadeIn();
     let hash = tab.attributes["data-hash"].value;
     let name = tab.attributes["data-path"].value;
+    if (name === active_name)
+        return;
+    $('#onFileReadOverlay').fadeIn();
     $.ajax({
         type: "POST",
         url: "Sandbox_Back/fetchFileSession.php",

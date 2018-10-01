@@ -10,7 +10,7 @@ session_start();
 if (!isset($_SESSION['changes']))
     $_SESSION['changes'] = array();
 
-$_SESSION['changes'][] = array(
+$_SESSION['changes'][$owner . $repo . $branch . $path . $name] = array(
     'type' => 'ADD',
     'path' => $path,
     'name' => $name,

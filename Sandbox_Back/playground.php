@@ -20,11 +20,11 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
           integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <link rel="stylesheet" href="Sandbox_Back/Docker/node_modules/xterm/dist/xterm.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/1.23.2/css/jquery.terminal.min.css" rel="stylesheet"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
-    <script src="Sandbox_Back/ace_editor/src-noconflict/ext-language_tools.js"></script>
-    <script src="Sandbox_Back/Docker/node_modules/xterm/dist/xterm.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/1.23.2/js/jquery.terminal.min.js"></script>
 	<link rel="stylesheet" href="css/animate.css">
 
 </head>
@@ -337,43 +337,28 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
     <!-- *************************************************** -->
     <!-- ******************** TERMINAL ********************* -->
     <!-- *************************************************** -->
-    <div id="terminal" style="overflow: scroll;">
-        <!--<iframe id="consoleFrame" src="https://www.sandboxcodes.com:4000/" width=100% height=100%></iframe>-->
-        <div id="consoleFrame">
-            <script>
-                container = document.getElementById('terminal');
-                var term = new Terminal(),
-                    url = 'wss://sandboxcodes.com:4000/echo',
-                    socket = new WebSocket(url);
+    <div id="terminal"></div>
+    <script>
+        url = 'wss://sandboxcodes.com:4000/echo',
+            socket = new WebSocket(url);
 
-                term.open(document.getElementById('terminal'));
-
-                var command = "";
-                var numtyped = 0;
-
-                term.on('data', function (data) {
-                    if(data == '\r'){
-                        term.write('\r\n');
-                        command += '\r';
-                        console.log(command);
-                        socket.send(command);
-                        command = "";
-                    }else{
-                        command += data;
-                        console.log(data);
-                        term.write(data);
-                    }
-                });
-
-                term.on('key', function(key, e) {
-                    if(e.which==8)
-                        term.write("\b \b");
-                });
-
-                socket.onmessage = function (e) {
-                    term.write(e.data);
+        jQuery(function($, undefined) {
+            $('#terminal').terminal(function(command) {
+                if (command !== '') {
+                    socket.send(command);
                 }
-            </script>
+            }, {
+                greetings: 'Initializing CeaShell',
+                name: 'terminal',
+                prompt: 'root@sandbox> '
+            });
+        });
+
+        socket.onmessage = function (e) {
+            console.log("resp: "+e.data);
+            $("#terminal").terminal().echo(e.data);
+        }
+    </script>
         </div>
     </div>
 
@@ -411,11 +396,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             }
         });
         showPreloader();
+
         $(function() {
             setTimeout(hidePreloader, 500);
 
-            if (!/[?&]repo=/.test(window.location.href))
+            if (!/[?&]repo=/.test(window.location.href)) {
                 chooseRepo();
+            }
         });
 
         function openNoteNav() {
@@ -1384,8 +1371,8 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             });
         }
 
-        let colors = ['#193e87', '#8044a8', '#7b0e75', '#6b142c'];
-        let colorCounter = 2;
+        var colors = ['#193e87', '#8044a8', '#7b0e75', '#6b142c'];
+        var colorCounter = 2;
         window.setInterval(function () {
             $('#repoSelectOverlay').css('background', colors[colorCounter]);
             colorCounter = (colorCounter + 1) % colors.length;

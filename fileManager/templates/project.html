@@ -14,3 +14,20 @@
 <span ng-repeat="(id, file) in contents.files track by $index">
     {{ addFile(id, file['name'], file['sha']) }}
 </span>
+
+<div id="shareRepoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header" id="publicHeader">Share this repo!</div>
+        <div class="modal-body">
+            <label for="repoShareFriendFilter">Filter friends:
+            <input type="text" placeholder="Name" id="repoShareFriendFilter" ng-model="repoShareFriendFilter">
+            </label>
+            <br><br><br>
+            <div ng-repeat="friend in friendsList | filter:repoShareFriendFilter">
+                <img ng-src="{{friend.profilepic}}" width="60">
+                {{friend.name}}
+            </div>
+            <br>
+        </div>
+    </div>
+</div>

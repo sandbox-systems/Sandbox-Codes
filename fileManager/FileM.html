@@ -116,7 +116,7 @@
     <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
     <!-- ng-class="isViewingInsideRepo ? 'show':'hide'" -->
     <!--<a ondrop="infodrop(event)" ondragover="allowDrop(event)"><span class="fas fa-info-circle"></span> Info</a>-->
-    <a id="sharebutton" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
+    <a id="sharebutton" onclick="openShareModal()" ondrop="dropper(event)" ondragover="allowDrop(event)"><span
             class="fas fa-user-plus"></span> Share</a>
     <a ondrop="drop(event)" ondragover="allowDrop(event)" id="trasher"><span
             class="fas fa-trash"></span> Trash</a>
@@ -394,6 +394,10 @@
             dataType: 'json'
         });
         window.location.reload();
+    }
+
+    function openShareModal() {
+        $('#shareRepoModal').show();
     }
 
     function addPrivateRepo() {

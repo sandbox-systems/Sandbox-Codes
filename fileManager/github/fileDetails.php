@@ -7,13 +7,17 @@
 
 include 'init.php';
 
-$blob = $client->git->blobs->getBlob($owner, $repo, $sha);
+$blob = "";
+try {
+    $blob = $client->git->blobs->getBlob($owner, $repo, $sha);
+} catch (GitHubClientException $e) {
+}
 $commits = $client->repos->commits->listCommitsOnRepository($owner, $repo, null, $path);
-$created = $commits[count($commits) - 1]->getCommit()->getAuthor()->getDate();
-$edited = $commits[0]->getCommit()->getAuthor()->getDate();
+$created = count($commits) > 0 ? $commits[count($commits) - 1]->getCommit()->getAuthor()->getDate() : "N/A";
+$edited = count($commits) > 0 ? $commits[0]->getCommit()->getAuthor()->getDate() : "N/A";
 
-$content = $blob->getContent();
-$size = number_format((float) $blob->getSize() / 1024, 1, '.', '');
+$content = $blob == "" ? "" : $blob->getContent();
+$size = number_format((float) ($blob == "" ? 0 : $blob->getSize()) / 1024, 1, '.', '');
 $fCreated = explode("T", $created, 2)[0];
 $fEdited = explode("T", $edited, 2)[0];
 

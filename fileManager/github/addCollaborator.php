@@ -9,6 +9,9 @@ include 'init.php';
 include_once '../initDB.php';
 
 foreach ($usernames as $username) {
-    $ghUname = getDocuments($man, "users", ['username' => $username], [])[0]->GHUsername;
-    $client->repos->collaborators->put($owner, $repo, $ghUname);
+    try {
+        $ghUname = getDocuments($man, "users", ['username' => $username], [])[0]->GHUsername;
+        $client->repos->collaborators->put($owner, $repo, $ghUname);
+    } catch (GitHubClientException $e) {
+    }
 }

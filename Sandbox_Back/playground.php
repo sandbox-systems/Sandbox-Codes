@@ -238,13 +238,13 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             <button title="Run" value="" id="runButton" class="btn navbar-btn toolbarButton" onclick="compile()" ng-if="isRepoOpen"><i class="fas fa-play fa-2x"></i>
             </button>
 			<div class="btn-group-toggle" data-toggle="buttons" style="position:absolute;left:44%;">
-			  <label class="btn btn-default">
+			  <label class="btn btn-default" onclick="toggleDisplayBtn('left'); updateDisplay()">
 				<input onchange="updateDisplay()" type="checkbox" checked autocomplete="off" id="left"><span class="fas fa-angle-double-left"></span>
 			  </label>
-				<label class="btn btn-default">
+				<label class="btn btn-default" onclick="toggleDisplayBtn('mid'); updateDisplay()">
 				<input type="checkbox" checked onchange="updateDisplay()" autocomplete="off" id="mid"><span class="fas fa-angle-double-up"></span>
 			  </label>
-				<label class="btn btn-default">
+				<label class="btn btn-default" onclick="toggleDisplayBtn('right'); updateDisplay()">
 				<input type="checkbox" checked autocomplete="off" onchange="updateDisplay()" id="right"><span class="fas fa-angle-double-right">
 			  </label>
 			</div>
@@ -343,6 +343,9 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
             socket = new WebSocket(url);
 
         jQuery(function($, undefined) {
+            $("#left").prop("checked", true);
+            $("#mid").prop("checked", true);
+            updateDisplay();
             $('#terminal').terminal(function(command) {
                 if (command !== '') {
                     socket.send(command);
@@ -1386,10 +1389,21 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 	var mstat;
 	var rstat;
 	var elements = [document.getElementById('leftcol'),document.getElementById('midcol'),document.getElementById('rightcol')];
+
+        function toggleDisplayBtn(btn) {
+            if (btn === "left") {
+                document.getElementById('left').checked = !document.getElementById('left').checked;
+            } else if (btn === "right") {
+                document.getElementById('right').checked = !document.getElementById('right').checked;
+            } else if (btn === "mid") {
+                document.getElementById('mid').checked = !document.getElementById('mid').checked;
+            }
+        }
+
 	function updateDisplay(){
-	    lstat = !document.getElementById('left').checked;
-	    mstat = !document.getElementById('mid').checked;
-	    rstat = !document.getElementById('right').checked;
+	    lstat = document.getElementById('left').checked;
+	    mstat = document.getElementById('mid').checked;
+	    rstat = document.getElementById('right').checked;
 
 		if(lstat){
 		    document.getElementById('leftcol').style.display = "inline-block";

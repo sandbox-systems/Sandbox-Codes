@@ -23,11 +23,16 @@
             <input type="text" placeholder="Name" id="repoShareFriendFilter" ng-model="repoShareFriendFilter">
             </label>
             <br><br><br>
-            <div ng-repeat="friend in friendsList | filter:repoShareFriendFilter">
+            <span class="fmSelectedFriend" ng-repeat="friend in selectedFriendsList" ng-click="removeSelectedFriend(friend)">
+                {{friend.name}}
+            </span>
+            <div ng-repeat="friend in friendsList | filter:repoShareFriendFilter" ng-click="addSelectedFriend(friend)"
+                    ng-if="selectedFriendsList.indexOf(friend) === -1">
                 <img ng-src="{{friend.profilepic}}" width="60">
                 {{friend.name}}
             </div>
             <br>
+            <button ng-click="sendShareInvites()">Invite</button>
         </div>
     </div>
 </div>

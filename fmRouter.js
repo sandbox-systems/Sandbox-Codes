@@ -81,7 +81,32 @@ treasury.controller('projectController', function ($scope, $stateParams, $http, 
         headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
     }).then(function (response) {
         $scope.friendsList = response.data;
+        $scope.selectedFriendsList = [];
     });
+
+    $scope.addSelectedFriend = function (friend) {
+        $scope.selectedFriendsList.push(friend);
+    };
+
+    $scope.removeSelectedFriend = function (friend) {
+        $scope.selectedFriendsList.splice($scope.selectedFriendsList.indexOf(friend), 1);
+    };
+
+    $scope.sendShareInvites = function () {
+        var usernames = [];
+
+        $scope.selectedFriendsList.forEach(friend => {
+            usernames.push(friend.username);
+        });
+
+        $http({
+            url: "fileManager/requests/shareProject.php",
+            data: $.param({...$scope.params, ...{usernames: usernames}}),
+            method: "post",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+        }).then(function (response) {
+        });
+    };
 
     setCurBranchName($scope.params.branch);
     updateBreadCrumbs("treasury/" + $scope.params.owner + "/" + $scope.params.repo + "/" +

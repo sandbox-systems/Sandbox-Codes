@@ -929,7 +929,7 @@ function compile(){
     switch(ext){
         case "java":
             socket.send("mkdir -p ~/code/java/"+name);
-            socket.send("echo "+escapeShell(editor.getValue())+" > "+"~/code/java/"+name+"/"+active_name);
+            socket.send("echo "+editor.getValue()+" > "+"~/code/java/"+name+"/"+active_name);
             socket.send("javac -g ~/code/java/"+name+"/"+active_name);
             socket.send("java -cp ~/code/java/"+name+" "+name);
     }

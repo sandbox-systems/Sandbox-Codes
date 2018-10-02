@@ -562,3 +562,11 @@ option {
 .ownerNameHidden {
     display: none;
 }
+
+.fmSelectedFriend {
+    border-radius: 15px;
+    border: solid 2px rebeccapurple;
+    padding: 2%;
+    background: rgba(147,112,219,0.5);
+    color: rebeccapurple;
+}

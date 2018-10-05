@@ -787,6 +787,17 @@ function joinCollabSession (id, filename) {
     $div.attr('id', 'editor');
     // Initialize editor
     setupAce();
+    editor.getSession().on('change', function() {
+        if (active_name.indexOf(".html") !== -1) {
+            $gscope.$apply(function() {
+                $gscope.livePreview = $gsce.trustAsHtml(editor.getValue());
+            });
+        } else {
+            $gscope.$apply(function() {
+                $gscope.livePreview = "";
+            });
+        }
+    });
     // Get or upsert reference to location in db where data with id is stored
     collab.firepadRef = firebase.database().ref(id);
     // Add current username to users list
@@ -929,7 +940,8 @@ function compile(){
     switch(ext){
         case "java":
             socket.send("mkdir -p ~/code/java/"+name);
-            socket.send("echo "+editor.getValue()+" > "+"~/code/java/"+name+"/"+active_name);
+            socket.send("echo -e '\\x" + editor.getValue().split('').map(e => e.charCodeAt().toString(16)).join("\\x") + "' > ~/code/java/"+name+"/"+active_name);
+            console.log("echo -e '\\x" + editor.getValue().split('').map(e => e.charCodeAt().toString(16)).join("\\x") + "' > ~/code/java/"+name+"/"+active_name);
             socket.send("javac -g ~/code/java/"+name+"/"+active_name);
             socket.send("java -cp ~/code/java/"+name+" "+name);
     }

@@ -42,7 +42,6 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 <style>
     html {
         background-image: url("images/blur.jpg");
-        background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
     }

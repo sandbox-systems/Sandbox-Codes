@@ -3,7 +3,7 @@
 <head>
 	<title>Sandbox</title>
 		<link rel="stylesheet" href="css/animate.css">
-		<link rel="icon" href="images/logo-king.png">
+		<link rel="icon" href="images/purplelogo.png">
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -17,8 +17,8 @@
 .card {
 	//position: relative;
 	padding: 1%;
-  width: 20%;
-float: left;
+  width: 25%;
+	float: left;
   text-align: center;
 }
 .title {
@@ -66,23 +66,9 @@ float: left;
 			  </div>
 			</div>
 			<div class="card">
-				<span class="fa-stack fa-4x">
-					<i class="far fa-circle fa-stack-4x"></i>
-					<strong class="fa-stack-1x circle-text">2</strong>
-				</span>
-			  <h2>Purple Board</h2>
-			  <p class="title">Dynamic API Display</p>
-			  <div style="margin: 24px 0;"> 
-			  </div>
-				<select id="pbselect" onchange="pbupdate()">
-					<option value="version1">None</option>
-					<option value="version2">Purple Board</option>
-				</select>
-			</div>
-			<div class="card">
 			  <span class="fa-stack fa-4x">
 					<i class="far fa-circle fa-stack-4x"></i>
-					<strong class="fa-stack-1x circle-text">3</strong>
+					<strong class="fa-stack-1x circle-text">2</strong>
 				</span>
 			  <h2>Collab</h2>
 			  <p class="title">Working Together</p>
@@ -96,22 +82,7 @@ float: left;
 			<div class="card">
 			  <span class="fa-stack fa-4x">
 					<i class="far fa-circle fa-stack-4x"></i>
-					<strong class="fa-stack-1x circle-text">4</strong>
-				</span>
-			  <h2>Chat</h2>
-			  <p class="title">Communication</p>
-			  <div style="margin: 24px 0;">
-				  <select id="chatselect" onchange="chatupdate()">
-				  	<option value="version1">∞ Chat, No Video Calls</option>
-					<option value="version2">∞ Chat, 5 People per Call</option>
-					<option value="version3">∞ Chat, 6+ People per Call</option>
-				  </select>
-			  </div>
-			</div>
-			<div class="card">
-			  <span class="fa-stack fa-4x">
-					<i class="far fa-circle fa-stack-4x"></i>
-					<strong class="fa-stack-1x circle-text">5</strong>
+					<strong class="fa-stack-1x circle-text">3</strong>
 				</span>
 			  <h2>Storage</h2>
 			  <p class="title">Code Savior</p>
@@ -119,32 +90,30 @@ float: left;
 				  <select id="storageselect" onchange="storageupdate()">
 				  	<option value="version1">∞ Public Repos</option>
 					<option value="version2">∞ Public and 5 Private Repos</option>
-					<option value="version3">∞ Public and ∞ Private Repos</option>
-					<option value="version4">Your own Server Config</option>
 				  </select>
 			  </div>
 			</div>
-			<!--<div class="card">
-			  <span class="fa-stack fa-5x">
+			<div class="card">
+			  <span class="fa-stack fa-4x">
 					<i class="far fa-circle fa-stack-4x"></i>
-					<strong class="fa-stack-1x circle-text">6</strong>
+					<strong class="fa-stack-1x circle-text">4</strong>
 				</span>
 			  <h2>Languages</h2>
 			  <p class="title">A Multitude of Skills</p>
-			  <div style="margin: 24px 0;"> 
+			  <div style="margin: 24px 0;">
 				  <input id="lang" type="text" oninput="languageupdate()">
 			  </div>
-			</div>-->
-			<h1 id="pricedisplay" style="text-align: center;">0.00</h1>
+			</div>
+			<h1 id="pricedisplay" style="text-align: center;">0.00<p class="title">Dollars Per Month</p></h1>
 			<div>
-			<button onclick="rounder()">Round Up for Charity</button>
-			<button id="gogetter" style="display: none;">Ready To Code!</button>
-			<a href="#payment"><button id="checkoutBtn" onclick="showpayment()">Checkout</button></a></div>
+			<!-- <button onclick="rounder()">Round Up for Charity</button> -->
+			<button style="display:block;position:relative;margin:0 auto;">Ready To Code!</button>
+		</div>
 		</div>
 	</section>
 	<section class="animated fadeIn wrapper" id="payment" style="display: none;">
 		<div class="content">
-		<form style="margin-left: 2%;">
+		<!-- <form style="margin-left: 2%;">
 			<fieldset>
 				Name</br>
 				<input type="text" style="width: 98%;">
@@ -160,7 +129,7 @@ float: left;
 	<input type="text" placeholder="month" style="width: 48%; float: left;">
 	<input type="text" placeholder="year" style="width: 48%; float: left;margin-left:2%;">
 			</fieldset>
-		</form>
+		</form> -->
 		</div>
 	</section>
 	</body>
@@ -200,18 +169,18 @@ float: left;
 		}
 		calculate();
 	}
-	function pbupdate(){
-		var e = document.getElementById("pbselect");
-		var value = e.options[e.selectedIndex].value;
-		var text = e.options[e.selectedIndex].text;
-		if(value === "version1"){
-			purpleboard=0;
-		}
-		if(value === "version2"){
-			purpleboard=0.99;
-		}
-		calculate();
-	}
+	// function pbupdate(){
+	// 	var e = document.getElementById("pbselect");
+	// 	var value = e.options[e.selectedIndex].value;
+	// 	var text = e.options[e.selectedIndex].text;
+	// 	if(value === "version1"){
+	// 		purpleboard=0;
+	// 	}
+	// 	if(value === "version2"){
+	// 		purpleboard=0.99;
+	// 	}
+	// 	calculate();
+	// }
 	function collabupdate(){
 		var e = document.getElementById("collabselect");
 		var value = e.options[e.selectedIndex].value;
@@ -224,21 +193,21 @@ float: left;
 		}
 		calculate();
 	}
-	function chatupdate(){
-		var e = document.getElementById("chatselect");
-		var value = e.options[e.selectedIndex].value;
-		var text = e.options[e.selectedIndex].text;
-		if(value === "version1"){
-			chat=0;
-		}
-		if(value === "version2"){
-			chat=0.99;
-		}
-		if(value === "version3"){
-			chat=1.99;
-		}
-		calculate();
-	}
+	// function chatupdate(){
+	// 	var e = document.getElementById("chatselect");
+	// 	var value = e.options[e.selectedIndex].value;
+	// 	var text = e.options[e.selectedIndex].text;
+	// 	if(value === "version1"){
+	// 		chat=0;
+	// 	}
+	// 	if(value === "version2"){
+	// 		chat=0.99;
+	// 	}
+	// 	if(value === "version3"){
+	// 		chat=1.99;
+	// 	}
+	// 	calculate();
+	// }
 	function storageupdate(){
 		var e = document.getElementById("storageselect");
 		var value = e.options[e.selectedIndex].value;
@@ -249,12 +218,6 @@ float: left;
 		if(value === "version2"){
 			storage=0.10;
 		}
-		if(value === "version3"){
-			storage=0.20;
-		}
-		if(value === "version4"){
-			storage=0.99;
-		}
 		calculate();
 	}
 	function languageupdate(){
@@ -263,20 +226,22 @@ float: left;
 		for(var i =0; i <temp.length-1;i++){
 			if(temp.substring(i,i+1) === ","){
 				count = count + 0.1;
+				console.log(count);
 			}
 		}
 		if(temp.length === 0){
 			count=0;
 		}
+		language=count;
 		calculate();
 		count = 0.1;
 	}
-	function showpayment(){
-		//document.getElementById("checkoutBtn").className = "animated fadeOut";
-		document.getElementById("checkoutBtn").style.display = "none";
-		document.getElementById("payment").style.display="block";
-		document.getElementById("pricedisplay").className="animated fadeIn";
-		document.getElementById("gogetter").style.display="block";
-	}
+	// function showpayment(){
+ 	//document.getElementById("checkoutBtn").className = "animated fadeOut";
+	// 	document.getElementById("checkoutBtn").style.display = "none";
+	// 	document.getElementById("payment").style.display="block";
+	// 	document.getElementById("pricedisplay").className="animated fadeIn";
+	// 	document.getElementById("gogetter").style.display="block";
+	// }
 </script>
 </html>

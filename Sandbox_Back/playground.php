@@ -1382,6 +1382,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
+<span id="livePreviewRestartBtn" class="fas fa-sync" onclick="resetLivePreview()"></span>
 <iframe class="rightcol animated zoomIn" id="rightcol" srcdoc="{{livePreview}}" frameborder="0"></iframe>
 <script>
 	var tw = ["20","36","36"];

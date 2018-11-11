@@ -603,9 +603,19 @@ iframe{
 }
 
 #rightcol {
+    width: 34% !important;
     background: white;
     height: 84vh;
     overflow: scroll;
+}
+
+#livePreviewRestartBtn {
+    color: white;
+}
+
+#livePreviewRestartBtn:hover {
+    color: #bbb;
+    cursor: pointer;
 }
 
 #leftcol {

@@ -29,7 +29,13 @@ function send_post($uri, $data) {
 
     // Send request and fetch response
     $context = stream_context_create($payload);
+var_dump($auth_server_url);
+echo "<br>";
+var_dump($payload);
+echo "<br>";
     $response_temp = file_get_contents($auth_server_url, false, $context);
+var_dump($response_temp);
+echo "<br>";
 
     // Parse response to array
     $response_to_array = explode('&', $response_temp);

@@ -442,6 +442,11 @@
     function submit_register(){
         if($("#nextBtn").html()=="Make Account!"){
             x = document.getElementsByClassName("tab");
+            /*swal({
+                icon: "error",
+                title: "Sorry",
+                text: "We are currently running maintenance. Please try again later."
+            });*/
             $('#preloader').fadeIn();
             $.ajax({
                 type: "POST",

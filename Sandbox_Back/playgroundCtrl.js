@@ -956,3 +956,10 @@ $(window).on("unload", function() {
         leaveCurrentCollabSession();
     }
 });
+
+var resetLivePreview = function() {
+    $gscope.$apply(function() {
+        // Cheating the system
+        $gscope.livePreview = $gsce.trustAsHtml($gscope.livePreview + " ");
+    });
+};

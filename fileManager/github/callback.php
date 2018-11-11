@@ -17,5 +17,6 @@ if ($token) {
     include 'saveGHUserData.php';
     header("Location: ../../Castle.php#/settings");
 } else {
-    header("Location: ../../Castle.php#/settings?unsuccessful");
+echo "UNS";
+//    header("Location: ../../Castle.php#/settings?unsuccessful");
 }

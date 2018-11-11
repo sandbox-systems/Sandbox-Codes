@@ -190,6 +190,7 @@ function chooseRepo(){
 }
 
 function clickFile(name, key){
+console.log("CLICK FILE");
     if (!isReading)
         openTab(hashes[name], name, key);
 }
@@ -428,6 +429,10 @@ setInterval(function(){
 
 function updateFile(path, name, content, altCallback, shouldResetCanSave){
     let fullPath = path + (path === "" ? "" : "/") + name;
+console.log("UPDATING " + fullPath);
+console.log(content);
+console.log("\n");
+console.log("HIDDEN: " + $('#onFileReadOverlay').is(":hidden"));
     if (!$('#onFileReadOverlay').is(":hidden") || isReading || (fileFlags[fullPath] && fileFlags[fullPath].canSave === false))
         return;
     tempContents[fullPath] = content;
@@ -447,6 +452,7 @@ function updateFile(path, name, content, altCallback, shouldResetCanSave){
         },
         dataType: "json",
         success: function(data) {
+console.log(data["newSha"]);
             if (!altCallback) {
                 active_hash = data["newSha"];
                 updateHash(active_hash);
@@ -496,6 +502,7 @@ function commitChanges() {
  ****************************************************/
 
 function openTab(hash, name, key){
+console.log("OPEN TAB");
     if (isReading)
         return;
     $('#onFileReadOverlay').fadeIn();
@@ -533,6 +540,7 @@ function openTab(hash, name, key){
 
 //Close tab
 function closeTab(element){
+console.log("CLOSE TAB");
     if (isReading)
         return;
     leaveCurrentCollabSession();
@@ -561,6 +569,7 @@ function closeTab(element){
 }
 
 function activateTab(hash, path, hasAlreadyLeftCollabSession){
+console.log("ACTIVATE TAB");
     if (isReading)
         return;
     let oldContent = "";
@@ -572,7 +581,9 @@ function activateTab(hash, path, hasAlreadyLeftCollabSession){
     joinCollabSession(fileFlags[path].sessionID, path);
     var active_li = angular.element('#tab-list > .active');
     if(active_li.length>0){
+        $('#onFileReadOverlay').hide();
         updateFile(active_path, active_name, oldContent, false);
+        $('#onFileReadOverlay').show();
         active_li[0].classList.remove("active");
     }
     var tab = angular.element('#tab'+path.replace(/[.\/]/g, ""));
@@ -614,6 +625,7 @@ function activateTab(hash, path, hasAlreadyLeftCollabSession){
 }
 
 function tabClick(tab){
+console.log("TAB CLICK");
     if (isReading)
         return;
     let hash = tab.attributes["data-hash"].value;
@@ -818,11 +830,13 @@ function joinCollabSession (id, filename) {
     collab.firepadRef.child("users").on("child_removed", removeCollabOnline);
 }
 
-function leaveCurrentCollabSession () {
+function leaveCurrentCollabSession (dontClearEditor) {
     // Remove this user from firebase DB
     collab.firepadRef.child("users").child(username).remove();
     // Clear editor from its container
-    $('#editorContainer').empty();
+    if (!dontClearEditor) {
+        $('#editorContainer').empty();
+    }
     let fullPath = active_path + (active_path === "" ? "" : "/") + active_name;
     if (collab.online.length > 0) {
         if (fileFlags[fullPath].canSave) {
@@ -951,11 +965,20 @@ function escapeShell(cmd) {
     return '"'+cmd.replace(/(["\s'$`\\])/g,'\\$1')+'"';
 };
 
-$(window).on("unload", function() {
+/*$(window).on("unload", function() {
     if (active_name !== null) {
-        leaveCurrentCollabSession();
+console.log(editor.getValue());
+        updateFile(active_path, active_name, editor.getValue(), false);
+        leaveCurrentCollabSession(true);
     }
-});
+});*/
+
+window.onbeforeunload = function() {
+    if (active_name !== null) {
+        updateFile(active_path, active_name, editor.getValue(), false);
+        leaveCurrentCollabSession(true);
+    }
+};
 
 var resetLivePreview = function() {
     $gscope.$apply(function() {

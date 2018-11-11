@@ -135,27 +135,6 @@
     <div ui-view></div>
 </ul>
 <!-- The Modal -->
-<div id="shareModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">Share With</div>
-        <div class="modal-body">
-            <form class="animated fadeIn">
-                <fieldset>
-                    <input class="inputname" id="sharer" type="text" autocomplete="off">
-                </fieldset>
-                <fieldset>
-                    <div style="float:right; background-color:#00C851; " class="goBtn" onclick="share()">Share</div>
-                    <div style="float:left; background-color:#ff4444; " class="goBtn" onclick="closesharemodal()">
-                        Cancel
-                    </div>
-                </fieldset>
-                <!--<fieldset id="sharedwith">-->
-                    <!--Shared with:<br>-->
-                <!--</fieldset>-->
-            </form>
-        </div>
-    </div>
-</div>
 <div id="branchModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">Create new Branch!</div>
@@ -497,7 +476,7 @@
             });
 
             $('#displaytrash').click(function () {
-                onFileDelete();    
+                onFileDelete();
             });
 
             $('#displayopeninplayground').click(function () {
@@ -529,7 +508,7 @@
        var container = $('.modal');
          if(container.is(event.target)){
             closeModal();
-            closesharemodal();
+            document.getElementById('shareRepoModal').style.display='none';
             document.getElementById('commitModal').style.display='none';
              document.getElementById('repoModal').style.display='none';
             document.getElementById('branchModal').style.display='none';
@@ -585,23 +564,6 @@
         document.getElementById('commitMessageInput').value = "";
         swal("Success", 'Commited', "success");
     });
-
-    function share() {
-        var tester = document.getElementById("sharer").value;
-        if (tester === "") {
-            swal("Uh oh!", "You forgot to enter a username", "warning");
-            return;
-        }
-        var temp = "Shared with ";
-        temp += tester;
-        swal("Success", temp, "success");
-        closesharemodal();
-    }
-
-    function closesharemodal() {
-        var dodal = document.getElementById('shareModal');
-        dodal.style.display = "none";
-    }
 
     var test = "white";
 

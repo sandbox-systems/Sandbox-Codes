@@ -108,6 +108,7 @@ li > a {
     animation-name: animatetop;
     animation-duration: 0.4s;
     border-radius: 15px;
+    margin-bottom: 5%;
 }
 
 /* Add Animation */
@@ -562,6 +563,10 @@ option {
 .ownerNameHidden {
     display: none;
 }
+img{
+  height: 40px;
+  width: 40px;
+}
 
 .fmSelectedFriend {
     border-radius: 15px;
@@ -569,4 +574,22 @@ option {
     padding: 2%;
     background: rgba(147,112,219,0.5);
     color: rebeccapurple;
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+    margin: 2%;
+    font-size: 0.85rem;
+    padding: 1%;
+}
+#repoShareFriendFilter{
+  border: none;
+  border-bottom: solid 2px gray;
+  float:none;
+  display: inline-block;
+  width: 90%;
+  transition: border-bottom 0.2s;
+  -webkit-transition: border-bottom 0.2s;
+}
+#repoShareFriendFilter:focus{
+    border-bottom: solid 2px mediumpurple;
 }

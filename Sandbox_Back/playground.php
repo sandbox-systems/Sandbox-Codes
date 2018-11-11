@@ -330,7 +330,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <!-- ***************** ACE CODE EDITOR ***************** -->
 <!-- *************************************************** -->
-<div class="rightcol animated zoomIn" ng-if="isRepoOpen" id="midcol">
+<div class="rightcol animated zoomIn" ng-if="isRepoOpen" id="midcol" style="position:fixed;">
     <ul id="tab-list" class="nav navbar-nav nav-tabs">
     </ul>
     <div id="editorContainer"></div>
@@ -1383,7 +1383,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
-<iframe class="rightcol animated zoomIn" id="rightcol" srcdoc="{{livePreview}}" frameborder="0"></iframe>
+<iframe class="rightcol animated zoomIn" style="float:right;" id="rightcol" srcdoc="{{livePreview}}" frameborder="0"></iframe>
 <script>
 	var tw = ["20","36","36"];
 	var lstat;

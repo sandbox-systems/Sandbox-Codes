@@ -603,9 +603,9 @@ iframe{
 }
 
 #rightcol {
-    width: 34% !important;
+    width: 34%;
     background: white;
-    height: 84vh;
+    height: 87vh;
     overflow: scroll;
 }
 

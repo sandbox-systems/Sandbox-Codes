@@ -603,7 +603,7 @@ iframe{
 }
 
 #rightcol {
-    width: 34% !important;
+    width: 34% important;
     background: white;
     height: 84vh;
     overflow: scroll;

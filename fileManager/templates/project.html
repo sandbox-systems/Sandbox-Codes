@@ -22,17 +22,17 @@
             <label style="display:block"for="repoShareFriendFilter">Filter friends:
             </label>
             <input type="text" placeholder="Name" id="repoShareFriendFilter" ng-model="repoShareFriendFilter">
-            <button style="padding: 1%; color:white; background: mediumpurple;" ng-click="sendShareInvites()"><span class="fas fa-share"></span></button>
             <label>Share With:</label>
             <span class="fmSelectedFriend" ng-repeat="friend in selectedFriendsList" ng-click="removeSelectedFriend(friend)">
                 {{friend.name}}
             </span>
-            <div ng-repeat="friend in friendsList | filter:repoShareFriendFilter" ng-click="addSelectedFriend(friend)"
+            <div class="chip" ng-repeat="friend in friendsList | filter:repoShareFriendFilter" ng-click="addSelectedFriend(friend)"
                     ng-if="selectedFriendsList.indexOf(friend) === -1">
                 <img ng-src="{{friend.profilepic}}" width="60">
                 {{friend.name}}
             </div>
             <br>
+		<button style="padding: 1%; color:white; background: mediumpurple;border-radius: 500px;" ng-click="sendShareInvites()"><span class="fas fa-share"></span></button>
         </div>
     </div>
 </div>

@@ -198,7 +198,7 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 <!-- *************************************************** -->
 <nav class="navbar-default" style="background:url('../images/blur.jpg');background-size: cover">
     <div class="container-fluid">
-        <div class="navbar-header" style="width: 86%">
+        <div class="navbar-header" style="width: 80%">
             <button title="Theme" class="dropdown btn navbar-btn toolbarButton" ng-if="isRepoOpen">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span style="color:white"
                                                                                  class="fas fa-ellipsis-h fa-2x"></span></a>
@@ -249,8 +249,9 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
 			  </label>
 			</div>
   </div>
-        <div class="nav navbar-nav navbar-right" style="	margin-top:0.5%;
+        <div class="nav navbar-nav navbar-right" style="margin-top:0.5%;width:7%;
 	margin-right: 0%;">
+			<button class="rightButton"><span id="livePreviewRestartBtn" class="fas fa-sync" onclick="resetLivePreview()"></span></button>
             <button class="rightButton" onclick="openNoteNav()" id="addpeople"><span class="fas fa-sticky-note"></span></button>
         </div>
     </div>
@@ -1382,7 +1383,6 @@ $notes = getDocuments($man, "users", ["username" => $_SESSION['username']], [])[
         }, 2000);
     </script>
 </div>
-<span id="livePreviewRestartBtn" class="fas fa-sync" onclick="resetLivePreview()"></span>
 <iframe class="rightcol animated zoomIn" id="rightcol" srcdoc="{{livePreview}}" frameborder="0"></iframe>
 <script>
 	var tw = ["20","36","36"];

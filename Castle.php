@@ -15,7 +15,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 <!DOCTYPE html>
 <html ng-app="castle">
 <head>
-    <link rel="icon" href="https://sandboxcodes.com/images/purplelogo.svg">
+    <link rel="icon" href="https://sandboxcodes.com/images/purplelogo.png">
     <link rel="stylesheet" href="https://sandboxcodes.com/css/animate.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">

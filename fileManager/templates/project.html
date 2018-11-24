@@ -22,7 +22,7 @@
             <label style="display:block"for="repoShareFriendFilter">Filter friends:
             </label>
             <input type="text" placeholder="Name" id="repoShareFriendFilter" ng-model="repoShareFriendFilter">
-            <label>Share With:</label>
+            <label style="display: block">Share With:</label>
             <span class="fmSelectedFriend" ng-repeat="friend in selectedFriendsList" ng-click="removeSelectedFriend(friend)">
                 {{friend.name}}
             </span>

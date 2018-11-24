@@ -574,7 +574,7 @@ img{
     padding: 2%;
     background: rgba(147,112,219,0.5);
     color: rebeccapurple;
-    display: block;
+    display: inline-block;
     width: 20%;
     text-align: center;
     margin: 2%;

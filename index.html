@@ -12,13 +12,16 @@
 		<title>Sandbox</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<meta name="description" content="An Online Code Editor and Compiler with Collaboration and Project Management features #therightwaytocode">
+  		<meta name="keywords" content="online,code,editor,compiler,collaboration,project management,chat,IDE,github,">
+  		<meta name="author" content="Sandbox Systems LLC">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
-                <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
+        <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
 		<script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="css/main.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-  ->
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 	</head>
 	<style>
@@ -26,215 +29,215 @@
 			font-family: "Lato";
 		}
 		.wave {
-  position: absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index: 1;
-height: 30%;
-}
-
-.wave + .wave {
-  z-index: 2;
-}
-#preloader {
-  background-color:rgba(255,255,255,0.9);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999999999;
-}
-
-#loader {
-  display: block;
-  position: relative;
-  left: 50%;
-  top: 50%;
-  width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #9370DB;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
-
-#loader:before {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #BA55D3;
-  -webkit-animation: spin 3s linear infinite;
-  animation: spin 3s linear infinite;
-}
-
-#loader:after {
-  content: "";
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #FF00FF;
-  -webkit-animation: spin 1.5s linear infinite;
-  animation: spin 1.5s linear infinite;
-}
-
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-#livechat-compact-container {
-  height: 153px;
-  position: fixed;
-  right: 0;
-  top: 200px;
-  top: 30vh;
-  z-index: 10000;
-}
-.btn-chat a {
-  font-family: arial;
-  color: #fff;
-  text-decoration: none;
-  background: #FF3366;
-  padding: 24px 20px 8px;
-  display: block;
-  font-weight: bold;
-  font-size: 14px;
-  border-radius: 10px;
-  -ms-transform: rotate(90deg) translate(0, -20px);
-  -webkit-transform: rotate(90deg) translate(0, -20px);
-  transform: rotate(90deg) translate(0, -20px);
-  position: relative;
-  right: -40px;
-  transition: background 0.4s, right 0.2s;
-}
-.btn-chat a:hover {
-  background: mediumseagreen;
-  /*right: -20px;*/
-}
-img {vertical-align: middle;}
-
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-}
-
-/* Caption text */
-.text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 8px;
-  width: 100%;
-  text-align: center;
-}
-
-/* Number text (1/3 etc) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-}
-		.videowrapper{
-			position: relative;
-    height: 50em;
-    width: 100%;
-    overflow: hidden;/* 16:9 */
-    margin-top: -0.5%;
+		  position: absolute;
+		  left:0;
+		  right:0;
+		  bottom:0;
+		  z-index: 1;
+		height: 30%;
 		}
-/* The dots/bullets/indicators */
 
-/* Fading animation */
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-  .text {font-size: 11px}
+		.wave + .wave {
+		  z-index: 2;
+		}
+		#preloader {
+		  background-color:rgba(255,255,255,0.9);
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  z-index: 999999999;
+		}
 
-}.middle {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-	width: 100%;
-	background-color: darkslateblue;
-}
+		#loader {
+		  display: block;
+		  position: relative;
+		  left: 50%;
+		  top: 50%;
+		  width: 150px;
+		  height: 150px;
+		  margin: -75px 0 0 -75px;
+		  border-radius: 50%;
+		  border: 3px solid transparent;
+		  border-top-color: #9370DB;
+		  -webkit-animation: spin 2s linear infinite;
+		  animation: spin 2s linear infinite;
+		}
 
-hr {
-    margin: auto;
-    width: 40%;
-}
-@media screen and (max-width: 800px) {
-	.picture{
-		position:absolute;height: 40%;top:15%;left:60%;
-	}
-	.videowrapper{
-		position: relative;
-    	height: 20em;
-    	width: 100%;
-    	overflow:hidden;/* 16:9 */
-    	margin-top: -0.5%;
-	}
-}
-.uno,
-.dos,.tres,.four,.cinco {
-	background-attachment: fixed;
-	text-align: center;
-	background-size: cover;
-	height: 100vh;
-}
+		#loader:before {
+		  content: "";
+		  position: absolute;
+		  top: 5px;
+		  left: 5px;
+		  right: 5px;
+		  bottom: 5px;
+		  border-radius: 50%;
+		  border: 3px solid transparent;
+		  border-top-color: #BA55D3;
+		  -webkit-animation: spin 3s linear infinite;
+		  animation: spin 3s linear infinite;
+		}
 
-.uno {
-	background-image: url('images/Renderings.svg');
-	
-}
+		#loader:after {
+		  content: "";
+		  position: absolute;
+		  top: 15px;
+		  left: 15px;
+		  right: 15px;
+		  bottom: 15px;
+		  border-radius: 50%;
+		  border: 3px solid transparent;
+		  border-top-color: #FF00FF;
+		  -webkit-animation: spin 1.5s linear infinite;
+		  animation: spin 1.5s linear infinite;
+		}
 
-.dos {
-	background-image: url('images/Search.svg');
-}
-.tres{
-	background-image: url('images/Treasury.svg');
-}
-.four{
-background-image: url('images/Chat.svg');
-}
-.cinco{
-	background-image: url('images/Pricing.svg');
-}
+		@-webkit-keyframes spin {
+		  0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+		  }
+		  100% {
+			-webkit-transform: rotate(360deg);
+			transform: rotate(360deg);
+		  }
+		}
+		@keyframes spin {
+		  0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg);
+		  }
+		  100% {
+			-webkit-transform: rotate(360deg);
+			transform: rotate(360deg);
+		  }
+		}
+		#livechat-compact-container {
+		  height: 153px;
+		  position: fixed;
+		  right: 0;
+		  top: 200px;
+		  top: 30vh;
+		  z-index: 10000;
+		}
+		.btn-chat a {
+		  font-family: arial;
+		  color: #fff;
+		  text-decoration: none;
+		  background: #FF3366;
+		  padding: 24px 20px 8px;
+		  display: block;
+		  font-weight: bold;
+		  font-size: 14px;
+		  border-radius: 10px;
+		  -ms-transform: rotate(90deg) translate(0, -20px);
+		  -webkit-transform: rotate(90deg) translate(0, -20px);
+		  transform: rotate(90deg) translate(0, -20px);
+		  position: relative;
+		  right: -40px;
+		  transition: background 0.4s, right 0.2s;
+		}
+		.btn-chat a:hover {
+		  background: mediumseagreen;
+		  /*right: -20px;*/
+		}
+		img {vertical-align: middle;}
 
-p {
-	color: #ffffff;
-	font-size: 2em;
+		/* Slideshow container */
+		.slideshow-container {
+		  max-width: 1000px;
+		  position: relative;
+		  margin: auto;
+		}
+
+		/* Caption text */
+		.text {
+		  color: #f2f2f2;
+		  font-size: 15px;
+		  padding: 8px 12px;
+		  position: absolute;
+		  bottom: 8px;
+		  width: 100%;
+		  text-align: center;
+		}
+
+		/* Number text (1/3 etc) */
+		.numbertext {
+		  color: #f2f2f2;
+		  font-size: 12px;
+		  padding: 8px 12px;
+		  position: absolute;
+		  top: 0;
+		}
+				.videowrapper{
+					position: relative;
+			height: 50em;
+			width: 100%;
+			overflow: hidden;/* 16:9 */
+			margin-top: -0.5%;
+				}
+		/* The dots/bullets/indicators */
+
+		/* Fading animation */
+		/* On smaller screens, decrease text size */
+		@media only screen and (max-width: 300px) {
+		  .text {font-size: 11px}
+
+		}.middle {
+			position: absolute;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			width: 100%;
+			background-color: darkslateblue;
+		}
+
+		hr {
+			margin: auto;
+			width: 40%;
+		}
+		@media screen and (max-width: 800px) {
+			.picture{
+				position:absolute;height: 40%;top:15%;left:60%;
+			}
+			.videowrapper{
+				position: relative;
+				height: 20em;
+				width: 100%;
+				overflow:hidden;/* 16:9 */
+				margin-top: -0.5%;
+			}
+		}
+		.uno,
+		.dos,.tres,.four,.cinco {
+			background-attachment: fixed;
+			text-align: center;
+			background-size: cover;
+			height: 100vh;
+		}
+
+		.uno {
+			background-image: url('images/Renderings.svg');
+
+		}
+
+		.dos {
+			background-image: url('images/Search.svg');
+		}
+		.tres{
+			background-image: url('images/Treasury.svg');
+		}
+		.four{
+		background-image: url('images/Chat.svg');
+		}
+		.cinco{
+			background-image: url('images/Pricing.svg');
+		}
+
+		p {
+			color: #ffffff;
+			font-size: 2em;
 		}
 .mySlides {display: none;}
     </style>
@@ -265,7 +268,7 @@ p {
 						<div class="inner">
 							<h1 style="color:mediumpurple;margin-bottom: 0;">Sandbox</h1>
                             <p style="color: mediumpurple">The Right Way to Code</p>
-                            <img src="images/purplelogo.svg" class="picture">
+                            <img src="images/purplelogo.svg" alt="Logo" class="picture">
 							<ul class="actions">
 								<li><a href="Login.html" class="button scrolly">Start Coding!</a></li>
 							</ul>
@@ -364,36 +367,6 @@ p {
 		</div>
 		<!-- Footer -->
 		<!-- Scripts -->
-        <script async>
-// Set the date we're counting down to
-var countDownDate = new Date("Aug 25, 2018 12:00:00").getTime();
-
-// Update the count down every 1 second
-var countdownfunction = setInterval(function() {
-
-    // Get todays date and time
-    var now = new Date().getTime();
-    
-    // Find the distance between now an the count down date
-    var distance = countDownDate - now;
-    
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    // Output the result in an element with id="demo"
-    document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-    + minutes + "m " + seconds + "s ";
-    
-    // If the count down is over, write some text 
-    if (distance < 0) {
-        clearInterval(countdownfunction);
-        document.getElementById("demo").innerHTML = "EXPIRED";
-    }
-}, 1000);
-</script>
 <script async>
 jQuery(document).ready(function($) { 
   $(window).on("load",function (){
@@ -402,25 +375,6 @@ jQuery(document).ready(function($) {
         document.getElementById('yellow').src = "https://biteable.com/watch/embed/intro-video-1875233";
   });
 });
-//var slideIndex = 0;
-//showSlides();
-//
-//function showSlides() {
-//    var i;
-//    var slides = document.getElementsByClassName("mySlides");
-//    var dots = document.getElementsByClassName("dot");
-//    for (i = 0; i < slides.length; i++) {
-//       slides[i].style.display = "none";  
-//    }
-//    slideIndex++;
-//    if (slideIndex > slides.length) {slideIndex = 1}    
-//    for (i = 0; i < dots.length; i++) {
-//        dots[i].className = dots[i].className.replace(" active", "");
-//    }
-//    slides[slideIndex-1].style.display = "block";  
-//    dots[slideIndex-1].className += " active";
-//    setTimeout(showSlides, 7000); // Change image every 2 seconds
-//}
 $('#feel-the-wave').wavify({
   height: 80,
   bones: 4,

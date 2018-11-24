@@ -317,7 +317,18 @@
     function setOnRepoPlay(func) {
         onRepoPlay = func;
     }
-
+	$(document).ready(function(){
+		$('.modal').click(function(event){
+       		var container = $('.modal');
+         	if(container.is(event.target)){
+            	closeModal();
+            	document.getElementById('shareRepoModal').style.display='none';
+				document.getElementById('commitModal').style.display='none';
+				document.getElementById('repoModal').style.display='none';
+            	document.getElementById('branchModal').style.display='none';
+         	}
+    	});
+	});
     showPreloader();
     $(function() {
         setTimeout(hidePreloader, 500);
@@ -504,18 +515,7 @@
             return false;
         }
     });
-    $('.modal').click(function(event){
-       var container = $('.modal');
-         if(container.is(event.target)){
-            closeModal();
-            document.getElementById('shareRepoModal').style.display='none';
-            document.getElementById('commitModal').style.display='none';
-             document.getElementById('repoModal').style.display='none';
-            document.getElementById('branchModal').style.display='none';
-
-         }
-    });
-    window.onscroll = function () {
+        window.onscroll = function () {
         myFunction()
     };
 

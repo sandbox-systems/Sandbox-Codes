@@ -8,3 +8,5 @@ composer.phar
 /vendor/
 collaboration/node_modules/
 *.swp
+composer
+composer/*

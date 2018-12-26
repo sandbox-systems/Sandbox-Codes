@@ -1,6 +1,0 @@
-{
-    "require": {
-        "phpmailer/phpmailer": "^6.0",
-        "docker-php/docker-php": "^2.0"
-    }
-}

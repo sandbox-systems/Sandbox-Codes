@@ -26,14 +26,15 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sweetalert/1.1.2/SweetAlert.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
-    <script src="https://sandboxcodes.com/Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="Sandbox_Back/ace_editor/src-noconflict/ace.js" type="text/javascript"
+            charset="utf-8"></script>
     <!--TODO Is this needed?-->
-    <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+    <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css"/>
     <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
-    <script src="https://sandboxcodes.com/Sandbox_Back/playgroundCtrl.js"></script>
-    <script src="https://sandboxcodes.com/fmRouter.js"></script>
-    <script src="https://sandboxcodes.com/router.js"></script>
-    <link rel="stylesheet" href="https://sandboxcodes.com/css/CastleStyle.css">
+    <script src="playgroundCtrl.js"></script>
+    <script src="fmRouter.js"></script>
+    <script src="router.js"></script>
+    <link rel="stylesheet" href="css/CastleStyle.css">
     <title>Sandbox</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,height=device-height"/>
@@ -54,80 +55,81 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         margin: 0 !important;
     }
 
-#preloader {
-  background-color:rgba(255,255,255,0.9);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999999999;
-    display: none;
-}
+    #preloader {
+        background-color: rgba(255, 255, 255, 0.9);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999999999;
+        display: none;
+    }
 
-#loader {
-  display: block;
-  position: relative;
-  left: 50%;
-  top: 50%;
-  width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #9370DB;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
+    #loader {
+        display: block;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        width: 150px;
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #9370DB;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
 
-#loader:before {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #BA55D3;
-  -webkit-animation: spin 3s linear infinite;
-  animation: spin 3s linear infinite;
-}
+    #loader:before {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #BA55D3;
+        -webkit-animation: spin 3s linear infinite;
+        animation: spin 3s linear infinite;
+    }
 
-#loader:after {
-  content: "";
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #FF00FF;
-  -webkit-animation: spin 1.5s linear infinite;
-  animation: spin 1.5s linear infinite;
-}
+    #loader:after {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #FF00FF;
+        -webkit-animation: spin 1.5s linear infinite;
+        animation: spin 1.5s linear infinite;
+    }
 
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
 
     #notificationsSidebarBtn {
         text-decoration: none;
@@ -178,7 +180,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     <img src="images/purplelogo.svg" class="milk">
     <footer style="
     color: mediumpurple;position: absolute;bottom: 0; padding-left:25px;"
-">© Sandbox Systems LLC 2018</footer>
+    ">© Sandbox Systems LLC 2019</footer>
 </div>
 <div class="wrapper">
     <div id="routedTemplate" ui-view></div>
@@ -189,7 +191,8 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
             <td><a ui-sref="home"><img src="images/white-logo.png" class=otherpic><title>Home</title></a></td>
         </tr>
         <tr>
-            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fas fa-search fa-2x"><title>Quicksand</title></i></a></td>
+            <td><a onClick="openSearch()" style="cursor: pointer"><i class="fas fa-search fa-2x"><title>
+                            Quicksand</title></i></a></td>
         </tr>
         <tr>
             <td><a ui-sref="playground"><i class="fas fa-terminal fa-2x"><title>Playground</title></i></a></td>
@@ -230,7 +233,8 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         <div class="animated bounceInRight">
             <form novalidate="novalidate" id="covers" onsubmit="return false;" class="searchbox sbx-custom">
                 <div id="outputs" role="search" class="sbx-custom__wrapper">
-                    <input type="search" name="search" placeholder="@username or @username filename or chatname" id="sbxx" autocomplete="off"
+                    <input type="search" name="search" placeholder="@username or @username filename or chatname"
+                           id="sbxx" autocomplete="off"
                            required="required" class="sbx-custom__input">
                     <button type="submit" title="Submit your search query." class="sbx-custom__submit">
                         <svg role="img" aria-label="Search">
@@ -243,11 +247,13 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sbx-icon-clear-5"></use>
                         </svg>
                     </button>
-                    <div class="searchoptions animated bounceIn" onclick="searchSO()" id="so" style="cursor: pointer;display: none">
+                    <div class="searchoptions animated bounceIn" onclick="searchSO()" id="so"
+                         style="cursor: pointer;display: none">
                         <i class="fab fa-stack-overflow" style="margin-right: 3%;"></i> Search on Stack Overflow...
                     </div>
                     <div onclick="searchGoogle()" class="searchoptions animated bounceIn" id="go"
-                         style="cursor: pointer;display: none;"><i class="fab fa-google" style="margin-right: 3%;"></i> Search on
+                         style="cursor: pointer;display: none;"><i class="fab fa-google" style="margin-right: 3%;"></i>
+                        Search on
                         Google...
                     </div>
                 </div>
@@ -260,19 +266,19 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     <div id="loader"></div>
 </div>
 <script>
-    function showPreloader () {
+    function showPreloader() {
         $('#preloader').show();
     }
 
-    function hidePreloader () {
+    function hidePreloader() {
         $('#preloader').fadeOut();
     }
 
-    $(function() {
+    $(function () {
         <?php if ($unreadNotifs > 0) { ?>
-            setTimeout(function () {
-                $('#notificationsSidebarBtn').addClass('animated shake')
-            }, 1500);
+        setTimeout(function () {
+            $('#notificationsSidebarBtn').addClass('animated shake')
+        }, 1500);
         <?php } ?>
     });
 
@@ -306,6 +312,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         document.getElementById("myOverlay").className = "overlay animated fadeIn";
         document.getElementById("myOverlay").style.display = "block";
     }
+
     function closeSearch() {
         document.getElementById("myOverlay").className = "overlay animated fadeOut";
         document.getElementById("myOverlay").style.display = "none";
@@ -316,9 +323,10 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         $('#sbxx').val("");
         $('#outputs').find('*').not('input').not('button').not('i').not('#so').not('#go').remove();
     }
-    $('#myOverlay').click(function(event){
+
+    $('#myOverlay').click(function (event) {
         var container = $('#myOverlay');
-        if(container.is(event.target)){
+        if (container.is(event.target)) {
             closeSearch();
         }
     });
@@ -328,12 +336,12 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
 
     function searchGoogle() {
         var x = document.getElementById("sbxx").value;
-        window.open("https://www.google.com/search?q=" + x,'_blank');
+        window.open("https://www.google.com/search?q=" + x, '_blank');
     }
 
     function searchSO() {
         var x = document.getElementById("sbxx").value;
-        window.open("https://www.stackoverflow.com/search?q=" + x,'_blank');
+        window.open("https://www.stackoverflow.com/search?q=" + x, '_blank');
     }
 
     document.getElementById("sbxx").oninput = function () {
@@ -375,7 +383,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
         } else if (type === 'error') {
             icon.className = "fas fa-exclamation-triangle";
             if (output === "Sync Github Account") {
-                div.onclick = function() {
+                div.onclick = function () {
                     location.href = "settings";
                     closeSearch();
                 }
@@ -389,7 +397,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
             let addOrRemoveFriendBtn = document.createElement("I");
             addOrRemoveFriendBtn.className = 'fas ' + (!(output.isFriend || output.isRequested) ? 'fa-user-plus' : '');
             addOrRemoveFriendBtn.style.cursor = "pointer";
-            addOrRemoveFriendBtn.onclick = function() {
+            addOrRemoveFriendBtn.onclick = function () {
                 if (!output.isFriend) {
                     $.ajax({
                         type: "POST",

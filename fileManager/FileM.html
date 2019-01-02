@@ -87,30 +87,13 @@
                 Last Modified<br>
                 <input id="displayedited" type="date" class="infoname" readonly>
                 <a><span id="displaytrash" class="fas fa-trash-o"></span></a>
-                <a><span id="displayopeninplayground" title="Open Repo In Playground" class="fas fa-terminal"></span></a>
+                <a><span id="displayopeninplayground" title="Open Repo In Playground"
+                         class="fas fa-terminal"></span></a>
                 <!--<button id="goToPlaygroundFromInfoBtn" class="goBtn" style="width:90%;background-color: mediumpurple;margin-top: 5%;padding: 4px">Open Repo In Playground</button>-->
             </fieldset>
-            <!--<fieldset>-->
-            <!--Color<br>-->
-            <!--<span id="gray" class="prevBtn" style="background-color: #CAD3C8;"-->
-            <!--onclick="test=document.getElementById('gray').style.backgroundColor"></span>-->
-            <!--<span id="pink" class="prevBtn" style="background-color: #FC427B;"-->
-            <!--onclick="test=document.getElementById('pink').style.backgroundColor"></span>-->
-            <!--<span id="orange" class="prevBtn" style="background-color: #F97F51;"-->
-            <!--onclick="test=document.getElementById('orange').style.backgroundColor"></span>-->
-            <!--<span id="green" class="prevBtn" style="background-color: #55E6C1;"-->
-            <!--onclick="test=document.getElementById('green').style.backgroundColor"></span>-->
-            <!--<span id="blue" class="prevBtn" style="background-color: #1B9CFC;"-->
-            <!--onclick="test=document.getElementById('blue').style.backgroundColor"></span>-->
-            <!--<span id="purple" class="prevBtn" style="background-color: #82589F;"-->
-            <!--onclick="test=document.getElementById('purple').style.backgroundColor"></span>-->
-            <!--</fieldset>-->
-            <!--<fieldset>-->
-                <!--Shared With<br>-->
-            <!--</fieldset>-->
         </form>
     </div>
-        <div id="editor"></div>
+    <div id="editor"></div>
 </div>
 <div class="topnav animated fadeIn" id="navbar">
     <a class="okeh" href="javascript:openModal(isViewingInsideRepo ? 'myModal' : 'repoModal')">New Entry!</a>
@@ -140,7 +123,8 @@
         <div class="modal-header">Create new Branch!</div>
         <div class="modal-body">
             <fieldset>
-                <input type="text" class="inputname" id="newBranchName" style="margin-top: 2%" autocomplete="off" placeholder="New Branch Name">
+                <input type="text" class="inputname" id="newBranchName" style="margin-top: 2%" autocomplete="off"
+                       placeholder="New Branch Name">
             </fieldset>
             <fieldset>
                 Branch Off Of<br>
@@ -166,7 +150,8 @@
                     <ul id="changesList" style="overflow: scroll;max-height: 100px;">
                     </ul>
                 </fieldset>
-                <input type="text" id="commitMessageInput" placeholder="Commit Message" class="inputname" title="Commit Message"
+                <input type="text" id="commitMessageInput" placeholder="Commit Message" class="inputname"
+                       title="Commit Message"
                        style="margin-top: 2%" autocomplete="off">
                 <div style="background-color:#ff4444; margin-top:7%;margin-right: 20%;margin-left: 9%;" class="goBtn"
                      onclick="document.getElementById('commitModal').style.display='none'">
@@ -255,51 +240,22 @@
                         <option value="ruby">Ruby</option>
                     </select>
                 </fieldset>
-                <!--<fieldset>-->
-                <!--Color Select:<br>-->
-                <!--<span id="gray" class="prevBtn" style="background-color: #CAD3C8;"-->
-                <!--onclick="test=document.getElementById('gray').style.backgroundColor"></span>-->
-                <!--<span id="pink" class="prevBtn" style="background-color: #FC427B;"-->
-                <!--onclick="test=document.getElementById('pink').style.backgroundColor"></span>-->
-                <!--<span id="orange" class="prevBtn" style="background-color: #F97F51;"-->
-                <!--onclick="test=document.getElementById('orange').style.backgroundColor"></span>-->
-                <!--<span id="green" class="prevBtn" style="background-color: #55E6C1;"-->
-                <!--onclick="test=document.getElementById('green').style.backgroundColor"></span>-->
-                <!--<span id="blue" class="prevBtn" style="background-color: #1B9CFC;"-->
-                <!--onclick="test=document.getElementById('blue').style.backgroundColor"></span>-->
-                <!--<span id="purple" class="prevBtn" style="background-color: #82589F;"-->
-                <!--onclick="test=document.getElementById('purple').style.backgroundColor"></span>-->
-                <!--</fieldset>-->
                 <fieldset>
-                    <div style="float:right; background-color:#00C851; " class="goBtn" onclick="addNewFile()">Create</div>
-                    <div style="float:left; background-color:#ff4444; " class="goBtn" onclick="closeModal()">Cancel
+                    <div style="float:right; background-color:#00C851; " class="goBtn" onclick="addNewFile()">Create
+                    </div>
+                    <div style="float:left; background-color:#ff4444; " class="goBtn">Cancel
                     </div>
                 </fieldset>
             </form>
             <form id="folderform" style="display: none;" class="animated fadeIn">
-               <fieldset>
+                <fieldset>
                     Foldername:<br>
                     <input id="foldername" class="inputname" type="text" autocomplete="off">
                 </fieldset>
-                <!--<fieldset>-->
-                <!--Color Select:<br>-->
-                <!--<span id="gray" class="prevBtn" style="background-color: #CAD3C8;"-->
-                <!--onclick="test=document.getElementById('gray').style.backgroundColor"></span>-->
-                <!--<span id="pink" class="prevBtn" style="background-color: #FC427B;"-->
-                <!--onclick="test=document.getElementById('pink').style.backgroundColor"></span>-->
-                <!--<span id="orange" class="prevBtn" style="background-color: #F97F51;"-->
-                <!--onclick="test=document.getElementById('orange').style.backgroundColor"></span>-->
-                <!--<span id="green" class="prevBtn" style="background-color: #55E6C1;"-->
-                <!--onclick="test=document.getElementById('green').style.backgroundColor"></span>-->
-                <!--<span id="blue" class="prevBtn" style="background-color: #1B9CFC;"-->
-                <!--onclick="test=document.getElementById('blue').style.backgroundColor"></span>-->
-                <!--<span id="purple" class="prevBtn" style="background-color: #82589F;"-->
-                <!--onclick="test=document.getElementById('purple').style.backgroundColor"></span>-->
-                <!--</fieldset>-->
                 <fieldset>
                     <div style="float:right; background-color:green; " class="goBtn" onclick="addNewFolder()">Create
                     </div>
-                    <div style="float:left; background-color:#FF3366; " class="goBtn" onclick="closeModal()">Cancel
+                    <div style="float:left; background-color:#FF3366; " class="goBtn">Cancel
                     </div>
                 </fieldset>
             </form>
@@ -317,23 +273,24 @@
     function setOnRepoPlay(func) {
         onRepoPlay = func;
     }
-	$(document).ready(function(){
-		$('.modal').click(function(event){
-       		var container = $('.modal');
-         	if(container.is(event.target)){
-            	closeModal();
-            	document.getElementById('shareRepoModal').style.display='none';
-				document.getElementById('commitModal').style.display='none';
-				document.getElementById('repoModal').style.display='none';
-            	document.getElementById('branchModal').style.display='none';
-         	}
-    	});
-	});
+
+    $(document).ready(function () {
+        $('.modal').click(function (event) {
+            var container = $('.modal');
+            if (container.is(event.target)) {
+                document.getElementById('myModal').style.display = 'none';
+                document.getElementById('shareRepoModal').style.display = 'none';
+                document.getElementById('commitModal').style.display = 'none';
+                document.getElementById('repoModal').style.display = 'none';
+                document.getElementById('branchModal').style.display = 'none';
+            }
+        });
+    });
     showPreloader();
-    $(function() {
+    $(function () {
         setTimeout(hidePreloader, 500);
         $('#repoPlay').click(onRepoPlay);
-        $('#goToPlaygroundFromInfoBtn').click(function() {
+        $('#goToPlaygroundFromInfoBtn').click(function () {
             onRepoPlay();
         });
         $(document).click(function (event) {
@@ -348,16 +305,17 @@
         });
     });
 
-			ace.require("ace/ext/language_tools");
-            var editor = ace.edit("editor");
-            editor.setOptions({
-                enableBasicAutocompletion: true,
-                enableSnippets: true,
-                enableLiveAutocompletion: false,
-				readOnly:true
-            });
-            editor.setTheme("ace/theme/solarized_dark");
+    ace.require("ace/ext/language_tools");
+    var editor = ace.edit("editor");
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: false,
+        readOnly: true
+    });
+    editor.setTheme("ace/theme/solarized_dark");
     var isViewingInsideRepo = false;
+
     function setIsViewingInsideRepo(isTrue) {
         if (isTrue) {
             $('#sharebutton').show();
@@ -370,6 +328,7 @@
         }
         isViewingInsideRepo = isTrue;
     }
+
     function addPublicRepo() {
         let name = $('#publicRepoName').val();
         $.ajax({
@@ -407,27 +366,32 @@
     }
 
     var onFileInfo;
-    function setOnFileInfo (func) {
+
+    function setOnFileInfo(func) {
         onFileInfo = func;
     }
 
     var onFileRename;
-    function setOnFileRename (func) {
+
+    function setOnFileRename(func) {
         onFileRename = func;
     }
 
     var onFileDelete;
-    function setOnFileDelete (func) {
+
+    function setOnFileDelete(func) {
         onFileDelete = func;
     }
 
     var onFileShare;
-    function setOnFileShare (func) {
+
+    function setOnFileShare(func) {
         onFileShare = func;
     }
 
     var onFileSave;
-    function setOnFileSave (func) {
+
+    function setOnFileSave(func) {
         onFileSave = func;
     }
 
@@ -440,82 +404,82 @@
 
         });
     });
-		$("body").on("click", function (element) {
-                $(this).attr("oncontextmenu", "return false;");
-                if (element.button == 0) {
-                    activeRight = "";
-                    $("#repomenu").fadeOut(80);
-					$("#insidemenu").fadeOut(80);
-                }
-            });
+    $("body").on("click", function (element) {
+        $(this).attr("oncontextmenu", "return false;");
+        if (element.button == 0) {
+            activeRight = "";
+            $("#repomenu").fadeOut(80);
+            $("#insidemenu").fadeOut(80);
+        }
+    });
 
-            //Context Menu Helpers for FILES
-            $("body").on("mousedown", function (element) {
-                if (element.target.toString() !== "[object HTMLSpanElement]OUT" && element.target.toString() !== "[object HTMLElement]")
-                    return;
-                rightClickedElem = element.target;
-                $(this).attr("oncontextmenu", "return false;");
-                if (element.button == 2) {
-                    if(!isViewingInsideRepo){
-						activeRight = $(this).attr("data-wd");
-                    	activeRightElem = this;
-                    	$("#repomenu").css("left", element.pageX + 1);
-                    	$("#repomenu").css("top", element.pageY + 1);
-                    	$("#repomenu").fadeIn(100);
-						$("#insidemenu").fadeOut(80);
-					}else{
-						activeRight = $(this).attr("data-wd");
-						activeRightElem = this;
-						$("#insidemenu").css("left", element.pageX + 1);
-						$("#insidemenu").css("top", element.pageY + 1);
-						$("#insidemenu").fadeIn(100);
-						$("#repomenu").fadeOut(80);
-					}
-                }
-                return false;
-            });
+    //Context Menu Helpers for FILES
+    $("body").on("mousedown", function (element) {
+        if (element.target.toString() !== "[object HTMLSpanElement]OUT" && element.target.toString() !== "[object HTMLElement]")
+            return;
+        rightClickedElem = element.target;
+        $(this).attr("oncontextmenu", "return false;");
+        if (element.button == 2) {
+            if (!isViewingInsideRepo) {
+                activeRight = $(this).attr("data-wd");
+                activeRightElem = this;
+                $("#repomenu").css("left", element.pageX + 1);
+                $("#repomenu").css("top", element.pageY + 1);
+                $("#repomenu").fadeIn(100);
+                $("#insidemenu").fadeOut(80);
+            } else {
+                activeRight = $(this).attr("data-wd");
+                activeRightElem = this;
+                $("#insidemenu").css("left", element.pageX + 1);
+                $("#insidemenu").css("top", element.pageY + 1);
+                $("#insidemenu").fadeIn(100);
+                $("#repomenu").fadeOut(80);
+            }
+        }
+        return false;
+    });
 
-            $('#fileInfo').click(function () {
-                let sha = $(rightClickedElem).siblings('span')[0].innerText;
-                let name = $(rightClickedElem).siblings('label')[0].innerText;
+    $('#fileInfo').click(function () {
+        let sha = $(rightClickedElem).siblings('span')[0].innerText;
+        let name = $(rightClickedElem).siblings('label')[0].innerText;
 
-                document.getElementById("infoNav").style.width = "100%";
-                document.getElementById("displayname").value = name;
-                document.getElementById("displaytype").value = typeUpdater(name);
+        document.getElementById("infoNav").style.width = "100%";
+        document.getElementById("displayname").value = name;
+        document.getElementById("displaytype").value = typeUpdater(name);
 
-                onFileInfo(sha, name);
-            });
+        onFileInfo(sha, name);
+    });
 
-            $('#displaytrash').click(function () {
-                onFileDelete();
-            });
+    $('#displaytrash').click(function () {
+        onFileDelete();
+    });
 
-            $('#displayopeninplayground').click(function () {
-                onRepoPlay();
-            });
+    $('#displayopeninplayground').click(function () {
+        onRepoPlay();
+    });
 
-            $('#fileRename').click(function () {
-                onFileRename();
-            });
+    $('#fileRename').click(function () {
+        onFileRename();
+    });
 
-            $('#fileDelete').click(function () {
-                onFileDelete();
-            });
+    $('#fileDelete').click(function () {
+        onFileDelete();
+    });
 
-            $('#fileSave').click(function () {
-                onFileSave();
-            });
+    $('#fileSave').click(function () {
+        onFileSave();
+    });
 
-            $('#fileOpen').click(function () {
-                onFileOpen();
-            });
+    $('#fileOpen').click(function () {
+        onFileOpen();
+    });
 
     $('html').bind('keypress', function (e) {
         if (e.keyCode == 13) {
             return false;
         }
     });
-        window.onscroll = function () {
+    window.onscroll = function () {
         myFunction()
     };
 
@@ -597,8 +561,8 @@
 
     function typeUpdater(filer) {
         var name = filer;
-        var array = [".java", ".py",".php", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
-        var actual = ["java", "python","php", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
+        var array = [".java", ".py", ".php", ".js", ".html", ".css", ".cpp", ".cs", ".m", ".rb"];
+        var actual = ["java", "python", "php", "javascript", "html", "css", "cplusplus", "csharp", "objc", "ruby"];
         var temp = "";
         for (i = 0; i < array.length; i++) {
             if (name.substring(name.indexOf(".")) === array[i]) {
@@ -606,78 +570,77 @@
                 document.getElementById("filechoose").value = actual[i];
             }
         }
-        if(name.substring(name.indexOf(".")) === ".md"){
+        if (name.substring(name.indexOf(".")) === ".md") {
             temp = "skip";
         }
         return temp;
     }
-            function getChosenExtension() {
-                let type = document.getElementById("filechoose").value;
-                let map = {java: ".java", python: ".py", javascript: ".js", html: ".html", css: ".css", cplusplus: ".cpp",
-                    csharp: ".cs", objc: ".m", ruby: ".rb"};
-                return map[type];
-            }
 
-            function closeModal() {
-                var modal = document.getElementById('myModal');
-                modal.style.display = "none";
-            }
+    function getChosenExtension() {
+        let type = document.getElementById("filechoose").value;
+        let map = {
+            java: ".java", python: ".py", javascript: ".js", html: ".html", css: ".css", cplusplus: ".cpp",
+            csharp: ".cs", objc: ".m", ruby: ".rb"
+        };
+        return map[type];
+    }
 
-            var localRepoData = {};
 
-            function setLocalRepoData(data) {
-                localRepoData = data;
-            }
+    var localRepoData = {};
 
-            function openModal(name) {
-                var modal = document.getElementById(name);
-                modal.style.display = "block";
-                if (name === "commitModal") {
-                    $.ajax({
-                        type: "POST",
-                        url: 'fileManager/requests/getLocalChanges.php',
-                        data: {
-                            owner: localRepoData.owner,
-                            repo: localRepoData.repo,
-                            branch: localRepoData.branch
-                        },
-                        success: function (data, status, xhttp) {
-                            $('#changesList').empty();
-                            let changesList = document.getElementById('changesList');
-                            data.forEach(datum => {
-                                let li = document.createElement('LI');
-                                let additions = document.createElement('SPAN');
-                                additions.innerText = '+' + datum.additions + ' ';
-                                additions.style.color = "#28a745";
-                                let deletions = document.createElement('SPAN');
-                                deletions.innerText = '-' + datum.deletions + '  ';
-                                deletions.style.color = "#dc3545";
-                                let name = document.createElement('SPAN');
-                                name.innerText = datum.name;
-                                li.appendChild(additions);
-                                li.appendChild(deletions);
-                                li.appendChild(name);
-                                changesList.appendChild(li);
-                            });
-                        },
-                        dataType: 'json'
+    function setLocalRepoData(data) {
+        localRepoData = data;
+    }
+
+    function openModal(name) {
+        var modal = document.getElementById(name);
+        modal.style.display = "block";
+        if (name === "commitModal") {
+            $.ajax({
+                type: "POST",
+                url: 'fileManager/requests/getLocalChanges.php',
+                data: {
+                    owner: localRepoData.owner,
+                    repo: localRepoData.repo,
+                    branch: localRepoData.branch
+                },
+                success: function (data, status, xhttp) {
+                    $('#changesList').empty();
+                    let changesList = document.getElementById('changesList');
+                    data.forEach(datum => {
+                        let li = document.createElement('LI');
+                        let additions = document.createElement('SPAN');
+                        additions.innerText = '+' + datum.additions + ' ';
+                        additions.style.color = "#28a745";
+                        let deletions = document.createElement('SPAN');
+                        deletions.innerText = '-' + datum.deletions + '  ';
+                        deletions.style.color = "#dc3545";
+                        let name = document.createElement('SPAN');
+                        name.innerText = datum.name;
+                        li.appendChild(additions);
+                        li.appendChild(deletions);
+                        li.appendChild(name);
+                        changesList.appendChild(li);
                     });
-                }
-            }
+                },
+                dataType: 'json'
+            });
+        }
+    }
 
-            var fetchFileContents;
+    var fetchFileContents;
 
-            function setFetchFileContents(func) {
-                fetchFileContents = func;
-            }
+    function setFetchFileContents(func) {
+        fetchFileContents = func;
+    }
 
-            function addFile(name, onclick, sha, path) {
-                var node = document.createElement("LI");
-                var link = document.createElement("A");
-                var icon = document.createElement("I");
-                var namer = document.createElement("LABEL");
-                namer.innerHTML = name;
-                namer.style.textAlign = "center";
+    function addFile(name, onclick, sha, path) {
+        var node = document.createElement("LI");
+        var link = document.createElement("A");
+        var icon = document.createElement("I");
+        var namer = document.createElement("LABEL");
+        namer.innerHTML = name;
+        namer.style.textAlign = "center";
         var temp = "file";
         temp += counter;
         node.id = temp;
@@ -876,11 +839,11 @@
     function dropper(ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
-		if(isViewingInsideRepo){
-			swal('Whoops!','You can only share repos','info');
-		}else{
-			document.getElementById('shareModal').style.display = "block";
-		}
+        if (isViewingInsideRepo) {
+            swal('Whoops!', 'You can only share repos', 'info');
+        } else {
+            document.getElementById('shareModal').style.display = "block";
+        }
     }
 
     // function moveFolder(ev) {

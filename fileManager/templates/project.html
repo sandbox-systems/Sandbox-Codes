@@ -15,7 +15,7 @@
     {{ addFile(id, file['name'], file['sha']) }}
 </span>
 
-<div id="shareRepoModal" class="modal">
+<div id="shareRepoModal" class="modal" onclick="document.getElementById('shareRepoModal').style.display='none'">
     <div class="modal-content">
         <div class="modal-header" id="publicHeader">Share this repo!</div>
         <div class="modal-body">

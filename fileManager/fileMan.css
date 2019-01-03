@@ -8,6 +8,7 @@ html {
     float: left;
     overflow: hidden;
 }
+
 .dropdown .dropbtn {
     font-size: 16px;
     border: none;
@@ -69,7 +70,7 @@ html {
 
 #fileList li {
     margin: 5%;
-    display:inline-block;
+    display: inline-block;
     vertical-align: top;
     text-align: center;
     width: 7rem;
@@ -291,9 +292,11 @@ button {
     outline: none;
     width: 95%;
 }
-.inputname:focus{
+
+.inputname:focus {
     border-bottom: 2px solid mediumpurple;
 }
+
 select {
     outline: none;
     border: 0px;
@@ -354,11 +357,11 @@ option {
 }
 
 .FMsidenav a {
-    //padding: 8px 8px 8px 32px;
+/ / padding: 8 px 8 px 8 px 32 px;
     text-decoration: none;
     font-size: 25px;
-    //color: #818181;
-    //display: block;
+/ / color: #818181;
+/ / display: block;
     transition: 0.3s;
 }
 
@@ -403,19 +406,21 @@ option {
 .infoname {
     width: 90%;
     border: 0px;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     color: black;
     border-bottom: solid 2px black;
 }
-#editor{
-    position:  absolute;
+
+#editor {
+    position: absolute;
     height: 92%;
-    display:  inline-block;
+    display: inline-block;
     width: 65%;
     top: 3%;
     /* right: auto; */
     left: 22%;
 }
+
 #preloader {
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -490,6 +495,7 @@ option {
         transform: rotate(360deg);
     }
 }
+
 #cssmenu-container {
     height: 220px;
     background-color: #CEE3F8;
@@ -497,15 +503,15 @@ option {
 
 /* Menu container */
 #cssmenu {
-    bottom:0;
+    bottom: 0;
     display: inline-block; /* The menu will have width as needed, not 100% */
-    position: fixed;
+    position: sticky;
     font-family: Lato;
     font-size: 14px;
     line-height: 1em;
     border-radius: 2px; /* Little curvature in the borders */
     overflow-x: scroll;
-    overflow-y: hidden;/* Hide everything that overflows, like shadows */
+    overflow-y: hidden; /* Hide everything that overflows, like shadows */
 }
 
 /* Icons */
@@ -526,6 +532,7 @@ option {
 #cssmenu ul li {
     margin: 0;
 }
+
 #cssmenu ul li a {
     display: inline-block;
     font-family: sans-serif;
@@ -540,6 +547,7 @@ option {
     border-radius: 0 100px 100px 0; /* Get the right side rounded */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); /* Apply the shadow */
 }
+
 #cssmenu ul li:hover a {
     background-color: rebeccapurple;
 }
@@ -563,16 +571,12 @@ option {
 .ownerNameHidden {
     display: none;
 }
-img{
-  height: 40px;
-  width: 40px;
-}
 
 .fmSelectedFriend {
     border-radius: 15px;
     border: solid 2px rebeccapurple;
     padding: 2%;
-    background: rgba(147,112,219,0.5);
+    background: rgba(147, 112, 219, 0.5);
     color: rebeccapurple;
     display: inline-block;
     width: 20%;
@@ -581,6 +585,7 @@ img{
     font-size: 0.85rem;
     padding: 1%;
 }
+
 .chip {
     padding: 0 25px;
     height: 50px;
@@ -597,15 +602,17 @@ img{
     width: 50px;
     border-radius: 50%;
 }
-#repoShareFriendFilter{
-  border: none;
-  border-bottom: solid 2px gray;
-  float:none;
-  display: inline-block;
-  width: 90%;
-  transition: border-bottom 0.2s;
-  -webkit-transition: border-bottom 0.2s;
+
+#repoShareFriendFilter {
+    border: none;
+    border-bottom: solid 2px gray;
+    float: none;
+    display: inline-block;
+    width: 90%;
+    transition: border-bottom 0.2s;
+    -webkit-transition: border-bottom 0.2s;
 }
-#repoShareFriendFilter:focus{
+
+#repoShareFriendFilter:focus {
     border-bottom: solid 2px mediumpurple;
 }

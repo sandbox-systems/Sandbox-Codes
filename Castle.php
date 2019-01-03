@@ -177,10 +177,7 @@ $unreadNotifs = count(getDocuments($man, "notifications", ['recipientID' => $_SE
     <a ui-sref="settings">Settings</a>
     <!--<a href="Pricing.html">Upgrade/Pricing</a>-->
     <a style="background-color: mediumpurple;color:white" href="http://sandboxcodes.com/Login.html">Logout</a>
-    <img src="images/purplelogo.svg" class="milk">
-    <footer style="
-    color: mediumpurple;position: absolute;bottom: 0; padding-left:25px;"
-    ">© Sandbox Systems LLC 2019</footer>
+    <img src="images/purplelogo.svg" class="milk" title="© Sandbox Systems LLC 2019">
 </div>
 <div class="wrapper">
     <div id="routedTemplate" ui-view></div>
